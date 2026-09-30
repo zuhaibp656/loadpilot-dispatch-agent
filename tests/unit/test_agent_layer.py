@@ -53,7 +53,8 @@ def test_report_and_surface(planned):
     resp = A.LlmResponse(content=types.Content(role="model", parts=[types.Part(text="- 8 trucks")]))
     resp = A.append_report(ctx, resp)
     md = resp.content.parts[-1].text
-    assert "### 1. Dispatch summary" in md and "### 3. Dispatch ledger" in md
+    assert "### Today vs LoadPilot" in md and "### Truck plan (copy-ready)" in md
+    assert "### Where each truck goes" in md
     for line in md.splitlines():
         if line.startswith("|"):
             assert line.count("|") <= 6, line  # <= 5 columns

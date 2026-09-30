@@ -114,7 +114,7 @@ def api(method: str, url: str, body: dict | None = None, project: str | None = N
 def enable_apis(project: str) -> None:
     services = ["aiplatform.googleapis.com", "storage.googleapis.com", "discoveryengine.googleapis.com",
                 "iamcredentials.googleapis.com", "iam.googleapis.com",
-                "cloudresourcemanager.googleapis.com", "logging.googleapis.com"]
+                "cloudresourcemanager.googleapis.com", "logging.googleapis.com", "routes.googleapis.com"]
     try:
         op = api("POST", f"https://serviceusage.googleapis.com/v1/projects/{project}/services:batchEnable",
                  {"serviceIds": services}, project)

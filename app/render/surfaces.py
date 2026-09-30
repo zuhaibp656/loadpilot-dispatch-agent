@@ -151,16 +151,14 @@ def dispatch_components(plan: DispatchPlan, video_url: str | None, focus_truck_i
             {"id": "dc-kpi", "component": "VegaChart", "spec": kpi_spec(plan), "height": 300},
         ]
 
-    load_html = build_anim_html(plan, mode="load", focus_truck_id=focus_truck_id)
-    route_html = build_anim_html(plan, mode="routes", focus_truck_id=focus_truck_id)
-    tabs = [{"title": "📊 Overview", "child": "tab-overview"},
-            {"title": "🗺️ Route animation", "child": "tab-routes"},
-            {"title": "📦 3D truck loading", "child": "tab-load"}]
+    app_html = build_anim_html(plan, mode="both", focus_truck_id=focus_truck_id)
+    tabs = [{"title": "🗺️ Road map & 3D loading", "child": "tab-live"},
+            {"title": "📊 Overview", "child": "tab-overview"}]
     comps: list[dict[str, Any]] = [
         {"id": "root", "component": "Canvas", "children": ["dc-title", "dc-sub", "dc-steps", "dc-tabs"],
          "autoOpen": True, "autoFullscreen": False,
          "cardTitle": f"LoadPilot · {o.trucks} trucks · ₹{plan.savings_inr:,.0f} saved",
-         "cardDescription": "Corridor routes, animated LIFO truck loading and loader video",
+         "cardDescription": "Interactive road map, drop sequence and animated 3D truck loading",
          "cardIcon": "local_shipping"},
         _t("dc-title", f"🚚 LoadPilot dispatch plan · {plan.plan_id} · {plan.hub.name}", "h3"),
         _t("dc-sub", headline, "caption"),
@@ -174,13 +172,11 @@ def dispatch_components(plan: DispatchPlan, video_url: str | None, focus_truck_i
             {"title": "Costed", "helpText": f"₹{o.cost_total:,.0f} vs ₹{b.cost_total:,.0f} today",
              "status": "completed"}]},
         {"id": "dc-tabs", "component": "Tabs", "tabs": tabs},
+        {"id": "tab-live", "component": "IFrameSrcdoc", "htmlContent": app_html, "height": 720,
+         "title": "LoadPilot interactive road map and 3D truck loading"},
         {"id": "tab-overview", "component": "Column", "children": ["ov-map", "ov-kpi"]},
         {"id": "ov-map", "component": "VegaChart", "spec": route_map_spec(plan), "height": 500},
         {"id": "ov-kpi", "component": "VegaChart", "spec": kpi_spec(plan), "height": 300},
-        {"id": "tab-routes", "component": "IFrameSrcdoc", "htmlContent": route_html, "height": 640,
-         "title": "Animated corridor route plan"},
-        {"id": "tab-load", "component": "IFrameSrcdoc", "htmlContent": load_html, "height": 640,
-         "title": "Animated 3D LIFO truck loading"},
     ]
     if video_url:
         tabs.append({"title": "🎬 Loader video", "child": "tab-video"})
