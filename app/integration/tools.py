@@ -215,7 +215,8 @@ def show_planning_wizard(tool_context: ToolContext) -> dict[str, Any]:
 
 def plan_dispatch(tool_context: ToolContext, truck_counts: str = "", objective: str = "",
                   corridor_claims: str = "", fuel_price: float = 0.0, driver_day_cost: float = 0.0,
-                  hub_id: str = "", dispatch_date: str = "", order_source: str = "") -> dict[str, Any]:
+                  hub_id: str = "", dispatch_date: str = "", order_source: str = "",
+                  driver: str = "") -> dict[str, Any]:
     """Optimise today's dispatch: corridors, truck assignment, stop order, LIFO truck loading and
     cost vs today's manual plan. Arguments are optional overrides; anything not given keeps the
     current values (from the planning form or earlier chat).
@@ -228,6 +229,8 @@ def plan_dispatch(tool_context: ToolContext, truck_counts: str = "", objective: 
         driver_day_cost: Driver cost per day (INR). 0 keeps the current value.
         hub_id: BHW-DC (Bhiwandi) or TLJ-DC (Taloja).
         dispatch_date: YYYY-MM-DD.
+        driver: ONLY when the user asks for one driver or truck ("for Ravi", "only T17-1"): the fleet is
+            still optimised, but the answer, map and 3D show just that driver's truck.
         order_source: demo | chat (orders pasted/uploaded) | photos (demo + scanned cartons) |
             bigquery (today's order book from BigQuery dataset loadpilot_demo).
     """
@@ -253,9 +256,24 @@ def plan_dispatch(tool_context: ToolContext, truck_counts: str = "", objective: 
         p.order_source = order_source
     save_params(st, p)
     try:
-        return run_plan(st)
+        out = run_plan(st)
     except ValueError as exc:
         return {"status": "error", "message": str(exc)}
+    who = (driver or "").strip().lower()
+    if who:
+        sess = session(st)
+        plan = sess["plan"]
+        r = next((x for x in plan.routes if who in (x.driver.lower(), x.truck_id.lower())), None)
+        if r is None:
+            out["note"] = f"'{driver}' is not driving today; showing the whole fleet."
+            return out
+        plan.focus_truck_id = r.truck_id
+        sess["links"] = start_publishing_driver(sess, plan, r.truck_id)
+        queue(st, "driver", focus=r.truck_id,
+              note=f"🗓️ {r.driver}'s part of today's fleet plan {plan.plan_id} "
+                   f"({plan.optimized.trucks} trucks, ₹{plan.savings_inr:,.0f}/day saved fleet-wide).")
+        return _driver_summary(plan, r.truck_id)
+    return out
 
 
 def claim_corridor(tool_context: ToolContext, driver: str, corridor: str) -> dict[str, Any]:

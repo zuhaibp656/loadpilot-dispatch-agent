@@ -104,7 +104,7 @@ TILE_ATTR = os.environ.get("LOADPILOT_TILE_ATTR", "Tiles © Esri — Esri, HERE,
 _BASEMAPS: dict[str, dict] = {}
 
 
-BASEMAP_CLASSES = tuple(os.environ.get("LOADPILOT_BASEMAP_CLASSES", "coast,motorway,trunk").split(","))
+BASEMAP_CLASSES = tuple(os.environ.get("LOADPILOT_BASEMAP_CLASSES", "coast,motorway").split(","))
 
 
 def _crop(lines: list, scale: float, box: tuple[float, float, float, float]) -> list:
@@ -173,8 +173,14 @@ def _stop_json(rs) -> dict:
             "skus": " · ".join(f"{n}× {d}" for d, n in top)}
 
 
-def _route_json(r: TruckRoute, color: str, legs: list | None) -> dict:
+def _route_json(r: TruckRoute, color: str, legs: list | None, eps: float = 0.0007) -> dict:
     hub = (r.path[0][0], r.path[0][1])
+    if legs and eps:
+        try:
+            from app.geo.roads import _dp
+        except ImportError:  # pragma: no cover
+            from geo.roads import _dp
+        legs = [_dp(list(lg), eps) for lg in legs]
     if not legs:
         wps = [hub] + [(rs.stop.lat, rs.stop.lon) for rs in r.stops] + [hub]
         legs = [[wps[i], wps[i + 1]] for i in range(len(wps) - 1)]
@@ -212,7 +218,7 @@ def _load_trucks(plan: DispatchPlan, focus_truck_id: str | None, max_trucks: int
                        "addr": rs.stop.address.split(", ")[-1] + (f" · {rs.stop.area}" if rs.stop.area else "")}
                       for rs in r.stops],
             "desc": {p.box.sku: p.box.description[:40] for p in placed},
-            "boxes": [[round(p.x, 1), round(p.y, 1), round(p.z, 1), p.l, p.w, p.h, p.stop_seq,
+            "boxes": [[round(p.x), round(p.y), round(p.z), p.l, p.w, p.h, p.stop_seq,
                        1 if p.box.fragile else 0, p.box.sku, round(p.box.weight_kg, 1), p.box.box_id]
                       for p in placed],
         })
@@ -244,7 +250,8 @@ def plan_to_anim_data(plan: DispatchPlan, focus_truck_id: str | None = None,
             "routes": {
                 "opt": [_route_json(r, ROUTE_COLORS[i % len(ROUTE_COLORS)], road["opt"].get(r.truck_id))
                         for i, r in opt_routes],
-                "base": [_route_json(r, BASE_COLORS[i % len(BASE_COLORS)], road["base"].get(r.truck_id))
+                # today's manual routes: straight legs (they are only a faint dashed comparison)
+                "base": [_route_json(r, BASE_COLORS[i % len(BASE_COLORS)], None)
                          for i, r in base_routes],
             },
             "kpi": {

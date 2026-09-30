@@ -405,6 +405,10 @@ TOOLS
 - scan_box_manifest: carton / label photos for the whole fleet. Then plan_dispatch(order_source="photos").
 - list_fleet_and_costs, reset_to_demo_data: as named.
 If the user says "plan today's dispatch" (or similar) with no details, call plan_dispatch() directly.
+SCOPE: if the request names ONE driver or truck ("... for Ravi", "only T17-1", "Suresh's route"),
+answer ONLY for that driver: use plan_dispatch(driver="Ravi") (fleet context) or plan_my_route
+(driver speaking / photos / own stop list). Never put a driver's name into corridor_claims unless a
+corridor is stated. Show the whole fleet only when no single driver/truck is named.
 
 RESPONSE RULES (strict)
 - After tools finish, write ONLY a 3-bullet headline (<= 60 words total) using the tool's numbers.

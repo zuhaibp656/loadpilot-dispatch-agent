@@ -147,3 +147,21 @@ def test_driver_briefings_one_per_truck():
     plan = T.session(ctx.state)["plan"]
     assert len(plan.routes) >= 2
     assert json.dumps(out)
+
+
+def test_plan_dispatch_scoped_to_one_driver():
+    ctx = Ctx()
+    out = T.plan_dispatch(ctx, driver="Ravi")
+    pend = ctx.state[T.PENDING_KEY]
+    assert pend["kind"] == "driver"
+    plan = T.session(ctx.state)["plan"]
+    r = next(x for x in plan.routes if x.truck_id == pend["focus"])
+    assert r.driver == "Ravi" and "Ravi" in json.dumps(out)
+
+
+def test_canvas_html_stays_small():
+    from app.render.anim_html import build_anim_html
+    ctx = Ctx()
+    T.plan_dispatch(ctx)
+    plan = T.session(ctx.state)["plan"]
+    assert len(build_anim_html(plan, mode="both").encode()) < 240_000
