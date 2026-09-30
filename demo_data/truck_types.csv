@@ -1,0 +1,6 @@
+truck_code,name,inner_l_cm,inner_w_cm,inner_h_cm,volume_m3,usable_volume_m3,payload_kg,fixed_daily_cost_inr,cost_per_km_inr,km_per_litre,avg_speed_kmph,color
+ACE,Mini Truck 7 ft (Tata Ace class),210.0,145.0,125.0,3.81,3.04,750.0,700.0,3.5,17.0,23.0,#34a853
+PKP,Pickup 8.5 ft (Dost / Bolero class),260.0,165.0,160.0,6.86,5.49,1500.0,950.0,4.2,14.0,24.0,#fbbc04
+T14,14 ft LCV (Eicher Pro 2049 class),425.0,200.0,200.0,17.0,13.6,3500.0,1800.0,6.0,9.0,25.0,#4285f4
+T17,17 ft ICV (Tata 1109 class),520.0,215.0,215.0,24.04,19.23,5000.0,2300.0,7.2,7.5,25.0,#a142f4
+T20,20 ft Container (Tata 1512 class),610.0,240.0,240.0,35.14,28.11,7000.0,2900.0,8.5,6.0,24.0,#ea4335

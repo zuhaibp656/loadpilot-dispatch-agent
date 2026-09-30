@@ -123,3 +123,27 @@ def test_truck_tool(planned):
     resp = A.append_report(ctx, A.LlmResponse(content=types.Content(role="model", parts=[
         types.Part(text="ok")])))
     assert f"Loading sheet · {tid}" in resp.content.parts[-1].text
+
+
+def test_plan_my_route_preset_driver():
+    ctx = Ctx()
+    out = T.plan_my_route(ctx, driver="Suresh")
+    s = json.dumps(out)
+    assert "Suresh" in s
+    plan = T.session(ctx.state)["plan"]
+    assert len(plan.routes) == 1 and len(plan.routes[0].stops) == 6
+
+
+def test_plan_my_route_stop_ids():
+    ctx = Ctx()
+    T.plan_my_route(ctx, driver="Ravi", truck_type="T14", stop_ids="S006, S007, S008, S009, S010, S011")
+    plan = T.session(ctx.state)["plan"]
+    assert len(plan.routes) == 1 and len(plan.routes[0].stops) == 6
+
+
+def test_driver_briefings_one_per_truck():
+    ctx = Ctx()
+    out = T.driver_briefings(ctx)
+    plan = T.session(ctx.state)["plan"]
+    assert len(plan.routes) >= 2
+    assert json.dumps(out)

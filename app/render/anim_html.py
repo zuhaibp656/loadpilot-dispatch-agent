@@ -80,6 +80,16 @@ box-shadow:0 12px 30px rgba(0,0,0,.5);font-size:12.5px;overflow:hidden}
 .lp-zoom button{width:32px;height:32px;border-radius:8px;border:1px solid #3b4b72;background:rgba(16,24,48,.92);color:#e8eaed;
 font:700 16px Inter,Roboto,Arial;cursor:pointer}.lp-zoom button:hover{background:#22305a}
 .lp-attr{position:absolute;right:8px;bottom:6px;font-size:10px;color:#9aa0a6;background:rgba(8,12,24,.7);padding:2px 6px;border-radius:6px}
+.lp-card{position:absolute;left:12px;top:12px;z-index:5;width:330px;max-height:calc(100% - 70px);overflow:auto;
+background:rgba(12,18,36,.97);border:1px solid #3b4b72;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.5);font-size:12.5px}
+.lp-card .lp-pop-g{grid-template-columns:62px 1fr}
+.lp-tip{position:absolute;z-index:6;pointer-events:none;max-width:320px;background:rgba(8,12,24,.96);border:1px solid #5b6b92;
+border-radius:10px;padding:7px 10px;font-size:12px;line-height:1.45;box-shadow:0 8px 20px rgba(0,0,0,.5)}
+.lp-hint{position:absolute;left:50%;top:12px;transform:translateX(-50%);background:rgba(253,214,99,.12);border:1px solid rgba(253,214,99,.5);
+color:#fdd663;border-radius:18px;padding:6px 14px;font-size:12.5px;white-space:nowrap;pointer-events:none}
+.lp-li.sel{background:#2a3a66;outline:2px solid #fdd663}
+.lp-go{display:block;width:calc(100% - 24px);margin:0 12px 12px;background:#fdd663;color:#111;border:none;border-radius:18px;
+padding:7px 10px;font-weight:700;cursor:pointer}.lp-go:hover{background:#ffe38a}
 """
 
 
@@ -179,15 +189,17 @@ def _route_json(r: TruckRoute, color: str, legs: list | None) -> dict:
     }
 
 
-def _load_trucks(plan: DispatchPlan, focus_truck_id: str | None, max_trucks: int | None) -> list[dict]:
+def _load_trucks(plan: DispatchPlan, focus_truck_id: str | None, max_trucks: int | None,
+                 only_truck: str | None = None) -> list[dict]:
     trucks = []
-    routes = plan.routes
+    routes = [r for r in plan.routes if not only_truck or r.truck_id == only_truck]
     if focus_truck_id:
         routes = sorted(routes, key=lambda r: r.truck_id != focus_truck_id)
     for r in routes[: max_trucks or len(routes)]:
         lp = plan.loads.get(r.truck_id)
         if lp is None:
             continue
+        placed = sorted(lp.placed, key=lambda q: q.load_step)
         trucks.append({
             "id": r.truck_id, "name": r.truck_type.name, "L": lp.truck_type.inner_l_cm,
             "W": lp.truck_type.inner_w_cm, "H": lp.truck_type.inner_h_cm,
@@ -195,19 +207,27 @@ def _load_trucks(plan: DispatchPlan, focus_truck_id: str | None, max_trucks: int
             "corridor": r.corridor, "branch": r.branch, "fill": lp.volume_fill_pct,
             "wfill": lp.weight_fill_pct, "lifo": lp.lifo_ok,
             "zones": [[z.stop_seq, z.x_start, z.x_end] for z in lp.zones],
-            "stops": [{"seq": rs.seq, "name": rs.stop.name[:28], "n": len(rs.stop.boxes),
-                       "eta": _hhmm(rs.arrive_min)} for rs in r.stops],
-            "boxes": [[p.x, p.y, p.z, p.l, p.w, p.h, p.stop_seq, 1 if p.box.fragile else 0,
-                       p.box.sku] for p in sorted(lp.placed, key=lambda q: q.load_step)],
+            "stops": [{"seq": rs.seq, "name": rs.stop.name[:32], "n": len(rs.stop.boxes),
+                       "eta": _hhmm(rs.arrive_min),
+                       "addr": rs.stop.address.split(", ")[-1] + (f" · {rs.stop.area}" if rs.stop.area else "")}
+                      for rs in r.stops],
+            "desc": {p.box.sku: p.box.description[:40] for p in placed},
+            "boxes": [[round(p.x, 1), round(p.y, 1), round(p.z, 1), p.l, p.w, p.h, p.stop_seq,
+                       1 if p.box.fragile else 0, p.box.sku, round(p.box.weight_kg, 1), p.box.box_id]
+                      for p in placed],
         })
     return trucks
 
 
 def plan_to_anim_data(plan: DispatchPlan, focus_truck_id: str | None = None,
-                      max_trucks: int | None = None, mode: str = "both") -> dict:
+                      max_trucks: int | None = None, mode: str = "both",
+                      only_truck: str | None = None, start: str | None = None) -> dict:
+    """only_truck: driver view (one truck's route + load). start: 'load' opens the 3D tab first."""
     data: dict = {"hub": {"name": plan.hub.name, "lat": plan.hub.lat, "lon": plan.hub.lon}}
+    if start:
+        data["start"] = start
     if mode in ("both", "load"):
-        data["trucks"] = _load_trucks(plan, focus_truck_id, max_trucks)
+        data["trucks"] = _load_trucks(plan, focus_truck_id, max_trucks, only_truck)
     if mode in ("both", "routes"):
         try:
             from app.geo.roads import plan_road_legs, provider_name
@@ -215,15 +235,17 @@ def plan_to_anim_data(plan: DispatchPlan, focus_truck_id: str | None = None,
             from geo.roads import plan_road_legs, provider_name
         road = plan_road_legs(plan)
         k = plan.baseline, plan.optimized
-        all_routes = plan.routes + plan.baseline_routes
+        opt_routes = [(i, r) for i, r in enumerate(plan.routes) if not only_truck or r.truck_id == only_truck]
+        base_routes = [] if only_truck else list(enumerate(plan.baseline_routes))
+        all_routes = [r for _, r in opt_routes] + [r for _, r in base_routes]
         data.update({
             "clock": [min((r.start_min for r in all_routes), default=420) - 10,
                       max((r.end_min for r in all_routes), default=1140) + 10],
             "routes": {
                 "opt": [_route_json(r, ROUTE_COLORS[i % len(ROUTE_COLORS)], road["opt"].get(r.truck_id))
-                        for i, r in enumerate(plan.routes)],
+                        for i, r in opt_routes],
                 "base": [_route_json(r, BASE_COLORS[i % len(BASE_COLORS)], road["base"].get(r.truck_id))
-                         for i, r in enumerate(plan.baseline_routes)],
+                         for i, r in base_routes],
             },
             "kpi": {
                 "base": {"trucks": k[0].trucks, "km": round(k[0].km), "cost": f"₹{k[0].cost_total:,.0f}"},
@@ -235,12 +257,19 @@ def plan_to_anim_data(plan: DispatchPlan, focus_truck_id: str | None = None,
             "tiles": TILE_URL, "labels": LABEL_URL, "tileAttr": TILE_ATTR,
             "router": provider_name(),
         })
+        if only_truck and opt_routes:
+            r = opt_routes[0][1]
+            data["driver"] = {"id": r.truck_id, "name": r.driver, "stops": len(r.stops), "km": round(r.km),
+                              "start": _hhmm(r.start_min), "end": _hhmm(r.end_min),
+                              "cartons": sum(len(rs.stop.boxes) for rs in r.stops)}
     return data
 
 
 def build_anim_html(plan: DispatchPlan, mode: str = "both", focus_truck_id: str | None = None,
-                    max_trucks: int | None = None) -> str:
-    data = plan_to_anim_data(plan, focus_truck_id=focus_truck_id, max_trucks=max_trucks, mode=mode)
+                    max_trucks: int | None = None, only_truck: str | None = None,
+                    start: str | None = None) -> str:
+    data = plan_to_anim_data(plan, focus_truck_id=focus_truck_id, max_trucks=max_trucks, mode=mode,
+                             only_truck=only_truck, start=start)
     payload = json.dumps(data, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
     return (
         "<!doctype html><html><head><meta charset='utf-8'>"

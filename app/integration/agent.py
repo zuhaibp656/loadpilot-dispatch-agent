@@ -83,7 +83,7 @@ try:
         ALL_TOOLS, PENDING_KEY, params_from_state, parse_claims, save_params, session,
     )
     from app.render.a2ui_envelope import A2A_DATA_PART_CLOSE_TAG, A2A_DATA_PART_OPEN_TAG
-    from app.render.markdown import dispatch_markdown, truck_markdown
+    from app.render.markdown import briefings_markdown, dispatch_markdown, driver_markdown, truck_markdown
     from app.render.surfaces import WIZARD_EVENT, build_dispatch_surface, build_wizard_surface
 except ImportError:  # pragma: no cover
     from contracts import Objective
@@ -93,7 +93,7 @@ except ImportError:  # pragma: no cover
         ALL_TOOLS, PENDING_KEY, params_from_state, parse_claims, save_params, session,
     )
     from render.a2ui_envelope import A2A_DATA_PART_CLOSE_TAG, A2A_DATA_PART_OPEN_TAG
-    from render.markdown import dispatch_markdown, truck_markdown
+    from render.markdown import briefings_markdown, dispatch_markdown, driver_markdown, truck_markdown
     from render.surfaces import WIZARD_EVENT, build_dispatch_surface, build_wizard_surface
 
 logger = logging.getLogger(__name__)
@@ -323,6 +323,10 @@ def append_report(callback_context: CallbackContext | None = None,
     extra = ""
     if plan is not None and pending.get("kind") == "dispatch":
         extra = dispatch_markdown(plan, sess.get("links"), pending.get("focus"))
+    elif plan is not None and pending.get("kind") == "driver":
+        extra = driver_markdown(plan, pending.get("focus", ""), sess.get("links"), pending.get("note", ""))
+    elif plan is not None and pending.get("kind") == "briefings":
+        extra = briefings_markdown(plan, sess.get("brief_links"))
     elif plan is not None and pending.get("kind") == "truck":
         extra = truck_markdown(plan, pending.get("focus", ""))
         links = sess.get("links") or {}
@@ -368,7 +372,8 @@ def emit_surface(callback_context: CallbackContext | None = None, **_: Any) -> t
             if IS_LOCAL and sess.get("poster"):
                 parts.append(types.Part.from_bytes(data=sess["poster"], mime_type="image/png"))
             parts += build_dispatch_surface(surface_id, plan, video_url=links.get("video") or None,
-                                            focus_truck_id=pending.get("focus"))
+                                            focus_truck_id=pending.get("focus"),
+                                            only_truck=pending.get("focus") if pending.get("kind") == "driver" else None)
     except Exception as exc:
         logger.exception("emit_surface failed: %s", exc)
     if not parts:
@@ -388,18 +393,26 @@ TOOLS
   diesel/driver cost, hub, date, order source). If the user message is
   "[Planning form submitted: optimiseDispatch ...]", call plan_dispatch() with NO arguments.
 - claim_corridor: "Ravi has the West route" / "give T20-1 the north-east".
-- get_truck_load_plan: loading sheet / animation / video for one truck or driver.
+- get_truck_load_plan: loading sheet / animation / video for one truck of the fleet plan (dock view).
+- plan_my_route: DRIVER perspective. The user is (or speaks for) ONE driver: "I'm Suresh, how do I
+  load my truck?", "here are my cartons" (+ photos), "my stops are S045, S046…", "plan my day".
+  Pass driver name, truck_type if said, stop_ids if listed. Photos attached with a driver
+  request go to plan_my_route (NOT scan_box_manifest).
+- driver_briefings: FLEET MANAGER perspective: "send each driver his instructions", "brief my
+  drivers", "individual instructions per driver".
 - ingest_delivery_orders: the user pastes or attaches an order list (email, CSV, Excel, PDF).
-  Then call plan_dispatch(order_source="chat").
-- scan_box_manifest: the user attaches carton / label photos. Then plan_dispatch(order_source="photos").
+  Then call plan_dispatch(order_source="chat") (or plan_my_route if it is one driver's list).
+- scan_box_manifest: carton / label photos for the whole fleet. Then plan_dispatch(order_source="photos").
 - list_fleet_and_costs, reset_to_demo_data: as named.
 If the user says "plan today's dispatch" (or similar) with no details, call plan_dispatch() directly.
 
 RESPONSE RULES (strict)
-- After tools finish, write ONLY a 3-bullet headline (<= 60 words total) using the tool's numbers:
-  trucks today vs LoadPilot, INR saved per day (and %), and one operational insight (claims,
-  branches, LIFO). No tables, no links, no JSON, no UI markup; the detailed report, tables, links
-  and the visual dispatch canvas are attached automatically after your text.
+- After tools finish, write ONLY a 3-bullet headline (<= 60 words total) using the tool's numbers.
+  Fleet plan: trucks today vs LoadPilot, INR saved per day (and %), one operational insight.
+  Driver view: drops + cartons + leave/back time, first drop, what goes in first at the cab.
+  Briefings: number of drivers briefed, earliest departure, that each has a personal link.
+  No tables, no links, no JSON, no UI markup; the detailed report, tables, links and the visual
+  canvas are attached automatically after your text.
 - For the wizard: one sentence telling the user to fill the form and press Optimise.
 - Never invent numbers. Currency is INR (₹). Never write loading sheets, per-stop lists, weights
   or volumes yourself; the verified loading sheet is attached automatically.

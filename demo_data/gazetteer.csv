@@ -1,0 +1,50 @@
+locality,lat,lon,sales_area,corridor,demo_stops
+Vasai,19.3919,72.8397,Vasai-Virar,NW,2
+Virar,19.4559,72.8111,Vasai-Virar,NW,2
+Nalasopara,19.418,72.819,Vasai-Virar,NW,1
+Palghar,19.697,72.765,Vasai-Virar,NW,1
+Boisar,19.8,72.755,Vasai-Virar,NW,1
+Bhayandar,19.301,72.851,Western Suburbs,W,1
+Mira Road,19.2813,72.8721,Western Suburbs,W,2
+Borivali,19.2307,72.8567,Western Suburbs,W,2
+Kandivali,19.2045,72.8519,Western Suburbs,W,1
+Malad,19.186,72.8485,Western Suburbs,SW,2
+Goregaon,19.1663,72.8526,Western Suburbs,SW,1
+Andheri,19.1197,72.8468,Western Suburbs,SW,2
+Powai,19.1176,72.906,Eastern Suburbs,SW,1
+Ghatkopar,19.086,72.9081,Eastern Suburbs,SW,2
+Kurla,19.0726,72.8845,Eastern Suburbs,SW,1
+Chembur,19.0522,72.9005,Eastern Suburbs,SW,1
+Mulund,19.1726,72.9565,Eastern Suburbs,SW,2
+Bhandup,19.144,72.937,Eastern Suburbs,SW,1
+Bandra,19.0596,72.8295,Mumbai City,SW,1
+Dadar,19.0178,72.8478,Mumbai City,SW,2
+Worli,19.0176,72.8162,Mumbai City,SW,1
+Colaba,18.9067,72.8147,Mumbai City,SW,1
+Thane West,19.2183,72.9781,Thane,SW,3
+Ghodbunder Road,19.26,72.97,Thane,W,2
+Kalwa,19.2,72.999,Thane,SW,1
+Mumbra,19.176,73.022,Thane,S,1
+Airoli,19.159,72.9986,Navi Mumbai,S,1
+Vashi,19.0771,72.9986,Navi Mumbai,S,2
+Nerul,19.033,73.0297,Navi Mumbai,S,1
+Belapur,19.0213,73.039,Navi Mumbai,S,1
+Kharghar,19.047,73.0699,Navi Mumbai,S,2
+Panvel,18.9894,73.1175,Navi Mumbai,S,2
+Kamothe,19.0183,73.096,Navi Mumbai,S,1
+Ulwe,18.97,73.025,Navi Mumbai,S,1
+Kalyan,19.2437,73.1355,Kalyan-Dombivli,SE,3
+Dombivli,19.2183,73.0867,Kalyan-Dombivli,SE,2
+Ulhasnagar,19.2215,73.1645,Kalyan-Dombivli,SE,2
+Ambernath,19.209,73.186,Ambernath-Badlapur,SE,1
+Badlapur,19.155,73.265,Ambernath-Badlapur,SE,2
+Titwala,19.295,73.203,Kalyan-Dombivli,E,1
+Neral,19.027,73.318,Ambernath-Badlapur,SE,1
+Karjat,18.9107,73.3236,Ambernath-Badlapur,SE,1
+Shahapur,19.452,73.328,Rural North,NE,1
+Padgha,19.365,73.187,Rural North,NE,1
+Murbad,19.253,73.393,Rural North,E,1
+Wada,19.653,73.133,Rural North,N,1
+Vajreshwari,19.486,73.034,Rural North,N,1
+Bhiwandi City,19.2967,73.0631,Rural North,NE,2
+Anjur Phata,19.264,73.017,Thane,SW,1

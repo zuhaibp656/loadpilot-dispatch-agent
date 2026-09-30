@@ -1,0 +1,3 @@
+hub_id,name,lat,lon,address,is_default
+BHW-DC,Bhiwandi Regional DC,19.2813,73.0483,"Mankoli Naka, Bhiwandi, Thane 421302",true
+TLJ-DC,Taloja Satellite DC,19.064,73.118,"MIDC Taloja, Navi Mumbai 410208",false

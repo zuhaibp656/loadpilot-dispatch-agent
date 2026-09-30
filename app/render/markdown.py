@@ -114,3 +114,71 @@ def truck_markdown(plan: DispatchPlan, truck_id: str) -> str:
     out.append(f"- Volume {lp.volume_fill_pct}% · payload {lp.weight_fill_pct}% · front-half weight "
                f"{lp.front_axle_share_pct}% · LIFO {'✅ verified' if lp.lifo_ok else '⚠️ review'}")
     return "\n".join(out) + "\n"
+
+
+def _load_line(r) -> str:
+    order = sorted(r.stops, key=lambda s: -s.seq)
+    return " → ".join(f"S{rs.seq} ({len(rs.stop.boxes)})" for rs in order)
+
+
+def driver_markdown(plan: DispatchPlan, truck_id: str, links: dict[str, str] | None = None,
+                    source_note: str = "") -> str:
+    """One driver's day: numbered route, where each store's cartons go, and how to load."""
+    r = next((x for x in plan.routes if x.truck_id == truck_id), None)
+    if r is None:
+        return f"\n\nTruck `{truck_id}` is not in plan {plan.plan_id}."
+    lp = plan.loads[r.truck_id]
+    zones = {z.stop_seq: z for z in lp.zones}
+    L = lp.truck_type.inner_l_cm
+    out = [f"\n\n---\n\n### Your day · {r.driver} · {r.truck_id} ({r.truck_type.name})\n",
+           f"Leave **{plan.hub.name}** at **{_hm(r.start_min)}**, {len(r.stops)} drops, "
+           f"{sum(len(rs.stop.boxes) for rs in r.stops)} cartons, {r.km:.0f} km, back by **{_hm(r.end_min)}**."
+           + (f"  \n{source_note}" if source_note else "") + "\n",
+           "| # | Store | Area · ETA | Cartons | Where in the truck |",
+           "| ---: | :--- | :--- | ---: | :--- |"]
+    for rs in r.stops:
+        z = zones.get(rs.seq)
+        pos = f"{max(0, L - z.x_end):.0f}–{L - z.x_start:.0f} cm from door" if z else "-"
+        out.append(f"| {rs.seq} | {rs.stop.name} | {_locality(rs.stop)} · {_hm(rs.arrive_min)} | "
+                   f"{len(rs.stop.boxes)} | {pos} |")
+    out.append("\n### How to load your truck\n")
+    out.append(f"1. Start at the **cab wall** with stop {len(r.stops)} (your last drop), then work back to the door.")
+    out.append(f"2. Load order: **{_load_line(r)}** (stop · cartons).")
+    out.append("3. Heavy cartons on the floor, fragile on top. Stop 1 goes in last, right at the door.")
+    out.append(f"4. Check: volume {lp.volume_fill_pct}% · payload {lp.weight_fill_pct}% · "
+               f"LIFO {'✅ nothing to dig at any stop' if lp.lifo_ok else '⚠️ review'}.")
+    if links and links.get("html"):
+        out.append("\n### Open on your phone\n")
+        out.append(f"- 📱 **[Your route map + tap-a-store 3D loading ↗]({links['html']})**")
+        if links.get("video"):
+            out.append(f"- 🎬 **[Loading video (MP4) ↗]({links['video']})**")
+    return "\n".join(out) + "\n"
+
+
+def briefings_markdown(plan: DispatchPlan, links_by_truck: dict[str, str] | None = None) -> str:
+    """Fleet manager: one ready-to-send instruction block per driver."""
+    links_by_truck = links_by_truck or {}
+    out = ["\n\n---\n\n### Driver instructions (send one to each driver)\n"]
+    for i, r in enumerate(plan.routes):
+        lp = plan.loads.get(r.truck_id)
+        first = r.stops[0].stop if r.stops else None
+        out.append(f"#### {DOTS[i % len(DOTS)]} {r.driver} · {r.truck_id} ({r.truck_type.code})\n")
+        out.append(f"- **Report** {_hm(r.start_min - 30)} at dock · **leave** {_hm(r.start_min)} · "
+                   f"**back** {_hm(r.end_min)} · {len(r.stops)} drops · {r.km:.0f} km")
+        out.append(f"- **Route**: Hub → {_itinerary(r)} → Hub")
+        out.append(f"- **First drop**: {first.name if first else '-'} at {_hm(r.stops[0].arrive_min) if r.stops else '-'}")
+        out.append(f"- **Load (cab → door)**: {_load_line(r)}")
+        if lp is not None:
+            frag = sum(1 for p in lp.placed if p.box.fragile)
+            out.append(f"- **Cartons**: {len(lp.placed)} ({frag} fragile, on top) · fill {lp.volume_fill_pct}%")
+        if links_by_truck.get(r.truck_id):
+            out.append(f"- 📱 **[Driver view: map + 3D loading ↗]({links_by_truck[r.truck_id]})**")
+        out.append("")
+    out.append("### Summary (copy-ready)\n")
+    out.append("| Driver · Truck | Leave · Back | Drops · Cartons | Km | First drop |")
+    out.append("| :--- | :--- | ---: | ---: | :--- |")
+    for r in plan.routes:
+        lp = plan.loads.get(r.truck_id)
+        out.append(f"| {r.driver} · {r.truck_id} | {_hm(r.start_min)} · {_hm(r.end_min)} | {len(r.stops)} · "
+                   f"{len(lp.placed) if lp else 0} | {r.km:.0f} | {r.stops[0].stop.name if r.stops else '-'} |")
+    return "\n".join(out) + "\n"

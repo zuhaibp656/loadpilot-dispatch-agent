@@ -1,0 +1,9 @@
+corridor,name,toll_inr
+N,North (Wada / Vajreshwari),0.0
+NE,North-East (Shahapur / Padgha),120.0
+E,East (Kalyan / Ambernath / Badlapur),0.0
+SE,South-East (Dombivli / Karjat),60.0
+S,South (Thane / Navi Mumbai / Panvel),145.0
+SW,South-West (Mumbai City / Eastern Suburbs),240.0
+W,West (Mira-Bhayandar / Western Suburbs),85.0
+NW,North-West (Vasai / Virar / Palghar),95.0

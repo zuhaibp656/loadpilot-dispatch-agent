@@ -1,0 +1,18 @@
+parameter,value,unit,description
+fuel_price_per_litre,92.0,INR/litre,Diesel price at the hub pump
+driver_day_cost,1100.0,INR/day,Driver wage per shift
+helper_day_cost,700.0,INR/day,Loader/helper wage per shift
+overtime_per_hour,180.0,INR/hour,Crew overtime beyond shift_hours
+shift_hours,10.0,hours,Standard shift length
+co2_kg_per_litre,2.68,kg/litre,Diesel CO2 emission factor
+service_min_base,8.0,min/stop,Parking + paperwork per stop
+service_min_per_box,0.35,min/carton,Unloading time per carton
+unsorted_search_min_per_stop,9.0,min/stop,Baseline: time lost digging for cartons when not LIFO-loaded
+toll_N,0.0,INR/trip,"Toll per trip, corridor North (Wada / Vajreshwari)"
+toll_NE,120.0,INR/trip,"Toll per trip, corridor North-East (Shahapur / Padgha)"
+toll_E,0.0,INR/trip,"Toll per trip, corridor East (Kalyan / Ambernath / Badlapur)"
+toll_SE,60.0,INR/trip,"Toll per trip, corridor South-East (Dombivli / Karjat)"
+toll_S,145.0,INR/trip,"Toll per trip, corridor South (Thane / Navi Mumbai / Panvel)"
+toll_SW,240.0,INR/trip,"Toll per trip, corridor South-West (Mumbai City / Eastern Suburbs)"
+toll_W,85.0,INR/trip,"Toll per trip, corridor West (Mira-Bhayandar / Western Suburbs)"
+toll_NW,95.0,INR/trip,"Toll per trip, corridor North-West (Vasai / Virar / Palghar)"

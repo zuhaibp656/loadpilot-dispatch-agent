@@ -95,6 +95,12 @@ def queue(state: Any, kind: str, **extra: Any) -> None:
 
 
 def current_stops(sess: dict[str, Any], source: str) -> list[Stop]:
+    if source == "bigquery":
+        try:
+            from app.data.bq_source import load_stops_from_bigquery
+            return load_stops_from_bigquery()
+        except Exception as exc:  # noqa: BLE001 - fall back to the built-in demo book
+            logging.warning("BigQuery order source failed, using demo data: %s", exc)
     base = sess["stops"] if (source == "chat" and sess["stops"]) else demo_stops()
     if source == "photos" and sess["scanned"]:
         by_stop: dict[str, list] = {}
@@ -222,7 +228,8 @@ def plan_dispatch(tool_context: ToolContext, truck_counts: str = "", objective: 
         driver_day_cost: Driver cost per day (INR). 0 keeps the current value.
         hub_id: BHW-DC (Bhiwandi) or TLJ-DC (Taloja).
         dispatch_date: YYYY-MM-DD.
-        order_source: demo | chat (orders pasted/uploaded) | photos (demo + scanned cartons).
+        order_source: demo | chat (orders pasted/uploaded) | photos (demo + scanned cartons) |
+            bigquery (today's order book from BigQuery dataset loadpilot_demo).
     """
     st = tool_context.state
     p = params_from_state(st)
@@ -242,7 +249,7 @@ def plan_dispatch(tool_context: ToolContext, truck_counts: str = "", objective: 
         p.hub_id = hub_id.upper()
     if dispatch_date:
         p.dispatch_date = dispatch_date[:10]
-    if order_source in ("demo", "chat", "photos"):
+    if order_source in ("demo", "chat", "photos", "bigquery"):
         p.order_source = order_source
     save_params(st, p)
     try:
@@ -408,7 +415,154 @@ def reset_to_demo_data(tool_context: ToolContext) -> dict[str, Any]:
             "fleet": DEFAULT_FLEET_AVAILABLE}
 
 
+def _driver_runs() -> list[dict[str, Any]]:
+    try:
+        from app.data.demo_extended import DRIVER_RUNS
+    except ImportError:  # pragma: no cover
+        try:
+            from data.demo_extended import DRIVER_RUNS
+        except ImportError:
+            return []
+    return list(DRIVER_RUNS)
+
+
+def _pick_truck(stops: list[Stop], wanted: str = "") -> list[str]:
+    """Candidate truck codes, smallest first, that could carry these stops."""
+    vol = sum(s.volume_m3 for s in stops)
+    kg = sum(s.weight_kg for s in stops)
+    codes = sorted(TRUCK_CATALOGUE, key=lambda c: TRUCK_CATALOGUE[c].volume_m3)
+    if wanted and wanted.upper() in TRUCK_CATALOGUE:
+        return [wanted.upper()] + [c for c in codes if TRUCK_CATALOGUE[c].volume_m3 > TRUCK_CATALOGUE[wanted.upper()].volume_m3]
+    return [c for c in codes if TRUCK_CATALOGUE[c].volume_m3 * 0.8 >= vol and TRUCK_CATALOGUE[c].payload_kg >= kg] or codes[-1:]
+
+
+def plan_my_route(tool_context: ToolContext, driver: str = "", truck_type: str = "",
+                  stop_ids: str = "") -> dict[str, Any]:
+    """DRIVER VIEW: one driver's route and how to load HIS truck ("I'm Suresh, here are my cartons,
+    how do I load?"). Works from (1) attached carton photos (labels identify the stores), (2) stop
+    ids or a pasted/attached order list, (3) the driver's preset run in the demo data, or (4) his
+    truck in today's fleet plan.
+
+    Args:
+        driver: Driver name (e.g. "Suresh") or truck id.
+        truck_type: ACE | PKP | T14 | T17 | T20. Empty = smallest truck that fits.
+        stop_ids: Optional demo stop ids, e.g. "S045, S046, S050".
+    """
+    st = tool_context.state
+    sess = session(st)
+    name = (driver or "").strip().title() or "Driver"
+    p = params_from_state(st)
+    hub = HUBS.get(p.hub_id) or HUBS["BHW-DC"]
+    by_id = {s.stop_id: s for s in demo_stops()}
+    ids: list[str] = []
+    source = ""
+    images = [(d, m) for d, m, _ in sess.get("attachments", []) if m.startswith("image/")]
+    if images:
+        try:
+            from app.capture.sources import PhotoSource
+        except ImportError:  # pragma: no cover
+            from capture.sources import PhotoSource
+        boxes, _issues = PhotoSource().capture(images)
+        known = {b.box_id for b in sess["scanned"]}
+        sess["scanned"] += [b for b in boxes if b.box_id not in known]
+        for b in boxes:
+            if b.stop_id not in ids:
+                ids.append(b.stop_id)
+        source = (f"📷 Read {len(boxes)} carton labels from {len(images)} photo(s) → {len(ids)} stores; "
+                  "each store's full consignment comes from the order book.")
+    if not ids and stop_ids:
+        ids = [m.upper() for m in re.findall(r"\bS\d{3}\b", stop_ids, re.I)]
+        source = f"📝 {len(ids)} stores from your list."
+    run = None
+    if not ids:
+        key = name.lower()
+        run = next((r for r in _driver_runs() if key in (str(r.get("driver", "")).lower(), str(r.get("run_id", "")).lower())), None)
+        if run:
+            ids = list(run.get("stop_ids", []))
+            truck_type = truck_type or run.get("truck_code", "")
+            source = f"📋 {name}'s run from today's order book ({len(ids)} stores)."
+    stops = [by_id[i] for i in ids if i in by_id]
+    if not stops and sess["stops"] and not ids:
+        stops = list(sess["stops"])
+        source = f"📝 {len(stops)} stores from the order list you shared."
+    if not stops:  # fall back to the driver's truck in today's fleet plan
+        plan = sess.get("plan")
+        if plan is None or not any(name.lower() in (r.driver.lower(), r.truck_id.lower()) for r in plan.routes):
+            run_plan(st)
+            plan = sess["plan"]
+        r = next((x for x in plan.routes if name.lower() in (x.driver.lower(), x.truck_id.lower())), None)
+        if r is None:
+            return {"status": "error", "message": f"No stops for '{driver}'. Attach carton photos, give stop ids, "
+                    "or use a demo driver.", "demo_drivers": [x.get("driver") for x in _driver_runs()],
+                    "fleet_plan_drivers": [x.driver for x in plan.routes]}
+        sess["links"] = start_publishing_driver(sess, plan, r.truck_id)
+        queue(st, "driver", focus=r.truck_id, note=f"🗓️ Your part of today's fleet plan {plan.plan_id}.")
+        return _driver_summary(plan, r.truck_id)
+    missing = [i for i in ids if i not in by_id]
+    plan = None
+    for code in _pick_truck(stops, truck_type):
+        dp = dataclasses.replace(p, truck_counts={code: 1}, corridor_claims={})
+        plan = _plan_dispatch(hub, stops, dp)
+        if plan.routes and not plan.unassigned:
+            break
+    if plan is None or not plan.routes:
+        return {"status": "error", "message": "Could not build a route for these stops."}
+    plan.routes = [dataclasses.replace(r, driver=name) for r in plan.routes]
+    tid = plan.routes[0].truck_id
+    plan.focus_truck_id = tid
+    sess["plan"] = plan
+    sess["links"] = start_publishing_driver(sess, plan, tid)
+    note = source + (f" ⚠️ {len(plan.unassigned)} stores did not fit." if plan.unassigned else "") + (
+        f" Unknown ids: {', '.join(missing)}." if missing else "")
+    queue(st, "driver", focus=tid, note=note)
+    out = _driver_summary(plan, tid)
+    out["source"] = note
+    return out
+
+
+def start_publishing_driver(sess: dict[str, Any], plan: Any, truck_id: str) -> dict[str, str]:
+    try:
+        from app.integration.media import start_publishing
+    except ImportError:  # pragma: no cover
+        from integration.media import start_publishing
+    return start_publishing(sess, plan, truck_id, only_truck=truck_id)
+
+
+def _driver_summary(plan: Any, truck_id: str) -> dict[str, Any]:
+    r = next(x for x in plan.routes if x.truck_id == truck_id)
+    lp = plan.loads[truck_id]
+    return {"driver": r.driver, "truck": r.truck_id, "type": r.truck_type.name, "stops": len(r.stops),
+            "cartons": len(lp.placed), "km": r.km, "leave": f"{r.start_min // 60:02d}:{r.start_min % 60:02d}",
+            "back": f"{r.end_min // 60:02d}:{r.end_min % 60:02d}", "first_drop": r.stops[0].stop.name if r.stops else "",
+            "load_first": f"stop {len(r.stops)} at the cab wall", "volume_fill_pct": lp.volume_fill_pct,
+            "lifo_ok": lp.lifo_ok,
+            "ui": "Driver route table, loading steps and the tap-a-store map/3D view are attached automatically."}
+
+
+def driver_briefings(tool_context: ToolContext) -> dict[str, Any]:
+    """FLEET MANAGER VIEW: individual, ready-to-send instructions for every driver in today's plan
+    (report/leave/back times, route, first drop, cab-to-door load order) plus a personal link per
+    driver to his own map + tap-a-store 3D loading page."""
+    st = tool_context.state
+    sess = session(st)
+    plan = sess.get("plan")
+    if plan is None or len(plan.routes) < 2:
+        run_plan(st)
+        plan = sess["plan"]
+    try:
+        from app.integration.media import start_briefings
+    except ImportError:  # pragma: no cover
+        from integration.media import start_briefings
+    sess["brief_links"] = start_briefings(sess, plan)
+    queue(st, "briefings", focus=plan.routes[0].truck_id if plan.routes else None)
+    return {"plan_id": plan.plan_id, "drivers": [
+        {"driver": r.driver, "truck": r.truck_id, "stops": len(r.stops),
+         "leave": f"{r.start_min // 60:02d}:{r.start_min % 60:02d}"} for r in plan.routes],
+        "ui": "One instruction block and personal link per driver is attached automatically."}
+
+
 ALL_TOOLS = [show_planning_wizard, plan_dispatch, claim_corridor, get_truck_load_plan,
+             plan_my_route, driver_briefings,
              ingest_delivery_orders, scan_box_manifest, list_fleet_and_costs, reset_to_demo_data]
 
 _ = threading  # media publishing threads are tracked in the session entry

@@ -4,8 +4,11 @@
   app/data/samples/bg_*.jpg) + composited cartons with printed shipping labels and real,
   decodable QR codes (payload LP1|box_id|stop_id|sku|LxWxH|kg|flags) for real demo stops.
 - Order lists: e-mail body (txt), CSV, XLSX, text-layer PDF — to test ingest_delivery_orders.
+- Driver runs (app.data.demo_extended.DRIVER_RUNS): per run, two staging photos
+  driver_<run_id>_cartons_{a,b}.jpg (2 cartons per stop, decodable QR labels) and a
+  WhatsApp-style manager message driver_<run_id>_orders.txt.
 
-Run:  uv run python scripts/generate_demo_assets.py
+Run:  uv run python scripts/generate_demo_assets.py [--drivers-only]
 """
 
 from __future__ import annotations
@@ -21,7 +24,9 @@ import qrcode  # noqa: E402
 from PIL import Image, ImageDraw, ImageFilter, ImageFont  # noqa: E402
 
 from app.capture.sources import decode_qr_codes, encode_qr_payload  # noqa: E402
+from app.data.demo_extended import DRIVER_RUNS, driver_run_stats, locality_of  # noqa: E402
 from app.data.demo_mmr import build_demo_stops  # noqa: E402
+from app.data.master_data import TRUCK_CATALOGUE  # noqa: E402
 
 OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "app", "data", "samples")
 KRAFT = [(196, 154, 108), (205, 165, 118), (186, 144, 98), (210, 176, 130)]
@@ -104,6 +109,7 @@ def carton_photo(bg_path: str, items, out_name: str, face_w: int, cols: int, ori
     bg.convert("RGB").save(path, quality=92)
     codes = decode_qr_codes(open(path, "rb").read())
     print(f"{out_name}: {len(items)} cartons, {len(codes)} QR decoded")
+    carton_photo.last_decoded = len(codes)
     return path
 
 
@@ -153,9 +159,60 @@ def _text_pdf(path: str, lines: list[str]) -> None:
     open(path, "wb").write(out)
 
 
+def _layout(n: int) -> dict:
+    """Photo layout for n cartons (<= 8) on the 1600 px wide background."""
+    if n <= 6:
+        return {"face_w": 210, "cols": 3, "origin": (290, 280), "gap": 190}
+    return {"face_w": 205, "cols": 4, "origin": (170, 285), "gap": 150}
+
+
+def driver_assets(stops) -> dict[str, list[tuple[str, int, int]]]:
+    """Per driver run: 2 staging photos (2 cartons per stop) + a WhatsApp order message."""
+    by_id = {s.stop_id: s for s in stops}
+    bgs = [os.path.join(OUT, "bg_staging_floor.jpg"), os.path.join(OUT, "bg_dock.jpg")]
+    report: dict[str, list[tuple[str, int, int]]] = {}
+    for ri, run in enumerate(DRIVER_RUNS):
+        run_stops = [by_id[sid] for sid in run["stop_ids"]]
+        half = (len(run_stops) + 1) // 2
+        groups = [run_stops[:half], run_stops[half:]]
+        report[run["run_id"]] = []
+        for pi, (group, photo) in enumerate(zip(groups, run["photos"])):
+            items = []
+            for st in group:
+                items += [(b, st, st.stop_id) for b in (st.boxes[0], st.boxes[-1])]
+            carton_photo(bgs[pi % 2], items, photo, seed=100 + 10 * ri + pi, **_layout(len(items)))
+            report[run["run_id"]].append((photo, len(items), carton_photo.last_decoded))
+        _driver_order_message(run, run_stops, stops)
+    return report
+
+
+def _driver_order_message(run: dict, run_stops, stops) -> None:
+    import datetime as dt
+    stamp = dt.date.today().strftime("%d/%m/%y")
+    t = TRUCK_CATALOGUE[run["truck_code"]]
+    st = driver_run_stats(run, stops)
+    mgr = f"[{stamp}, 6:05 AM] Priya (Dispatch Mgr):"
+    lines = [f"{mgr} Good morning {run['driver']} 🙏",
+             f"{mgr} Today you take the {run['label'].split(' · ')[-1]} route. "
+             f"Vehicle {t.code} ({t.name}). Loading at Bhiwandi DC bay 4 from 6:30.",
+             f"{mgr} Drops:"]
+    for i, s in enumerate(run_stops, 1):
+        win = "8am-1pm" if s.window_start_min == 480 else "9am-7pm"
+        lines.append(f"{i}. {s.name}, {locality_of(s)} - {len(s.boxes)} cartons "
+                     f"({s.boxes[0].category}), {win}")
+    lines += [f"[{stamp}, 6:07 AM] Priya (Dispatch Mgr): Total {st['cartons']} cartons, "
+              f"{st['weight_kg']:.0f} kg. Photos of the staged cartons coming now 📸",
+              f"[{stamp}, 6:09 AM] {run['driver']}: Ok madam 👍 will load last drop first"]
+    open(os.path.join(OUT, run["order_file"]), "w", encoding="utf-8").write("\n".join(lines) + "\n")
+    print(f"{run['order_file']}: {len(run_stops)} stops")
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     stops = build_demo_stops(seed=42)
+    if "--drivers-only" in sys.argv:
+        print(driver_assets(stops))
+        return
     by_id = {s.stop_id: s for s in stops}
     bg_dock = os.path.join(OUT, "bg_dock.jpg")
     bg_floor = os.path.join(OUT, "bg_staging_floor.jpg")
@@ -175,6 +232,7 @@ def main():
     lab.save(os.path.join(OUT, "label_closeup.png"))
     print("label_closeup.png:", len(decode_qr_codes(open(os.path.join(OUT, "label_closeup.png"), "rb").read())), "QR")
     order_files(stops)
+    print(driver_assets(stops))
 
 
 if __name__ == "__main__":

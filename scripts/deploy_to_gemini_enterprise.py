@@ -114,7 +114,8 @@ def api(method: str, url: str, body: dict | None = None, project: str | None = N
 def enable_apis(project: str) -> None:
     services = ["aiplatform.googleapis.com", "storage.googleapis.com", "discoveryengine.googleapis.com",
                 "iamcredentials.googleapis.com", "iam.googleapis.com",
-                "cloudresourcemanager.googleapis.com", "logging.googleapis.com", "routes.googleapis.com"]
+                "cloudresourcemanager.googleapis.com", "logging.googleapis.com", "routes.googleapis.com",
+                "bigquery.googleapis.com"]
     try:
         op = api("POST", f"https://serviceusage.googleapis.com/v1/projects/{project}/services:batchEnable",
                  {"serviceIds": services}, project)
@@ -172,7 +173,7 @@ def grant_iam(project: str, sa_email: str, media: str, viewer_domain: str | None
               {"options": {"requestedPolicyVersion": 3}})
     changed = False
     for role in ("roles/aiplatform.user", "roles/logging.logWriter", "roles/serviceusage.serviceUsageConsumer",
-                 "roles/storage.objectViewer"):
+                 "roles/storage.objectViewer", "roles/bigquery.dataViewer", "roles/bigquery.jobUser"):
         changed |= _add_binding(pol, role, member)
     if changed:
         api("POST", f"https://cloudresourcemanager.googleapis.com/v1/projects/{project}:setIamPolicy",

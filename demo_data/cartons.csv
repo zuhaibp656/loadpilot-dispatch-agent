@@ -1,0 +1,1261 @@
+box_id,stop_id,sku,description,category,industry,l_cm,w_cm,h_cm,weight_kg,volume_m3,fragile,this_side_up,qr_payload
+S001-B01,S001,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S001-B01|S001|FMC-DET-24|46x32x30|25|
+S001-B02,S001,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S001-B02|S001|FMC-DET-24|46x32x30|25|
+S001-B03,S001,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S001-B03|S001|FMC-OIL-15L|25x25x35|15.5|U
+S001-B04,S001,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S001-B04|S001|FMC-SHM-36|38x26x24|13.5|U
+S001-B05,S001,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S001-B05|S001|FMC-SHM-36|38x26x24|13.5|U
+S001-B06,S001,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S001-B06|S001|FMC-DET-24|46x32x30|25|
+S001-B07,S001,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S001-B07|S001|FMC-DET-24|46x32x30|25|
+S001-B08,S001,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S001-B08|S001|FMC-BIS-96|44x30x28|7.5|
+S001-B09,S001,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S001-B09|S001|FMC-SHM-36|38x26x24|13.5|U
+S001-B10,S001,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S001-B10|S001|FMC-SHM-36|38x26x24|13.5|U
+S001-B11,S001,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S001-B11|S001|FMC-OIL-15L|25x25x35|15.5|U
+S001-B12,S001,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S001-B12|S001|FMC-OIL-15L|25x25x35|15.5|U
+S001-B13,S001,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S001-B13|S001|FMC-BIS-96|44x30x28|7.5|
+S001-B14,S001,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S001-B14|S001|FMC-BIS-96|44x30x28|7.5|
+S001-B15,S001,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S001-B15|S001|FMC-BIS-96|44x30x28|7.5|
+S001-B16,S001,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S001-B16|S001|FMC-BEV-24|40x27x24|15|U
+S001-B17,S001,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S001-B17|S001|FMC-OIL-15L|25x25x35|15.5|U
+S001-B18,S001,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S001-B18|S001|FMC-DET-24|46x32x30|25|
+S002-B01,S002,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S002-B01|S002|PNT-EXT-10L|28x28x31|13|U
+S002-B02,S002,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S002-B02|S002|PNT-EMU-20L|34x34x38|24|U
+S002-B03,S002,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S002-B03|S002|PNT-EMU-20L|34x34x38|24|U
+S002-B04,S002,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S002-B04|S002|PNT-PTY-20KG|50x34x16|20.5|
+S002-B05,S002,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S002-B05|S002|PNT-ENM-4x4L|36x36x24|18.5|U
+S002-B06,S002,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S002-B06|S002|PNT-PTY-20KG|50x34x16|20.5|
+S002-B07,S002,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S002-B07|S002|PNT-PRM-12x1L|40x30x19|15|U
+S002-B08,S002,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S002-B08|S002|PNT-ENM-4x4L|36x36x24|18.5|U
+S002-B09,S002,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S002-B09|S002|PNT-TNT-48|32x24x22|9.5|FU
+S002-B10,S002,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S002-B10|S002|PNT-EXT-10L|28x28x31|13|U
+S002-B11,S002,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S002-B11|S002|PNT-ENM-4x4L|36x36x24|18.5|U
+S002-B12,S002,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S002-B12|S002|PNT-PTY-20KG|50x34x16|20.5|
+S002-B13,S002,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S002-B13|S002|PNT-ENM-4x4L|36x36x24|18.5|U
+S002-B14,S002,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S002-B14|S002|PNT-PTY-20KG|50x34x16|20.5|
+S002-B15,S002,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S002-B15|S002|PNT-ENM-4x4L|36x36x24|18.5|U
+S002-B16,S002,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S002-B16|S002|PNT-PRM-12x1L|40x30x19|15|U
+S003-B01,S003,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S003-B01|S003|PNT-PTY-20KG|50x34x16|20.5|
+S003-B02,S003,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S003-B02|S003|PNT-EXT-10L|28x28x31|13|U
+S003-B03,S003,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S003-B03|S003|PNT-EXT-10L|28x28x31|13|U
+S003-B04,S003,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S003-B04|S003|PNT-PTY-20KG|50x34x16|20.5|
+S003-B05,S003,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S003-B05|S003|PNT-EMU-20L|34x34x38|24|U
+S003-B06,S003,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S003-B06|S003|PNT-EXT-10L|28x28x31|13|U
+S003-B07,S003,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S003-B07|S003|PNT-PRM-12x1L|40x30x19|15|U
+S003-B08,S003,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S003-B08|S003|PNT-PRM-12x1L|40x30x19|15|U
+S003-B09,S003,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S003-B09|S003|PNT-PRM-12x1L|40x30x19|15|U
+S003-B10,S003,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S003-B10|S003|PNT-EMU-20L|34x34x38|24|U
+S003-B11,S003,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S003-B11|S003|PNT-ENM-4x4L|36x36x24|18.5|U
+S003-B12,S003,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S003-B12|S003|PNT-ENM-4x4L|36x36x24|18.5|U
+S004-B01,S004,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S004-B01|S004|PNT-ENM-4x4L|36x36x24|18.5|U
+S004-B02,S004,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S004-B02|S004|PNT-ENM-4x4L|36x36x24|18.5|U
+S004-B03,S004,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S004-B03|S004|PNT-PRM-12x1L|40x30x19|15|U
+S004-B04,S004,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S004-B04|S004|PNT-PTY-20KG|50x34x16|20.5|
+S004-B05,S004,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S004-B05|S004|PNT-PRM-12x1L|40x30x19|15|U
+S004-B06,S004,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S004-B06|S004|PNT-EMU-20L|34x34x38|24|U
+S004-B07,S004,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S004-B07|S004|PNT-EMU-20L|34x34x38|24|U
+S004-B08,S004,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S004-B08|S004|PNT-EXT-10L|28x28x31|13|U
+S004-B09,S004,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S004-B09|S004|PNT-EMU-20L|34x34x38|24|U
+S004-B10,S004,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S004-B10|S004|PNT-EMU-20L|34x34x38|24|U
+S004-B11,S004,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S004-B11|S004|PNT-TNT-48|32x24x22|9.5|FU
+S004-B12,S004,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S004-B12|S004|PNT-PTY-20KG|50x34x16|20.5|
+S004-B13,S004,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S004-B13|S004|PNT-EXT-10L|28x28x31|13|U
+S004-B14,S004,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S004-B14|S004|PNT-PRM-12x1L|40x30x19|15|U
+S004-B15,S004,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S004-B15|S004|PNT-EXT-10L|28x28x31|13|U
+S004-B16,S004,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S004-B16|S004|PNT-PTY-20KG|50x34x16|20.5|
+S004-B17,S004,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S004-B17|S004|PNT-EXT-10L|28x28x31|13|U
+S004-B18,S004,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S004-B18|S004|PNT-EMU-20L|34x34x38|24|U
+S005-B01,S005,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S005-B01|S005|PNT-EXT-10L|28x28x31|13|U
+S005-B02,S005,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S005-B02|S005|PNT-ENM-4x4L|36x36x24|18.5|U
+S005-B03,S005,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S005-B03|S005|PNT-EXT-10L|28x28x31|13|U
+S005-B04,S005,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S005-B04|S005|PNT-TNT-48|32x24x22|9.5|FU
+S005-B05,S005,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S005-B05|S005|PNT-EMU-20L|34x34x38|24|U
+S005-B06,S005,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S005-B06|S005|PNT-EXT-10L|28x28x31|13|U
+S005-B07,S005,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S005-B07|S005|PNT-PRM-12x1L|40x30x19|15|U
+S005-B08,S005,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S005-B08|S005|PNT-PTY-20KG|50x34x16|20.5|
+S005-B09,S005,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S005-B09|S005|PNT-EMU-20L|34x34x38|24|U
+S005-B10,S005,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S005-B10|S005|PNT-EMU-20L|34x34x38|24|U
+S005-B11,S005,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S005-B11|S005|PNT-PRM-12x1L|40x30x19|15|U
+S005-B12,S005,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S005-B12|S005|PNT-ENM-4x4L|36x36x24|18.5|U
+S005-B13,S005,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S005-B13|S005|PNT-EXT-10L|28x28x31|13|U
+S005-B14,S005,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S005-B14|S005|PNT-ENM-4x4L|36x36x24|18.5|U
+S005-B15,S005,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S005-B15|S005|PNT-EXT-10L|28x28x31|13|U
+S005-B16,S005,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S005-B16|S005|PNT-EMU-20L|34x34x38|24|U
+S005-B17,S005,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S005-B17|S005|PNT-ENM-4x4L|36x36x24|18.5|U
+S005-B18,S005,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S005-B18|S005|PNT-TNT-48|32x24x22|9.5|FU
+S006-B01,S006,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S006-B01|S006|FMC-BIS-96|44x30x28|7.5|
+S006-B02,S006,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S006-B02|S006|FMC-BIS-96|44x30x28|7.5|
+S006-B03,S006,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S006-B03|S006|FMC-DET-24|46x32x30|25|
+S006-B04,S006,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S006-B04|S006|FMC-DET-24|46x32x30|25|
+S006-B05,S006,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S006-B05|S006|FMC-OIL-15L|25x25x35|15.5|U
+S006-B06,S006,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S006-B06|S006|FMC-OIL-15L|25x25x35|15.5|U
+S006-B07,S006,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S006-B07|S006|FMC-BEV-24|40x27x24|15|U
+S006-B08,S006,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S006-B08|S006|FMC-OIL-15L|25x25x35|15.5|U
+S006-B09,S006,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S006-B09|S006|FMC-SHM-36|38x26x24|13.5|U
+S006-B10,S006,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S006-B10|S006|FMC-DET-24|46x32x30|25|
+S006-B11,S006,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S006-B11|S006|FMC-OIL-15L|25x25x35|15.5|U
+S006-B12,S006,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S006-B12|S006|FMC-JAR-24|32x30x20|11|FU
+S006-B13,S006,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S006-B13|S006|FMC-SHM-36|38x26x24|13.5|U
+S006-B14,S006,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S006-B14|S006|FMC-DET-24|46x32x30|25|
+S006-B15,S006,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S006-B15|S006|FMC-BIS-96|44x30x28|7.5|
+S006-B16,S006,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S006-B16|S006|FMC-DET-24|46x32x30|25|
+S006-B17,S006,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S006-B17|S006|FMC-BEV-24|40x27x24|15|U
+S006-B18,S006,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S006-B18|S006|FMC-BEV-24|40x27x24|15|U
+S007-B01,S007,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S007-B01|S007|ELC-MXR-4|48x40x34|16|FU
+S007-B02,S007,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S007-B02|S007|ELC-MXR-4|48x40x34|16|FU
+S007-B03,S007,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S007-B03|S007|ELC-MXR-4|48x40x34|16|FU
+S007-B04,S007,ELC-TV-43,43-inch LED TV,electronics,electronics,105.0,16.0,66.0,12.0,0.1109,true,true,LP1|S007-B04|S007|ELC-TV-43|105x16x66|12|FU
+S007-B05,S007,ELC-TV-43,43-inch LED TV,electronics,electronics,105.0,16.0,66.0,12.0,0.1109,true,true,LP1|S007-B05|S007|ELC-TV-43|105x16x66|12|FU
+S007-B06,S007,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S007-B06|S007|ELC-MXR-4|48x40x34|16|FU
+S007-B07,S007,ELC-TV-43,43-inch LED TV,electronics,electronics,105.0,16.0,66.0,12.0,0.1109,true,true,LP1|S007-B07|S007|ELC-TV-43|105x16x66|12|FU
+S007-B08,S007,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S007-B08|S007|ELC-MXR-4|48x40x34|16|FU
+S007-B09,S007,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S007-B09|S007|ELC-MXR-4|48x40x34|16|FU
+S007-B10,S007,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S007-B10|S007|ELC-MXR-4|48x40x34|16|FU
+S008-B01,S008,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S008-B01|S008|FMC-DET-24|46x32x30|25|
+S008-B02,S008,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S008-B02|S008|FMC-SHM-36|38x26x24|13.5|U
+S008-B03,S008,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S008-B03|S008|FMC-SHM-36|38x26x24|13.5|U
+S008-B04,S008,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S008-B04|S008|FMC-BEV-24|40x27x24|15|U
+S008-B05,S008,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S008-B05|S008|FMC-BEV-24|40x27x24|15|U
+S008-B06,S008,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S008-B06|S008|FMC-OIL-15L|25x25x35|15.5|U
+S008-B07,S008,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S008-B07|S008|FMC-OIL-15L|25x25x35|15.5|U
+S008-B08,S008,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S008-B08|S008|FMC-OIL-15L|25x25x35|15.5|U
+S008-B09,S008,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S008-B09|S008|FMC-BIS-96|44x30x28|7.5|
+S008-B10,S008,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S008-B10|S008|FMC-OIL-15L|25x25x35|15.5|U
+S008-B11,S008,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S008-B11|S008|FMC-BIS-96|44x30x28|7.5|
+S008-B12,S008,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S008-B12|S008|FMC-BEV-24|40x27x24|15|U
+S008-B13,S008,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S008-B13|S008|FMC-BIS-96|44x30x28|7.5|
+S008-B14,S008,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S008-B14|S008|FMC-BIS-96|44x30x28|7.5|
+S008-B15,S008,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S008-B15|S008|FMC-DET-24|46x32x30|25|
+S008-B16,S008,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S008-B16|S008|FMC-DET-24|46x32x30|25|
+S008-B17,S008,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S008-B17|S008|FMC-SHM-36|38x26x24|13.5|U
+S008-B18,S008,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S008-B18|S008|FMC-SHM-36|38x26x24|13.5|U
+S008-B19,S008,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S008-B19|S008|FMC-DET-24|46x32x30|25|
+S008-B20,S008,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S008-B20|S008|FMC-OIL-15L|25x25x35|15.5|U
+S008-B21,S008,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S008-B21|S008|FMC-DET-24|46x32x30|25|
+S008-B22,S008,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S008-B22|S008|FMC-DET-24|46x32x30|25|
+S008-B23,S008,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S008-B23|S008|FMC-DET-24|46x32x30|25|
+S008-B24,S008,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S008-B24|S008|FMC-BIS-96|44x30x28|7.5|
+S008-B25,S008,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S008-B25|S008|FMC-SHM-36|38x26x24|13.5|U
+S009-B01,S009,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S009-B01|S009|PNT-PTY-20KG|50x34x16|20.5|
+S009-B02,S009,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S009-B02|S009|PNT-ENM-4x4L|36x36x24|18.5|U
+S009-B03,S009,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S009-B03|S009|PNT-EMU-20L|34x34x38|24|U
+S009-B04,S009,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S009-B04|S009|PNT-EXT-10L|28x28x31|13|U
+S009-B05,S009,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S009-B05|S009|PNT-EXT-10L|28x28x31|13|U
+S009-B06,S009,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S009-B06|S009|PNT-EMU-20L|34x34x38|24|U
+S009-B07,S009,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S009-B07|S009|PNT-PRM-12x1L|40x30x19|15|U
+S009-B08,S009,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S009-B08|S009|PNT-EXT-10L|28x28x31|13|U
+S009-B09,S009,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S009-B09|S009|PNT-EXT-10L|28x28x31|13|U
+S009-B10,S009,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S009-B10|S009|PNT-PTY-20KG|50x34x16|20.5|
+S009-B11,S009,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S009-B11|S009|PNT-EMU-20L|34x34x38|24|U
+S009-B12,S009,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S009-B12|S009|PNT-PRM-12x1L|40x30x19|15|U
+S009-B13,S009,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S009-B13|S009|PNT-PRM-12x1L|40x30x19|15|U
+S009-B14,S009,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S009-B14|S009|PNT-EMU-20L|34x34x38|24|U
+S010-B01,S010,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S010-B01|S010|FMC-BIS-96|44x30x28|7.5|
+S010-B02,S010,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S010-B02|S010|FMC-BIS-96|44x30x28|7.5|
+S010-B03,S010,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S010-B03|S010|FMC-BIS-96|44x30x28|7.5|
+S010-B04,S010,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S010-B04|S010|FMC-BIS-96|44x30x28|7.5|
+S010-B05,S010,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S010-B05|S010|FMC-BEV-24|40x27x24|15|U
+S010-B06,S010,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S010-B06|S010|FMC-BIS-96|44x30x28|7.5|
+S010-B07,S010,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S010-B07|S010|FMC-BEV-24|40x27x24|15|U
+S010-B08,S010,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S010-B08|S010|FMC-SHM-36|38x26x24|13.5|U
+S010-B09,S010,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S010-B09|S010|FMC-DET-24|46x32x30|25|
+S010-B10,S010,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S010-B10|S010|FMC-BEV-24|40x27x24|15|U
+S010-B11,S010,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S010-B11|S010|FMC-JAR-24|32x30x20|11|FU
+S010-B12,S010,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S010-B12|S010|FMC-BEV-24|40x27x24|15|U
+S010-B13,S010,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S010-B13|S010|FMC-BEV-24|40x27x24|15|U
+S010-B14,S010,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S010-B14|S010|FMC-BEV-24|40x27x24|15|U
+S010-B15,S010,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S010-B15|S010|FMC-DET-24|46x32x30|25|
+S010-B16,S010,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S010-B16|S010|FMC-SHM-36|38x26x24|13.5|U
+S011-B01,S011,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S011-B01|S011|PNT-TNT-48|32x24x22|9.5|FU
+S011-B02,S011,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S011-B02|S011|PNT-EMU-20L|34x34x38|24|U
+S011-B03,S011,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S011-B03|S011|PNT-PRM-12x1L|40x30x19|15|U
+S011-B04,S011,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S011-B04|S011|PNT-EXT-10L|28x28x31|13|U
+S011-B05,S011,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S011-B05|S011|PNT-EXT-10L|28x28x31|13|U
+S011-B06,S011,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S011-B06|S011|PNT-TNT-48|32x24x22|9.5|FU
+S011-B07,S011,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S011-B07|S011|PNT-TNT-48|32x24x22|9.5|FU
+S011-B08,S011,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S011-B08|S011|PNT-ENM-4x4L|36x36x24|18.5|U
+S011-B09,S011,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S011-B09|S011|PNT-PRM-12x1L|40x30x19|15|U
+S011-B10,S011,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S011-B10|S011|PNT-EMU-20L|34x34x38|24|U
+S011-B11,S011,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S011-B11|S011|PNT-EXT-10L|28x28x31|13|U
+S011-B12,S011,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S011-B12|S011|PNT-TNT-48|32x24x22|9.5|FU
+S011-B13,S011,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S011-B13|S011|PNT-ENM-4x4L|36x36x24|18.5|U
+S011-B14,S011,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S011-B14|S011|PNT-ENM-4x4L|36x36x24|18.5|U
+S011-B15,S011,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S011-B15|S011|PNT-PRM-12x1L|40x30x19|15|U
+S012-B01,S012,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S012-B01|S012|PNT-TNT-48|32x24x22|9.5|FU
+S012-B02,S012,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S012-B02|S012|PNT-EMU-20L|34x34x38|24|U
+S012-B03,S012,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S012-B03|S012|PNT-EMU-20L|34x34x38|24|U
+S012-B04,S012,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S012-B04|S012|PNT-ENM-4x4L|36x36x24|18.5|U
+S012-B05,S012,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S012-B05|S012|PNT-PRM-12x1L|40x30x19|15|U
+S012-B06,S012,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S012-B06|S012|PNT-EMU-20L|34x34x38|24|U
+S012-B07,S012,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S012-B07|S012|PNT-EMU-20L|34x34x38|24|U
+S012-B08,S012,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S012-B08|S012|PNT-PTY-20KG|50x34x16|20.5|
+S012-B09,S012,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S012-B09|S012|PNT-EMU-20L|34x34x38|24|U
+S012-B10,S012,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S012-B10|S012|PNT-ENM-4x4L|36x36x24|18.5|U
+S012-B11,S012,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S012-B11|S012|PNT-ENM-4x4L|36x36x24|18.5|U
+S012-B12,S012,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S012-B12|S012|PNT-EXT-10L|28x28x31|13|U
+S012-B13,S012,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S012-B13|S012|PNT-ENM-4x4L|36x36x24|18.5|U
+S012-B14,S012,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S012-B14|S012|PNT-ENM-4x4L|36x36x24|18.5|U
+S012-B15,S012,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S012-B15|S012|PNT-TNT-48|32x24x22|9.5|FU
+S012-B16,S012,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S012-B16|S012|PNT-EMU-20L|34x34x38|24|U
+S012-B17,S012,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S012-B17|S012|PNT-PRM-12x1L|40x30x19|15|U
+S012-B18,S012,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S012-B18|S012|PNT-EMU-20L|34x34x38|24|U
+S012-B19,S012,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S012-B19|S012|PNT-EXT-10L|28x28x31|13|U
+S012-B20,S012,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S012-B20|S012|PNT-PRM-12x1L|40x30x19|15|U
+S012-B21,S012,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S012-B21|S012|PNT-EXT-10L|28x28x31|13|U
+S012-B22,S012,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S012-B22|S012|PNT-EXT-10L|28x28x31|13|U
+S012-B23,S012,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S012-B23|S012|PNT-PRM-12x1L|40x30x19|15|U
+S012-B24,S012,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S012-B24|S012|PNT-EMU-20L|34x34x38|24|U
+S012-B25,S012,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S012-B25|S012|PNT-EXT-10L|28x28x31|13|U
+S012-B26,S012,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S012-B26|S012|PNT-TNT-48|32x24x22|9.5|FU
+S013-B01,S013,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S013-B01|S013|BLD-TIL-4|62x62x9|28|F
+S013-B02,S013,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S013-B02|S013|BLD-TIL-4|62x62x9|28|F
+S013-B03,S013,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S013-B03|S013|BLD-TIL-4|62x62x9|28|F
+S013-B04,S013,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S013-B04|S013|BLD-CEM-50|60x40x14|50|
+S013-B05,S013,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S013-B05|S013|BLD-CEM-50|60x40x14|50|
+S013-B06,S013,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S013-B06|S013|BLD-TIL-4|62x62x9|28|F
+S013-B07,S013,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S013-B07|S013|BLD-TIL-4|62x62x9|28|F
+S013-B08,S013,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S013-B08|S013|BLD-TIL-4|62x62x9|28|F
+S013-B09,S013,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S013-B09|S013|BLD-TIL-4|62x62x9|28|F
+S013-B10,S013,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S013-B10|S013|BLD-TIL-4|62x62x9|28|F
+S013-B11,S013,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S013-B11|S013|BLD-CEM-50|60x40x14|50|
+S013-B12,S013,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S013-B12|S013|BLD-TIL-4|62x62x9|28|F
+S013-B13,S013,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S013-B13|S013|BLD-CEM-50|60x40x14|50|
+S013-B14,S013,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S013-B14|S013|BLD-TIL-4|62x62x9|28|F
+S013-B15,S013,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S013-B15|S013|BLD-TIL-4|62x62x9|28|F
+S013-B16,S013,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S013-B16|S013|BLD-CEM-50|60x40x14|50|
+S013-B17,S013,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S013-B17|S013|BLD-CEM-50|60x40x14|50|
+S013-B18,S013,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S013-B18|S013|BLD-CEM-50|60x40x14|50|
+S013-B19,S013,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S013-B19|S013|BLD-CEM-50|60x40x14|50|
+S013-B20,S013,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S013-B20|S013|BLD-CEM-50|60x40x14|50|
+S013-B21,S013,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S013-B21|S013|BLD-TIL-4|62x62x9|28|F
+S013-B22,S013,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S013-B22|S013|BLD-TIL-4|62x62x9|28|F
+S013-B23,S013,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S013-B23|S013|BLD-CEM-50|60x40x14|50|
+S013-B24,S013,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S013-B24|S013|BLD-TIL-4|62x62x9|28|F
+S013-B25,S013,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S013-B25|S013|BLD-CEM-50|60x40x14|50|
+S013-B26,S013,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S013-B26|S013|BLD-CEM-50|60x40x14|50|
+S014-B01,S014,ELC-TV-43,43-inch LED TV,electronics,electronics,105.0,16.0,66.0,12.0,0.1109,true,true,LP1|S014-B01|S014|ELC-TV-43|105x16x66|12|FU
+S014-B02,S014,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S014-B02|S014|ELC-MXR-4|48x40x34|16|FU
+S014-B03,S014,ELC-TV-43,43-inch LED TV,electronics,electronics,105.0,16.0,66.0,12.0,0.1109,true,true,LP1|S014-B03|S014|ELC-TV-43|105x16x66|12|FU
+S014-B04,S014,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S014-B04|S014|ELC-MXR-4|48x40x34|16|FU
+S014-B05,S014,ELC-TV-43,43-inch LED TV,electronics,electronics,105.0,16.0,66.0,12.0,0.1109,true,true,LP1|S014-B05|S014|ELC-TV-43|105x16x66|12|FU
+S014-B06,S014,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S014-B06|S014|ELC-MXR-4|48x40x34|16|FU
+S014-B07,S014,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S014-B07|S014|ELC-MXR-4|48x40x34|16|FU
+S014-B08,S014,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S014-B08|S014|ELC-MXR-4|48x40x34|16|FU
+S014-B09,S014,ELC-TV-43,43-inch LED TV,electronics,electronics,105.0,16.0,66.0,12.0,0.1109,true,true,LP1|S014-B09|S014|ELC-TV-43|105x16x66|12|FU
+S014-B10,S014,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S014-B10|S014|ELC-MXR-4|48x40x34|16|FU
+S014-B11,S014,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S014-B11|S014|ELC-MXR-4|48x40x34|16|FU
+S014-B12,S014,ELC-TV-43,43-inch LED TV,electronics,electronics,105.0,16.0,66.0,12.0,0.1109,true,true,LP1|S014-B12|S014|ELC-TV-43|105x16x66|12|FU
+S014-B13,S014,ELC-TV-43,43-inch LED TV,electronics,electronics,105.0,16.0,66.0,12.0,0.1109,true,true,LP1|S014-B13|S014|ELC-TV-43|105x16x66|12|FU
+S014-B14,S014,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S014-B14|S014|ELC-MXR-4|48x40x34|16|FU
+S014-B15,S014,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S014-B15|S014|ELC-MXR-4|48x40x34|16|FU
+S014-B16,S014,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S014-B16|S014|ELC-MXR-4|48x40x34|16|FU
+S014-B17,S014,ELC-TV-43,43-inch LED TV,electronics,electronics,105.0,16.0,66.0,12.0,0.1109,true,true,LP1|S014-B17|S014|ELC-TV-43|105x16x66|12|FU
+S014-B18,S014,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S014-B18|S014|ELC-MXR-4|48x40x34|16|FU
+S014-B19,S014,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S014-B19|S014|ELC-MXR-4|48x40x34|16|FU
+S014-B20,S014,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S014-B20|S014|ELC-MXR-4|48x40x34|16|FU
+S014-B21,S014,ELC-TV-43,43-inch LED TV,electronics,electronics,105.0,16.0,66.0,12.0,0.1109,true,true,LP1|S014-B21|S014|ELC-TV-43|105x16x66|12|FU
+S014-B22,S014,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S014-B22|S014|ELC-MXR-4|48x40x34|16|FU
+S014-B23,S014,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S014-B23|S014|ELC-MXR-4|48x40x34|16|FU
+S015-B01,S015,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S015-B01|S015|FMC-OIL-15L|25x25x35|15.5|U
+S015-B02,S015,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S015-B02|S015|FMC-BEV-24|40x27x24|15|U
+S015-B03,S015,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S015-B03|S015|FMC-BIS-96|44x30x28|7.5|
+S015-B04,S015,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S015-B04|S015|FMC-DET-24|46x32x30|25|
+S015-B05,S015,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S015-B05|S015|FMC-JAR-24|32x30x20|11|FU
+S015-B06,S015,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S015-B06|S015|FMC-DET-24|46x32x30|25|
+S015-B07,S015,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S015-B07|S015|FMC-BIS-96|44x30x28|7.5|
+S015-B08,S015,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S015-B08|S015|FMC-DET-24|46x32x30|25|
+S015-B09,S015,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S015-B09|S015|FMC-BEV-24|40x27x24|15|U
+S015-B10,S015,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S015-B10|S015|FMC-JAR-24|32x30x20|11|FU
+S015-B11,S015,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S015-B11|S015|FMC-BIS-96|44x30x28|7.5|
+S015-B12,S015,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S015-B12|S015|FMC-OIL-15L|25x25x35|15.5|U
+S015-B13,S015,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S015-B13|S015|FMC-OIL-15L|25x25x35|15.5|U
+S015-B14,S015,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S015-B14|S015|FMC-BIS-96|44x30x28|7.5|
+S015-B15,S015,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S015-B15|S015|FMC-DET-24|46x32x30|25|
+S015-B16,S015,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S015-B16|S015|FMC-OIL-15L|25x25x35|15.5|U
+S015-B17,S015,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S015-B17|S015|FMC-BIS-96|44x30x28|7.5|
+S015-B18,S015,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S015-B18|S015|FMC-DET-24|46x32x30|25|
+S015-B19,S015,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S015-B19|S015|FMC-SHM-36|38x26x24|13.5|U
+S015-B20,S015,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S015-B20|S015|FMC-DET-24|46x32x30|25|
+S015-B21,S015,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S015-B21|S015|FMC-BEV-24|40x27x24|15|U
+S015-B22,S015,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S015-B22|S015|FMC-BIS-96|44x30x28|7.5|
+S015-B23,S015,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S015-B23|S015|FMC-JAR-24|32x30x20|11|FU
+S016-B01,S016,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S016-B01|S016|APP-GAR-40|60x40x40|11|
+S016-B02,S016,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S016-B02|S016|APP-GAR-40|60x40x40|11|
+S016-B03,S016,APP-SHO-12,Footwear (carton of 12 pairs),apparel,apparel,52.0,36.0,30.0,9.0,0.0562,false,false,LP1|S016-B03|S016|APP-SHO-12|52x36x30|9|
+S016-B04,S016,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S016-B04|S016|APP-GAR-40|60x40x40|11|
+S016-B05,S016,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S016-B05|S016|APP-GAR-40|60x40x40|11|
+S016-B06,S016,APP-SHO-12,Footwear (carton of 12 pairs),apparel,apparel,52.0,36.0,30.0,9.0,0.0562,false,false,LP1|S016-B06|S016|APP-SHO-12|52x36x30|9|
+S016-B07,S016,APP-SHO-12,Footwear (carton of 12 pairs),apparel,apparel,52.0,36.0,30.0,9.0,0.0562,false,false,LP1|S016-B07|S016|APP-SHO-12|52x36x30|9|
+S016-B08,S016,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S016-B08|S016|APP-GAR-40|60x40x40|11|
+S016-B09,S016,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S016-B09|S016|APP-GAR-40|60x40x40|11|
+S016-B10,S016,APP-SHO-12,Footwear (carton of 12 pairs),apparel,apparel,52.0,36.0,30.0,9.0,0.0562,false,false,LP1|S016-B10|S016|APP-SHO-12|52x36x30|9|
+S016-B11,S016,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S016-B11|S016|APP-GAR-40|60x40x40|11|
+S016-B12,S016,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S016-B12|S016|APP-GAR-40|60x40x40|11|
+S016-B13,S016,APP-SHO-12,Footwear (carton of 12 pairs),apparel,apparel,52.0,36.0,30.0,9.0,0.0562,false,false,LP1|S016-B13|S016|APP-SHO-12|52x36x30|9|
+S016-B14,S016,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S016-B14|S016|APP-GAR-40|60x40x40|11|
+S016-B15,S016,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S016-B15|S016|APP-GAR-40|60x40x40|11|
+S016-B16,S016,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S016-B16|S016|APP-GAR-40|60x40x40|11|
+S017-B01,S017,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S017-B01|S017|FMC-BEV-24|40x27x24|15|U
+S017-B02,S017,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S017-B02|S017|FMC-DET-24|46x32x30|25|
+S017-B03,S017,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S017-B03|S017|FMC-DET-24|46x32x30|25|
+S017-B04,S017,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S017-B04|S017|FMC-BIS-96|44x30x28|7.5|
+S017-B05,S017,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S017-B05|S017|FMC-SHM-36|38x26x24|13.5|U
+S017-B06,S017,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S017-B06|S017|FMC-JAR-24|32x30x20|11|FU
+S017-B07,S017,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S017-B07|S017|FMC-OIL-15L|25x25x35|15.5|U
+S017-B08,S017,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S017-B08|S017|FMC-BEV-24|40x27x24|15|U
+S017-B09,S017,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S017-B09|S017|FMC-OIL-15L|25x25x35|15.5|U
+S017-B10,S017,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S017-B10|S017|FMC-DET-24|46x32x30|25|
+S017-B11,S017,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S017-B11|S017|FMC-BIS-96|44x30x28|7.5|
+S017-B12,S017,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S017-B12|S017|FMC-BEV-24|40x27x24|15|U
+S017-B13,S017,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S017-B13|S017|FMC-BEV-24|40x27x24|15|U
+S017-B14,S017,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S017-B14|S017|FMC-OIL-15L|25x25x35|15.5|U
+S017-B15,S017,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S017-B15|S017|FMC-OIL-15L|25x25x35|15.5|U
+S017-B16,S017,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S017-B16|S017|FMC-DET-24|46x32x30|25|
+S017-B17,S017,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S017-B17|S017|FMC-BEV-24|40x27x24|15|U
+S017-B18,S017,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S017-B18|S017|FMC-SHM-36|38x26x24|13.5|U
+S017-B19,S017,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S017-B19|S017|FMC-OIL-15L|25x25x35|15.5|U
+S017-B20,S017,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S017-B20|S017|FMC-BIS-96|44x30x28|7.5|
+S017-B21,S017,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S017-B21|S017|FMC-OIL-15L|25x25x35|15.5|U
+S017-B22,S017,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S017-B22|S017|FMC-SHM-36|38x26x24|13.5|U
+S017-B23,S017,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S017-B23|S017|FMC-DET-24|46x32x30|25|
+S017-B24,S017,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S017-B24|S017|FMC-OIL-15L|25x25x35|15.5|U
+S017-B25,S017,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S017-B25|S017|FMC-BIS-96|44x30x28|7.5|
+S017-B26,S017,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S017-B26|S017|FMC-OIL-15L|25x25x35|15.5|U
+S018-B01,S018,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S018-B01|S018|PNT-EMU-20L|34x34x38|24|U
+S018-B02,S018,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S018-B02|S018|PNT-PTY-20KG|50x34x16|20.5|
+S018-B03,S018,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S018-B03|S018|PNT-ENM-4x4L|36x36x24|18.5|U
+S018-B04,S018,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S018-B04|S018|PNT-EXT-10L|28x28x31|13|U
+S018-B05,S018,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S018-B05|S018|PNT-EXT-10L|28x28x31|13|U
+S018-B06,S018,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S018-B06|S018|PNT-PRM-12x1L|40x30x19|15|U
+S018-B07,S018,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S018-B07|S018|PNT-ENM-4x4L|36x36x24|18.5|U
+S018-B08,S018,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S018-B08|S018|PNT-PTY-20KG|50x34x16|20.5|
+S018-B09,S018,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S018-B09|S018|PNT-TNT-48|32x24x22|9.5|FU
+S018-B10,S018,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S018-B10|S018|PNT-PRM-12x1L|40x30x19|15|U
+S019-B01,S019,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S019-B01|S019|FMC-BEV-24|40x27x24|15|U
+S019-B02,S019,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S019-B02|S019|FMC-BIS-96|44x30x28|7.5|
+S019-B03,S019,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S019-B03|S019|FMC-BIS-96|44x30x28|7.5|
+S019-B04,S019,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S019-B04|S019|FMC-JAR-24|32x30x20|11|FU
+S019-B05,S019,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S019-B05|S019|FMC-DET-24|46x32x30|25|
+S019-B06,S019,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S019-B06|S019|FMC-DET-24|46x32x30|25|
+S019-B07,S019,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S019-B07|S019|FMC-BEV-24|40x27x24|15|U
+S019-B08,S019,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S019-B08|S019|FMC-SHM-36|38x26x24|13.5|U
+S019-B09,S019,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S019-B09|S019|FMC-OIL-15L|25x25x35|15.5|U
+S019-B10,S019,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S019-B10|S019|FMC-BIS-96|44x30x28|7.5|
+S019-B11,S019,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S019-B11|S019|FMC-BEV-24|40x27x24|15|U
+S019-B12,S019,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S019-B12|S019|FMC-SHM-36|38x26x24|13.5|U
+S019-B13,S019,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S019-B13|S019|FMC-OIL-15L|25x25x35|15.5|U
+S019-B14,S019,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S019-B14|S019|FMC-BIS-96|44x30x28|7.5|
+S019-B15,S019,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S019-B15|S019|FMC-BIS-96|44x30x28|7.5|
+S019-B16,S019,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S019-B16|S019|FMC-DET-24|46x32x30|25|
+S019-B17,S019,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S019-B17|S019|FMC-OIL-15L|25x25x35|15.5|U
+S019-B18,S019,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S019-B18|S019|FMC-BEV-24|40x27x24|15|U
+S019-B19,S019,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S019-B19|S019|FMC-BEV-24|40x27x24|15|U
+S019-B20,S019,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S019-B20|S019|FMC-BEV-24|40x27x24|15|U
+S020-B01,S020,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S020-B01|S020|FMC-SHM-36|38x26x24|13.5|U
+S020-B02,S020,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S020-B02|S020|FMC-BEV-24|40x27x24|15|U
+S020-B03,S020,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S020-B03|S020|FMC-DET-24|46x32x30|25|
+S020-B04,S020,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S020-B04|S020|FMC-DET-24|46x32x30|25|
+S020-B05,S020,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S020-B05|S020|FMC-SHM-36|38x26x24|13.5|U
+S020-B06,S020,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S020-B06|S020|FMC-SHM-36|38x26x24|13.5|U
+S020-B07,S020,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S020-B07|S020|FMC-SHM-36|38x26x24|13.5|U
+S020-B08,S020,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S020-B08|S020|FMC-BIS-96|44x30x28|7.5|
+S020-B09,S020,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S020-B09|S020|FMC-OIL-15L|25x25x35|15.5|U
+S020-B10,S020,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S020-B10|S020|FMC-BIS-96|44x30x28|7.5|
+S020-B11,S020,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S020-B11|S020|FMC-JAR-24|32x30x20|11|FU
+S020-B12,S020,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S020-B12|S020|FMC-BEV-24|40x27x24|15|U
+S020-B13,S020,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S020-B13|S020|FMC-BIS-96|44x30x28|7.5|
+S020-B14,S020,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S020-B14|S020|FMC-BEV-24|40x27x24|15|U
+S020-B15,S020,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S020-B15|S020|FMC-BIS-96|44x30x28|7.5|
+S020-B16,S020,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S020-B16|S020|FMC-DET-24|46x32x30|25|
+S020-B17,S020,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S020-B17|S020|FMC-BEV-24|40x27x24|15|U
+S020-B18,S020,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S020-B18|S020|FMC-BIS-96|44x30x28|7.5|
+S020-B19,S020,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S020-B19|S020|FMC-OIL-15L|25x25x35|15.5|U
+S020-B20,S020,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S020-B20|S020|FMC-JAR-24|32x30x20|11|FU
+S020-B21,S020,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S020-B21|S020|FMC-BIS-96|44x30x28|7.5|
+S020-B22,S020,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S020-B22|S020|FMC-JAR-24|32x30x20|11|FU
+S020-B23,S020,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S020-B23|S020|FMC-SHM-36|38x26x24|13.5|U
+S020-B24,S020,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S020-B24|S020|FMC-BIS-96|44x30x28|7.5|
+S020-B25,S020,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S020-B25|S020|FMC-BIS-96|44x30x28|7.5|
+S020-B26,S020,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S020-B26|S020|FMC-OIL-15L|25x25x35|15.5|U
+S021-B01,S021,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S021-B01|S021|PNT-EMU-20L|34x34x38|24|U
+S021-B02,S021,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S021-B02|S021|PNT-PRM-12x1L|40x30x19|15|U
+S021-B03,S021,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S021-B03|S021|PNT-PRM-12x1L|40x30x19|15|U
+S021-B04,S021,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S021-B04|S021|PNT-EMU-20L|34x34x38|24|U
+S021-B05,S021,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S021-B05|S021|PNT-EXT-10L|28x28x31|13|U
+S021-B06,S021,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S021-B06|S021|PNT-ENM-4x4L|36x36x24|18.5|U
+S021-B07,S021,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S021-B07|S021|PNT-EXT-10L|28x28x31|13|U
+S021-B08,S021,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S021-B08|S021|PNT-EMU-20L|34x34x38|24|U
+S021-B09,S021,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S021-B09|S021|PNT-EXT-10L|28x28x31|13|U
+S021-B10,S021,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S021-B10|S021|PNT-PTY-20KG|50x34x16|20.5|
+S021-B11,S021,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S021-B11|S021|PNT-ENM-4x4L|36x36x24|18.5|U
+S021-B12,S021,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S021-B12|S021|PNT-PRM-12x1L|40x30x19|15|U
+S022-B01,S022,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S022-B01|S022|APP-GAR-40|60x40x40|11|
+S022-B02,S022,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S022-B02|S022|APP-GAR-40|60x40x40|11|
+S022-B03,S022,APP-SHO-12,Footwear (carton of 12 pairs),apparel,apparel,52.0,36.0,30.0,9.0,0.0562,false,false,LP1|S022-B03|S022|APP-SHO-12|52x36x30|9|
+S022-B04,S022,APP-SHO-12,Footwear (carton of 12 pairs),apparel,apparel,52.0,36.0,30.0,9.0,0.0562,false,false,LP1|S022-B04|S022|APP-SHO-12|52x36x30|9|
+S022-B05,S022,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S022-B05|S022|APP-GAR-40|60x40x40|11|
+S022-B06,S022,APP-SHO-12,Footwear (carton of 12 pairs),apparel,apparel,52.0,36.0,30.0,9.0,0.0562,false,false,LP1|S022-B06|S022|APP-SHO-12|52x36x30|9|
+S022-B07,S022,APP-SHO-12,Footwear (carton of 12 pairs),apparel,apparel,52.0,36.0,30.0,9.0,0.0562,false,false,LP1|S022-B07|S022|APP-SHO-12|52x36x30|9|
+S022-B08,S022,APP-SHO-12,Footwear (carton of 12 pairs),apparel,apparel,52.0,36.0,30.0,9.0,0.0562,false,false,LP1|S022-B08|S022|APP-SHO-12|52x36x30|9|
+S022-B09,S022,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S022-B09|S022|APP-GAR-40|60x40x40|11|
+S022-B10,S022,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S022-B10|S022|APP-GAR-40|60x40x40|11|
+S023-B01,S023,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S023-B01|S023|FMC-JAR-24|32x30x20|11|FU
+S023-B02,S023,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S023-B02|S023|FMC-BEV-24|40x27x24|15|U
+S023-B03,S023,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S023-B03|S023|FMC-BEV-24|40x27x24|15|U
+S023-B04,S023,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S023-B04|S023|FMC-SHM-36|38x26x24|13.5|U
+S023-B05,S023,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S023-B05|S023|FMC-BEV-24|40x27x24|15|U
+S023-B06,S023,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S023-B06|S023|FMC-SHM-36|38x26x24|13.5|U
+S023-B07,S023,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S023-B07|S023|FMC-OIL-15L|25x25x35|15.5|U
+S023-B08,S023,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S023-B08|S023|FMC-DET-24|46x32x30|25|
+S023-B09,S023,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S023-B09|S023|FMC-BIS-96|44x30x28|7.5|
+S023-B10,S023,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S023-B10|S023|FMC-BEV-24|40x27x24|15|U
+S023-B11,S023,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S023-B11|S023|FMC-DET-24|46x32x30|25|
+S023-B12,S023,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S023-B12|S023|FMC-BIS-96|44x30x28|7.5|
+S023-B13,S023,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S023-B13|S023|FMC-BIS-96|44x30x28|7.5|
+S023-B14,S023,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S023-B14|S023|FMC-BIS-96|44x30x28|7.5|
+S023-B15,S023,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S023-B15|S023|FMC-BIS-96|44x30x28|7.5|
+S023-B16,S023,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S023-B16|S023|FMC-BEV-24|40x27x24|15|U
+S023-B17,S023,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S023-B17|S023|FMC-BIS-96|44x30x28|7.5|
+S023-B18,S023,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S023-B18|S023|FMC-BEV-24|40x27x24|15|U
+S023-B19,S023,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S023-B19|S023|FMC-BIS-96|44x30x28|7.5|
+S023-B20,S023,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S023-B20|S023|FMC-JAR-24|32x30x20|11|FU
+S023-B21,S023,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S023-B21|S023|FMC-SHM-36|38x26x24|13.5|U
+S023-B22,S023,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S023-B22|S023|FMC-OIL-15L|25x25x35|15.5|U
+S024-B01,S024,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S024-B01|S024|PNT-PRM-12x1L|40x30x19|15|U
+S024-B02,S024,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S024-B02|S024|PNT-PRM-12x1L|40x30x19|15|U
+S024-B03,S024,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S024-B03|S024|PNT-TNT-48|32x24x22|9.5|FU
+S024-B04,S024,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S024-B04|S024|PNT-EMU-20L|34x34x38|24|U
+S024-B05,S024,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S024-B05|S024|PNT-EMU-20L|34x34x38|24|U
+S024-B06,S024,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S024-B06|S024|PNT-EMU-20L|34x34x38|24|U
+S024-B07,S024,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S024-B07|S024|PNT-EMU-20L|34x34x38|24|U
+S024-B08,S024,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S024-B08|S024|PNT-PRM-12x1L|40x30x19|15|U
+S024-B09,S024,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S024-B09|S024|PNT-ENM-4x4L|36x36x24|18.5|U
+S024-B10,S024,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S024-B10|S024|PNT-EMU-20L|34x34x38|24|U
+S024-B11,S024,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S024-B11|S024|PNT-PRM-12x1L|40x30x19|15|U
+S024-B12,S024,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S024-B12|S024|PNT-PRM-12x1L|40x30x19|15|U
+S025-B01,S025,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S025-B01|S025|PNT-EMU-20L|34x34x38|24|U
+S025-B02,S025,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S025-B02|S025|PNT-EXT-10L|28x28x31|13|U
+S025-B03,S025,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S025-B03|S025|PNT-PRM-12x1L|40x30x19|15|U
+S025-B04,S025,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S025-B04|S025|PNT-TNT-48|32x24x22|9.5|FU
+S025-B05,S025,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S025-B05|S025|PNT-EXT-10L|28x28x31|13|U
+S025-B06,S025,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S025-B06|S025|PNT-PRM-12x1L|40x30x19|15|U
+S025-B07,S025,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S025-B07|S025|PNT-EMU-20L|34x34x38|24|U
+S025-B08,S025,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S025-B08|S025|PNT-PRM-12x1L|40x30x19|15|U
+S025-B09,S025,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S025-B09|S025|PNT-ENM-4x4L|36x36x24|18.5|U
+S025-B10,S025,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S025-B10|S025|PNT-EMU-20L|34x34x38|24|U
+S025-B11,S025,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S025-B11|S025|PNT-PRM-12x1L|40x30x19|15|U
+S025-B12,S025,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S025-B12|S025|PNT-PTY-20KG|50x34x16|20.5|
+S025-B13,S025,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S025-B13|S025|PNT-ENM-4x4L|36x36x24|18.5|U
+S025-B14,S025,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S025-B14|S025|PNT-EMU-20L|34x34x38|24|U
+S025-B15,S025,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S025-B15|S025|PNT-TNT-48|32x24x22|9.5|FU
+S025-B16,S025,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S025-B16|S025|PNT-PRM-12x1L|40x30x19|15|U
+S025-B17,S025,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S025-B17|S025|PNT-EXT-10L|28x28x31|13|U
+S025-B18,S025,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S025-B18|S025|PNT-EXT-10L|28x28x31|13|U
+S025-B19,S025,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S025-B19|S025|PNT-EXT-10L|28x28x31|13|U
+S026-B01,S026,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S026-B01|S026|FMC-DET-24|46x32x30|25|
+S026-B02,S026,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S026-B02|S026|FMC-BEV-24|40x27x24|15|U
+S026-B03,S026,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S026-B03|S026|FMC-OIL-15L|25x25x35|15.5|U
+S026-B04,S026,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S026-B04|S026|FMC-JAR-24|32x30x20|11|FU
+S026-B05,S026,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S026-B05|S026|FMC-OIL-15L|25x25x35|15.5|U
+S026-B06,S026,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S026-B06|S026|FMC-BIS-96|44x30x28|7.5|
+S026-B07,S026,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S026-B07|S026|FMC-OIL-15L|25x25x35|15.5|U
+S026-B08,S026,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S026-B08|S026|FMC-BEV-24|40x27x24|15|U
+S026-B09,S026,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S026-B09|S026|FMC-BIS-96|44x30x28|7.5|
+S026-B10,S026,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S026-B10|S026|FMC-JAR-24|32x30x20|11|FU
+S026-B11,S026,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S026-B11|S026|FMC-SHM-36|38x26x24|13.5|U
+S026-B12,S026,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S026-B12|S026|FMC-SHM-36|38x26x24|13.5|U
+S026-B13,S026,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S026-B13|S026|FMC-BIS-96|44x30x28|7.5|
+S026-B14,S026,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S026-B14|S026|FMC-OIL-15L|25x25x35|15.5|U
+S026-B15,S026,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S026-B15|S026|FMC-BIS-96|44x30x28|7.5|
+S026-B16,S026,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S026-B16|S026|FMC-BEV-24|40x27x24|15|U
+S026-B17,S026,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S026-B17|S026|FMC-JAR-24|32x30x20|11|FU
+S026-B18,S026,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S026-B18|S026|FMC-DET-24|46x32x30|25|
+S026-B19,S026,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S026-B19|S026|FMC-BEV-24|40x27x24|15|U
+S026-B20,S026,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S026-B20|S026|FMC-BIS-96|44x30x28|7.5|
+S026-B21,S026,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S026-B21|S026|FMC-SHM-36|38x26x24|13.5|U
+S026-B22,S026,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S026-B22|S026|FMC-SHM-36|38x26x24|13.5|U
+S026-B23,S026,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S026-B23|S026|FMC-BIS-96|44x30x28|7.5|
+S027-B01,S027,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S027-B01|S027|PNT-PTY-20KG|50x34x16|20.5|
+S027-B02,S027,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S027-B02|S027|PNT-EXT-10L|28x28x31|13|U
+S027-B03,S027,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S027-B03|S027|PNT-PTY-20KG|50x34x16|20.5|
+S027-B04,S027,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S027-B04|S027|PNT-PRM-12x1L|40x30x19|15|U
+S027-B05,S027,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S027-B05|S027|PNT-EMU-20L|34x34x38|24|U
+S027-B06,S027,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S027-B06|S027|PNT-EMU-20L|34x34x38|24|U
+S027-B07,S027,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S027-B07|S027|PNT-TNT-48|32x24x22|9.5|FU
+S027-B08,S027,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S027-B08|S027|PNT-EMU-20L|34x34x38|24|U
+S027-B09,S027,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S027-B09|S027|PNT-PRM-12x1L|40x30x19|15|U
+S027-B10,S027,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S027-B10|S027|PNT-EXT-10L|28x28x31|13|U
+S027-B11,S027,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S027-B11|S027|PNT-PRM-12x1L|40x30x19|15|U
+S027-B12,S027,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S027-B12|S027|PNT-PRM-12x1L|40x30x19|15|U
+S027-B13,S027,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S027-B13|S027|PNT-PRM-12x1L|40x30x19|15|U
+S027-B14,S027,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S027-B14|S027|PNT-EXT-10L|28x28x31|13|U
+S027-B15,S027,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S027-B15|S027|PNT-PTY-20KG|50x34x16|20.5|
+S027-B16,S027,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S027-B16|S027|PNT-EMU-20L|34x34x38|24|U
+S027-B17,S027,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S027-B17|S027|PNT-EMU-20L|34x34x38|24|U
+S027-B18,S027,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S027-B18|S027|PNT-PRM-12x1L|40x30x19|15|U
+S027-B19,S027,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S027-B19|S027|PNT-EXT-10L|28x28x31|13|U
+S027-B20,S027,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S027-B20|S027|PNT-ENM-4x4L|36x36x24|18.5|U
+S027-B21,S027,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S027-B21|S027|PNT-EXT-10L|28x28x31|13|U
+S027-B22,S027,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S027-B22|S027|PNT-ENM-4x4L|36x36x24|18.5|U
+S027-B23,S027,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S027-B23|S027|PNT-EXT-10L|28x28x31|13|U
+S027-B24,S027,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S027-B24|S027|PNT-PRM-12x1L|40x30x19|15|U
+S027-B25,S027,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S027-B25|S027|PNT-EXT-10L|28x28x31|13|U
+S028-B01,S028,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S028-B01|S028|FMC-OIL-15L|25x25x35|15.5|U
+S028-B02,S028,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S028-B02|S028|FMC-BIS-96|44x30x28|7.5|
+S028-B03,S028,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S028-B03|S028|FMC-OIL-15L|25x25x35|15.5|U
+S028-B04,S028,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S028-B04|S028|FMC-BEV-24|40x27x24|15|U
+S028-B05,S028,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S028-B05|S028|FMC-OIL-15L|25x25x35|15.5|U
+S028-B06,S028,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S028-B06|S028|FMC-DET-24|46x32x30|25|
+S028-B07,S028,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S028-B07|S028|FMC-OIL-15L|25x25x35|15.5|U
+S028-B08,S028,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S028-B08|S028|FMC-BIS-96|44x30x28|7.5|
+S028-B09,S028,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S028-B09|S028|FMC-SHM-36|38x26x24|13.5|U
+S028-B10,S028,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S028-B10|S028|FMC-OIL-15L|25x25x35|15.5|U
+S028-B11,S028,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S028-B11|S028|FMC-SHM-36|38x26x24|13.5|U
+S028-B12,S028,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S028-B12|S028|FMC-BEV-24|40x27x24|15|U
+S028-B13,S028,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S028-B13|S028|FMC-JAR-24|32x30x20|11|FU
+S028-B14,S028,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S028-B14|S028|FMC-BIS-96|44x30x28|7.5|
+S028-B15,S028,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S028-B15|S028|FMC-BIS-96|44x30x28|7.5|
+S028-B16,S028,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S028-B16|S028|FMC-BIS-96|44x30x28|7.5|
+S028-B17,S028,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S028-B17|S028|FMC-OIL-15L|25x25x35|15.5|U
+S028-B18,S028,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S028-B18|S028|FMC-DET-24|46x32x30|25|
+S029-B01,S029,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S029-B01|S029|PNT-EMU-20L|34x34x38|24|U
+S029-B02,S029,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S029-B02|S029|PNT-PTY-20KG|50x34x16|20.5|
+S029-B03,S029,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S029-B03|S029|PNT-EXT-10L|28x28x31|13|U
+S029-B04,S029,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S029-B04|S029|PNT-PTY-20KG|50x34x16|20.5|
+S029-B05,S029,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S029-B05|S029|PNT-ENM-4x4L|36x36x24|18.5|U
+S029-B06,S029,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S029-B06|S029|PNT-EXT-10L|28x28x31|13|U
+S029-B07,S029,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S029-B07|S029|PNT-EXT-10L|28x28x31|13|U
+S029-B08,S029,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S029-B08|S029|PNT-EMU-20L|34x34x38|24|U
+S029-B09,S029,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S029-B09|S029|PNT-EMU-20L|34x34x38|24|U
+S029-B10,S029,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S029-B10|S029|PNT-TNT-48|32x24x22|9.5|FU
+S029-B11,S029,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S029-B11|S029|PNT-EXT-10L|28x28x31|13|U
+S029-B12,S029,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S029-B12|S029|PNT-PTY-20KG|50x34x16|20.5|
+S029-B13,S029,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S029-B13|S029|PNT-EXT-10L|28x28x31|13|U
+S029-B14,S029,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S029-B14|S029|PNT-EMU-20L|34x34x38|24|U
+S029-B15,S029,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S029-B15|S029|PNT-ENM-4x4L|36x36x24|18.5|U
+S029-B16,S029,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S029-B16|S029|PNT-EMU-20L|34x34x38|24|U
+S029-B17,S029,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S029-B17|S029|PNT-EMU-20L|34x34x38|24|U
+S029-B18,S029,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S029-B18|S029|PNT-ENM-4x4L|36x36x24|18.5|U
+S029-B19,S029,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S029-B19|S029|PNT-EXT-10L|28x28x31|13|U
+S030-B01,S030,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S030-B01|S030|BLD-CEM-50|60x40x14|50|
+S030-B02,S030,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S030-B02|S030|BLD-TIL-4|62x62x9|28|F
+S030-B03,S030,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S030-B03|S030|BLD-CEM-50|60x40x14|50|
+S030-B04,S030,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S030-B04|S030|BLD-CEM-50|60x40x14|50|
+S030-B05,S030,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S030-B05|S030|BLD-CEM-50|60x40x14|50|
+S030-B06,S030,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S030-B06|S030|BLD-CEM-50|60x40x14|50|
+S030-B07,S030,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S030-B07|S030|BLD-CEM-50|60x40x14|50|
+S030-B08,S030,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S030-B08|S030|BLD-TIL-4|62x62x9|28|F
+S030-B09,S030,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S030-B09|S030|BLD-CEM-50|60x40x14|50|
+S030-B10,S030,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S030-B10|S030|BLD-TIL-4|62x62x9|28|F
+S030-B11,S030,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S030-B11|S030|BLD-TIL-4|62x62x9|28|F
+S030-B12,S030,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S030-B12|S030|BLD-CEM-50|60x40x14|50|
+S030-B13,S030,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S030-B13|S030|BLD-CEM-50|60x40x14|50|
+S030-B14,S030,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S030-B14|S030|BLD-CEM-50|60x40x14|50|
+S030-B15,S030,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S030-B15|S030|BLD-CEM-50|60x40x14|50|
+S030-B16,S030,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S030-B16|S030|BLD-CEM-50|60x40x14|50|
+S030-B17,S030,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S030-B17|S030|BLD-CEM-50|60x40x14|50|
+S031-B01,S031,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S031-B01|S031|FMC-OIL-15L|25x25x35|15.5|U
+S031-B02,S031,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S031-B02|S031|FMC-OIL-15L|25x25x35|15.5|U
+S031-B03,S031,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S031-B03|S031|FMC-BIS-96|44x30x28|7.5|
+S031-B04,S031,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S031-B04|S031|FMC-OIL-15L|25x25x35|15.5|U
+S031-B05,S031,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S031-B05|S031|FMC-BEV-24|40x27x24|15|U
+S031-B06,S031,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S031-B06|S031|FMC-JAR-24|32x30x20|11|FU
+S031-B07,S031,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S031-B07|S031|FMC-OIL-15L|25x25x35|15.5|U
+S031-B08,S031,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S031-B08|S031|FMC-OIL-15L|25x25x35|15.5|U
+S031-B09,S031,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S031-B09|S031|FMC-BEV-24|40x27x24|15|U
+S031-B10,S031,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S031-B10|S031|FMC-BIS-96|44x30x28|7.5|
+S031-B11,S031,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S031-B11|S031|FMC-SHM-36|38x26x24|13.5|U
+S032-B01,S032,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S032-B01|S032|FMC-JAR-24|32x30x20|11|FU
+S032-B02,S032,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S032-B02|S032|FMC-SHM-36|38x26x24|13.5|U
+S032-B03,S032,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S032-B03|S032|FMC-JAR-24|32x30x20|11|FU
+S032-B04,S032,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S032-B04|S032|FMC-BEV-24|40x27x24|15|U
+S032-B05,S032,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S032-B05|S032|FMC-BIS-96|44x30x28|7.5|
+S032-B06,S032,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S032-B06|S032|FMC-SHM-36|38x26x24|13.5|U
+S032-B07,S032,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S032-B07|S032|FMC-BIS-96|44x30x28|7.5|
+S032-B08,S032,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S032-B08|S032|FMC-BIS-96|44x30x28|7.5|
+S032-B09,S032,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S032-B09|S032|FMC-BIS-96|44x30x28|7.5|
+S032-B10,S032,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S032-B10|S032|FMC-SHM-36|38x26x24|13.5|U
+S032-B11,S032,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S032-B11|S032|FMC-BIS-96|44x30x28|7.5|
+S032-B12,S032,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S032-B12|S032|FMC-SHM-36|38x26x24|13.5|U
+S033-B01,S033,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S033-B01|S033|ELC-MXR-4|48x40x34|16|FU
+S033-B02,S033,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S033-B02|S033|ELC-MXR-4|48x40x34|16|FU
+S033-B03,S033,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S033-B03|S033|ELC-MXR-4|48x40x34|16|FU
+S033-B04,S033,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S033-B04|S033|ELC-MXR-4|48x40x34|16|FU
+S033-B05,S033,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S033-B05|S033|ELC-MXR-4|48x40x34|16|FU
+S033-B06,S033,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S033-B06|S033|ELC-MXR-4|48x40x34|16|FU
+S033-B07,S033,ELC-TV-43,43-inch LED TV,electronics,electronics,105.0,16.0,66.0,12.0,0.1109,true,true,LP1|S033-B07|S033|ELC-TV-43|105x16x66|12|FU
+S033-B08,S033,ELC-TV-43,43-inch LED TV,electronics,electronics,105.0,16.0,66.0,12.0,0.1109,true,true,LP1|S033-B08|S033|ELC-TV-43|105x16x66|12|FU
+S033-B09,S033,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S033-B09|S033|ELC-MXR-4|48x40x34|16|FU
+S033-B10,S033,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S033-B10|S033|ELC-MXR-4|48x40x34|16|FU
+S034-B01,S034,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S034-B01|S034|FMC-SHM-36|38x26x24|13.5|U
+S034-B02,S034,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S034-B02|S034|FMC-DET-24|46x32x30|25|
+S034-B03,S034,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S034-B03|S034|FMC-BIS-96|44x30x28|7.5|
+S034-B04,S034,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S034-B04|S034|FMC-BIS-96|44x30x28|7.5|
+S034-B05,S034,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S034-B05|S034|FMC-OIL-15L|25x25x35|15.5|U
+S034-B06,S034,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S034-B06|S034|FMC-BEV-24|40x27x24|15|U
+S034-B07,S034,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S034-B07|S034|FMC-BIS-96|44x30x28|7.5|
+S034-B08,S034,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S034-B08|S034|FMC-OIL-15L|25x25x35|15.5|U
+S034-B09,S034,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S034-B09|S034|FMC-BIS-96|44x30x28|7.5|
+S034-B10,S034,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S034-B10|S034|FMC-BEV-24|40x27x24|15|U
+S034-B11,S034,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S034-B11|S034|FMC-JAR-24|32x30x20|11|FU
+S034-B12,S034,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S034-B12|S034|FMC-SHM-36|38x26x24|13.5|U
+S034-B13,S034,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S034-B13|S034|FMC-BIS-96|44x30x28|7.5|
+S034-B14,S034,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S034-B14|S034|FMC-BIS-96|44x30x28|7.5|
+S034-B15,S034,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S034-B15|S034|FMC-BIS-96|44x30x28|7.5|
+S034-B16,S034,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S034-B16|S034|FMC-BEV-24|40x27x24|15|U
+S034-B17,S034,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S034-B17|S034|FMC-BIS-96|44x30x28|7.5|
+S034-B18,S034,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S034-B18|S034|FMC-SHM-36|38x26x24|13.5|U
+S034-B19,S034,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S034-B19|S034|FMC-BEV-24|40x27x24|15|U
+S034-B20,S034,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S034-B20|S034|FMC-OIL-15L|25x25x35|15.5|U
+S034-B21,S034,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S034-B21|S034|FMC-SHM-36|38x26x24|13.5|U
+S034-B22,S034,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S034-B22|S034|FMC-BIS-96|44x30x28|7.5|
+S034-B23,S034,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S034-B23|S034|FMC-DET-24|46x32x30|25|
+S035-B01,S035,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S035-B01|S035|PNT-EMU-20L|34x34x38|24|U
+S035-B02,S035,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S035-B02|S035|PNT-ENM-4x4L|36x36x24|18.5|U
+S035-B03,S035,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S035-B03|S035|PNT-PTY-20KG|50x34x16|20.5|
+S035-B04,S035,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S035-B04|S035|PNT-EXT-10L|28x28x31|13|U
+S035-B05,S035,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S035-B05|S035|PNT-PRM-12x1L|40x30x19|15|U
+S035-B06,S035,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S035-B06|S035|PNT-EMU-20L|34x34x38|24|U
+S035-B07,S035,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S035-B07|S035|PNT-TNT-48|32x24x22|9.5|FU
+S035-B08,S035,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S035-B08|S035|PNT-ENM-4x4L|36x36x24|18.5|U
+S035-B09,S035,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S035-B09|S035|PNT-EMU-20L|34x34x38|24|U
+S035-B10,S035,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S035-B10|S035|PNT-EMU-20L|34x34x38|24|U
+S035-B11,S035,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S035-B11|S035|PNT-ENM-4x4L|36x36x24|18.5|U
+S035-B12,S035,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S035-B12|S035|PNT-ENM-4x4L|36x36x24|18.5|U
+S035-B13,S035,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S035-B13|S035|PNT-EMU-20L|34x34x38|24|U
+S035-B14,S035,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S035-B14|S035|PNT-TNT-48|32x24x22|9.5|FU
+S035-B15,S035,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S035-B15|S035|PNT-PTY-20KG|50x34x16|20.5|
+S035-B16,S035,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S035-B16|S035|PNT-EXT-10L|28x28x31|13|U
+S035-B17,S035,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S035-B17|S035|PNT-EMU-20L|34x34x38|24|U
+S035-B18,S035,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S035-B18|S035|PNT-PTY-20KG|50x34x16|20.5|
+S035-B19,S035,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S035-B19|S035|PNT-EXT-10L|28x28x31|13|U
+S035-B20,S035,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S035-B20|S035|PNT-PRM-12x1L|40x30x19|15|U
+S035-B21,S035,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S035-B21|S035|PNT-ENM-4x4L|36x36x24|18.5|U
+S035-B22,S035,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S035-B22|S035|PNT-EMU-20L|34x34x38|24|U
+S035-B23,S035,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S035-B23|S035|PNT-PTY-20KG|50x34x16|20.5|
+S035-B24,S035,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S035-B24|S035|PNT-TNT-48|32x24x22|9.5|FU
+S036-B01,S036,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S036-B01|S036|PNT-ENM-4x4L|36x36x24|18.5|U
+S036-B02,S036,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S036-B02|S036|PNT-PRM-12x1L|40x30x19|15|U
+S036-B03,S036,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S036-B03|S036|PNT-EMU-20L|34x34x38|24|U
+S036-B04,S036,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S036-B04|S036|PNT-EMU-20L|34x34x38|24|U
+S036-B05,S036,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S036-B05|S036|PNT-PRM-12x1L|40x30x19|15|U
+S036-B06,S036,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S036-B06|S036|PNT-PTY-20KG|50x34x16|20.5|
+S036-B07,S036,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S036-B07|S036|PNT-EXT-10L|28x28x31|13|U
+S036-B08,S036,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S036-B08|S036|PNT-PTY-20KG|50x34x16|20.5|
+S036-B09,S036,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S036-B09|S036|PNT-EMU-20L|34x34x38|24|U
+S036-B10,S036,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S036-B10|S036|PNT-EMU-20L|34x34x38|24|U
+S036-B11,S036,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S036-B11|S036|PNT-PRM-12x1L|40x30x19|15|U
+S036-B12,S036,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S036-B12|S036|PNT-PTY-20KG|50x34x16|20.5|
+S036-B13,S036,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S036-B13|S036|PNT-ENM-4x4L|36x36x24|18.5|U
+S036-B14,S036,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S036-B14|S036|PNT-PRM-12x1L|40x30x19|15|U
+S036-B15,S036,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S036-B15|S036|PNT-PTY-20KG|50x34x16|20.5|
+S036-B16,S036,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S036-B16|S036|PNT-EXT-10L|28x28x31|13|U
+S036-B17,S036,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S036-B17|S036|PNT-EXT-10L|28x28x31|13|U
+S036-B18,S036,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S036-B18|S036|PNT-EXT-10L|28x28x31|13|U
+S036-B19,S036,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S036-B19|S036|PNT-PRM-12x1L|40x30x19|15|U
+S036-B20,S036,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S036-B20|S036|PNT-EXT-10L|28x28x31|13|U
+S036-B21,S036,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S036-B21|S036|PNT-TNT-48|32x24x22|9.5|FU
+S036-B22,S036,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S036-B22|S036|PNT-PTY-20KG|50x34x16|20.5|
+S037-B01,S037,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S037-B01|S037|BLD-CEM-50|60x40x14|50|
+S037-B02,S037,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S037-B02|S037|BLD-CEM-50|60x40x14|50|
+S037-B03,S037,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S037-B03|S037|BLD-CEM-50|60x40x14|50|
+S037-B04,S037,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S037-B04|S037|BLD-TIL-4|62x62x9|28|F
+S037-B05,S037,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S037-B05|S037|BLD-CEM-50|60x40x14|50|
+S037-B06,S037,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S037-B06|S037|BLD-TIL-4|62x62x9|28|F
+S037-B07,S037,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S037-B07|S037|BLD-TIL-4|62x62x9|28|F
+S037-B08,S037,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S037-B08|S037|BLD-TIL-4|62x62x9|28|F
+S037-B09,S037,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S037-B09|S037|BLD-CEM-50|60x40x14|50|
+S037-B10,S037,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S037-B10|S037|BLD-TIL-4|62x62x9|28|F
+S037-B11,S037,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S037-B11|S037|BLD-CEM-50|60x40x14|50|
+S037-B12,S037,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S037-B12|S037|BLD-TIL-4|62x62x9|28|F
+S037-B13,S037,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S037-B13|S037|BLD-CEM-50|60x40x14|50|
+S037-B14,S037,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S037-B14|S037|BLD-CEM-50|60x40x14|50|
+S037-B15,S037,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S037-B15|S037|BLD-TIL-4|62x62x9|28|F
+S037-B16,S037,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S037-B16|S037|BLD-CEM-50|60x40x14|50|
+S037-B17,S037,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S037-B17|S037|BLD-TIL-4|62x62x9|28|F
+S038-B01,S038,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S038-B01|S038|PNT-PRM-12x1L|40x30x19|15|U
+S038-B02,S038,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S038-B02|S038|PNT-EMU-20L|34x34x38|24|U
+S038-B03,S038,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S038-B03|S038|PNT-ENM-4x4L|36x36x24|18.5|U
+S038-B04,S038,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S038-B04|S038|PNT-EXT-10L|28x28x31|13|U
+S038-B05,S038,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S038-B05|S038|PNT-EMU-20L|34x34x38|24|U
+S038-B06,S038,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S038-B06|S038|PNT-EXT-10L|28x28x31|13|U
+S038-B07,S038,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S038-B07|S038|PNT-PRM-12x1L|40x30x19|15|U
+S038-B08,S038,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S038-B08|S038|PNT-ENM-4x4L|36x36x24|18.5|U
+S038-B09,S038,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S038-B09|S038|PNT-TNT-48|32x24x22|9.5|FU
+S038-B10,S038,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S038-B10|S038|PNT-ENM-4x4L|36x36x24|18.5|U
+S038-B11,S038,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S038-B11|S038|PNT-PTY-20KG|50x34x16|20.5|
+S038-B12,S038,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S038-B12|S038|PNT-EXT-10L|28x28x31|13|U
+S038-B13,S038,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S038-B13|S038|PNT-ENM-4x4L|36x36x24|18.5|U
+S038-B14,S038,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S038-B14|S038|PNT-ENM-4x4L|36x36x24|18.5|U
+S039-B01,S039,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S039-B01|S039|PNT-EMU-20L|34x34x38|24|U
+S039-B02,S039,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S039-B02|S039|PNT-ENM-4x4L|36x36x24|18.5|U
+S039-B03,S039,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S039-B03|S039|PNT-PTY-20KG|50x34x16|20.5|
+S039-B04,S039,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S039-B04|S039|PNT-EXT-10L|28x28x31|13|U
+S039-B05,S039,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S039-B05|S039|PNT-PRM-12x1L|40x30x19|15|U
+S039-B06,S039,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S039-B06|S039|PNT-PTY-20KG|50x34x16|20.5|
+S039-B07,S039,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S039-B07|S039|PNT-EMU-20L|34x34x38|24|U
+S039-B08,S039,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S039-B08|S039|PNT-PTY-20KG|50x34x16|20.5|
+S039-B09,S039,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S039-B09|S039|PNT-EXT-10L|28x28x31|13|U
+S039-B10,S039,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S039-B10|S039|PNT-EXT-10L|28x28x31|13|U
+S039-B11,S039,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S039-B11|S039|PNT-EMU-20L|34x34x38|24|U
+S039-B12,S039,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S039-B12|S039|PNT-ENM-4x4L|36x36x24|18.5|U
+S040-B01,S040,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S040-B01|S040|FMC-BEV-24|40x27x24|15|U
+S040-B02,S040,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S040-B02|S040|FMC-OIL-15L|25x25x35|15.5|U
+S040-B03,S040,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S040-B03|S040|FMC-BIS-96|44x30x28|7.5|
+S040-B04,S040,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S040-B04|S040|FMC-BEV-24|40x27x24|15|U
+S040-B05,S040,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S040-B05|S040|FMC-DET-24|46x32x30|25|
+S040-B06,S040,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S040-B06|S040|FMC-BIS-96|44x30x28|7.5|
+S040-B07,S040,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S040-B07|S040|FMC-BIS-96|44x30x28|7.5|
+S040-B08,S040,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S040-B08|S040|FMC-BIS-96|44x30x28|7.5|
+S040-B09,S040,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S040-B09|S040|FMC-DET-24|46x32x30|25|
+S040-B10,S040,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S040-B10|S040|FMC-JAR-24|32x30x20|11|FU
+S040-B11,S040,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S040-B11|S040|FMC-BEV-24|40x27x24|15|U
+S040-B12,S040,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S040-B12|S040|FMC-OIL-15L|25x25x35|15.5|U
+S040-B13,S040,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S040-B13|S040|FMC-DET-24|46x32x30|25|
+S040-B14,S040,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S040-B14|S040|FMC-BIS-96|44x30x28|7.5|
+S040-B15,S040,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S040-B15|S040|FMC-BIS-96|44x30x28|7.5|
+S041-B01,S041,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S041-B01|S041|FMC-BIS-96|44x30x28|7.5|
+S041-B02,S041,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S041-B02|S041|FMC-BEV-24|40x27x24|15|U
+S041-B03,S041,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S041-B03|S041|FMC-BEV-24|40x27x24|15|U
+S041-B04,S041,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S041-B04|S041|FMC-DET-24|46x32x30|25|
+S041-B05,S041,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S041-B05|S041|FMC-BIS-96|44x30x28|7.5|
+S041-B06,S041,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S041-B06|S041|FMC-BIS-96|44x30x28|7.5|
+S041-B07,S041,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S041-B07|S041|FMC-BIS-96|44x30x28|7.5|
+S041-B08,S041,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S041-B08|S041|FMC-OIL-15L|25x25x35|15.5|U
+S041-B09,S041,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S041-B09|S041|FMC-DET-24|46x32x30|25|
+S041-B10,S041,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S041-B10|S041|FMC-JAR-24|32x30x20|11|FU
+S041-B11,S041,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S041-B11|S041|FMC-BIS-96|44x30x28|7.5|
+S041-B12,S041,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S041-B12|S041|FMC-DET-24|46x32x30|25|
+S041-B13,S041,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S041-B13|S041|FMC-BEV-24|40x27x24|15|U
+S041-B14,S041,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S041-B14|S041|FMC-JAR-24|32x30x20|11|FU
+S041-B15,S041,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S041-B15|S041|FMC-BEV-24|40x27x24|15|U
+S041-B16,S041,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S041-B16|S041|FMC-BEV-24|40x27x24|15|U
+S041-B17,S041,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S041-B17|S041|FMC-OIL-15L|25x25x35|15.5|U
+S041-B18,S041,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S041-B18|S041|FMC-JAR-24|32x30x20|11|FU
+S042-B01,S042,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S042-B01|S042|ELC-MXR-4|48x40x34|16|FU
+S042-B02,S042,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S042-B02|S042|ELC-MXR-4|48x40x34|16|FU
+S042-B03,S042,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S042-B03|S042|ELC-MXR-4|48x40x34|16|FU
+S042-B04,S042,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S042-B04|S042|ELC-MXR-4|48x40x34|16|FU
+S042-B05,S042,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S042-B05|S042|ELC-MXR-4|48x40x34|16|FU
+S042-B06,S042,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S042-B06|S042|ELC-MXR-4|48x40x34|16|FU
+S042-B07,S042,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S042-B07|S042|ELC-MXR-4|48x40x34|16|FU
+S042-B08,S042,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S042-B08|S042|ELC-MXR-4|48x40x34|16|FU
+S042-B09,S042,ELC-TV-43,43-inch LED TV,electronics,electronics,105.0,16.0,66.0,12.0,0.1109,true,true,LP1|S042-B09|S042|ELC-TV-43|105x16x66|12|FU
+S042-B10,S042,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S042-B10|S042|ELC-MXR-4|48x40x34|16|FU
+S042-B11,S042,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S042-B11|S042|ELC-MXR-4|48x40x34|16|FU
+S042-B12,S042,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S042-B12|S042|ELC-MXR-4|48x40x34|16|FU
+S042-B13,S042,ELC-TV-43,43-inch LED TV,electronics,electronics,105.0,16.0,66.0,12.0,0.1109,true,true,LP1|S042-B13|S042|ELC-TV-43|105x16x66|12|FU
+S042-B14,S042,ELC-TV-43,43-inch LED TV,electronics,electronics,105.0,16.0,66.0,12.0,0.1109,true,true,LP1|S042-B14|S042|ELC-TV-43|105x16x66|12|FU
+S042-B15,S042,ELC-MXR-4,Mixer grinders (carton of 4),electronics,electronics,48.0,40.0,34.0,16.0,0.0653,true,true,LP1|S042-B15|S042|ELC-MXR-4|48x40x34|16|FU
+S042-B16,S042,ELC-TV-43,43-inch LED TV,electronics,electronics,105.0,16.0,66.0,12.0,0.1109,true,true,LP1|S042-B16|S042|ELC-TV-43|105x16x66|12|FU
+S042-B17,S042,ELC-TV-43,43-inch LED TV,electronics,electronics,105.0,16.0,66.0,12.0,0.1109,true,true,LP1|S042-B17|S042|ELC-TV-43|105x16x66|12|FU
+S043-B01,S043,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S043-B01|S043|FMC-JAR-24|32x30x20|11|FU
+S043-B02,S043,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S043-B02|S043|FMC-BIS-96|44x30x28|7.5|
+S043-B03,S043,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S043-B03|S043|FMC-JAR-24|32x30x20|11|FU
+S043-B04,S043,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S043-B04|S043|FMC-SHM-36|38x26x24|13.5|U
+S043-B05,S043,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S043-B05|S043|FMC-JAR-24|32x30x20|11|FU
+S043-B06,S043,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S043-B06|S043|FMC-OIL-15L|25x25x35|15.5|U
+S043-B07,S043,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S043-B07|S043|FMC-BIS-96|44x30x28|7.5|
+S043-B08,S043,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S043-B08|S043|FMC-DET-24|46x32x30|25|
+S043-B09,S043,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S043-B09|S043|FMC-BEV-24|40x27x24|15|U
+S043-B10,S043,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S043-B10|S043|FMC-DET-24|46x32x30|25|
+S043-B11,S043,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S043-B11|S043|FMC-BEV-24|40x27x24|15|U
+S043-B12,S043,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S043-B12|S043|FMC-BEV-24|40x27x24|15|U
+S043-B13,S043,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S043-B13|S043|FMC-OIL-15L|25x25x35|15.5|U
+S043-B14,S043,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S043-B14|S043|FMC-BEV-24|40x27x24|15|U
+S043-B15,S043,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S043-B15|S043|FMC-BEV-24|40x27x24|15|U
+S043-B16,S043,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S043-B16|S043|FMC-JAR-24|32x30x20|11|FU
+S043-B17,S043,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S043-B17|S043|FMC-BIS-96|44x30x28|7.5|
+S043-B18,S043,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S043-B18|S043|FMC-JAR-24|32x30x20|11|FU
+S043-B19,S043,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S043-B19|S043|FMC-DET-24|46x32x30|25|
+S043-B20,S043,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S043-B20|S043|FMC-SHM-36|38x26x24|13.5|U
+S043-B21,S043,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S043-B21|S043|FMC-BIS-96|44x30x28|7.5|
+S043-B22,S043,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S043-B22|S043|FMC-OIL-15L|25x25x35|15.5|U
+S043-B23,S043,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S043-B23|S043|FMC-OIL-15L|25x25x35|15.5|U
+S043-B24,S043,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S043-B24|S043|FMC-SHM-36|38x26x24|13.5|U
+S043-B25,S043,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S043-B25|S043|FMC-JAR-24|32x30x20|11|FU
+S043-B26,S043,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S043-B26|S043|FMC-BEV-24|40x27x24|15|U
+S044-B01,S044,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S044-B01|S044|PNT-TNT-48|32x24x22|9.5|FU
+S044-B02,S044,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S044-B02|S044|PNT-EXT-10L|28x28x31|13|U
+S044-B03,S044,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S044-B03|S044|PNT-ENM-4x4L|36x36x24|18.5|U
+S044-B04,S044,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S044-B04|S044|PNT-PRM-12x1L|40x30x19|15|U
+S044-B05,S044,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S044-B05|S044|PNT-ENM-4x4L|36x36x24|18.5|U
+S044-B06,S044,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S044-B06|S044|PNT-EXT-10L|28x28x31|13|U
+S044-B07,S044,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S044-B07|S044|PNT-PRM-12x1L|40x30x19|15|U
+S044-B08,S044,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S044-B08|S044|PNT-PRM-12x1L|40x30x19|15|U
+S044-B09,S044,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S044-B09|S044|PNT-EMU-20L|34x34x38|24|U
+S044-B10,S044,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S044-B10|S044|PNT-EMU-20L|34x34x38|24|U
+S045-B01,S045,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S045-B01|S045|PNT-ENM-4x4L|36x36x24|18.5|U
+S045-B02,S045,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S045-B02|S045|PNT-EXT-10L|28x28x31|13|U
+S045-B03,S045,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S045-B03|S045|PNT-EXT-10L|28x28x31|13|U
+S045-B04,S045,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S045-B04|S045|PNT-TNT-48|32x24x22|9.5|FU
+S045-B05,S045,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S045-B05|S045|PNT-PRM-12x1L|40x30x19|15|U
+S045-B06,S045,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S045-B06|S045|PNT-ENM-4x4L|36x36x24|18.5|U
+S045-B07,S045,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S045-B07|S045|PNT-ENM-4x4L|36x36x24|18.5|U
+S045-B08,S045,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S045-B08|S045|PNT-PRM-12x1L|40x30x19|15|U
+S045-B09,S045,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S045-B09|S045|PNT-PTY-20KG|50x34x16|20.5|
+S045-B10,S045,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S045-B10|S045|PNT-PRM-12x1L|40x30x19|15|U
+S045-B11,S045,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S045-B11|S045|PNT-PTY-20KG|50x34x16|20.5|
+S045-B12,S045,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S045-B12|S045|PNT-ENM-4x4L|36x36x24|18.5|U
+S045-B13,S045,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S045-B13|S045|PNT-TNT-48|32x24x22|9.5|FU
+S046-B01,S046,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S046-B01|S046|PNT-EMU-20L|34x34x38|24|U
+S046-B02,S046,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S046-B02|S046|PNT-EXT-10L|28x28x31|13|U
+S046-B03,S046,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S046-B03|S046|PNT-TNT-48|32x24x22|9.5|FU
+S046-B04,S046,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S046-B04|S046|PNT-EXT-10L|28x28x31|13|U
+S046-B05,S046,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S046-B05|S046|PNT-PTY-20KG|50x34x16|20.5|
+S046-B06,S046,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S046-B06|S046|PNT-PRM-12x1L|40x30x19|15|U
+S046-B07,S046,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S046-B07|S046|PNT-EMU-20L|34x34x38|24|U
+S046-B08,S046,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S046-B08|S046|PNT-EMU-20L|34x34x38|24|U
+S046-B09,S046,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S046-B09|S046|PNT-TNT-48|32x24x22|9.5|FU
+S046-B10,S046,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S046-B10|S046|PNT-TNT-48|32x24x22|9.5|FU
+S046-B11,S046,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S046-B11|S046|PNT-PTY-20KG|50x34x16|20.5|
+S046-B12,S046,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S046-B12|S046|PNT-EMU-20L|34x34x38|24|U
+S046-B13,S046,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S046-B13|S046|PNT-EMU-20L|34x34x38|24|U
+S046-B14,S046,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S046-B14|S046|PNT-ENM-4x4L|36x36x24|18.5|U
+S046-B15,S046,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S046-B15|S046|PNT-TNT-48|32x24x22|9.5|FU
+S046-B16,S046,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S046-B16|S046|PNT-EMU-20L|34x34x38|24|U
+S046-B17,S046,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S046-B17|S046|PNT-EXT-10L|28x28x31|13|U
+S046-B18,S046,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S046-B18|S046|PNT-TNT-48|32x24x22|9.5|FU
+S046-B19,S046,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S046-B19|S046|PNT-PTY-20KG|50x34x16|20.5|
+S046-B20,S046,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S046-B20|S046|PNT-EMU-20L|34x34x38|24|U
+S046-B21,S046,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S046-B21|S046|PNT-PTY-20KG|50x34x16|20.5|
+S046-B22,S046,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S046-B22|S046|PNT-ENM-4x4L|36x36x24|18.5|U
+S046-B23,S046,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S046-B23|S046|PNT-ENM-4x4L|36x36x24|18.5|U
+S046-B24,S046,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S046-B24|S046|PNT-PTY-20KG|50x34x16|20.5|
+S047-B01,S047,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S047-B01|S047|PNT-TNT-48|32x24x22|9.5|FU
+S047-B02,S047,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S047-B02|S047|PNT-TNT-48|32x24x22|9.5|FU
+S047-B03,S047,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S047-B03|S047|PNT-ENM-4x4L|36x36x24|18.5|U
+S047-B04,S047,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S047-B04|S047|PNT-PTY-20KG|50x34x16|20.5|
+S047-B05,S047,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S047-B05|S047|PNT-EMU-20L|34x34x38|24|U
+S047-B06,S047,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S047-B06|S047|PNT-PTY-20KG|50x34x16|20.5|
+S047-B07,S047,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S047-B07|S047|PNT-EMU-20L|34x34x38|24|U
+S047-B08,S047,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S047-B08|S047|PNT-EXT-10L|28x28x31|13|U
+S047-B09,S047,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S047-B09|S047|PNT-PTY-20KG|50x34x16|20.5|
+S047-B10,S047,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S047-B10|S047|PNT-ENM-4x4L|36x36x24|18.5|U
+S048-B01,S048,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S048-B01|S048|PNT-ENM-4x4L|36x36x24|18.5|U
+S048-B02,S048,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S048-B02|S048|PNT-PRM-12x1L|40x30x19|15|U
+S048-B03,S048,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S048-B03|S048|PNT-EXT-10L|28x28x31|13|U
+S048-B04,S048,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S048-B04|S048|PNT-PRM-12x1L|40x30x19|15|U
+S048-B05,S048,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S048-B05|S048|PNT-ENM-4x4L|36x36x24|18.5|U
+S048-B06,S048,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S048-B06|S048|PNT-EMU-20L|34x34x38|24|U
+S048-B07,S048,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S048-B07|S048|PNT-ENM-4x4L|36x36x24|18.5|U
+S048-B08,S048,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S048-B08|S048|PNT-TNT-48|32x24x22|9.5|FU
+S048-B09,S048,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S048-B09|S048|PNT-EMU-20L|34x34x38|24|U
+S048-B10,S048,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S048-B10|S048|PNT-PRM-12x1L|40x30x19|15|U
+S048-B11,S048,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S048-B11|S048|PNT-PTY-20KG|50x34x16|20.5|
+S048-B12,S048,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S048-B12|S048|PNT-ENM-4x4L|36x36x24|18.5|U
+S048-B13,S048,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S048-B13|S048|PNT-EXT-10L|28x28x31|13|U
+S048-B14,S048,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S048-B14|S048|PNT-TNT-48|32x24x22|9.5|FU
+S049-B01,S049,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S049-B01|S049|PNT-EXT-10L|28x28x31|13|U
+S049-B02,S049,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S049-B02|S049|PNT-PTY-20KG|50x34x16|20.5|
+S049-B03,S049,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S049-B03|S049|PNT-EMU-20L|34x34x38|24|U
+S049-B04,S049,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S049-B04|S049|PNT-EMU-20L|34x34x38|24|U
+S049-B05,S049,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S049-B05|S049|PNT-ENM-4x4L|36x36x24|18.5|U
+S049-B06,S049,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S049-B06|S049|PNT-EMU-20L|34x34x38|24|U
+S049-B07,S049,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S049-B07|S049|PNT-EMU-20L|34x34x38|24|U
+S049-B08,S049,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S049-B08|S049|PNT-ENM-4x4L|36x36x24|18.5|U
+S049-B09,S049,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S049-B09|S049|PNT-ENM-4x4L|36x36x24|18.5|U
+S049-B10,S049,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S049-B10|S049|PNT-EXT-10L|28x28x31|13|U
+S049-B11,S049,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S049-B11|S049|PNT-TNT-48|32x24x22|9.5|FU
+S049-B12,S049,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S049-B12|S049|PNT-ENM-4x4L|36x36x24|18.5|U
+S049-B13,S049,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S049-B13|S049|PNT-EXT-10L|28x28x31|13|U
+S049-B14,S049,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S049-B14|S049|PNT-ENM-4x4L|36x36x24|18.5|U
+S049-B15,S049,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S049-B15|S049|PNT-EMU-20L|34x34x38|24|U
+S049-B16,S049,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S049-B16|S049|PNT-PRM-12x1L|40x30x19|15|U
+S049-B17,S049,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S049-B17|S049|PNT-PTY-20KG|50x34x16|20.5|
+S049-B18,S049,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S049-B18|S049|PNT-PRM-12x1L|40x30x19|15|U
+S049-B19,S049,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S049-B19|S049|PNT-PRM-12x1L|40x30x19|15|U
+S049-B20,S049,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S049-B20|S049|PNT-PRM-12x1L|40x30x19|15|U
+S049-B21,S049,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S049-B21|S049|PNT-EMU-20L|34x34x38|24|U
+S049-B22,S049,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S049-B22|S049|PNT-EXT-10L|28x28x31|13|U
+S049-B23,S049,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S049-B23|S049|PNT-EMU-20L|34x34x38|24|U
+S050-B01,S050,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S050-B01|S050|PNT-EXT-10L|28x28x31|13|U
+S050-B02,S050,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S050-B02|S050|PNT-EXT-10L|28x28x31|13|U
+S050-B03,S050,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S050-B03|S050|PNT-EMU-20L|34x34x38|24|U
+S050-B04,S050,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S050-B04|S050|PNT-TNT-48|32x24x22|9.5|FU
+S050-B05,S050,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S050-B05|S050|PNT-PRM-12x1L|40x30x19|15|U
+S050-B06,S050,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S050-B06|S050|PNT-EXT-10L|28x28x31|13|U
+S050-B07,S050,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S050-B07|S050|PNT-EMU-20L|34x34x38|24|U
+S050-B08,S050,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S050-B08|S050|PNT-EMU-20L|34x34x38|24|U
+S050-B09,S050,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S050-B09|S050|PNT-EXT-10L|28x28x31|13|U
+S050-B10,S050,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S050-B10|S050|PNT-PRM-12x1L|40x30x19|15|U
+S050-B11,S050,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S050-B11|S050|PNT-EXT-10L|28x28x31|13|U
+S050-B12,S050,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S050-B12|S050|PNT-EMU-20L|34x34x38|24|U
+S050-B13,S050,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S050-B13|S050|PNT-EMU-20L|34x34x38|24|U
+S050-B14,S050,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S050-B14|S050|PNT-TNT-48|32x24x22|9.5|FU
+S050-B15,S050,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S050-B15|S050|PNT-ENM-4x4L|36x36x24|18.5|U
+S050-B16,S050,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S050-B16|S050|PNT-PRM-12x1L|40x30x19|15|U
+S050-B17,S050,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S050-B17|S050|PNT-EXT-10L|28x28x31|13|U
+S050-B18,S050,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S050-B18|S050|PNT-PTY-20KG|50x34x16|20.5|
+S050-B19,S050,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S050-B19|S050|PNT-TNT-48|32x24x22|9.5|FU
+S050-B20,S050,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S050-B20|S050|PNT-EXT-10L|28x28x31|13|U
+S050-B21,S050,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S050-B21|S050|PNT-PTY-20KG|50x34x16|20.5|
+S050-B22,S050,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S050-B22|S050|PNT-EMU-20L|34x34x38|24|U
+S050-B23,S050,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S050-B23|S050|PNT-EXT-10L|28x28x31|13|U
+S051-B01,S051,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S051-B01|S051|PNT-PRM-12x1L|40x30x19|15|U
+S051-B02,S051,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S051-B02|S051|PNT-EMU-20L|34x34x38|24|U
+S051-B03,S051,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S051-B03|S051|PNT-EMU-20L|34x34x38|24|U
+S051-B04,S051,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S051-B04|S051|PNT-PTY-20KG|50x34x16|20.5|
+S051-B05,S051,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S051-B05|S051|PNT-EXT-10L|28x28x31|13|U
+S051-B06,S051,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S051-B06|S051|PNT-PRM-12x1L|40x30x19|15|U
+S051-B07,S051,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S051-B07|S051|PNT-ENM-4x4L|36x36x24|18.5|U
+S051-B08,S051,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S051-B08|S051|PNT-PTY-20KG|50x34x16|20.5|
+S051-B09,S051,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S051-B09|S051|PNT-PTY-20KG|50x34x16|20.5|
+S051-B10,S051,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S051-B10|S051|PNT-TNT-48|32x24x22|9.5|FU
+S051-B11,S051,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S051-B11|S051|PNT-PTY-20KG|50x34x16|20.5|
+S051-B12,S051,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S051-B12|S051|PNT-ENM-4x4L|36x36x24|18.5|U
+S051-B13,S051,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S051-B13|S051|PNT-ENM-4x4L|36x36x24|18.5|U
+S051-B14,S051,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S051-B14|S051|PNT-EMU-20L|34x34x38|24|U
+S051-B15,S051,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S051-B15|S051|PNT-TNT-48|32x24x22|9.5|FU
+S051-B16,S051,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S051-B16|S051|PNT-PTY-20KG|50x34x16|20.5|
+S051-B17,S051,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S051-B17|S051|PNT-EMU-20L|34x34x38|24|U
+S051-B18,S051,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S051-B18|S051|PNT-EMU-20L|34x34x38|24|U
+S051-B19,S051,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S051-B19|S051|PNT-PRM-12x1L|40x30x19|15|U
+S051-B20,S051,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S051-B20|S051|PNT-EXT-10L|28x28x31|13|U
+S051-B21,S051,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S051-B21|S051|PNT-EXT-10L|28x28x31|13|U
+S051-B22,S051,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S051-B22|S051|PNT-EMU-20L|34x34x38|24|U
+S051-B23,S051,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S051-B23|S051|PNT-PTY-20KG|50x34x16|20.5|
+S051-B24,S051,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S051-B24|S051|PNT-ENM-4x4L|36x36x24|18.5|U
+S051-B25,S051,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S051-B25|S051|PNT-EXT-10L|28x28x31|13|U
+S051-B26,S051,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S051-B26|S051|PNT-EMU-20L|34x34x38|24|U
+S052-B01,S052,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S052-B01|S052|FMC-BIS-96|44x30x28|7.5|
+S052-B02,S052,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S052-B02|S052|FMC-BIS-96|44x30x28|7.5|
+S052-B03,S052,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S052-B03|S052|FMC-BIS-96|44x30x28|7.5|
+S052-B04,S052,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S052-B04|S052|FMC-OIL-15L|25x25x35|15.5|U
+S052-B05,S052,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S052-B05|S052|FMC-JAR-24|32x30x20|11|FU
+S052-B06,S052,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S052-B06|S052|FMC-SHM-36|38x26x24|13.5|U
+S052-B07,S052,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S052-B07|S052|FMC-DET-24|46x32x30|25|
+S052-B08,S052,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S052-B08|S052|FMC-DET-24|46x32x30|25|
+S052-B09,S052,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S052-B09|S052|FMC-DET-24|46x32x30|25|
+S052-B10,S052,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S052-B10|S052|FMC-OIL-15L|25x25x35|15.5|U
+S052-B11,S052,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S052-B11|S052|FMC-OIL-15L|25x25x35|15.5|U
+S052-B12,S052,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S052-B12|S052|FMC-BIS-96|44x30x28|7.5|
+S052-B13,S052,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S052-B13|S052|FMC-OIL-15L|25x25x35|15.5|U
+S052-B14,S052,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S052-B14|S052|FMC-SHM-36|38x26x24|13.5|U
+S052-B15,S052,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S052-B15|S052|FMC-BIS-96|44x30x28|7.5|
+S052-B16,S052,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S052-B16|S052|FMC-BIS-96|44x30x28|7.5|
+S052-B17,S052,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S052-B17|S052|FMC-OIL-15L|25x25x35|15.5|U
+S052-B18,S052,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S052-B18|S052|FMC-DET-24|46x32x30|25|
+S052-B19,S052,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S052-B19|S052|FMC-BIS-96|44x30x28|7.5|
+S052-B20,S052,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S052-B20|S052|FMC-BIS-96|44x30x28|7.5|
+S052-B21,S052,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S052-B21|S052|FMC-OIL-15L|25x25x35|15.5|U
+S052-B22,S052,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S052-B22|S052|FMC-SHM-36|38x26x24|13.5|U
+S052-B23,S052,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S052-B23|S052|FMC-OIL-15L|25x25x35|15.5|U
+S052-B24,S052,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S052-B24|S052|FMC-DET-24|46x32x30|25|
+S052-B25,S052,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S052-B25|S052|FMC-BIS-96|44x30x28|7.5|
+S052-B26,S052,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S052-B26|S052|FMC-SHM-36|38x26x24|13.5|U
+S053-B01,S053,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S053-B01|S053|PNT-EXT-10L|28x28x31|13|U
+S053-B02,S053,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S053-B02|S053|PNT-EMU-20L|34x34x38|24|U
+S053-B03,S053,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S053-B03|S053|PNT-EXT-10L|28x28x31|13|U
+S053-B04,S053,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S053-B04|S053|PNT-EXT-10L|28x28x31|13|U
+S053-B05,S053,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S053-B05|S053|PNT-EMU-20L|34x34x38|24|U
+S053-B06,S053,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S053-B06|S053|PNT-ENM-4x4L|36x36x24|18.5|U
+S053-B07,S053,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S053-B07|S053|PNT-EMU-20L|34x34x38|24|U
+S053-B08,S053,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S053-B08|S053|PNT-ENM-4x4L|36x36x24|18.5|U
+S053-B09,S053,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S053-B09|S053|PNT-PRM-12x1L|40x30x19|15|U
+S053-B10,S053,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S053-B10|S053|PNT-EXT-10L|28x28x31|13|U
+S053-B11,S053,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S053-B11|S053|PNT-EXT-10L|28x28x31|13|U
+S053-B12,S053,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S053-B12|S053|PNT-PRM-12x1L|40x30x19|15|U
+S053-B13,S053,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S053-B13|S053|PNT-EXT-10L|28x28x31|13|U
+S053-B14,S053,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S053-B14|S053|PNT-EXT-10L|28x28x31|13|U
+S054-B01,S054,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S054-B01|S054|PNT-PRM-12x1L|40x30x19|15|U
+S054-B02,S054,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S054-B02|S054|PNT-EXT-10L|28x28x31|13|U
+S054-B03,S054,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S054-B03|S054|PNT-EMU-20L|34x34x38|24|U
+S054-B04,S054,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S054-B04|S054|PNT-EMU-20L|34x34x38|24|U
+S054-B05,S054,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S054-B05|S054|PNT-EXT-10L|28x28x31|13|U
+S054-B06,S054,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S054-B06|S054|PNT-PTY-20KG|50x34x16|20.5|
+S054-B07,S054,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S054-B07|S054|PNT-ENM-4x4L|36x36x24|18.5|U
+S054-B08,S054,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S054-B08|S054|PNT-PTY-20KG|50x34x16|20.5|
+S054-B09,S054,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S054-B09|S054|PNT-PTY-20KG|50x34x16|20.5|
+S054-B10,S054,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S054-B10|S054|PNT-EMU-20L|34x34x38|24|U
+S054-B11,S054,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S054-B11|S054|PNT-PTY-20KG|50x34x16|20.5|
+S054-B12,S054,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S054-B12|S054|PNT-EMU-20L|34x34x38|24|U
+S054-B13,S054,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S054-B13|S054|PNT-ENM-4x4L|36x36x24|18.5|U
+S054-B14,S054,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S054-B14|S054|PNT-ENM-4x4L|36x36x24|18.5|U
+S054-B15,S054,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S054-B15|S054|PNT-EXT-10L|28x28x31|13|U
+S054-B16,S054,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S054-B16|S054|PNT-EXT-10L|28x28x31|13|U
+S054-B17,S054,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S054-B17|S054|PNT-EXT-10L|28x28x31|13|U
+S054-B18,S054,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S054-B18|S054|PNT-EXT-10L|28x28x31|13|U
+S054-B19,S054,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S054-B19|S054|PNT-EMU-20L|34x34x38|24|U
+S054-B20,S054,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S054-B20|S054|PNT-ENM-4x4L|36x36x24|18.5|U
+S054-B21,S054,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S054-B21|S054|PNT-EMU-20L|34x34x38|24|U
+S054-B22,S054,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S054-B22|S054|PNT-ENM-4x4L|36x36x24|18.5|U
+S054-B23,S054,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S054-B23|S054|PNT-PTY-20KG|50x34x16|20.5|
+S055-B01,S055,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S055-B01|S055|PNT-EMU-20L|34x34x38|24|U
+S055-B02,S055,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S055-B02|S055|PNT-ENM-4x4L|36x36x24|18.5|U
+S055-B03,S055,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S055-B03|S055|PNT-PRM-12x1L|40x30x19|15|U
+S055-B04,S055,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S055-B04|S055|PNT-PRM-12x1L|40x30x19|15|U
+S055-B05,S055,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S055-B05|S055|PNT-EMU-20L|34x34x38|24|U
+S055-B06,S055,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S055-B06|S055|PNT-PRM-12x1L|40x30x19|15|U
+S055-B07,S055,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S055-B07|S055|PNT-EXT-10L|28x28x31|13|U
+S055-B08,S055,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S055-B08|S055|PNT-PRM-12x1L|40x30x19|15|U
+S055-B09,S055,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S055-B09|S055|PNT-PRM-12x1L|40x30x19|15|U
+S055-B10,S055,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S055-B10|S055|PNT-EXT-10L|28x28x31|13|U
+S055-B11,S055,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S055-B11|S055|PNT-PTY-20KG|50x34x16|20.5|
+S055-B12,S055,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S055-B12|S055|PNT-ENM-4x4L|36x36x24|18.5|U
+S055-B13,S055,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S055-B13|S055|PNT-ENM-4x4L|36x36x24|18.5|U
+S056-B01,S056,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S056-B01|S056|FMC-BIS-96|44x30x28|7.5|
+S056-B02,S056,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S056-B02|S056|FMC-BIS-96|44x30x28|7.5|
+S056-B03,S056,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S056-B03|S056|FMC-BIS-96|44x30x28|7.5|
+S056-B04,S056,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S056-B04|S056|FMC-DET-24|46x32x30|25|
+S056-B05,S056,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S056-B05|S056|FMC-SHM-36|38x26x24|13.5|U
+S056-B06,S056,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S056-B06|S056|FMC-BIS-96|44x30x28|7.5|
+S056-B07,S056,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S056-B07|S056|FMC-BIS-96|44x30x28|7.5|
+S056-B08,S056,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S056-B08|S056|FMC-DET-24|46x32x30|25|
+S056-B09,S056,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S056-B09|S056|FMC-JAR-24|32x30x20|11|FU
+S056-B10,S056,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S056-B10|S056|FMC-DET-24|46x32x30|25|
+S056-B11,S056,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S056-B11|S056|FMC-BEV-24|40x27x24|15|U
+S056-B12,S056,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S056-B12|S056|FMC-BEV-24|40x27x24|15|U
+S056-B13,S056,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S056-B13|S056|FMC-SHM-36|38x26x24|13.5|U
+S056-B14,S056,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S056-B14|S056|FMC-SHM-36|38x26x24|13.5|U
+S056-B15,S056,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S056-B15|S056|FMC-SHM-36|38x26x24|13.5|U
+S056-B16,S056,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S056-B16|S056|FMC-SHM-36|38x26x24|13.5|U
+S056-B17,S056,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S056-B17|S056|FMC-JAR-24|32x30x20|11|FU
+S056-B18,S056,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S056-B18|S056|FMC-BEV-24|40x27x24|15|U
+S056-B19,S056,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S056-B19|S056|FMC-BIS-96|44x30x28|7.5|
+S056-B20,S056,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S056-B20|S056|FMC-JAR-24|32x30x20|11|FU
+S056-B21,S056,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S056-B21|S056|FMC-OIL-15L|25x25x35|15.5|U
+S056-B22,S056,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S056-B22|S056|FMC-BIS-96|44x30x28|7.5|
+S056-B23,S056,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S056-B23|S056|FMC-SHM-36|38x26x24|13.5|U
+S056-B24,S056,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S056-B24|S056|FMC-DET-24|46x32x30|25|
+S057-B01,S057,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S057-B01|S057|PNT-EMU-20L|34x34x38|24|U
+S057-B02,S057,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S057-B02|S057|PNT-EMU-20L|34x34x38|24|U
+S057-B03,S057,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S057-B03|S057|PNT-EXT-10L|28x28x31|13|U
+S057-B04,S057,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S057-B04|S057|PNT-EXT-10L|28x28x31|13|U
+S057-B05,S057,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S057-B05|S057|PNT-ENM-4x4L|36x36x24|18.5|U
+S057-B06,S057,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S057-B06|S057|PNT-EMU-20L|34x34x38|24|U
+S057-B07,S057,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S057-B07|S057|PNT-EXT-10L|28x28x31|13|U
+S057-B08,S057,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S057-B08|S057|PNT-EMU-20L|34x34x38|24|U
+S057-B09,S057,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S057-B09|S057|PNT-EXT-10L|28x28x31|13|U
+S057-B10,S057,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S057-B10|S057|PNT-EXT-10L|28x28x31|13|U
+S057-B11,S057,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S057-B11|S057|PNT-ENM-4x4L|36x36x24|18.5|U
+S057-B12,S057,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S057-B12|S057|PNT-PTY-20KG|50x34x16|20.5|
+S058-B01,S058,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S058-B01|S058|FMC-BIS-96|44x30x28|7.5|
+S058-B02,S058,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S058-B02|S058|FMC-BIS-96|44x30x28|7.5|
+S058-B03,S058,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S058-B03|S058|FMC-BEV-24|40x27x24|15|U
+S058-B04,S058,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S058-B04|S058|FMC-BEV-24|40x27x24|15|U
+S058-B05,S058,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S058-B05|S058|FMC-SHM-36|38x26x24|13.5|U
+S058-B06,S058,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S058-B06|S058|FMC-DET-24|46x32x30|25|
+S058-B07,S058,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S058-B07|S058|FMC-DET-24|46x32x30|25|
+S058-B08,S058,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S058-B08|S058|FMC-OIL-15L|25x25x35|15.5|U
+S058-B09,S058,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S058-B09|S058|FMC-BEV-24|40x27x24|15|U
+S058-B10,S058,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S058-B10|S058|FMC-BIS-96|44x30x28|7.5|
+S058-B11,S058,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S058-B11|S058|FMC-OIL-15L|25x25x35|15.5|U
+S058-B12,S058,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S058-B12|S058|FMC-OIL-15L|25x25x35|15.5|U
+S058-B13,S058,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S058-B13|S058|FMC-DET-24|46x32x30|25|
+S059-B01,S059,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S059-B01|S059|FMC-BIS-96|44x30x28|7.5|
+S059-B02,S059,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S059-B02|S059|FMC-DET-24|46x32x30|25|
+S059-B03,S059,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S059-B03|S059|FMC-OIL-15L|25x25x35|15.5|U
+S059-B04,S059,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S059-B04|S059|FMC-BEV-24|40x27x24|15|U
+S059-B05,S059,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S059-B05|S059|FMC-BEV-24|40x27x24|15|U
+S059-B06,S059,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S059-B06|S059|FMC-BEV-24|40x27x24|15|U
+S059-B07,S059,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S059-B07|S059|FMC-DET-24|46x32x30|25|
+S059-B08,S059,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S059-B08|S059|FMC-OIL-15L|25x25x35|15.5|U
+S059-B09,S059,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S059-B09|S059|FMC-SHM-36|38x26x24|13.5|U
+S059-B10,S059,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S059-B10|S059|FMC-DET-24|46x32x30|25|
+S059-B11,S059,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S059-B11|S059|FMC-BIS-96|44x30x28|7.5|
+S059-B12,S059,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S059-B12|S059|FMC-BEV-24|40x27x24|15|U
+S059-B13,S059,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S059-B13|S059|FMC-BIS-96|44x30x28|7.5|
+S059-B14,S059,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S059-B14|S059|FMC-OIL-15L|25x25x35|15.5|U
+S059-B15,S059,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S059-B15|S059|FMC-DET-24|46x32x30|25|
+S059-B16,S059,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S059-B16|S059|FMC-BEV-24|40x27x24|15|U
+S059-B17,S059,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S059-B17|S059|FMC-DET-24|46x32x30|25|
+S059-B18,S059,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S059-B18|S059|FMC-BIS-96|44x30x28|7.5|
+S059-B19,S059,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S059-B19|S059|FMC-JAR-24|32x30x20|11|FU
+S059-B20,S059,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S059-B20|S059|FMC-SHM-36|38x26x24|13.5|U
+S059-B21,S059,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S059-B21|S059|FMC-SHM-36|38x26x24|13.5|U
+S059-B22,S059,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S059-B22|S059|FMC-OIL-15L|25x25x35|15.5|U
+S060-B01,S060,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S060-B01|S060|FMC-DET-24|46x32x30|25|
+S060-B02,S060,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S060-B02|S060|FMC-DET-24|46x32x30|25|
+S060-B03,S060,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S060-B03|S060|FMC-OIL-15L|25x25x35|15.5|U
+S060-B04,S060,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S060-B04|S060|FMC-OIL-15L|25x25x35|15.5|U
+S060-B05,S060,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S060-B05|S060|FMC-BEV-24|40x27x24|15|U
+S060-B06,S060,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S060-B06|S060|FMC-OIL-15L|25x25x35|15.5|U
+S060-B07,S060,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S060-B07|S060|FMC-DET-24|46x32x30|25|
+S060-B08,S060,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S060-B08|S060|FMC-BIS-96|44x30x28|7.5|
+S060-B09,S060,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S060-B09|S060|FMC-OIL-15L|25x25x35|15.5|U
+S060-B10,S060,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S060-B10|S060|FMC-BEV-24|40x27x24|15|U
+S060-B11,S060,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S060-B11|S060|FMC-SHM-36|38x26x24|13.5|U
+S060-B12,S060,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S060-B12|S060|FMC-OIL-15L|25x25x35|15.5|U
+S060-B13,S060,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S060-B13|S060|FMC-JAR-24|32x30x20|11|FU
+S060-B14,S060,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S060-B14|S060|FMC-BIS-96|44x30x28|7.5|
+S061-B01,S061,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S061-B01|S061|PNT-ENM-4x4L|36x36x24|18.5|U
+S061-B02,S061,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S061-B02|S061|PNT-EXT-10L|28x28x31|13|U
+S061-B03,S061,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S061-B03|S061|PNT-PRM-12x1L|40x30x19|15|U
+S061-B04,S061,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S061-B04|S061|PNT-PRM-12x1L|40x30x19|15|U
+S061-B05,S061,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S061-B05|S061|PNT-ENM-4x4L|36x36x24|18.5|U
+S061-B06,S061,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S061-B06|S061|PNT-EXT-10L|28x28x31|13|U
+S061-B07,S061,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S061-B07|S061|PNT-EMU-20L|34x34x38|24|U
+S061-B08,S061,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S061-B08|S061|PNT-EMU-20L|34x34x38|24|U
+S061-B09,S061,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S061-B09|S061|PNT-ENM-4x4L|36x36x24|18.5|U
+S061-B10,S061,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S061-B10|S061|PNT-PTY-20KG|50x34x16|20.5|
+S061-B11,S061,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S061-B11|S061|PNT-EMU-20L|34x34x38|24|U
+S061-B12,S061,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S061-B12|S061|PNT-EXT-10L|28x28x31|13|U
+S061-B13,S061,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S061-B13|S061|PNT-EXT-10L|28x28x31|13|U
+S061-B14,S061,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S061-B14|S061|PNT-TNT-48|32x24x22|9.5|FU
+S061-B15,S061,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S061-B15|S061|PNT-PRM-12x1L|40x30x19|15|U
+S061-B16,S061,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S061-B16|S061|PNT-ENM-4x4L|36x36x24|18.5|U
+S061-B17,S061,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S061-B17|S061|PNT-EMU-20L|34x34x38|24|U
+S061-B18,S061,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S061-B18|S061|PNT-EMU-20L|34x34x38|24|U
+S061-B19,S061,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S061-B19|S061|PNT-EMU-20L|34x34x38|24|U
+S061-B20,S061,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S061-B20|S061|PNT-EXT-10L|28x28x31|13|U
+S061-B21,S061,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S061-B21|S061|PNT-ENM-4x4L|36x36x24|18.5|U
+S062-B01,S062,APP-SHO-12,Footwear (carton of 12 pairs),apparel,apparel,52.0,36.0,30.0,9.0,0.0562,false,false,LP1|S062-B01|S062|APP-SHO-12|52x36x30|9|
+S062-B02,S062,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S062-B02|S062|APP-GAR-40|60x40x40|11|
+S062-B03,S062,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S062-B03|S062|APP-GAR-40|60x40x40|11|
+S062-B04,S062,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S062-B04|S062|APP-GAR-40|60x40x40|11|
+S062-B05,S062,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S062-B05|S062|APP-GAR-40|60x40x40|11|
+S062-B06,S062,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S062-B06|S062|APP-GAR-40|60x40x40|11|
+S062-B07,S062,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S062-B07|S062|APP-GAR-40|60x40x40|11|
+S062-B08,S062,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S062-B08|S062|APP-GAR-40|60x40x40|11|
+S062-B09,S062,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S062-B09|S062|APP-GAR-40|60x40x40|11|
+S062-B10,S062,APP-SHO-12,Footwear (carton of 12 pairs),apparel,apparel,52.0,36.0,30.0,9.0,0.0562,false,false,LP1|S062-B10|S062|APP-SHO-12|52x36x30|9|
+S062-B11,S062,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S062-B11|S062|APP-GAR-40|60x40x40|11|
+S062-B12,S062,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S062-B12|S062|APP-GAR-40|60x40x40|11|
+S062-B13,S062,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S062-B13|S062|APP-GAR-40|60x40x40|11|
+S062-B14,S062,APP-SHO-12,Footwear (carton of 12 pairs),apparel,apparel,52.0,36.0,30.0,9.0,0.0562,false,false,LP1|S062-B14|S062|APP-SHO-12|52x36x30|9|
+S062-B15,S062,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S062-B15|S062|APP-GAR-40|60x40x40|11|
+S062-B16,S062,APP-SHO-12,Footwear (carton of 12 pairs),apparel,apparel,52.0,36.0,30.0,9.0,0.0562,false,false,LP1|S062-B16|S062|APP-SHO-12|52x36x30|9|
+S062-B17,S062,APP-SHO-12,Footwear (carton of 12 pairs),apparel,apparel,52.0,36.0,30.0,9.0,0.0562,false,false,LP1|S062-B17|S062|APP-SHO-12|52x36x30|9|
+S062-B18,S062,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S062-B18|S062|APP-GAR-40|60x40x40|11|
+S062-B19,S062,APP-SHO-12,Footwear (carton of 12 pairs),apparel,apparel,52.0,36.0,30.0,9.0,0.0562,false,false,LP1|S062-B19|S062|APP-SHO-12|52x36x30|9|
+S062-B20,S062,APP-SHO-12,Footwear (carton of 12 pairs),apparel,apparel,52.0,36.0,30.0,9.0,0.0562,false,false,LP1|S062-B20|S062|APP-SHO-12|52x36x30|9|
+S062-B21,S062,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S062-B21|S062|APP-GAR-40|60x40x40|11|
+S062-B22,S062,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S062-B22|S062|APP-GAR-40|60x40x40|11|
+S062-B23,S062,APP-GAR-40,Folded garments (master carton),apparel,apparel,60.0,40.0,40.0,11.0,0.096,false,false,LP1|S062-B23|S062|APP-GAR-40|60x40x40|11|
+S062-B24,S062,APP-SHO-12,Footwear (carton of 12 pairs),apparel,apparel,52.0,36.0,30.0,9.0,0.0562,false,false,LP1|S062-B24|S062|APP-SHO-12|52x36x30|9|
+S063-B01,S063,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S063-B01|S063|FMC-DET-24|46x32x30|25|
+S063-B02,S063,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S063-B02|S063|FMC-BIS-96|44x30x28|7.5|
+S063-B03,S063,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S063-B03|S063|FMC-OIL-15L|25x25x35|15.5|U
+S063-B04,S063,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S063-B04|S063|FMC-OIL-15L|25x25x35|15.5|U
+S063-B05,S063,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S063-B05|S063|FMC-DET-24|46x32x30|25|
+S063-B06,S063,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S063-B06|S063|FMC-JAR-24|32x30x20|11|FU
+S063-B07,S063,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S063-B07|S063|FMC-SHM-36|38x26x24|13.5|U
+S063-B08,S063,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S063-B08|S063|FMC-SHM-36|38x26x24|13.5|U
+S063-B09,S063,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S063-B09|S063|FMC-OIL-15L|25x25x35|15.5|U
+S063-B10,S063,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S063-B10|S063|FMC-SHM-36|38x26x24|13.5|U
+S063-B11,S063,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S063-B11|S063|FMC-OIL-15L|25x25x35|15.5|U
+S063-B12,S063,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S063-B12|S063|FMC-BIS-96|44x30x28|7.5|
+S063-B13,S063,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S063-B13|S063|FMC-DET-24|46x32x30|25|
+S063-B14,S063,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S063-B14|S063|FMC-BIS-96|44x30x28|7.5|
+S063-B15,S063,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S063-B15|S063|FMC-SHM-36|38x26x24|13.5|U
+S063-B16,S063,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S063-B16|S063|FMC-DET-24|46x32x30|25|
+S063-B17,S063,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S063-B17|S063|FMC-OIL-15L|25x25x35|15.5|U
+S063-B18,S063,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S063-B18|S063|FMC-SHM-36|38x26x24|13.5|U
+S063-B19,S063,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S063-B19|S063|FMC-BIS-96|44x30x28|7.5|
+S064-B01,S064,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S064-B01|S064|BLD-CEM-50|60x40x14|50|
+S064-B02,S064,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S064-B02|S064|BLD-CEM-50|60x40x14|50|
+S064-B03,S064,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S064-B03|S064|BLD-CEM-50|60x40x14|50|
+S064-B04,S064,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S064-B04|S064|BLD-TIL-4|62x62x9|28|F
+S064-B05,S064,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S064-B05|S064|BLD-CEM-50|60x40x14|50|
+S064-B06,S064,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S064-B06|S064|BLD-CEM-50|60x40x14|50|
+S064-B07,S064,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S064-B07|S064|BLD-CEM-50|60x40x14|50|
+S064-B08,S064,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S064-B08|S064|BLD-TIL-4|62x62x9|28|F
+S064-B09,S064,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S064-B09|S064|BLD-CEM-50|60x40x14|50|
+S064-B10,S064,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S064-B10|S064|BLD-CEM-50|60x40x14|50|
+S064-B11,S064,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S064-B11|S064|BLD-TIL-4|62x62x9|28|F
+S064-B12,S064,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S064-B12|S064|BLD-CEM-50|60x40x14|50|
+S064-B13,S064,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S064-B13|S064|BLD-CEM-50|60x40x14|50|
+S064-B14,S064,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S064-B14|S064|BLD-CEM-50|60x40x14|50|
+S064-B15,S064,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S064-B15|S064|BLD-TIL-4|62x62x9|28|F
+S064-B16,S064,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S064-B16|S064|BLD-TIL-4|62x62x9|28|F
+S064-B17,S064,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S064-B17|S064|BLD-TIL-4|62x62x9|28|F
+S064-B18,S064,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S064-B18|S064|BLD-TIL-4|62x62x9|28|F
+S064-B19,S064,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S064-B19|S064|BLD-CEM-50|60x40x14|50|
+S064-B20,S064,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S064-B20|S064|BLD-CEM-50|60x40x14|50|
+S064-B21,S064,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S064-B21|S064|BLD-CEM-50|60x40x14|50|
+S064-B22,S064,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S064-B22|S064|BLD-TIL-4|62x62x9|28|F
+S065-B01,S065,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S065-B01|S065|BLD-CEM-50|60x40x14|50|
+S065-B02,S065,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S065-B02|S065|BLD-CEM-50|60x40x14|50|
+S065-B03,S065,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S065-B03|S065|BLD-TIL-4|62x62x9|28|F
+S065-B04,S065,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S065-B04|S065|BLD-CEM-50|60x40x14|50|
+S065-B05,S065,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S065-B05|S065|BLD-TIL-4|62x62x9|28|F
+S065-B06,S065,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S065-B06|S065|BLD-CEM-50|60x40x14|50|
+S065-B07,S065,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S065-B07|S065|BLD-CEM-50|60x40x14|50|
+S065-B08,S065,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S065-B08|S065|BLD-TIL-4|62x62x9|28|F
+S065-B09,S065,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S065-B09|S065|BLD-CEM-50|60x40x14|50|
+S065-B10,S065,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S065-B10|S065|BLD-CEM-50|60x40x14|50|
+S065-B11,S065,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S065-B11|S065|BLD-TIL-4|62x62x9|28|F
+S065-B12,S065,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S065-B12|S065|BLD-TIL-4|62x62x9|28|F
+S065-B13,S065,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S065-B13|S065|BLD-CEM-50|60x40x14|50|
+S065-B14,S065,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S065-B14|S065|BLD-CEM-50|60x40x14|50|
+S065-B15,S065,BLD-CEM-50,Cement 50 kg bag (palletised),building,cement,60.0,40.0,14.0,50.0,0.0336,false,false,LP1|S065-B15|S065|BLD-CEM-50|60x40x14|50|
+S065-B16,S065,BLD-TIL-4,Floor tiles 600x600 (box of 4),building,cement,62.0,62.0,9.0,28.0,0.0346,true,false,LP1|S065-B16|S065|BLD-TIL-4|62x62x9|28|F
+S066-B01,S066,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S066-B01|S066|FMC-SHM-36|38x26x24|13.5|U
+S066-B02,S066,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S066-B02|S066|FMC-BEV-24|40x27x24|15|U
+S066-B03,S066,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S066-B03|S066|FMC-SHM-36|38x26x24|13.5|U
+S066-B04,S066,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S066-B04|S066|FMC-JAR-24|32x30x20|11|FU
+S066-B05,S066,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S066-B05|S066|FMC-OIL-15L|25x25x35|15.5|U
+S066-B06,S066,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S066-B06|S066|FMC-DET-24|46x32x30|25|
+S066-B07,S066,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S066-B07|S066|FMC-SHM-36|38x26x24|13.5|U
+S066-B08,S066,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S066-B08|S066|FMC-JAR-24|32x30x20|11|FU
+S066-B09,S066,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S066-B09|S066|FMC-SHM-36|38x26x24|13.5|U
+S066-B10,S066,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S066-B10|S066|FMC-BIS-96|44x30x28|7.5|
+S066-B11,S066,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S066-B11|S066|FMC-DET-24|46x32x30|25|
+S066-B12,S066,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S066-B12|S066|FMC-OIL-15L|25x25x35|15.5|U
+S066-B13,S066,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S066-B13|S066|FMC-BIS-96|44x30x28|7.5|
+S066-B14,S066,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S066-B14|S066|FMC-SHM-36|38x26x24|13.5|U
+S066-B15,S066,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S066-B15|S066|FMC-BIS-96|44x30x28|7.5|
+S067-B01,S067,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S067-B01|S067|FMC-BEV-24|40x27x24|15|U
+S067-B02,S067,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S067-B02|S067|FMC-SHM-36|38x26x24|13.5|U
+S067-B03,S067,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S067-B03|S067|FMC-BIS-96|44x30x28|7.5|
+S067-B04,S067,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S067-B04|S067|FMC-OIL-15L|25x25x35|15.5|U
+S067-B05,S067,FMC-JAR-24,Glass jar spreads (carton of 24),fmcg,fmcg,32.0,30.0,20.0,11.0,0.0192,true,true,LP1|S067-B05|S067|FMC-JAR-24|32x30x20|11|FU
+S067-B06,S067,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S067-B06|S067|FMC-DET-24|46x32x30|25|
+S067-B07,S067,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S067-B07|S067|FMC-OIL-15L|25x25x35|15.5|U
+S067-B08,S067,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S067-B08|S067|FMC-BIS-96|44x30x28|7.5|
+S067-B09,S067,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S067-B09|S067|FMC-SHM-36|38x26x24|13.5|U
+S067-B10,S067,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S067-B10|S067|FMC-OIL-15L|25x25x35|15.5|U
+S067-B11,S067,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S067-B11|S067|FMC-DET-24|46x32x30|25|
+S068-B01,S068,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S068-B01|S068|PNT-PRM-12x1L|40x30x19|15|U
+S068-B02,S068,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S068-B02|S068|PNT-EXT-10L|28x28x31|13|U
+S068-B03,S068,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S068-B03|S068|PNT-EXT-10L|28x28x31|13|U
+S068-B04,S068,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S068-B04|S068|PNT-ENM-4x4L|36x36x24|18.5|U
+S068-B05,S068,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S068-B05|S068|PNT-ENM-4x4L|36x36x24|18.5|U
+S068-B06,S068,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S068-B06|S068|PNT-PRM-12x1L|40x30x19|15|U
+S068-B07,S068,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S068-B07|S068|PNT-TNT-48|32x24x22|9.5|FU
+S068-B08,S068,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S068-B08|S068|PNT-EXT-10L|28x28x31|13|U
+S068-B09,S068,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S068-B09|S068|PNT-PRM-12x1L|40x30x19|15|U
+S068-B10,S068,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S068-B10|S068|PNT-ENM-4x4L|36x36x24|18.5|U
+S068-B11,S068,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S068-B11|S068|PNT-ENM-4x4L|36x36x24|18.5|U
+S068-B12,S068,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S068-B12|S068|PNT-EXT-10L|28x28x31|13|U
+S068-B13,S068,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S068-B13|S068|PNT-PRM-12x1L|40x30x19|15|U
+S068-B14,S068,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S068-B14|S068|PNT-EMU-20L|34x34x38|24|U
+S069-B01,S069,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S069-B01|S069|PNT-ENM-4x4L|36x36x24|18.5|U
+S069-B02,S069,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S069-B02|S069|PNT-EMU-20L|34x34x38|24|U
+S069-B03,S069,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S069-B03|S069|PNT-EMU-20L|34x34x38|24|U
+S069-B04,S069,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S069-B04|S069|PNT-EXT-10L|28x28x31|13|U
+S069-B05,S069,PNT-TNT-48,Tinter bottles (case of 48),paints,paints,32.0,24.0,22.0,9.5,0.0169,true,true,LP1|S069-B05|S069|PNT-TNT-48|32x24x22|9.5|FU
+S069-B06,S069,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S069-B06|S069|PNT-EMU-20L|34x34x38|24|U
+S069-B07,S069,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S069-B07|S069|PNT-PTY-20KG|50x34x16|20.5|
+S069-B08,S069,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S069-B08|S069|PNT-EXT-10L|28x28x31|13|U
+S069-B09,S069,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S069-B09|S069|PNT-EMU-20L|34x34x38|24|U
+S069-B10,S069,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S069-B10|S069|PNT-PTY-20KG|50x34x16|20.5|
+S069-B11,S069,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S069-B11|S069|PNT-EXT-10L|28x28x31|13|U
+S069-B12,S069,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S069-B12|S069|PNT-PTY-20KG|50x34x16|20.5|
+S069-B13,S069,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S069-B13|S069|PNT-EXT-10L|28x28x31|13|U
+S069-B14,S069,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S069-B14|S069|PNT-EMU-20L|34x34x38|24|U
+S069-B15,S069,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S069-B15|S069|PNT-PRM-12x1L|40x30x19|15|U
+S069-B16,S069,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S069-B16|S069|PNT-PTY-20KG|50x34x16|20.5|
+S069-B17,S069,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S069-B17|S069|PNT-EXT-10L|28x28x31|13|U
+S069-B18,S069,PNT-EXT-10L,Exterior emulsion 10 L pail carton,paints,paints,28.0,28.0,31.0,13.0,0.0243,false,true,LP1|S069-B18|S069|PNT-EXT-10L|28x28x31|13|U
+S069-B19,S069,PNT-EMU-20L,Interior emulsion 20 L pail carton,paints,paints,34.0,34.0,38.0,24.0,0.0439,false,true,LP1|S069-B19|S069|PNT-EMU-20L|34x34x38|24|U
+S069-B20,S069,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S069-B20|S069|PNT-ENM-4x4L|36x36x24|18.5|U
+S069-B21,S069,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S069-B21|S069|PNT-PTY-20KG|50x34x16|20.5|
+S069-B22,S069,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S069-B22|S069|PNT-PTY-20KG|50x34x16|20.5|
+S069-B23,S069,PNT-PRM-12x1L,Primer 1 L tins (case of 12),paints,paints,40.0,30.0,19.0,15.0,0.0228,false,true,LP1|S069-B23|S069|PNT-PRM-12x1L|40x30x19|15|U
+S069-B24,S069,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S069-B24|S069|PNT-PTY-20KG|50x34x16|20.5|
+S069-B25,S069,PNT-ENM-4x4L,Enamel 4 L tins (case of 4),paints,paints,36.0,36.0,24.0,18.5,0.0311,false,true,LP1|S069-B25|S069|PNT-ENM-4x4L|36x36x24|18.5|U
+S069-B26,S069,PNT-PTY-20KG,Wall putty 20 kg carton,paints,paints,50.0,34.0,16.0,20.5,0.0272,false,false,LP1|S069-B26|S069|PNT-PTY-20KG|50x34x16|20.5|
+S070-B01,S070,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S070-B01|S070|FMC-SHM-36|38x26x24|13.5|U
+S070-B02,S070,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S070-B02|S070|FMC-BIS-96|44x30x28|7.5|
+S070-B03,S070,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S070-B03|S070|FMC-SHM-36|38x26x24|13.5|U
+S070-B04,S070,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S070-B04|S070|FMC-SHM-36|38x26x24|13.5|U
+S070-B05,S070,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S070-B05|S070|FMC-BEV-24|40x27x24|15|U
+S070-B06,S070,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S070-B06|S070|FMC-DET-24|46x32x30|25|
+S070-B07,S070,FMC-BEV-24,Beverage PET 600 ml (tray of 24),fmcg,fmcg,40.0,27.0,24.0,15.0,0.0259,false,true,LP1|S070-B07|S070|FMC-BEV-24|40x27x24|15|U
+S070-B08,S070,FMC-DET-24,Detergent 1 kg packs (carton of 24),fmcg,fmcg,46.0,32.0,30.0,25.0,0.0442,false,false,LP1|S070-B08|S070|FMC-DET-24|46x32x30|25|
+S070-B09,S070,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S070-B09|S070|FMC-BIS-96|44x30x28|7.5|
+S070-B10,S070,FMC-OIL-15L,Edible oil 15 L tin,fmcg,fmcg,25.0,25.0,35.0,15.5,0.0219,false,true,LP1|S070-B10|S070|FMC-OIL-15L|25x25x35|15.5|U
+S070-B11,S070,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S070-B11|S070|FMC-SHM-36|38x26x24|13.5|U
+S070-B12,S070,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S070-B12|S070|FMC-BIS-96|44x30x28|7.5|
+S070-B13,S070,FMC-BIS-96,Biscuits (carton of 96),fmcg,fmcg,44.0,30.0,28.0,7.5,0.037,false,false,LP1|S070-B13|S070|FMC-BIS-96|44x30x28|7.5|
+S070-B14,S070,FMC-SHM-36,Shampoo 340 ml (carton of 36),fmcg,fmcg,38.0,26.0,24.0,13.5,0.0237,false,true,LP1|S070-B14|S070|FMC-SHM-36|38x26x24|13.5|U

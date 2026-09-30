@@ -1,0 +1,13 @@
+driver_id,name,full_name,phone,licence_class,home_corridor,home_corridor_name,years_experience,preferred_truck_type,helper_assigned
+DRV-001,Ravi,Ravi Khan,+91-95725-20931,TRANS (HGMV),W,West (Mira-Bhayandar / Western Suburbs),11,T17,true
+DRV-002,Sanjay,Sanjay Patil,+91-91331-41747,TRANS (MGV),SW,South-West (Mumbai City / Eastern Suburbs),8,T14,true
+DRV-003,Imran,Imran Shaikh,+91-94348-55296,LMV-TR,S,South (Thane / Navi Mumbai / Panvel),9,PKP,false
+DRV-004,Deepak,Deepak More,+91-93143-00204,TRANS (HGMV),E,East (Kalyan / Ambernath / Badlapur),6,T20,true
+DRV-005,Arjun,Arjun Shinde,+91-98730-79714,TRANS (HGMV),NW,North-West (Vasai / Virar / Palghar),5,T17,true
+DRV-006,Manoj,Manoj Shinde,+91-96052-62862,TRANS (HGMV),SE,South-East (Dombivli / Karjat),12,T20,true
+DRV-007,Farhan,Farhan Pawar,+91-97801-39192,LMV-TR,SW,South-West (Mumbai City / Eastern Suburbs),4,PKP,false
+DRV-008,Suresh,Suresh Nair,+91-95676-82287,TRANS (MGV),N,North (Wada / Vajreshwari),7,T14,true
+DRV-009,Vikram,Vikram Shaikh,+91-98352-18821,TRANS (HGMV),NE,North-East (Shahapur / Padgha),14,T20,true
+DRV-010,Naveen,Naveen Shaikh,+91-97227-00651,LMV-TR,S,South (Thane / Navi Mumbai / Panvel),3,ACE,false
+DRV-011,Prakash,Prakash More,+91-90340-93206,TRANS (MGV),E,East (Kalyan / Ambernath / Badlapur),10,T14,true
+DRV-012,Kiran,Kiran Yadav,+91-95135-02248,LMV-TR,W,West (Mira-Bhayandar / Western Suburbs),2,ACE,false

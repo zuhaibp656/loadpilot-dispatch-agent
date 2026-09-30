@@ -77,13 +77,58 @@
     var trucks = D.trucks || [], T = null;
     var yaw = 0.62, pitch = 0.52, zoom = 1, speed = 4, playing = true, mode = 'load';
     var t = 0, last = null, scale = 1, ox = 0, oy = 0;
+    var focusSeq = null, hoverIdx = -1, pinIdx = -1, polys = [], mouse = null;
+    var card = $('div', 'lp-card', cwrap); card.style.display = 'none';
+    var tip = $('div', 'lp-tip', cwrap); tip.style.display = 'none';
+    var hint = $('div', 'lp-hint', cwrap, '👆 Click a store on the right (or any carton) to see exactly where its boxes go');
 
     trucks.forEach(function (tr, i) {
       var b = $('button', 'lp-chip', sel, esc(tr.id) + ' <small>' + esc(tr.driver) + '</small>');
       b.style.borderColor = tr.color; b.onclick = function () { pick(i); };
     });
+    function stopInfo(seq) {  // derived from the placed cartons: zone, layers, load steps
+      var bx = T.boxes, o = { n: 0, kg: 0, frag: 0, x0: 1e9, x1: -1e9, z1: 0, y0: 1e9, y1: -1e9, s0: 1e9, s1: -1, skus: {} };
+      for (var i = 0; i < bx.length; i++) {
+        var b = bx[i]; if (b[6] !== seq) continue;
+        o.n++; o.kg += b[9] || 0; if (b[7]) o.frag++;
+        o.x0 = Math.min(o.x0, b[0]); o.x1 = Math.max(o.x1, b[0] + b[3]); o.z1 = Math.max(o.z1, b[2] + b[5]);
+        o.y0 = Math.min(o.y0, b[1]); o.y1 = Math.max(o.y1, b[1] + b[4]); o.s0 = Math.min(o.s0, i); o.s1 = Math.max(o.s1, i);
+        var d = (T.desc && T.desc[b[8]]) || b[8]; o.skus[d] = (o.skus[d] || 0) + 1;
+      }
+      return o;
+    }
+    function where(b) {
+      var fromDoor = Math.round(T.L - (b[0] + b[3])), side = (b[1] + b[4] / 2) < T.W / 3 ? 'left' : (b[1] + b[4] / 2) > 2 * T.W / 3 ? 'right' : 'middle';
+      var layer = b[2] < 1 ? 'on the floor' : 'stacked at ' + Math.round(b[2]) + ' cm';
+      return fromDoor + ' cm from the door · ' + side + ' · ' + layer;
+    }
+    function showCard(seq) {
+      var s = T.stops.filter(function (x) { return x.seq === seq; })[0]; if (!s) { card.style.display = 'none'; return; }
+      var o = stopInfo(seq), nS = T.stops.length, before = T.stops.filter(function (x) { return x.seq < seq; });
+      var inFront = before.reduce(function (a, x) { return a + x.n; }, 0);
+      var skus = Object.keys(o.skus).sort(function (a, b) { return o.skus[b] - o.skus[a]; }).map(function (k) { return o.skus[k] + '× ' + esc(k); }).join('<br>');
+      var fromDoor0 = Math.max(0, Math.round(T.L - o.x1)), fromDoor1 = Math.round(T.L - o.x0);
+      card.innerHTML = '<div class="lp-pop-h" style="border-color:' + stopColor(seq) + '"><span class="lp-num" style="background:' + stopColor(seq) + '">' + seq + '</span>' +
+        '<div><b>' + esc(s.name) + '</b><br><span class="lp-muted">' + esc(s.addr || '') + '</span></div><button class="lp-x">&times;</button></div>' +
+        '<div class="lp-pop-g">' +
+        '<span>Delivery</span><b>' + seq + ' of ' + nS + ' · ETA ' + esc(s.eta) + (seq === 1 ? ' · first off' : seq === nS ? ' · last stop' : '') + '</b>' +
+        '<span>Cartons</span><b>' + o.n + ' · ' + Math.round(o.kg) + ' kg' + (o.frag ? ' · <span class="bad">' + o.frag + ' fragile (on top)</span>' : '') + '</b>' +
+        '<span>Put them</span><b>' + fromDoor0 + '–' + fromDoor1 + ' cm from the rear door' + (o.y1 - o.y0 > T.W * 0.8 ? ', full width' : '') + ', up to ' + Math.round(o.z1) + ' cm high</b>' +
+        '<span>Load</span><b>steps ' + (o.s0 + 1) + '–' + (o.s1 + 1) + ' of ' + T.boxes.length + (seq < nS ? ' · after stop ' + (seq + 1) : ' · first, against the cab') + (seq > 1 ? ', before stop ' + (seq - 1) : ', last in (at the door)') + '</b>' +
+        '<span>Unload</span><b>' + (inFront ? inFront + ' cartons of stops 1–' + (seq - 1) + ' are gone before you reach it' : 'nothing in front — straight out') + '</b>' +
+        '<span>Goods</span><b>' + skus + '</b></div>';
+      card.style.display = 'block';
+      card.querySelector('.lp-x').onclick = function () { setFocus(null); };
+    }
+    function setFocus(seq) {
+      focusSeq = seq; pinIdx = -1; tip.style.display = 'none';
+      if (seq != null) { if (mode !== 'load') { mode = 'load'; modeB.textContent = 'Unload replay'; } t = T.boxes.length; playing = false; play.innerHTML = '&#9654;'; hint.style.display = 'none'; showCard(seq); }
+      else card.style.display = 'none';
+      Array.prototype.forEach.call(legend.querySelectorAll('.lp-li'), function (r) { r.classList.toggle('sel', +r.dataset.seq === seq); });
+    }
     function pick(i) {
-      T = trucks[i]; t = 0; mode = 'load'; modeB.textContent = 'Unload replay'; playing = true;
+      T = trucks[i]; t = 0; mode = 'load'; modeB.textContent = 'Unload replay'; playing = true; focusSeq = null; pinIdx = -1;
+      card.style.display = 'none'; tip.style.display = 'none';
       play.innerHTML = '&#10074;&#10074;';
       Array.prototype.forEach.call(sel.children, function (b, k) { b.classList.toggle('on', k === i); });
       scrub.max = T.boxes.length; title.innerHTML = '<b>' + esc(T.id) + '</b> &middot; ' + esc(T.name) +
@@ -91,30 +136,70 @@
       stats.innerHTML = kv('Driver', esc(T.driver)) + kv('Corridor', esc(T.corridor + ' · ' + T.branch)) +
         kv('Cartons', T.boxes.length) + kv('Volume fill', T.fill + '%') + kv('Payload', T.wfill + '%') +
         kv('LIFO check', T.lifo ? '<span class="ok">&#10003; pass</span>' : '<span class="bad">review</span>');
-      legend.innerHTML = '<div class="lp-lh">Delivery order <span class="lp-muted">(1 = at the door)</span></div>';
+      legend.innerHTML = '<div class="lp-lh">Delivery order <span class="lp-muted">(1 = at the door) · click a store</span></div>';
       T.stops.forEach(function (s) {
-        var r = $('div', 'lp-li', legend, '<i style="background:' + stopColor(s.seq) + '"></i><b>' + s.seq +
-          '</b> ' + esc(s.name) + ' <span class="lp-muted">' + s.n + ' ctn &middot; ' + s.eta + '</span>');
-        r.dataset.seq = s.seq;
+        var r = $('div', 'lp-li lp-click', legend, '<i style="background:' + stopColor(s.seq) + '"></i><div><b>' + s.seq +
+          '</b> ' + esc(s.name) + '<br><span class="lp-muted">' + s.n + ' ctn &middot; ETA ' + s.eta + '</span></div>');
+        r.dataset.seq = s.seq; r.onclick = function () { setFocus(focusSeq === s.seq ? null : s.seq); };
       });
+      var all = $('div', 'lp-li lp-click', legend, '<i style="background:#8ab4f8"></i><div><b>Show all stores</b></div>');
+      all.onclick = function () { setFocus(null); };
     }
+    this.focusTruckStop = function (id, seq) {
+      for (var i = 0; i < trucks.length; i++) if (trucks[i].id === id) { pick(i); if (seq != null) setFocus(seq); return true; }
+      return false;
+    };
     function kv(k, v) { return '<div class="kv"><span>' + k + '</span><b>' + v + '</b></div>'; }
 
-    play.onclick = function () { playing = !playing; play.innerHTML = playing ? '&#10074;&#10074;' : '&#9654;'; };
+    play.onclick = function () { playing = !playing; play.innerHTML = playing ? '&#10074;&#10074;' : '&#9654;'; if (playing && focusSeq != null) setFocus(null); };
     spd.onclick = function () { speed = speed >= 16 ? 1 : speed * 2; spd.textContent = speed + 'x'; };
     modeB.onclick = function () {
+      setFocus(null);
       mode = mode === 'load' ? 'unload' : 'load'; t = 0; playing = true; play.innerHTML = '&#10074;&#10074;';
       modeB.textContent = mode === 'load' ? 'Unload replay' : 'Loading replay';
     };
     scrub.oninput = function () { playing = false; play.innerHTML = '&#9654;'; mode = 'load'; t = +scrub.value; };
     reset.onclick = function () { yaw = 0.62; pitch = 0.52; zoom = 1; };
+    function inPoly(px, py, pts) {
+      var c = false;
+      for (var i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+        if (((pts[i][1] > py) !== (pts[j][1] > py)) && (px < (pts[j][0] - pts[i][0]) * (py - pts[i][1]) / (pts[j][1] - pts[i][1]) + pts[i][0])) c = !c;
+      }
+      return c;
+    }
+    function hitBox(px, py) {
+      for (var i = polys.length - 1; i >= 0; i--) if (inPoly(px, py, polys[i][1])) return polys[i][0];
+      return -1;
+    }
+    function showTip(idx, px, py) {
+      if (idx < 0) { tip.style.display = 'none'; return; }
+      var b = T.boxes[idx], s = T.stops.filter(function (x) { return x.seq === b[6]; })[0] || {};
+      tip.innerHTML = '<b style="color:' + stopColor(b[6]) + '">■</b> <b>' + esc(b[10] || b[8]) + '</b> · ' + esc((T.desc && T.desc[b[8]]) || b[8]) +
+        '<br><span class="lp-muted">Stop ' + b[6] + ' · ' + esc(s.name || '') + '</span><br>' +
+        Math.round(b[3]) + '×' + Math.round(b[4]) + '×' + Math.round(b[5]) + ' cm · ' + (b[9] || '?') + ' kg' + (b[7] ? ' · <span class="bad">FRAGILE</span>' : '') +
+        '<br>Load step ' + (idx + 1) + ' · ' + where(b);
+      tip.style.display = 'block';
+      tip.style.left = Math.min(px + 14, S.W - tip.offsetWidth - 6) + 'px'; tip.style.top = Math.max(6, Math.min(py + 14, S.H - tip.offsetHeight - 6)) + 'px';
+    }
     var drag = null;
-    cv.addEventListener('pointerdown', function (e) { drag = [e.clientX, e.clientY, yaw, pitch]; try { cv.setPointerCapture(e.pointerId); } catch (x) { /* host */ } });
+    cv.addEventListener('pointerdown', function (e) { drag = [e.clientX, e.clientY, yaw, pitch, false]; try { cv.setPointerCapture(e.pointerId); } catch (x) { /* host */ } });
     cv.addEventListener('pointermove', function (e) {
-      if (!drag) return; yaw = drag[2] - (e.clientX - drag[0]) * 0.008;
+      var r = cv.getBoundingClientRect(); mouse = [e.clientX - r.left, e.clientY - r.top];
+      if (!drag) { hoverIdx = T ? hitBox(mouse[0], mouse[1]) : -1; cv.style.cursor = hoverIdx >= 0 ? 'pointer' : 'grab'; if (pinIdx < 0) showTip(hoverIdx, mouse[0], mouse[1]); return; }
+      if (Math.abs(e.clientX - drag[0]) + Math.abs(e.clientY - drag[1]) > 4) drag[4] = true;
+      if (!drag[4]) return;
+      yaw = drag[2] - (e.clientX - drag[0]) * 0.008;
       pitch = Math.max(0.12, Math.min(1.3, drag[3] + (e.clientY - drag[1]) * 0.006));
     });
-    cv.addEventListener('pointerup', function () { drag = null; });
+    cv.addEventListener('pointerup', function (e) {
+      if (drag && !drag[4] && T) {
+        var r = cv.getBoundingClientRect(), idx = hitBox(e.clientX - r.left, e.clientY - r.top);
+        if (idx >= 0) { var sq = T.boxes[idx][6]; if (focusSeq !== sq) setFocus(sq); pinIdx = idx; showTip(idx, e.clientX - r.left, e.clientY - r.top); }
+        else { setFocus(null); }
+      }
+      drag = null;
+    });
+    cv.addEventListener('pointerleave', function () { hoverIdx = -1; if (pinIdx < 0) tip.style.display = 'none'; });
     cv.addEventListener('wheel', function (e) { e.preventDefault(); zoom = Math.max(0.5, Math.min(2.5, zoom * (e.deltaY < 0 ? 1.1 : 0.9))); }, { passive: false });
 
     var B;
@@ -137,7 +222,7 @@
       ctx.closePath(); if (fill) { ctx.fillStyle = fill; ctx.fill(); }
       if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 0.8; ctx.stroke(); } ctx.globalAlpha = 1;
     }
-    function drawBox(x, y, z, l, w, h, col, alpha, glow) {
+    function drawBox(x, y, z, l, w, h, col, alpha, glow, idx, outline) {
       var x2 = x + l, y2 = y + w, z2 = z + h, V = B.v, faces = [];
       if (V[0] > 0) faces.push([[x2, y, z], [x2, y2, z], [x2, y2, z2], [x2, y, z2], 0.82]);
       else faces.push([[x, y, z], [x, y2, z], [x, y2, z2], [x, y, z2], 0.82]);
@@ -146,9 +231,9 @@
       faces.push([[x, y, z2], [x2, y, z2], [x2, y2, z2], [x, y2, z2], 1.0]);  // top last
       if (glow) { ctx.shadowColor = col; ctx.shadowBlur = 18; }
       for (var i = 0; i < faces.length; i++) {
-        var f = faces[i];
-        quad([P.apply(null, f[0]), P.apply(null, f[1]), P.apply(null, f[2]), P.apply(null, f[3])],
-             shade(col, f[4]), 'rgba(0,0,0,0.35)', alpha);
+        var f = faces[i], pts = [P.apply(null, f[0]), P.apply(null, f[1]), P.apply(null, f[2]), P.apply(null, f[3])];
+        quad(pts, shade(col, f[4]), outline || 'rgba(0,0,0,0.35)', alpha);
+        if (idx != null && idx >= 0) polys.push([idx, pts]);
       }
       ctx.shadowBlur = 0;
     }
@@ -272,10 +357,23 @@
         } else { banner.style.opacity = 0; hudTxt = '<span class="ok">&#10003; All ' + nS + ' deliveries done</span>'; }
       }
       items = orderItems(items.filter(function (it) { return it[1] > 0.02; }));
+      polys = [];
       for (var m = 0; m < items.length; m++) {
-        var it = items[m], bb = it[0];
-        drawBox(bb[0] + it[2], bb[1], bb[2] + it[3], bb[3], bb[4], bb[5], stopColor(bb[6]), it[1], it[4]);
-        if (bb[7] && it[1] > 0.9) { var c = P(bb[0] + it[2] + bb[3] / 2, bb[1] + bb[4] / 2, bb[2] + it[3] + bb[5]); label(c, '!', '#fff'); }
+        var it = items[m], bb = it[0], bi = T.boxes.indexOf(bb), a = it[1];
+        var isF = focusSeq == null || bb[6] === focusSeq;
+        if (!isF) a = Math.min(a, 0.1);
+        var hl = bi >= 0 && (bi === pinIdx || bi === hoverIdx);
+        drawBox(bb[0] + it[2], bb[1], bb[2] + it[3], bb[3], bb[4], bb[5], stopColor(bb[6]), a,
+                it[4] || (focusSeq != null && isF && hl), isF && a > 0.5 && !it[4] ? bi : -1, hl ? '#ffffff' : null);
+        if (bb[7] && a > 0.9) { var c = P(bb[0] + it[2] + bb[3] / 2, bb[1] + bb[4] / 2, bb[2] + it[3] + bb[5]); label(c, '!', '#fff'); }
+      }
+      if (focusSeq != null) {  // floor footprint of the focused store
+        var fo = stopInfo(focusSeq);
+        if (fo.n) {
+          ctx.setLineDash([5, 4]); quad([P(fo.x0, fo.y0, 0.5), P(fo.x1, fo.y0, 0.5), P(fo.x1, fo.y1, 0.5), P(fo.x0, fo.y1, 0.5)], null, '#ffffff', 0.9); ctx.setLineDash([]);
+          var lp = P((fo.x0 + fo.x1) / 2, (fo.y0 + fo.y1) / 2, fo.z1 + 18);
+          label(lp, 'Stop ' + focusSeq + ' · ' + Math.max(0, Math.round(T.L - fo.x1)) + '–' + Math.round(T.L - fo.x0) + ' cm from door', '#ffffff');
+        }
       }
       drawEdges(true);
       label(P(0, T.W / 2, T.H + 14), 'CAB', '#8ab4f8');
@@ -301,7 +399,9 @@
   function MapView(host) {
     var el = $('div', 'lp-pane', host); this.el = el;
     var top = $('div', 'lp-top', el);
-    $('div', 'lp-title', top, '<b>Delivery route map</b> &middot; ' + esc(D.hub ? D.hub.name : '') +
+    $('div', 'lp-title', top, D.driver ? '<b>Your route today</b> &middot; ' + esc(D.driver.name) + ' · ' + esc(D.driver.id) +
+      ' <span class="lp-muted">click a numbered stop, then “Where are these cartons?”</span>' :
+      '<b>Delivery route map</b> &middot; ' + esc(D.hub ? D.hub.name : '') +
       ' <span class="lp-muted">click a numbered stop or a truck</span>');
     var kpis = $('div', 'lp-stats', top);
     var body = $('div', 'lp-body', el);
@@ -454,6 +554,12 @@
     function kv(k, v) { return '<div class="kv"><span>' + k + '</span><b>' + v + '</b></div>'; }
     (function () {
       var K = D.kpi || {}, a = K.base || {}, b = K.opt || {};
+      if (D.driver) {
+        var dv = D.driver;
+        kpis.innerHTML = kv('Drops', dv.stops) + kv('Cartons', dv.cartons) + kv('Road km', dv.km) + kv('Shift', dv.start + '–' + dv.end);
+        sel = 0; tog.style.display = 'none';
+        return;
+      }
       kpis.innerHTML = kv('Trucks', a.trucks + ' &rarr; <span class="ok">' + b.trucks + '</span>') +
         kv('Road km', a.km + ' &rarr; <span class="ok">' + b.km + '</span>') +
         kv('Cost / day', a.cost + ' &rarr; <span class="ok">' + b.cost + '</span>') +
@@ -501,9 +607,10 @@
         (win ? '<span>Window</span><b>' + win + '</b>' : '') +
         '<span>Cartons</span><b>' + s.n + (s.kg ? ' · ' + s.kg + ' kg' : '') + (s.frag ? ' · ' + s.frag + ' fragile' : '') + '</b>' +
         (s.skus ? '<span>Goods</span><b>' + esc(s.skus) + '</b>' : '') +
-        '</div>';
+        '</div>' + (window.LPgoLoad && set === 'opt' ? '<button class="lp-go">📦 Where are these cartons in the truck?</button>' : '');
       pop.style.display = 'block';
       pop.querySelector('.lp-x').onclick = closePop;
+      var go = pop.querySelector('.lp-go'); if (go) go.onclick = function () { window.LPgoLoad(r.id, s.seq); };
     }
     function closePop() { popStop = null; pop.style.display = 'none'; }
     function setMode(k) {
@@ -625,9 +732,10 @@
     this.frame = frame;
   }
 
+  if (MODE === 'both') window.LPgoLoad = function (id, seq) { show('load'); if (panes.load) panes.load.focusTruckStop(id, seq); };
   if (MODE === 'both' || MODE === 'routes') panes.routes = new MapView(root);
   if (MODE === 'both' || MODE === 'load') panes.load = new LoadView(root);
-  show(MODE === 'load' ? 'load' : 'routes');
+  show(MODE === 'load' || D.start === 'load' ? 'load' : 'routes');
   function loop(now) {
     Object.keys(panes).forEach(function (k) {
       if (panes[k].el.style.display !== 'none') { try { panes[k].frame(now); } catch (e) { if (window.console) console.error(e); } }

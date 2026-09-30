@@ -136,7 +136,7 @@ def build_wizard_surface(surface_id: str, params: PlanningParams, fuel: float, d
 # 2) Dispatch canvas
 # ==============================================================================
 def dispatch_components(plan: DispatchPlan, video_url: str | None, focus_truck_id: str | None,
-                        mode: str | None = None) -> list[dict[str, Any]]:
+                        mode: str | None = None, only_truck: str | None = None) -> list[dict[str, Any]]:
     mode = (mode or os.environ.get("LOADPILOT_UI_MODE", "canvas")).lower()
     b, o = plan.baseline, plan.optimized
     headline = (f"{o.trucks} trucks instead of {b.trucks} · ₹{plan.savings_inr:,.0f} saved today · "
@@ -151,16 +151,27 @@ def dispatch_components(plan: DispatchPlan, video_url: str | None, focus_truck_i
             {"id": "dc-kpi", "component": "VegaChart", "spec": kpi_spec(plan), "height": 300},
         ]
 
-    app_html = build_anim_html(plan, mode="both", focus_truck_id=focus_truck_id)
+    app_html = build_anim_html(plan, mode="both", focus_truck_id=focus_truck_id, only_truck=only_truck)
     tabs = [{"title": "🗺️ Road map & 3D loading", "child": "tab-live"},
             {"title": "📊 Overview", "child": "tab-overview"}]
+    card_title = f"LoadPilot · {o.trucks} trucks · ₹{plan.savings_inr:,.0f} saved"
+    title = f"🚚 LoadPilot dispatch plan · {plan.plan_id} · {plan.hub.name}"
+    if only_truck:
+        r = next((x for x in plan.routes if x.truck_id == only_truck), None)
+        if r is not None:
+            n_ctn = sum(len(rs.stop.boxes) for rs in r.stops)
+            card_title = f"{r.driver} · {r.truck_id} · {len(r.stops)} drops · {n_ctn} cartons"
+            title = f"🚚 {r.driver}'s day · {r.truck_id} ({r.truck_type.name})"
+            headline = (f"{len(r.stops)} drops · {n_ctn} cartons · {r.km:.0f} km · leave {r.start_min // 60:02d}:"
+                        f"{r.start_min % 60:02d} · tap a store in the 3D view to see where its cartons go")
+        tabs = tabs[:1]
     comps: list[dict[str, Any]] = [
         {"id": "root", "component": "Canvas", "children": ["dc-title", "dc-sub", "dc-steps", "dc-tabs"],
          "autoOpen": True, "autoFullscreen": False,
-         "cardTitle": f"LoadPilot · {o.trucks} trucks · ₹{plan.savings_inr:,.0f} saved",
-         "cardDescription": "Interactive road map, drop sequence and animated 3D truck loading",
+         "cardTitle": card_title,
+         "cardDescription": "Interactive road map, drop sequence and tap-a-store 3D truck loading",
          "cardIcon": "local_shipping"},
-        _t("dc-title", f"🚚 LoadPilot dispatch plan · {plan.plan_id} · {plan.hub.name}", "h3"),
+        _t("dc-title", title, "h3"),
         _t("dc-sub", headline, "caption"),
         {"id": "dc-steps", "component": "Stepper", "activeStep": 4, "steps": [
             {"title": "Orders & cartons", "helpText": f"{sum(len(r.stops) for r in plan.routes)} stops · "
@@ -174,10 +185,13 @@ def dispatch_components(plan: DispatchPlan, video_url: str | None, focus_truck_i
         {"id": "dc-tabs", "component": "Tabs", "tabs": tabs},
         {"id": "tab-live", "component": "IFrameSrcdoc", "htmlContent": app_html, "height": 720,
          "title": "LoadPilot interactive road map and 3D truck loading"},
-        {"id": "tab-overview", "component": "Column", "children": ["ov-map", "ov-kpi"]},
-        {"id": "ov-map", "component": "VegaChart", "spec": route_map_spec(plan), "height": 500},
-        {"id": "ov-kpi", "component": "VegaChart", "spec": kpi_spec(plan), "height": 300},
     ]
+    if not only_truck:
+        comps += [
+            {"id": "tab-overview", "component": "Column", "children": ["ov-map", "ov-kpi"]},
+            {"id": "ov-map", "component": "VegaChart", "spec": route_map_spec(plan), "height": 500},
+            {"id": "ov-kpi", "component": "VegaChart", "spec": kpi_spec(plan), "height": 300},
+        ]
     if video_url:
         tabs.append({"title": "🎬 Loader video", "child": "tab-video"})
         comps += [
@@ -190,5 +204,6 @@ def dispatch_components(plan: DispatchPlan, video_url: str | None, focus_truck_i
 
 
 def build_dispatch_surface(surface_id: str, plan: DispatchPlan, video_url: str | None = None,
-                           focus_truck_id: str | None = None, mode: str | None = None) -> list[types.Part]:
-    return _emit(surface_id, dispatch_components(plan, video_url, focus_truck_id, mode), None)
+                           focus_truck_id: str | None = None, mode: str | None = None,
+                           only_truck: str | None = None) -> list[types.Part]:
+    return _emit(surface_id, dispatch_components(plan, video_url, focus_truck_id, mode, only_truck), None)
