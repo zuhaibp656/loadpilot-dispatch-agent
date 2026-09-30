@@ -87,15 +87,17 @@ def _map_svg(plan, stops) -> str:
     x0, x1 = mx(min(lons)), mx(max(lons))
     y0, y1 = my(min(lats)), my(max(lats))
     # fit the plan into the centre ~70% of the canvas; the slice viewBox fills any screen
-    sc = min(W * 0.70 / max(x1 - x0, 1e-9), H * 0.78 / max(y1 - y0, 1e-9))
+    # map sits in the right ~45% of the canvas so slide text on the left stays readable
+    MX = W * 0.74
+    sc = min(W * 0.44 / max(x1 - x0, 1e-9), H * 0.80 / max(y1 - y0, 1e-9))
     cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
 
     def xy(lat: float, lon: float) -> tuple[float, float]:
-        return W / 2 + (mx(lon) - cx) * sc, H / 2 - (my(lat) - cy) * sc
+        return MX + (mx(lon) - cx) * sc, H / 2 - (my(lat) - cy) * sc
 
     # geographic box that covers the whole (sliced) canvas incl. ultra-wide screens
     def inv(px: float, py: float) -> tuple[float, float]:
-        lon = math.degrees(cx + (px - W / 2) / sc)
+        lon = math.degrees(cx + (px - MX) / sc)
         lat = math.degrees(2 * math.atan(math.exp(cy - (py - H / 2) / sc)) - math.pi / 2)
         return lat, lon
 
@@ -105,7 +107,7 @@ def _map_svg(plan, stops) -> str:
     def path_of(pts) -> str:
         return "M" + "L".join(f"{x:.0f},{y:.0f}" for x, y in pts)
 
-    out = [f'<svg class="bg-map-svg" viewBox="0 0 {W} {H}" preserveAspectRatio="xMidYMid slice" '
+    out = [f'<svg class="bg-map-svg" viewBox="0 0 {W} {H}" preserveAspectRatio="xMaxYMid slice" '
            'xmlns="http://www.w3.org/2000/svg" aria-hidden="true">']
 
     # ── OSM basemap ────────────────────────────────────────────────────────
@@ -341,7 +343,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     --border-hairline:#ECE6DA; --border-subtle:#DCD3C2; --border-strong:#A8A08F;
     --text:#1B1A17; --text-muted:#4E4A42; --text-dim:#7A7468;
     --amber-ink:#B35C00; --teal-ink:#00796B; --green-ink:#137333; --red-ink:#C5221F; --blue-ink:#1A73E8;
-    --map-alpha:.62; --map-water:#8EC3E6; --map-rail:#C9C2B4; --map-road:#E2DBCD; --map-trunk:#F3D08A; --map-motorway:#F1B26B; --map-label:#8A8374;
+    --map-alpha:.36; --map-water:#8EC3E6; --map-rail:#C9C2B4; --map-road:#E2DBCD; --map-trunk:#F3D08A; --map-motorway:#F1B26B; --map-label:#8A8374;
     --card-shadow:0 4px 20px rgba(60,40,0,.06),0 1px 3px rgba(0,0,0,.03);
     --cockpit-shadow:0 8px 30px rgba(60,40,0,.08),0 1px 3px rgba(0,0,0,.04);
   }
@@ -350,7 +352,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     --border-hairline:rgba(255,255,255,.08); --border-subtle:rgba(255,255,255,.13); --border-strong:rgba(255,255,255,.24);
     --text:#F6F4EF; --text-muted:#A9A396; --text-dim:#6F6A60;
     --amber-ink:#FDB750; --teal-ink:#4FD1B8; --green-ink:#5BB974; --red-ink:#F28B82; --blue-ink:#8AB4F8;
-    --map-alpha:.5; --map-water:#2F5E80; --map-rail:#3A3F48; --map-road:#2A2F38; --map-trunk:#6B5A35; --map-motorway:#8A6630; --map-label:#8C8778;
+    --map-alpha:.38; --map-water:#2F5E80; --map-rail:#3A3F48; --map-road:#2A2F38; --map-trunk:#6B5A35; --map-motorway:#8A6630; --map-label:#8C8778;
     --card-shadow:0 16px 40px rgba(0,0,0,.4); --cockpit-shadow:0 16px 40px rgba(0,0,0,.4);
   }
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -359,7 +361,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   /* ── Light real-map backdrop ────────────────────────────────────── */
   .bg-map{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:var(--map-alpha)}
   .bg-map-svg{width:100%;height:100%}
-  .bg-map::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,color-mix(in srgb,var(--canvas) 38%,transparent) 0%,transparent 70%)}
+  .bg-map{-webkit-mask-image:linear-gradient(90deg,transparent 0%,transparent 52%,rgba(0,0,0,.45) 72%,#000 92%);mask-image:linear-gradient(90deg,transparent 0%,transparent 52%,rgba(0,0,0,.45) 72%,#000 92%)}
   .bgm-coast{fill:none;stroke:var(--map-water);stroke-width:3.2;stroke-linejoin:round;stroke-linecap:round}
   .bgm-rail{fill:none;stroke:var(--map-rail);stroke-width:1;stroke-dasharray:5 4}
   .bgm-primary{fill:none;stroke:var(--map-road);stroke-width:1.1;stroke-linejoin:round}
@@ -410,6 +412,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .tagline-lead{font-size:clamp(16px,1.25vw,19.5px);line-height:1.55;color:var(--text-muted);max-width:1240px;margin-bottom:28px}
   .tagline-lead b{color:var(--text)}
 
+  .monumental-headline,.tagline-lead,.title-kicker,.hero-stats{text-shadow:0 0 10px var(--canvas),0 0 4px var(--canvas)}
+  .gradient-span,.gradient-span *{text-shadow:none}
   /* ── Gemini cockpit ─────────────────────────────────────────────── */
   .gemini-cockpit{background:var(--surface);border:1px solid var(--border-subtle);border-radius:24px;padding:14px 20px;display:flex;align-items:center;gap:16px;box-shadow:var(--cockpit-shadow);max-width:1400px;margin-bottom:16px}
   .gemini-brand-badge{display:flex;align-items:center;gap:8px;flex-shrink:0}
@@ -727,7 +731,7 @@ function fitSlide(){
   const cs=getComputedStyle(sec);
   const availW=sec.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
   const availH=window.innerHeight-60-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
-  const z=Math.max(.7,Math.min(availW/w.offsetWidth,availH/w.scrollHeight,2.2));
+  const z=Math.max(.7,Math.min(availW/w.offsetWidth,availH/w.scrollHeight,1.15));
   w.style.zoom=z.toFixed(3);
 }
 window.addEventListener('resize',fitSlide);
