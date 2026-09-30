@@ -1,0 +1,52 @@
+[project]
+name = "loadpilot-dispatch-agent"
+version = "0.1.0"
+description = "LoadPilot - Cross-industry Fleet Dispatch, Corridor Route & LIFO Truck-Load Optimizer Agent with animated A2UI surfaces for Gemini Enterprise"
+authors = [
+    {name = "Zuhaib P", email = "zuhaibp656@users.noreply.github.com"},
+]
+
+dependencies = [
+    "google-adk[gcp,otel-gcp]>=2.6.0,<3.0.0",
+    "opentelemetry-resourcedetector-gcp<=1.12.0a0",
+    "a2a-sdk[http-server]>=1.0,<2",
+    "aiohttp>=3.13.4",
+    "google-cloud-logging>=3.12.0,<4.0.0",
+    "google-cloud-storage>=2.18.0,<4.0.0",
+    "google-cloud-aiplatform[evaluation,agent-engines]>=1.156.0",
+    "protobuf>=6.31.1,<7.0.0",
+    "numpy>=1.26,<3.0",
+    "pillow>=10.0.0",
+    "ortools>=9.10",
+    "pandas>=2.2",
+    "openpyxl>=3.1",
+    "pypdf>=4.0",
+    "qrcode>=7.4",
+    "opencv-python-headless>=4.9",
+    "imageio>=2.34",
+    "imageio-ffmpeg>=0.5",
+]
+requires-python = ">=3.11,<3.14"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2,<10.0.0",
+    "pytest-asyncio>=1.0.0,<2.0.0",
+    "jsonschema>=4.20.0,<5.0.0",
+    "ruff>=0.4.6,<1.0.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+pythonpath = "."
+asyncio_default_fixture_loop_scope = "session"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
