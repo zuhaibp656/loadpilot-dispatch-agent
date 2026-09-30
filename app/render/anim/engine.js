@@ -68,16 +68,23 @@
     var ctr = $('div', 'lp-ctrl', el);
     var sel = $('div', 'lp-trucks', ctr);
     var play = $('button', 'lp-btn lp-play', ctr, '&#10074;&#10074;');
+    var prevStopBtn = $('button', 'lp-btn lp-step-btn', ctr, '⏮ Prev Stop');
+    var nextStopBtn = $('button', 'lp-btn lp-step-btn', ctr, 'Next Stop ⏭');
+    var pauseStepBtn = $('button', 'lp-btn lp-active', ctr, 'Step Pause: ON');
     var modeB = $('button', 'lp-btn', ctr, 'Unload replay');
-    var spd = $('button', 'lp-btn', ctr, '4x');
+    var spd = $('button', 'lp-btn', ctr, '1x');
     var scrub = $('input', 'lp-scrub', ctr); scrub.type = 'range'; scrub.min = 0; scrub.value = 0;
     var reset = $('button', 'lp-btn', ctr, 'Reset view');
     var S = autoSize(cwrap, cv, ctx);
 
     var trucks = D.trucks || [], T = null;
-    var yaw = 0.62, pitch = 0.52, zoom = 1, speed = 4, playing = true, mode = 'load';
+    var yaw = 0.62, pitch = 0.52, zoom = 1, speed = 1.5, playing = true, mode = 'load';
     var t = 0, last = null, scale = 1, ox = 0, oy = 0;
     var focusSeq = null, hoverIdx = -1, pinIdx = -1, polys = [], mouse = null;
+    var orderMode = 'load'; // 'load' (15 -> 1 cab to door) or 'delivery' (1 -> 15)
+    var viewMode = 'step';  // 'step' (foundation + current stop), 'isolated', 'all'
+    var animStop = null, animStopT = 0, animStopDur = 0.75;
+    var pauseAtStep = true, stepPauseTimer = 0, stepPauseDur = 1.6, lastKStop = null;
     var card = $('div', 'lp-card', cwrap); card.style.display = 'none';
     var tip = $('div', 'lp-tip', cwrap); tip.style.display = 'none';
     var hint = $('div', 'lp-hint', cwrap, '👆 Click a store on the right (or any carton) to see exactly where its boxes go');
@@ -108,26 +115,101 @@
       var inFront = before.reduce(function (a, x) { return a + x.n; }, 0);
       var skus = Object.keys(o.skus).sort(function (a, b) { return o.skus[b] - o.skus[a]; }).map(function (k) { return o.skus[k] + '× ' + esc(k); }).join('<br>');
       var fromDoor0 = Math.max(0, Math.round(T.L - o.x1)), fromDoor1 = Math.round(T.L - o.x0);
+      var stepNum = nS - seq + 1;
+      var priorStops = T.stops.filter(function (x) { return x.seq > seq; });
+      var priorCartons = priorStops.reduce(function (a, x) { return a + x.n; }, 0);
+      var foundationText = seq === nS ?
+        'First in · Placed on floor directly against CAB bulkhead' :
+        ('Rests against / on top of Stop ' + (seq + 1) + ' foundation (' + priorCartons + ' earlier cartons in place)');
+
       card.innerHTML = '<div class="lp-pop-h" style="border-color:' + stopColor(seq) + '"><span class="lp-num" style="background:' + stopColor(seq) + '">' + seq + '</span>' +
         '<div><b>' + esc(s.name) + '</b><br><span class="lp-muted">' + esc(s.addr || '') + '</span></div><button class="lp-x">&times;</button></div>' +
+        '<div class="lp-vmodes">' +
+          '<button class="lp-vbtn' + (viewMode === 'step' ? ' on' : '') + '" data-vm="step">Foundation + Stop</button>' +
+          '<button class="lp-vbtn' + (viewMode === 'isolated' ? ' on' : '') + '" data-vm="isolated">Isolated</button>' +
+          '<button class="lp-vbtn' + (viewMode === 'all' ? ' on' : '') + '" data-vm="all">Full Truck</button>' +
+          '<button class="lp-vbtn lp-rep" title="Replay loading animation for this stop">↺ Replay</button>' +
+        '</div>' +
         '<div class="lp-pop-g">' +
+        '<span>Loading</span><b>Step ' + stepNum + ' of ' + nS + ' · ' + (seq === nS ? 'Cab bulkhead (1st)' : seq === 1 ? 'Rear door (last in)' : 'After Stop ' + (seq + 1)) + '</b>' +
+        '<span>Foundation</span><b style="color:#8ab4f8">' + foundationText + '</b>' +
         '<span>Delivery</span><b>' + seq + ' of ' + nS + ' · ETA ' + esc(s.eta) + (seq === 1 ? ' · first off' : seq === nS ? ' · last stop' : '') + '</b>' +
         '<span>Cartons</span><b>' + o.n + ' · ' + Math.round(o.kg) + ' kg' + (o.frag ? ' · <span class="bad">' + o.frag + ' fragile (on top)</span>' : '') + '</b>' +
-        '<span>Put them</span><b>' + fromDoor0 + '–' + fromDoor1 + ' cm from the rear door' + (o.y1 - o.y0 > T.W * 0.8 ? ', full width' : '') + ', up to ' + Math.round(o.z1) + ' cm high</b>' +
-        '<span>Load</span><b>steps ' + (o.s0 + 1) + '–' + (o.s1 + 1) + ' of ' + T.boxes.length + (seq < nS ? ' · after stop ' + (seq + 1) : ' · first, against the cab') + (seq > 1 ? ', before stop ' + (seq - 1) : ', last in (at the door)') + '</b>' +
+        '<span>Position</span><b>' + fromDoor0 + '–' + fromDoor1 + ' cm from rear door' + (o.y1 - o.y0 > T.W * 0.8 ? ', full width' : '') + ', up to ' + Math.round(o.z1) + ' cm high</b>' +
         '<span>Unload</span><b>' + (inFront ? inFront + ' cartons of stops 1–' + (seq - 1) + ' are gone before you reach it' : 'nothing in front — straight out') + '</b>' +
         '<span>Goods</span><b>' + skus + '</b></div>';
       card.style.display = 'block';
       card.querySelector('.lp-x').onclick = function () { setFocus(null); };
+      Array.prototype.forEach.call(card.querySelectorAll('.lp-vbtn[data-vm]'), function (btn) {
+        btn.onclick = function () {
+          viewMode = btn.dataset.vm;
+          Array.prototype.forEach.call(card.querySelectorAll('.lp-vbtn[data-vm]'), function (b) { b.classList.toggle('on', b === btn); });
+        };
+      });
+      var repBtn = card.querySelector('.lp-rep');
+      if (repBtn) {
+        repBtn.onclick = function () { setFocus(seq, true); };
+      }
     }
-    function setFocus(seq) {
+    function setFocus(seq, animate) {
       focusSeq = seq; pinIdx = -1; tip.style.display = 'none';
-      if (seq != null) { if (mode !== 'load') { mode = 'load'; modeB.textContent = 'Unload replay'; } t = T.boxes.length; playing = false; play.innerHTML = '&#9654;'; hint.style.display = 'none'; showCard(seq); }
-      else card.style.display = 'none';
-      Array.prototype.forEach.call(legend.querySelectorAll('.lp-li'), function (r) { r.classList.toggle('sel', +r.dataset.seq === seq); });
+      if (seq != null) {
+        if (mode !== 'load') { mode = 'load'; modeB.textContent = 'Unload replay'; }
+        t = T.boxes.length; playing = false; play.innerHTML = '&#9654;'; hint.style.display = 'none';
+        if (animate) {
+          animStop = seq; animStopT = 0; animStopDur = 0.75;
+        } else {
+          animStop = null;
+        }
+        showCard(seq);
+      } else {
+        animStop = null; card.style.display = 'none';
+      }
+      Array.prototype.forEach.call(legend.querySelectorAll('.lp-li'), function (r) {
+        r.classList.toggle('sel', +r.dataset.seq === seq);
+      });
+    }
+    function renderLegend() {
+      legend.innerHTML = '';
+      var hdr = $('div', 'lp-lh', legend);
+      hdr.style.display = 'flex'; hdr.style.justifyContent = 'space-between'; hdr.style.alignItems = 'center';
+      $('span', '', hdr, orderMode === 'load' ? 'Loading order (15→1)' : 'Delivery order (1→15)');
+      var sortBtn = $('button', 'lp-btn lp-btn-sm', hdr, orderMode === 'load' ? '1→15' : '15→1');
+      sortBtn.title = 'Switch between Loading sequence (Cab to Door) and Delivery sequence';
+      sortBtn.onclick = function (e) {
+        e.stopPropagation();
+        orderMode = orderMode === 'load' ? 'delivery' : 'load';
+        renderLegend();
+      };
+      var stopsList = T.stops.slice();
+      if (orderMode === 'load') {
+        stopsList.sort(function (a, b) { return b.seq - a.seq; });
+      } else {
+        stopsList.sort(function (a, b) { return a.seq - b.seq; });
+      }
+      var nS = T.stops.length;
+      stopsList.forEach(function (s) {
+        var stepNum = nS - s.seq + 1;
+        var stepTag = orderMode === 'load' ? ('<span class="lp-step-tag">Step ' + stepNum + '</span> ') : '';
+        var subNote = orderMode === 'load' ?
+          (s.seq === nS ? 'Cab bulkhead (1st)' : (s.seq === 1 ? 'Rear door (last)' : ('Stop ' + s.seq))) :
+          ('ETA ' + s.eta);
+        var r = $('div', 'lp-li lp-click', legend,
+          '<i style="background:' + stopColor(s.seq) + '"></i><div>' + stepTag + '<b>' + s.seq +
+          '</b> ' + esc(s.name) + '<br><span class="lp-muted">' + s.n + ' ctn &middot; ' + subNote + '</span></div>');
+        r.dataset.seq = s.seq;
+        r.onclick = function () {
+          if (focusSeq === s.seq) { setFocus(null); }
+          else { setFocus(s.seq, true); }
+        };
+        if (focusSeq === s.seq) r.classList.add('sel');
+      });
+      var all = $('div', 'lp-li lp-click', legend, '<i style="background:#8ab4f8"></i><div><b>Show all stores / Full truck</b></div>');
+      all.onclick = function () { setFocus(null); };
     }
     function pick(i) {
       T = trucks[i]; t = 0; mode = 'load'; modeB.textContent = 'Unload replay'; playing = true; focusSeq = null; pinIdx = -1;
+      animStop = null; lastKStop = null; stepPauseTimer = 0;
       card.style.display = 'none'; tip.style.display = 'none';
       play.innerHTML = '&#10074;&#10074;';
       Array.prototype.forEach.call(sel.children, function (b, k) { b.classList.toggle('on', k === i); });
@@ -136,27 +218,49 @@
       stats.innerHTML = kv('Driver', esc(T.driver)) + kv('Corridor', esc(T.corridor + ' · ' + T.branch)) +
         kv('Cartons', T.boxes.length) + kv('Volume fill', T.fill + '%') + kv('Payload', T.wfill + '%') +
         kv('LIFO check', T.lifo ? '<span class="ok">&#10003; pass</span>' : '<span class="bad">review</span>');
-      legend.innerHTML = '<div class="lp-lh">Delivery order <span class="lp-muted">(1 = at the door) · click a store</span></div>';
-      T.stops.forEach(function (s) {
-        var r = $('div', 'lp-li lp-click', legend, '<i style="background:' + stopColor(s.seq) + '"></i><div><b>' + s.seq +
-          '</b> ' + esc(s.name) + '<br><span class="lp-muted">' + s.n + ' ctn &middot; ETA ' + s.eta + '</span></div>');
-        r.dataset.seq = s.seq; r.onclick = function () { setFocus(focusSeq === s.seq ? null : s.seq); };
-      });
-      var all = $('div', 'lp-li lp-click', legend, '<i style="background:#8ab4f8"></i><div><b>Show all stores</b></div>');
-      all.onclick = function () { setFocus(null); };
+      renderLegend();
     }
     this.focusTruckStop = function (id, seq) {
-      for (var i = 0; i < trucks.length; i++) if (trucks[i].id === id) { pick(i); if (seq != null) setFocus(seq); return true; }
+      for (var i = 0; i < trucks.length; i++) if (trucks[i].id === id) { pick(i); if (seq != null) setFocus(seq, true); return true; }
       return false;
     };
     function kv(k, v) { return '<div class="kv"><span>' + k + '</span><b>' + v + '</b></div>'; }
 
-    play.onclick = function () { playing = !playing; play.innerHTML = playing ? '&#10074;&#10074;' : '&#9654;'; if (playing && focusSeq != null) setFocus(null); };
-    spd.onclick = function () { speed = speed >= 16 ? 1 : speed * 2; spd.textContent = speed + 'x'; };
+    play.onclick = function () {
+      playing = !playing; play.innerHTML = playing ? '&#10074;&#10074;' : '&#9654;';
+      if (playing && focusSeq != null) setFocus(null);
+    };
+    prevStopBtn.onclick = function () {
+      if (!T || !T.stops.length) return;
+      var nS = T.stops.length;
+      var cur = focusSeq == null ? 1 : focusSeq;
+      var target = cur < nS ? cur + 1 : nS;
+      setFocus(target, true);
+    };
+    nextStopBtn.onclick = function () {
+      if (!T || !T.stops.length) return;
+      var nS = T.stops.length;
+      var cur = focusSeq == null ? nS : focusSeq;
+      var target = cur > 1 ? cur - 1 : 1;
+      setFocus(target, true);
+    };
+    pauseStepBtn.onclick = function () {
+      pauseAtStep = !pauseAtStep;
+      pauseStepBtn.textContent = 'Step Pause: ' + (pauseAtStep ? 'ON' : 'OFF');
+      pauseStepBtn.classList.toggle('lp-active', pauseAtStep);
+    };
+    spd.onclick = function () {
+      if (speed === 1) speed = 2;
+      else if (speed === 2) speed = 4;
+      else if (speed === 4) speed = 0.5;
+      else speed = 1;
+      spd.textContent = speed + 'x';
+    };
     modeB.onclick = function () {
       setFocus(null);
       mode = mode === 'load' ? 'unload' : 'load'; t = 0; playing = true; play.innerHTML = '&#10074;&#10074;';
       modeB.textContent = mode === 'load' ? 'Unload replay' : 'Loading replay';
+      lastKStop = null; stepPauseTimer = 0;
     };
     scrub.oninput = function () { playing = false; play.innerHTML = '&#9654;'; mode = 'load'; t = +scrub.value; };
     reset.onclick = function () { yaw = 0.62; pitch = 0.52; zoom = 1; };
@@ -317,7 +421,10 @@
       if (!T || !S.fit()) return;
       var dt = last == null ? 0 : Math.min(0.05, (now - last) / 1000); last = now;
       var N = T.boxes.length, perBox = 0.22;
-      if (playing) t += dt * speed / perBox;
+      if (animStop != null) {
+        animStopT += dt * speed;
+        if (animStopT >= animStopDur) { animStop = null; }
+      }
       var hudTxt = '', cur = null;
       B = basis(); fitScale();
       ctx.clearRect(0, 0, S.W, S.H);
@@ -326,18 +433,80 @@
       drawShell();
       var items = [];
       if (mode === 'load') {
-        if (t > N + 6) { t = playing ? 0 : N; }
-        var k = Math.min(N, Math.floor(t)), frac = t - Math.floor(t);
-        for (var i = 0; i < k && i < N; i++) items.push([T.boxes[i], 1, 0, 0]);
-        if (k < N) {
-          var b = T.boxes[k], e = easeOut(Math.min(1, frac * 1.15));
-          var dx = (T.L + 90 - b[0]) * (1 - e), dz = 60 * (1 - e) * (1 - e);
-          items.push([b, 1, dx, dz, true]); cur = b;
-          hudTxt = 'Loading carton <b>' + (k + 1) + '</b> / ' + N + ' &middot; stop <b>' + b[6] + '</b> &middot; ' + esc(b[8]);
-        } else hudTxt = '<span class="ok">&#10003; Loaded</span> ' + N + ' cartons &middot; stop 1 sits at the door';
-        scrub.value = Math.min(N, Math.floor(t));
-        banner.style.opacity = 0;
+        if (focusSeq != null) {
+          hudTxt = 'Stop <b>' + focusSeq + '</b> of ' + T.stops.length + ' &middot; ' +
+                   (animStop ? 'Loading into position...' : (viewMode === 'step' ? 'Resting on foundation' : viewMode));
+          for (var j = 0; j < N; j++) {
+            var bx = T.boxes[j], sq = bx[6];
+            if (sq === focusSeq) {
+              if (animStop === focusSeq) {
+                var frac = Math.min(1, animStopT / animStopDur);
+                var e = easeOut(frac);
+                var dx = (T.L + 90 - bx[0]) * (1 - e);
+                var dz = 45 * (1 - e) * (1 - e);
+                items.push([bx, 1.0, dx, dz, true]);
+              } else {
+                items.push([bx, 1.0, 0, 0, false]);
+              }
+            } else if (sq > focusSeq) {
+              // Prior stops in loading order (loaded before focusSeq, against CAB / on floor)
+              if (viewMode === 'step') {
+                items.push([bx, 0.78, 0, 0, false]);
+              } else if (viewMode === 'all') {
+                items.push([bx, 0.85, 0, 0, false]);
+              } else {
+                items.push([bx, 0.08, 0, 0, false]);
+              }
+            } else {
+              // Future stops (closer to rear door, not loaded yet at this step)
+              if (viewMode === 'all') {
+                items.push([bx, 0.85, 0, 0, false]);
+              } else if (viewMode === 'isolated') {
+                items.push([bx, 0.08, 0, 0, false]);
+              }
+            }
+          }
+          cur = [0, 0, 0, 0, 0, 0, focusSeq];
+        } else {
+          // Free play mode through all boxes
+          if (playing && pauseAtStep) {
+            if (stepPauseTimer > 0) {
+              stepPauseTimer -= dt;
+            } else {
+              t += dt * speed / perBox;
+              var curK = Math.min(N - 1, Math.floor(t));
+              var curBox = T.boxes[curK];
+              if (curBox) {
+                var curStopSeq = curBox[6];
+                var isLastBoxOfStop = (curK === N - 1) || (T.boxes[curK + 1][6] !== curStopSeq);
+                if (isLastBoxOfStop && lastKStop !== curStopSeq) {
+                  lastKStop = curStopSeq;
+                  stepPauseTimer = stepPauseDur;
+                  var stObj = T.stops.filter(function (x) { return x.seq === curStopSeq; })[0];
+                  if (stObj) {
+                    banner.innerHTML = '<i style="background:' + stopColor(curStopSeq) + '"></i> Step ' + (T.stops.length - curStopSeq + 1) + ' of ' + T.stops.length + ' · Stop ' + curStopSeq + ' (' + esc(stObj.name) + ') loaded · ' + stObj.n + ' cartons in place';
+                    banner.style.opacity = 1;
+                  }
+                }
+              }
+            }
+          } else if (playing) {
+            t += dt * speed / perBox;
+          }
+          if (t > N + 6) { t = playing ? 0 : N; lastKStop = null; }
+          var k = Math.min(N, Math.floor(t)), frac = t - Math.floor(t);
+          for (var i = 0; i < k && i < N; i++) items.push([T.boxes[i], 1, 0, 0]);
+          if (k < N) {
+            var b = T.boxes[k], e = easeOut(Math.min(1, frac * 1.15));
+            var dx = (T.L + 90 - b[0]) * (1 - e), dz = 60 * (1 - e) * (1 - e);
+            items.push([b, 1, dx, dz, true]); cur = b;
+            hudTxt = 'Loading carton <b>' + (k + 1) + '</b> / ' + N + ' &middot; stop <b>' + b[6] + '</b> &middot; ' + esc(b[8]);
+          } else hudTxt = '<span class="ok">&#10003; Loaded</span> ' + N + ' cartons &middot; stop 1 sits at the door';
+          scrub.value = Math.min(N, Math.floor(t));
+          if (stepPauseTimer <= 0) banner.style.opacity = 0;
+        }
       } else {
+        // Unload replay mode
         var nS = T.stops.length, per = 3.2;
         var sT = t * perBox / per, sIdx = Math.floor(sT), sf = sT - sIdx;
         if (sIdx >= nS + 1) { t = 0; sIdx = 0; sf = 0; }
@@ -360,12 +529,13 @@
       polys = [];
       for (var m = 0; m < items.length; m++) {
         var it = items[m], bb = it[0], bi = T.boxes.indexOf(bb), a = it[1];
-        var isF = focusSeq == null || bb[6] === focusSeq;
-        if (!isF) a = Math.min(a, 0.1);
-        var hl = bi >= 0 && (bi === pinIdx || bi === hoverIdx);
+        var isTarget = focusSeq != null && bb[6] === focusSeq;
+        var isPrior = focusSeq != null && bb[6] > focusSeq;
+        var hl = isTarget || (bi >= 0 && (bi === pinIdx || bi === hoverIdx));
+        var outlineCol = isTarget ? '#ffffff' : (isPrior ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.35)');
         drawBox(bb[0] + it[2], bb[1], bb[2] + it[3], bb[3], bb[4], bb[5], stopColor(bb[6]), a,
-                it[4] || (focusSeq != null && isF && hl), isF && a > 0.5 && !it[4] ? bi : -1, hl ? '#ffffff' : null);
-        if (bb[7] && a > 0.9) { var c = P(bb[0] + it[2] + bb[3] / 2, bb[1] + bb[4] / 2, bb[2] + it[3] + bb[5]); label(c, '!', '#fff'); }
+                it[4] || (isTarget && hl), a > 0.5 && !it[4] ? bi : -1, outlineCol);
+        if (bb[7] && a > 0.7) { var c = P(bb[0] + it[2] + bb[3] / 2, bb[1] + bb[4] / 2, bb[2] + it[3] + bb[5]); label(c, '!', '#fff'); }
       }
       if (focusSeq != null) {  // floor footprint of the focused store
         var fo = stopInfo(focusSeq);

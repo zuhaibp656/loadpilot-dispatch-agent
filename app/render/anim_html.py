@@ -85,11 +85,18 @@ background:rgba(12,18,36,.97);border:1px solid #3b4b72;border-radius:14px;box-sh
 .lp-card .lp-pop-g{grid-template-columns:62px 1fr}
 .lp-tip{position:absolute;z-index:6;pointer-events:none;max-width:320px;background:rgba(8,12,24,.96);border:1px solid #5b6b92;
 border-radius:10px;padding:7px 10px;font-size:12px;line-height:1.45;box-shadow:0 8px 20px rgba(0,0,0,.5)}
-.lp-hint{position:absolute;left:50%;top:12px;transform:translateX(-50%);background:rgba(253,214,99,.12);border:1px solid rgba(253,214,99,.5);
-color:#fdd663;border-radius:18px;padding:6px 14px;font-size:12.5px;white-space:nowrap;pointer-events:none}
 .lp-li.sel{background:#2a3a66;outline:2px solid #fdd663}
 .lp-go{display:block;width:calc(100% - 24px);margin:0 12px 12px;background:#fdd663;color:#111;border:none;border-radius:18px;
 padding:7px 10px;font-weight:700;cursor:pointer}.lp-go:hover{background:#ffe38a}
+.lp-btn-sm{padding:2px 8px;font-size:10px;border-radius:12px}
+.lp-step-tag{display:inline-block;background:#243049;color:#8ab4f8;font-size:10px;font-weight:700;padding:1px 5px;border-radius:4px;margin-right:4px}
+.lp-vmodes{display:flex;gap:4px;padding:6px 10px;background:#141d36;border-bottom:1px solid #243049;flex-wrap:wrap;align-items:center}
+.lp-vbtn{background:#1b243d;color:#9aa0a6;border:1px solid #3b4b72;border-radius:12px;padding:3px 8px;font-size:11px;cursor:pointer;font-weight:600}
+.lp-vbtn:hover{background:#28365a;color:#fff}
+.lp-vbtn.on{background:#8ab4f8;color:#0b1020;border-color:#8ab4f8}
+.lp-vbtn.lp-rep{margin-left:auto;background:#2a3a66;color:#fdd663;border-color:#fdd663}
+.lp-vbtn.lp-rep:hover{background:#3b4f88}
+.lp-btn.lp-active{background:#8ab4f8;color:#0b1020;border-color:#8ab4f8}
 """
 
 
@@ -278,12 +285,13 @@ def build_anim_html(plan: DispatchPlan, mode: str = "both", focus_truck_id: str 
     data = plan_to_anim_data(plan, focus_truck_id=focus_truck_id, max_trucks=max_trucks, mode=mode,
                              only_truck=only_truck, start=start)
     payload = json.dumps(data, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
+    engine_js = (Path(__file__).parent / "anim" / "engine.js").read_text(encoding="utf-8")
     return (
         "<!doctype html><html><head><meta charset='utf-8'>"
         "<meta name='viewport' content='width=device-width,initial-scale=1'>"
         f"<title>LoadPilot · {plan.plan_id}</title><style>{_CSS}</style></head>"
         "<body><div id='lp-app'></div>"
         f"<script>window.LP={payload};window.LP_MODE={json.dumps(mode)};</script>"
-        f"<script>{_ENGINE_JS}</script></body></html>"
+        f"<script>{engine_js}</script></body></html>"
     )
 
