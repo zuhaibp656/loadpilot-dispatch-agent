@@ -192,7 +192,12 @@ def plan_summary(plan: Any) -> dict[str, Any]:
         "co2_saved_kg": round(b.co2_kg - o.co2_kg), "lifo_verified_all": all(
             lp.lifo_ok for lp in plan.loads.values()),
         "trucks": [{"id": r.truck_id, "driver": r.driver, "corridor": r.corridor,
-                    "branch": r.branch, "stops": len(r.stops)} for r in plan.routes],
+                    "branch": r.branch, "stops": len(r.stops), "truck": r.truck_type.name,
+                    "payload_fill_pct": plan.loads[r.truck_id].weight_fill_pct if r.truck_id in plan.loads else None,
+                    "volume_fill_pct": plan.loads[r.truck_id].volume_fill_pct if r.truck_id in plan.loads else None}
+                   for r in plan.routes],
+        "why_drop_counts_differ": ("Each truck is filled to its payload / space / shift limit; small trucks "
+                                   "(Tata Ace 0.75 t) fill after 3-4 heavy drops, 17 ft trucks take 13-15."),
         "notes": [n for n in plan.notes if "did not fit" not in n][:6],
         "ui": "Dispatch canvas and the full report are attached automatically; do not repeat tables.",
     }

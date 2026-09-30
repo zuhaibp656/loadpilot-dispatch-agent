@@ -412,7 +412,8 @@ corridor is stated. Show the whole fleet only when no single driver/truck is nam
 
 RESPONSE RULES (strict)
 - After tools finish, write ONLY a 3-bullet headline (<= 60 words total) using the tool's numbers.
-  Fleet plan: trucks today vs LoadPilot, INR saved per day (and %), one operational insight.
+  Fleet plan: trucks today vs LoadPilot, INR saved per day (and %), and why drop counts differ
+  (trucks are filled to payload/space limits: small trucks fewer drops, big trucks more).
   Driver view: drops + cartons + leave/back time, first drop, what goes in first at the cab.
   Briefings: number of drivers briefed, earliest departure, that each has a personal link.
   No tables, no links, no JSON, no UI markup; the detailed report, tables, links and the visual

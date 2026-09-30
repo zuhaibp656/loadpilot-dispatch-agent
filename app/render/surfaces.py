@@ -25,6 +25,7 @@ try:
     )
     from app.render.anim_html import build_anim_html
     from app.render.kpi_vega import kpi_spec, route_map_spec
+    from app.render.static_views import load_view_spec, route_view_spec
 except ImportError:  # pragma: no cover
     from contracts import DispatchPlan, PlanningParams
     from data.demo_mmr import HUBS
@@ -35,6 +36,7 @@ except ImportError:  # pragma: no cover
     )
     from render.anim_html import build_anim_html
     from render.kpi_vega import kpi_spec, route_map_spec
+    from render.static_views import load_view_spec, route_view_spec
 
 WIZARD_EVENT = "optimiseDispatch"
 
@@ -151,9 +153,16 @@ def dispatch_components(plan: DispatchPlan, video_url: str | None, focus_truck_i
             {"id": "dc-kpi", "component": "VegaChart", "spec": kpi_spec(plan), "height": 300},
         ]
 
-    app_html = build_anim_html(plan, mode="both", focus_truck_id=focus_truck_id, only_truck=only_truck)
-    tabs = [{"title": "🗺️ Road map & 3D loading", "child": "tab-live"},
-            {"title": "📊 Overview", "child": "tab-overview"}]
+    # GE renders native VegaChart reliably; the big interactive IFrameSrcdoc app is opt-in
+    # (LOADPILOT_CANVAS_IFRAME=true) and otherwise opened through the link in the chat answer.
+    use_iframe = os.environ.get("LOADPILOT_CANVAS_IFRAME", "false").lower() in ("1", "true", "yes")
+    if use_iframe:
+        tabs = [{"title": "🗺️ Road map & 3D loading", "child": "tab-live"},
+                {"title": "📊 Overview", "child": "tab-overview"}]
+    else:
+        tabs = [{"title": "🗺️ Route map", "child": "tab-route"},
+                {"title": "📦 Load plan", "child": "tab-load"},
+                {"title": "📊 Today vs LoadPilot", "child": "tab-overview"}]
     card_title = f"LoadPilot · {o.trucks} trucks · ₹{plan.savings_inr:,.0f} saved"
     title = f"🚚 LoadPilot dispatch plan · {plan.plan_id} · {plan.hub.name}"
     if only_truck:
@@ -163,13 +172,13 @@ def dispatch_components(plan: DispatchPlan, video_url: str | None, focus_truck_i
             card_title = f"{r.driver} · {r.truck_id} · {len(r.stops)} drops · {n_ctn} cartons"
             title = f"🚚 {r.driver}'s day · {r.truck_id} ({r.truck_type.name})"
             headline = (f"{len(r.stops)} drops · {n_ctn} cartons · {r.km:.0f} km · leave {r.start_min // 60:02d}:"
-                        f"{r.start_min % 60:02d} · tap a store in the 3D view to see where its cartons go")
-        tabs = tabs[:1]
+                        f"{r.start_min % 60:02d} · open the 3D link in chat to tap a store")
+        tabs = tabs[:1] if use_iframe else tabs[:2]
     comps: list[dict[str, Any]] = [
         {"id": "root", "component": "Canvas", "children": ["dc-title", "dc-sub", "dc-steps", "dc-tabs"],
          "autoOpen": True, "autoFullscreen": False,
          "cardTitle": card_title,
-         "cardDescription": "Interactive road map, drop sequence and tap-a-store 3D truck loading",
+         "cardDescription": "Route map on real roads, drop order and where each store's cartons sit",
          "cardIcon": "local_shipping"},
         _t("dc-title", title, "h3"),
         _t("dc-sub", headline, "caption"),
@@ -183,9 +192,18 @@ def dispatch_components(plan: DispatchPlan, video_url: str | None, focus_truck_i
             {"title": "Costed", "helpText": f"₹{o.cost_total:,.0f} vs ₹{b.cost_total:,.0f} today",
              "status": "completed"}]},
         {"id": "dc-tabs", "component": "Tabs", "tabs": tabs},
-        {"id": "tab-live", "component": "IFrameSrcdoc", "htmlContent": app_html, "height": 720,
-         "title": "LoadPilot interactive road map and 3D truck loading"},
     ]
+    if use_iframe:
+        comps.append({"id": "tab-live", "component": "IFrameSrcdoc", "height": 720,
+                      "htmlContent": build_anim_html(plan, mode="both", focus_truck_id=focus_truck_id,
+                                                     only_truck=only_truck),
+                      "title": "LoadPilot interactive road map and 3D truck loading"})
+    else:
+        comps += [
+            {"id": "tab-route", "component": "VegaChart", "spec": route_view_spec(plan, only_truck), "height": 640},
+            {"id": "tab-load", "component": "VegaChart", "spec": load_view_spec(plan, only_truck),
+             "height": 560},
+        ]
     if not only_truck:
         comps += [
             {"id": "tab-overview", "component": "Column", "children": ["ov-map", "ov-kpi"]},

@@ -5,5 +5,5 @@
   "service_account": "loadpilot-agent@zuhaibp-ai.iam.gserviceaccount.com",
   "media_bucket": "zuhaibp-ai-loadpilot-media",
   "agent_framework": "google-adk",
-  "deployed_at": "2026-09-30T12:13:33Z"
+  "deployed_at": "2026-09-30T14:08:15Z"
 }

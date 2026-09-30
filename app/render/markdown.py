@@ -40,6 +40,30 @@ def _itinerary(r) -> str:
     return " → ".join(f"{g[0]}" + (f" ({g[1]})" if g[1] > 1 else "") for g in groups)
 
 
+def _why_rows(plan: DispatchPlan) -> list[str]:
+    """Explain uneven drop counts: every truck is capped by space, payload or shift hours."""
+    shift = plan.params.cost_profile.shift_hours * 60 if getattr(plan, "params", None) and \
+        getattr(plan.params, "cost_profile", None) else 540
+    out = []
+    for r in plan.routes:
+        lp = plan.loads.get(r.truck_id)
+        if lp is None:
+            continue
+        t = lp.truck_type
+        used = 100 * (r.end_min - r.start_min) / shift if shift else 0
+        caps = {"payload (kg)": lp.weight_fill_pct, "space (m³)": lp.volume_fill_pct, "shift hours": used}
+        lim, val = max(caps.items(), key=lambda kv: kv[1])
+        kg = sum(sum(b.weight_kg for b in rs.stop.boxes) for rs in r.stops)
+        if val >= 85:
+            why = f"full on **{lim}** ({val:.0f}%)"
+        else:
+            why = f"{r.corridor} corridor has only these drops left after the bigger trucks were filled"
+        out.append(f"| {r.truck_id} · {r.driver} | {t.name.split('(')[0].strip()} · {t.payload_kg / 1000:g} t · "
+                   f"{t.volume_m3:.1f} m³ | {len(r.stops)} · {kg:,.0f} kg | {lp.weight_fill_pct:.0f}% · "
+                   f"{lp.volume_fill_pct:.0f}% · {used:.0f}% | {why} |")
+    return out
+
+
 def dispatch_markdown(plan: DispatchPlan, links: dict[str, str] | None = None,
                       focus_truck_id: str | None = None) -> str:
     b, o = plan.baseline, plan.optimized
@@ -66,6 +90,18 @@ def dispatch_markdown(plan: DispatchPlan, links: dict[str, str] | None = None,
         out.append(f"| {r.truck_id} · {r.driver} | {r.corridor}{br} | {len(r.stops)} · "
                    f"{len(lp.placed) if lp else 0} | {_hm(r.start_min)}–{_hm(r.end_min)} · {r.km:.0f} | "
                    f"{_inr(r.cost.total)} |")
+
+    why = _why_rows(plan)
+    if why:
+        out.append("\n### Why some trucks have more drops\n")
+        out.append("Every truck is filled until it hits a limit: payload, space or the shift. Drop counts depend "
+                   "on the truck size and on how much each store ordered, so the number of drops is not the "
+                   "measure. A 7 ft Tata Ace (0.75 t) fills up after 3–4 heavy drops, while a 17 ft truck "
+                   "(about 5 t) can take 15 lighter ones. Fragile and this-side-up rules and the LIFO door "
+                   "order are checked for every carton.\n")
+        out.append("| Truck · Driver | Truck (payload · space) | Drops · kg | Payload · space · shift used | Why this many |")
+        out.append("| :--- | :--- | ---: | ---: | :--- |")
+        out += why
 
     out.append("\n### Where each truck goes\n")
     for i, r in enumerate(plan.routes):
