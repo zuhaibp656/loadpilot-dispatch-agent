@@ -286,6 +286,18 @@ def sanitize_llm_request_history(callback_context: CallbackContext | None = None
     return None
 
 
+def _headline_only(text: str) -> str:
+    """Keep the model's headline bullets; drop any tables/headings it wrote (the verified report
+    that follows is the single source of truth)."""
+    out: list[str] = []
+    for line in text.splitlines():
+        s = line.strip()
+        if s.startswith(("#", "|", "---", "```")):
+            break
+        out.append(line)
+    return "\n".join(out).rstrip()
+
+
 def append_report(callback_context: CallbackContext | None = None,
                   llm_response: LlmResponse | None = None, **_: Any) -> LlmResponse | None:
     """after_model: strip fabricated A2UI; on the final text turn append the deterministic report."""
@@ -323,7 +335,7 @@ def append_report(callback_context: CallbackContext | None = None,
     if extra:
         idx = max((i for i, p in enumerate(cleaned) if getattr(p, "text", None)), default=-1)
         if idx >= 0:
-            cleaned[idx] = types.Part(text=(cleaned[idx].text or "").rstrip() + extra)
+            cleaned[idx] = types.Part(text=_headline_only(cleaned[idx].text or "") + extra)
         else:
             cleaned.append(types.Part(text=extra.lstrip()))
     llm_response.content.parts = cleaned
@@ -389,7 +401,8 @@ RESPONSE RULES (strict)
   branches, LIFO). No tables, no links, no JSON, no UI markup; the detailed report, tables, links
   and the visual dispatch canvas are attached automatically after your text.
 - For the wizard: one sentence telling the user to fill the form and press Optimise.
-- Never invent numbers. Currency is INR (₹).
+- Never invent numbers. Currency is INR (₹). Never write loading sheets, per-stop lists, weights
+  or volumes yourself; the verified loading sheet is attached automatically.
 """
 
 root_agent = Agent(
