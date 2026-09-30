@@ -49,9 +49,15 @@ class _Cam:
         self.v = (cp * cy, cp * sy, sp)
         self.r = (-sy, cy, 0.0)
         self.u = (-sp * cy, -sp * sy, cp)
-        diag = math.sqrt(L * L + W * W + H * H)
-        self.s = min(width, height * 1.6) / diag * 0.92
-        self.ox, self.oy = width / 2, height / 2 + 30
+        # fit the projected truck body into the frame below the title (never cropped)
+        self.s, self.ox, self.oy = 1.0, 0.0, 0.0
+        corners = [self.p(x, y, z) for x in (0, L) for y in (0, W) for z in (0, H + 20)]
+        minx, maxx = min(c[0] for c in corners), max(c[0] for c in corners)
+        miny, maxy = min(c[1] for c in corners), max(c[1] for c in corners)
+        top, bottom, side = 86, 62, 40
+        self.s = min((width - 2 * side) / max(maxx - minx, 1e-6), (height - top - bottom) / max(maxy - miny, 1e-6))
+        self.ox = width / 2 - (minx + maxx) / 2 * self.s
+        self.oy = top + (height - top - bottom) / 2 - (miny + maxy) / 2 * self.s
 
     def p(self, x: float, y: float, z: float) -> tuple[float, float]:
         px, py, pz = x - self.L / 2, y - self.W / 2, z - self.H / 2
@@ -60,6 +66,75 @@ class _Cam:
 
     def depth(self, x: float, y: float, z: float) -> float:
         return (x - self.L / 2) * self.v[0] + (y - self.W / 2) * self.v[1] + (z - self.H / 2) * self.v[2]
+
+
+def _order_items(cam: "_Cam", items: list) -> list:
+    """Painter order for axis-aligned boxes (mirrors engine.js orderItems): any separating axis
+    between boxes whose screen footprints overlap gives a "behind" edge; then Kahn-sort. This
+    stops lower/deeper cartons (or the floor-level row) from painting over the boxes above them."""
+    V = cam.v
+    A = []
+    for idx, (p, dx, dz) in enumerate(items):
+        x0, z0 = p.x + dx, p.z + dz
+        o = {"x0": x0, "x1": x0 + p.l, "y0": p.y, "y1": p.y + p.w, "z0": z0, "z1": z0 + p.h}
+        pts = [cam.p(x, y, z) for x in (o["x0"], o["x1"]) for y in (o["y0"], o["y1"]) for z in (o["z0"], o["z1"])]
+        o["sx0"], o["sx1"] = min(q[0] for q in pts), max(q[0] for q in pts)
+        o["sy0"], o["sy1"] = min(q[1] for q in pts), max(q[1] for q in pts)
+        o["dep"] = cam.depth((o["x0"] + o["x1"]) / 2, (o["y0"] + o["y1"]) / 2, (o["z0"] + o["z1"]) / 2)
+        A.append(o)
+    eps = 0.5
+
+    def behind(a: dict, b: dict) -> bool:
+        if a["x1"] <= b["x0"] + eps:
+            return V[0] >= 0
+        if b["x1"] <= a["x0"] + eps:
+            return V[0] < 0
+        if a["y1"] <= b["y0"] + eps:
+            return V[1] >= 0
+        if b["y1"] <= a["y0"] + eps:
+            return V[1] < 0
+        if a["z1"] <= b["z0"] + eps:
+            return V[2] >= 0
+        if b["z1"] <= a["z0"] + eps:
+            return V[2] < 0
+        return a["dep"] < b["dep"]
+
+    n = len(A)
+    adj: list[list[int]] = [[] for _ in range(n)]
+    indeg = [0] * n
+    for i in range(n):
+        a = A[i]
+        for j in range(i + 1, n):
+            b = A[j]
+            if a["sx1"] <= b["sx0"] or b["sx1"] <= a["sx0"] or a["sy1"] <= b["sy0"] or b["sy1"] <= a["sy0"]:
+                continue
+            if behind(a, b):
+                adj[i].append(j)
+                indeg[j] += 1
+            else:
+                adj[j].append(i)
+                indeg[i] += 1
+    import heapq
+
+    heap = [(A[i]["dep"], i) for i in range(n) if indeg[i] == 0]
+    heapq.heapify(heap)
+    used = [False] * n
+    out = []
+    while len(out) < n:
+        if not heap:  # cycle (only with the moving carton) - break by depth
+            best = min((i for i in range(n) if not used[i]), key=lambda i: A[i]["dep"])
+            indeg[best] = 0
+            heapq.heappush(heap, (A[best]["dep"], best))
+        _, k = heapq.heappop(heap)
+        if used[k]:
+            continue
+        used[k] = True
+        out.append(items[k])
+        for m in adj[k]:
+            indeg[m] -= 1
+            if indeg[m] == 0 and not used[m]:
+                heapq.heappush(heap, (A[m]["dep"], m))
+    return out
 
 
 def _box(d: ImageDraw.ImageDraw, cam: _Cam, x, y, z, l, w, h, col) -> None:
@@ -120,8 +195,7 @@ def render_loading_frames(route: TruckRoute, lp: TruckLoadPlan, width: int = 960
             e = 1 - (1 - min(1.0, frac * 1.15)) ** 3
             items.append((p, (t.inner_l_cm + 90 - p.x) * (1 - e), 60 * (1 - e) ** 2))
             cur = p
-        items.sort(key=lambda it: cam.depth(it[0].x + it[1] + it[0].l / 2, it[0].y + it[0].w / 2,
-                                            it[0].z + it[2] + it[0].h / 2))
+        items = _order_items(cam, items)
         for p, dx, dz in items:
             _box(d, cam, p.x + dx, p.y, p.z + dz, p.l, p.w, p.h, stop_color(p.stop_seq))
         _body(d, cam, zones, front=True)
@@ -157,7 +231,7 @@ def render_loading_mp4(route: TruckRoute, lp: TruckLoadPlan, seconds: float = 14
 
 
 def render_poster_png(route: TruckRoute, lp: TruckLoadPlan) -> bytes:
-    frames = list(render_loading_frames(route, lp, seconds=0.1, fps=10))
+    frames = list(render_loading_frames(route, lp, seconds=2.0, fps=2))  # last frame = fully loaded
     buf = io.BytesIO()
     frames[-1].save(buf, format="PNG", optimize=True)
     return buf.getvalue()

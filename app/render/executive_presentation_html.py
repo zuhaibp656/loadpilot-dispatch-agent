@@ -65,56 +65,131 @@ def _demo_plan():
 
 
 def _map_svg(plan, stops) -> str:
-    """Dim route-map backdrop: graticule, ring roads, stops, animated truck routes."""
-    pts = [(s.lat, s.lon) for s in stops] + [(plan.hub.lat, plan.hub.lon)]
-    lat0, lat1 = min(p[0] for p in pts), max(p[0] for p in pts)
-    lon0, lon1 = min(p[1] for p in pts), max(p[1] for p in pts)
-    W, H, pad = 1600, 900, 90
-    sx = (W - 2 * pad) / max(lon1 - lon0, 1e-6)
-    sy = (H - 2 * pad) / max(lat1 - lat0, 1e-6)
-    sc = min(sx, sy)
-    ox = (W - (lon1 - lon0) * sc) / 2
-    oy = (H - (lat1 - lat0) * sc) / 2
+    """Light, real-geography route-map backdrop (Web Mercator).
+
+    Layers: OSM coastline / rail / primary / trunk / motorway polylines from
+    app/data/basemap_*.json, locality labels from the demo gazetteer, today's routes (faint)
+    and the LoadPilot routes following real roads (Google Routes / OSRM, straight fallback),
+    with animated truck dots.
+    """
+    import math
+
+    W, H = 1600, 900
+    lats = [plan.hub.lat] + [s.lat for s in stops]
+    lons = [plan.hub.lon] + [s.lon for s in stops]
+
+    def mx(lon: float) -> float:
+        return math.radians(lon)
+
+    def my(lat: float) -> float:
+        return math.log(math.tan(math.pi / 4 + math.radians(lat) / 2))
+
+    x0, x1 = mx(min(lons)), mx(max(lons))
+    y0, y1 = my(min(lats)), my(max(lats))
+    # fit the plan into the centre ~70% of the canvas; the slice viewBox fills any screen
+    sc = min(W * 0.70 / max(x1 - x0, 1e-9), H * 0.78 / max(y1 - y0, 1e-9))
+    cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
 
     def xy(lat: float, lon: float) -> tuple[float, float]:
-        return ox + (lon - lon0) * sc, H - (oy + (lat - lat0) * sc)
+        return W / 2 + (mx(lon) - cx) * sc, H / 2 - (my(lat) - cy) * sc
+
+    # geographic box that covers the whole (sliced) canvas incl. ultra-wide screens
+    def inv(px: float, py: float) -> tuple[float, float]:
+        lon = math.degrees(cx + (px - W / 2) / sc)
+        lat = math.degrees(2 * math.atan(math.exp(cy - (py - H / 2) / sc)) - math.pi / 2)
+        return lat, lon
+
+    s_, w_ = inv(-W * 0.45, H * 1.35)
+    n_, e_ = inv(W * 1.45, -H * 0.35)
+
+    def path_of(pts) -> str:
+        return "M" + "L".join(f"{x:.0f},{y:.0f}" for x, y in pts)
 
     out = [f'<svg class="bg-map-svg" viewBox="0 0 {W} {H}" preserveAspectRatio="xMidYMid slice" '
            'xmlns="http://www.w3.org/2000/svg" aria-hidden="true">']
-    # graticule
-    out.append('<g class="bgm-grid">')
-    for x in range(0, W + 1, 80):
-        out.append(f'<line x1="{x}" y1="0" x2="{x}" y2="{H}"/>')
-    for y in range(0, H + 1, 80):
-        out.append(f'<line x1="0" y1="{y}" x2="{W}" y2="{y}"/>')
-    out.append("</g>")
-    hx, hy = xy(plan.hub.lat, plan.hub.lon)
-    # ring roads + radial highways
-    out.append('<g class="bgm-roads">')
-    for r in (120, 240, 380, 540):
-        out.append(f'<circle cx="{hx:.0f}" cy="{hy:.0f}" r="{r}"/>')
-    for ang in range(0, 360, 45):
-        import math
-        ex, ey = hx + 1400 * math.cos(math.radians(ang)), hy + 1400 * math.sin(math.radians(ang))
-        out.append(f'<line x1="{hx:.0f}" y1="{hy:.0f}" x2="{ex:.0f}" y2="{ey:.0f}"/>')
-    out.append("</g>")
-    # baseline (today) routes, faint grey
+
+    # ── OSM basemap ────────────────────────────────────────────────────────
+    bm = None
+    for p in (ROOT / "app" / "data").glob("basemap_*.json"):
+        try:
+            d = json.loads(p.read_text())
+        except Exception:  # noqa: BLE001
+            continue
+        bs, bw, bn, be = d["bbox"]
+        if bs <= plan.hub.lat <= bn and bw <= plan.hub.lon <= be:
+            bm = d
+            break
+    if bm:
+        scale = bm.get("scale", 1e4)
+        for cls in ("coast", "rail", "primary", "trunk", "motorway"):
+            paths = []
+            for flat in bm.get(cls, []):
+                lon = lat = 0
+                pts, hit, last = [], False, None
+                for i in range(0, len(flat), 2):
+                    lon += flat[i]
+                    lat += flat[i + 1]
+                    la, lo = lat / scale, lon / scale
+                    if s_ <= la <= n_ and w_ <= lo <= e_:
+                        hit = True
+                    x, y = xy(la, lo)
+                    if last is None or abs(x - last[0]) + abs(y - last[1]) >= 2.5:
+                        pts.append((x, y))
+                        last = (x, y)
+                if hit and len(pts) > 1:
+                    paths.append(path_of(pts))
+            if paths:
+                out.append(f'<path class="bgm-{cls}" d="{" ".join(paths)}"/>')
+
+    # ── locality labels (demo gazetteer) ───────────────────────────────────
+    try:
+        from app.data.demo_extended import build_tables
+
+        seen = []
+        out.append('<g class="bgm-labels">')
+        for g in build_tables()["gazetteer"]:
+            x, y = xy(g["lat"], g["lon"])
+            if any(abs(x - a) < 90 and abs(y - b) < 22 for a, b in seen):
+                continue
+            seen.append((x, y))
+            out.append(f'<text x="{x:.0f}" y="{y - 9:.0f}">{html.escape(g["locality"])}</text>')
+        out.append("</g>")
+    except Exception:  # noqa: BLE001
+        pass
+
+    # ── routes: road-following where available ─────────────────────────────
+    try:
+        from app.geo.roads import plan_road_legs
+
+        legs = plan_road_legs(plan)
+    except Exception:  # noqa: BLE001
+        legs = {"opt": {}, "base": {}}
+
+    def route_pts(kind: str, r) -> list[tuple[float, float]]:
+        lg = legs.get(kind, {}).get(r.truck_id)
+        if lg:
+            ll = [p for leg in lg for p in leg]
+        else:
+            ll = ([(plan.hub.lat, plan.hub.lon)] + [(rs.stop.lat, rs.stop.lon) for rs in r.stops]
+                  + [(plan.hub.lat, plan.hub.lon)])
+        pts, last = [], None
+        for la, lo in ll:
+            x, y = xy(la, lo)
+            if last is None or abs(x - last[0]) + abs(y - last[1]) >= 2:
+                pts.append((x, y))
+                last = (x, y)
+        return pts
+
     out.append('<g class="bgm-base">')
     for r in getattr(plan, "baseline_routes", []) or []:
-        seq = [(plan.hub.lat, plan.hub.lon)] + [(rs.stop.lat, rs.stop.lon) for rs in r.stops]
-        d = " ".join(f"{'M' if i == 0 else 'L'}{x:.1f},{y:.1f}" for i, (x, y) in
-                     enumerate(xy(*p) for p in seq))
-        out.append(f'<path d="{d}"/>')
+        out.append(f'<path d="{path_of(route_pts("base", r))}"/>')
     out.append("</g>")
-    # optimised routes, animated dash + moving truck dot
     out.append('<g class="bgm-routes">')
     for i, r in enumerate(plan.routes):
-        seq = ([(plan.hub.lat, plan.hub.lon)] + [(rs.stop.lat, rs.stop.lon) for rs in r.stops]
-               + [(plan.hub.lat, plan.hub.lon)])
-        d = " ".join(f"{'M' if k == 0 else 'L'}{x:.1f},{y:.1f}" for k, (x, y) in
-                     enumerate(xy(*p) for p in seq))
+        d = path_of(route_pts("opt", r))
         c = ROUTE_COLORS[i % len(ROUTE_COLORS)]
-        dur = 16 + 3 * i
+        dur = 22 + 3 * i
+        out.append(f'<path class="bgm-casing" d="{d}"/>')
         out.append(f'<path class="bgm-route" d="{d}" stroke="{c}" style="animation-delay:-{i * 1.7:.1f}s"/>')
         out.append(f'<circle r="6" fill="{c}" class="bgm-truck"><animateMotion dur="{dur}s" '
                    f'repeatCount="indefinite" path="{d}"/></circle>')
@@ -122,10 +197,12 @@ def _map_svg(plan, stops) -> str:
     out.append('<g class="bgm-stops">')
     for s in stops:
         x, y = xy(s.lat, s.lon)
-        out.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.2"/>')
+        out.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.6"/>')
     out.append("</g>")
-    out.append(f'<g class="bgm-hub"><circle cx="{hx:.1f}" cy="{hy:.1f}" r="11"/>'
-               f'<circle class="bgm-pulse" cx="{hx:.1f}" cy="{hy:.1f}" r="11"/></g>')
+    hx, hy = xy(plan.hub.lat, plan.hub.lon)
+    out.append(f'<g class="bgm-hub"><circle cx="{hx:.1f}" cy="{hy:.1f}" r="10"/>'
+               f'<circle class="bgm-pulse" cx="{hx:.1f}" cy="{hy:.1f}" r="10"/>'
+               f'<text x="{hx + 16:.0f}" y="{hy + 5:.0f}">{html.escape(plan.hub.name)}</text></g>')
     out.append("</svg>")
     return "".join(out)
 
@@ -260,11 +337,11 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     --gemini-spark:linear-gradient(135deg,#1A73E8 0%,#4B31E3 100%);
   }
   html.theme-light {
-    --canvas:#FBFAF7; --surface:#FFFFFF; --surface-card:rgba(255,255,255,.92); --surface-sunk:#F4F1EA;
+    --canvas:#FBFAF7; --surface:#FFFFFF; --surface-card:rgba(255,255,255,.97); --surface-sunk:#F4F1EA;
     --border-hairline:#ECE6DA; --border-subtle:#DCD3C2; --border-strong:#A8A08F;
     --text:#1B1A17; --text-muted:#4E4A42; --text-dim:#7A7468;
     --amber-ink:#B35C00; --teal-ink:#00796B; --green-ink:#137333; --red-ink:#C5221F; --blue-ink:#1A73E8;
-    --map-ink:#8C7A5B; --map-op:.22; --map-route-op:.75;
+    --map-alpha:.62; --map-water:#8EC3E6; --map-rail:#C9C2B4; --map-road:#E2DBCD; --map-trunk:#F3D08A; --map-motorway:#F1B26B; --map-label:#8A8374;
     --card-shadow:0 4px 20px rgba(60,40,0,.06),0 1px 3px rgba(0,0,0,.03);
     --cockpit-shadow:0 8px 30px rgba(60,40,0,.08),0 1px 3px rgba(0,0,0,.04);
   }
@@ -273,25 +350,31 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     --border-hairline:rgba(255,255,255,.08); --border-subtle:rgba(255,255,255,.13); --border-strong:rgba(255,255,255,.24);
     --text:#F6F4EF; --text-muted:#A9A396; --text-dim:#6F6A60;
     --amber-ink:#FDB750; --teal-ink:#4FD1B8; --green-ink:#5BB974; --red-ink:#F28B82; --blue-ink:#8AB4F8;
-    --map-ink:#C9B48A; --map-op:.16; --map-route-op:.75;
+    --map-alpha:.5; --map-water:#2F5E80; --map-rail:#3A3F48; --map-road:#2A2F38; --map-trunk:#6B5A35; --map-motorway:#8A6630; --map-label:#8C8778;
     --card-shadow:0 16px 40px rgba(0,0,0,.4); --cockpit-shadow:0 16px 40px rgba(0,0,0,.4);
   }
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--canvas);color:var(--text);font-family:var(--font-body);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
 
-  /* ── Dim route-map backdrop ─────────────────────────────────────── */
-  .bg-map{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  /* ── Light real-map backdrop ────────────────────────────────────── */
+  .bg-map{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:var(--map-alpha)}
   .bg-map-svg{width:100%;height:100%}
-  .bg-map::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,transparent 0%,var(--canvas) 78%)}
-  .bgm-grid line{stroke:var(--map-ink);stroke-width:.6;opacity:calc(var(--map-op)*.55)}
-  .bgm-roads circle,.bgm-roads line{fill:none;stroke:var(--map-ink);stroke-width:1.2;stroke-dasharray:2 7;opacity:var(--map-op)}
-  .bgm-base path{fill:none;stroke:var(--map-ink);stroke-width:1.4;stroke-dasharray:3 5;opacity:calc(var(--map-op)*.9)}
-  .bgm-route{fill:none;stroke-width:2.6;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:10 12;opacity:calc(var(--map-route-op)*.5);animation:roadflow 7s linear infinite}
-  .bgm-truck{opacity:calc(var(--map-route-op)*.9)}
-  .bgm-stops circle{fill:var(--map-ink);opacity:calc(var(--map-op)*2)}
-  .bgm-hub circle{fill:var(--amber);opacity:.5}
+  .bg-map::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,color-mix(in srgb,var(--canvas) 38%,transparent) 0%,transparent 70%)}
+  .bgm-coast{fill:none;stroke:var(--map-water);stroke-width:3.2;stroke-linejoin:round;stroke-linecap:round}
+  .bgm-rail{fill:none;stroke:var(--map-rail);stroke-width:1;stroke-dasharray:5 4}
+  .bgm-primary{fill:none;stroke:var(--map-road);stroke-width:1.1;stroke-linejoin:round}
+  .bgm-trunk{fill:none;stroke:var(--map-trunk);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+  .bgm-motorway{fill:none;stroke:var(--map-motorway);stroke-width:3.2;stroke-linejoin:round;stroke-linecap:round}
+  .bgm-labels text{font-family:var(--font-body);font-size:13px;font-weight:500;fill:var(--map-label);text-anchor:middle;paint-order:stroke;stroke:var(--canvas);stroke-width:3px}
+  .bgm-base path{fill:none;stroke:var(--map-label);stroke-width:1.4;stroke-dasharray:3 5;opacity:.35}
+  .bgm-casing{fill:none;stroke:var(--canvas);stroke-width:6.5;stroke-linejoin:round;stroke-linecap:round;opacity:.9}
+  .bgm-route{fill:none;stroke-width:3.4;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:14 9;opacity:.85;animation:roadflow 9s linear infinite}
+  .bgm-truck{stroke:#fff;stroke-width:2}
+  .bgm-stops circle{fill:var(--surface);stroke:var(--map-label);stroke-width:1.4}
+  .bgm-hub circle{fill:var(--amber);stroke:#fff;stroke-width:2}
+  .bgm-hub text{font-family:var(--font-display);font-size:14px;font-weight:700;fill:var(--amber-ink);paint-order:stroke;stroke:var(--canvas);stroke-width:3px}
   .bgm-pulse{fill:none!important;stroke:var(--amber);stroke-width:2;transform-box:fill-box;transform-origin:center;animation:pulse 2.6s ease-out infinite}
-  @keyframes roadflow{to{stroke-dashoffset:-220}}
+  @keyframes roadflow{to{stroke-dashoffset:-230}}
   @keyframes pulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(4.5);opacity:0}}
 
   /* ── Mast ───────────────────────────────────────────────────────── */
@@ -313,10 +396,10 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 
   /* ── Slides ─────────────────────────────────────────────────────── */
   .deck-container{padding-top:60px;min-height:100vh;position:relative;z-index:1}
-  .slide-section{display:none;min-height:calc(100vh - 60px);padding:clamp(28px,4.5vh,60px) max(24px,5vw) 70px;position:relative}
+  .slide-section{display:none;min-height:calc(100vh - 60px);padding:clamp(16px,2.5vh,36px) max(20px,2.5vw) 28px;position:relative}
   .slide-section.active{display:flex;flex-direction:column;justify-content:center;animation:fadeIn .3s cubic-bezier(.16,1,.3,1)}
   @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  .wrap-max{max-width:1400px;margin:0 auto;width:100%}
+  .wrap-max{max-width:1400px;margin:0 auto;width:100%;transform-origin:top center}
   .title-kicker{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
   .kicker-bar{width:24px;height:3px;border-radius:2px;background:var(--grad-route)}
   .kicker-primary{font-family:var(--font-display);font-size:13.5px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--amber-ink)}
@@ -324,11 +407,11 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .kicker-sub{font-family:var(--font-mono);font-size:13px;color:var(--text-dim);letter-spacing:.5px}
   .monumental-headline{font-family:var(--font-display);font-size:clamp(32px,3.8vw,54px);font-weight:800;line-height:1.12;letter-spacing:-1.3px;margin-bottom:16px}
   .gradient-span{background:var(--grad-route);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-  .tagline-lead{font-size:clamp(16px,1.25vw,19.5px);line-height:1.55;color:var(--text-muted);max-width:940px;margin-bottom:28px}
+  .tagline-lead{font-size:clamp(16px,1.25vw,19.5px);line-height:1.55;color:var(--text-muted);max-width:1240px;margin-bottom:28px}
   .tagline-lead b{color:var(--text)}
 
   /* ── Gemini cockpit ─────────────────────────────────────────────── */
-  .gemini-cockpit{background:var(--surface);border:1px solid var(--border-subtle);border-radius:24px;padding:14px 20px;display:flex;align-items:center;gap:16px;box-shadow:var(--cockpit-shadow);max-width:1060px;margin-bottom:16px}
+  .gemini-cockpit{background:var(--surface);border:1px solid var(--border-subtle);border-radius:24px;padding:14px 20px;display:flex;align-items:center;gap:16px;box-shadow:var(--cockpit-shadow);max-width:1400px;margin-bottom:16px}
   .gemini-brand-badge{display:flex;align-items:center;gap:8px;flex-shrink:0}
   .gemini-spark-svg{width:26px;height:26px;filter:drop-shadow(0 0 8px rgba(26,115,232,.45))}
   .gemini-brand-text{font-family:var(--font-display);font-size:17px;font-weight:700}
@@ -340,7 +423,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .cockpit-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
   .query-chip{font-family:var(--font-mono);font-size:11.5px;font-weight:700;padding:7px 13px;border-radius:999px;border:1px solid var(--border-subtle);background:var(--surface-card);color:var(--text-muted);cursor:pointer;transition:all .18s}
   .query-chip.active,.query-chip:hover{border-color:var(--amber-deep);color:var(--amber-ink);background:color-mix(in srgb,var(--amber) 10%,var(--surface))}
-  .agent-response-drawer{max-width:1060px;background:var(--surface-card);border:1px solid var(--border-hairline);border-left:3px solid var(--teal);border-radius:14px;padding:14px 18px;box-shadow:var(--card-shadow);font-size:14.5px;line-height:1.6;color:var(--text-muted);min-height:92px}
+  .agent-response-drawer{max-width:1400px;background:var(--surface-card);border:1px solid var(--border-hairline);border-left:3px solid var(--teal);border-radius:14px;padding:14px 18px;box-shadow:var(--card-shadow);font-size:14.5px;line-height:1.6;color:var(--text-muted);min-height:92px}
   .agent-response-drawer b{color:var(--text)}
   .tool-trace{font-family:var(--font-mono);font-size:11.5px;color:var(--teal-ink);margin-bottom:6px}
 
@@ -634,6 +717,23 @@ function goToSlide(i){
   if(cur===2) replayLifo();
   window.scrollTo(0,0);
 }
+
+/* Fit-to-screen: zoom the active slide so its content uses the full viewport. */
+function fitSlide(){
+  const sec=document.querySelector('.slide-section.active'); if(!sec) return;
+  const w=sec.querySelector('.wrap-max'); if(!w) return;
+  w.style.zoom=1;
+  if(window.innerWidth<1100){return;}
+  const cs=getComputedStyle(sec);
+  const availW=sec.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+  const availH=window.innerHeight-60-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
+  const z=Math.max(.7,Math.min(availW/w.offsetWidth,availH/w.scrollHeight,2.2));
+  w.style.zoom=z.toFixed(3);
+}
+window.addEventListener('resize',fitSlide);
+window.addEventListener('load',fitSlide);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitSlide);
+const _goRaw=goToSlide;goToSlide=function(i){_goRaw(i);requestAnimationFrame(fitSlide);};
 function next(){goToSlide(cur+1)} function prev(){goToSlide(cur-1)}
 document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();next()}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();prev()}});
 let tx=null;document.addEventListener('touchstart',e=>tx=e.touches[0].clientX);document.addEventListener('touchend',e=>{if(tx===null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>60)(d<0?next:prev)();tx=null;});
