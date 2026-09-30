@@ -120,7 +120,7 @@
     };
     function fitScale() {
       if (!T) return; var diag = Math.sqrt(T.L * T.L + T.W * T.W + T.H * T.H);
-      scale = Math.min(W, H * 1.6) / diag * 0.95 * zoom; ox = W / 2; oy = H / 2 + 10;
+      scale = Math.min(W, H * 1.6) / diag * 0.78 * zoom; ox = W / 2; oy = H / 2 + 10;
     }
     function quad(pts, fill, stroke, alpha) {
       ctx.globalAlpha = alpha == null ? 1 : alpha; ctx.beginPath();
