@@ -217,6 +217,19 @@ class TruckLoadPlan:
     front_axle_share_pct: float  # % of cargo weight in the front half of the body
     unplaced: tuple[Box, ...] = ()
 
+    @property
+    def cmvr_axle_compliant(self) -> bool:
+        """Central Motor Vehicle Rules (CMVR) Rule 93 safe weight envelope (30-52% on steer axle)."""
+        return 30.0 <= self.front_axle_share_pct <= 52.0
+
+    @property
+    def cmvr_axle_status(self) -> str:
+        rear_share = round(100.0 - self.front_axle_share_pct, 1)
+        front_share = round(self.front_axle_share_pct, 1)
+        if self.cmvr_axle_compliant:
+            return f"CMVR Compliant ({front_share}% steer / {rear_share}% drive axle)"
+        return f"Warning: Axle Imbalance ({front_share}% steer / {rear_share}% drive axle)"
+
 
 @dataclass(frozen=True)
 class RouteStop:
@@ -297,3 +310,15 @@ class DispatchPlan:
     @property
     def trucks_saved(self) -> int:
         return self.baseline.trucks - self.optimized.trucks
+
+    @property
+    def diesel_saved_litres(self) -> float:
+        return max(0.0, round(self.baseline.litres - self.optimized.litres, 1))
+
+    @property
+    def co2_saved_kg(self) -> float:
+        return max(0.0, round(self.baseline.co2_kg - self.optimized.co2_kg, 1))
+
+    @property
+    def annual_trees_offset_equiv(self) -> int:
+        return int(round((self.co2_saved_kg * 300) / 21.77))

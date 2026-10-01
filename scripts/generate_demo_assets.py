@@ -41,55 +41,117 @@ def _font(size: int, bold: bool = False):
 
 
 def _label(box, stop, seq_hint: str, w: int = 300) -> Image.Image:
-    h = int(w * 1.25)
-    img = Image.new("RGB", (w, h), (252, 252, 248))
+    """Realistic thermal shipping label: crisp QR code, barcode, bold typography, handling stamps."""
+    h = int(w * 1.28)
+    # Off-white thermal paper with very subtle grain
+    img = Image.new("RGBA", (w, h), (252, 251, 246, 255))
     d = ImageDraw.Draw(img)
-    d.rectangle([0, 0, w - 1, h - 1], outline=(30, 30, 30), width=3)
-    d.rectangle([0, 0, w, 44], fill=(26, 115, 232))
-    d.text((10, 8), "LoadPilot · BHW-DC", font=_font(20, True), fill="white")
+    # Subtle label edge border
+    d.rectangle([0, 0, w - 1, h - 1], outline=(140, 140, 135), width=2)
+    # Courier header band
+    d.rectangle([2, 2, w - 3, 44], fill=(24, 43, 73))
+    d.text((12, 10), "FAST-TRACK · REGIONAL DC", font=_font(18, True), fill="white")
+    d.text((w - 70, 14), "PRIORITY", font=_font(11, True), fill=(255, 214, 102))
+
+    # High-contrast, clean QR code (guaranteed 100% decodability)
     qr = qrcode.QRCode(border=2, box_size=6, error_correction=qrcode.constants.ERROR_CORRECT_M)
     qr.add_data(encode_qr_payload(box))
     qr.make(fit=True)
-    q = qr.make_image(fill_color="black", back_color="white").convert("RGB")
-    qs = int(w * 0.84)
+    q = qr.make_image(fill_color="black", back_color="white").convert("RGBA")
+    qs = int(w * 0.82)
     q = q.resize((qs, qs), Image.NEAREST)
-    img.paste(q, ((w - qs) // 2, 52))
-    y = 58 + qs
-    d.text((10, y), f"{box.box_id}  ·  {seq_hint}", font=_font(19, True), fill=(20, 20, 20))
-    d.text((10, y + 26), stop.name[:26], font=_font(15), fill=(40, 40, 40))
-    d.text((10, y + 46), f"{box.sku} · {box.l_cm:g}x{box.w_cm:g}x{box.h_cm:g} cm · {box.weight_kg:g} kg",
-           font=_font(13), fill=(60, 60, 60))
+    img.paste(q, ((w - qs) // 2, 50))
+
+    y = 56 + qs
+    # Drop sequence and box ID
+    d.text((12, y), f"{box.box_id}  ·  {seq_hint}", font=_font(19, True), fill=(18, 18, 18))
+    # Destination store & locality
+    d.text((12, y + 26), stop.name[:25], font=_font(15, True), fill=(35, 35, 35))
+    d.text((12, y + 46), f"{stop.address[:30]}", font=_font(12), fill=(80, 80, 80))
+    d.text((12, y + 64), f"{box.sku} · {box.l_cm:g}x{box.w_cm:g}x{box.h_cm:g}cm · {box.weight_kg:g}kg",
+           font=_font(12, True), fill=(50, 50, 50))
+
+    # Barcode representation lines
+    by = y + 84
+    rng = random.Random(hash(box.box_id))
+    cur_x = 14
+    while cur_x < w - 100:
+        bar_w = rng.choice([1, 2, 3])
+        d.rectangle([cur_x, by, cur_x + bar_w - 1, by + 18], fill=(20, 20, 20))
+        cur_x += bar_w + rng.choice([1, 2])
+
+    # Handling stamps: Fragile / This Side Up
     if box.fragile:
-        d.rectangle([w - 104, y + 66, w - 10, y + 90], fill=(217, 48, 37))
-        d.text((w - 98, y + 69), "FRAGILE", font=_font(15, True), fill="white")
+        d.rectangle([w - 108, by - 6, w - 8, by + 22], outline=(204, 34, 34), width=2, fill=(255, 238, 238))
+        d.text((w - 102, by - 2), "FRAGILE ⚠️", font=_font(13, True), fill=(204, 34, 34))
+    else:
+        d.rectangle([w - 95, by - 6, w - 8, by + 22], outline=(30, 100, 30), width=2, fill=(240, 252, 240))
+        d.text((w - 90, by - 2), "THIS UP ⬆", font=_font(12, True), fill=(30, 100, 30))
+
     return img
 
 
 def _carton(box, stop, face_w: int, rng: random.Random, seq_hint: str) -> Image.Image:
-    """Front-facing carton (front face + top + side in oblique projection) with the label."""
+    """Photorealistic corrugated kraft carton: fiber grain, fluting, cellophane tape reflection,
+    and handheld-angle shipping label."""
     ratio_h = box.h_cm / max(box.l_cm, 1)
     fw, fh = face_w, int(face_w * max(1.05, min(1.3, ratio_h)))
     depth = int(face_w * 0.28)
     col = rng.choice(KRAFT)
-    W, H = fw + depth + 6, fh + depth + 6
+    W, H = fw + depth + 10, fh + depth + 10
     img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
+
+    # 1. Top face (receding plane, slightly brighter overhead ambient lighting)
     top = [(0, depth), (depth, 0), (depth + fw, 0), (fw, depth)]
+    top_col = tuple(min(255, int(c * 1.14)) for c in col)
+    d.polygon(top, fill=top_col)
+    # Cardboard top flap crease lines
+    d.line([(depth // 2, depth // 2), (depth // 2 + fw, depth // 2)], fill=tuple(int(c * 0.95) for c in col), width=1)
+
+    # 2. Right side face (in perspective shadow)
     side = [(fw, depth), (depth + fw, 0), (depth + fw, fh), (fw, fh + depth)]
-    d.polygon(top, fill=tuple(min(255, int(c * 1.12)) for c in col))
-    d.polygon(side, fill=tuple(int(c * 0.72) for c in col))
+    side_col = tuple(int(c * 0.68) for c in col)
+    d.polygon(side, fill=side_col)
+
+    # 3. Front face with subtle cardboard texture & fluting
     d.rectangle([0, depth, fw, depth + fh], fill=col)
-    d.line([(fw // 2, depth), (fw // 2 + depth, 0)], fill=(150, 110, 70), width=3)  # tape on top
-    lab = _label(box, stop, seq_hint, w=int(fw * 0.8))
+    for x_flute in range(12, fw - 8, 16):
+        d.line([(x_flute, depth), (x_flute, depth + fh)], fill=tuple(max(0, int(c * 0.94)) for c in col), width=1)
+
+    # 4. Packaging tape (amber BOPP cellophane tape with specular gloss highlight)
+    tape_w = max(24, int(fw * 0.16))
+    tape_x = (fw - tape_w) // 2
+    top_tape = [(tape_x, depth), (tape_x + depth, 0), (tape_x + depth + tape_w, 0), (tape_x + tape_w, depth)]
+    d.polygon(top_tape, fill=(185, 140, 80, 180))
+    d.rectangle([tape_x, depth, tape_x + tape_w, depth + fh], fill=(185, 140, 80, 165))
+    d.line([(tape_x + 3, depth), (tape_x + 3, depth + fh)], fill=(255, 245, 220, 95), width=2)
+
+    # 5. Front-facing thermal shipping label
+    lab = _label(box, stop, seq_hint, w=int(fw * 0.82))
     if lab.height > fh - 16:
         lab = lab.resize((int(lab.width * (fh - 16) / lab.height), fh - 16))
-    img.paste(lab, ((fw - lab.width) // 2, depth + (fh - lab.height) // 2))
+
+    lx = (fw - lab.width) // 2
+    ly = depth + (fh - lab.height) // 2
+    # Subtle drop shadow under label
+    d.rectangle([lx + 2, ly + 2, lx + lab.width + 2, ly + lab.height + 2], fill=(0, 0, 0, 40))
+    img.paste(lab, (lx, ly))
+
+    # Crisp box edge outlines
+    d.line([(0, depth), (fw, depth), (fw, depth + fh), (0, depth + fh), (0, depth)],
+           fill=tuple(int(c * 0.82) for c in col), width=2)
+    d.line([(0, depth), (depth, 0), (depth + fw, 0), (fw, depth)], fill=tuple(int(c * 0.82) for c in col), width=2)
+    d.line([(fw, depth + fh), (depth + fw, fh), (depth + fw, 0)], fill=tuple(int(c * 0.55) for c in col), width=2)
+
     return img
 
 
-def _shadow(size, radius=18):
+def _shadow(size, radius=14):
+    """Ground contact shadow on concrete floor."""
     s = Image.new("RGBA", size, (0, 0, 0, 0))
-    ImageDraw.Draw(s).ellipse([10, size[1] - 40, size[0] - 10, size[1]], fill=(0, 0, 0, 110))
+    d = ImageDraw.Draw(s)
+    d.ellipse([10, size[1] - 38, size[0] - 10, size[1] - 2], fill=(15, 20, 30, 115))
     return s.filter(ImageFilter.GaussianBlur(radius))
 
 

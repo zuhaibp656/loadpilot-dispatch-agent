@@ -152,11 +152,16 @@ def build_baseline(hub: Hub, stops: list[Stop], profile: CostProfile, depart_min
                    catalogue: dict[str, TruckType] = TRUCK_CATALOGUE) -> list[TruckRoute]:
     """Today's plan: area-based assignment, nearest-neighbour order, unsorted loading."""
     try:
-        from app.data.demo_mmr import baseline_assignment
-    except ImportError:  # pragma: no cover
-        from data.demo_mmr import baseline_assignment
+        from app.data.cities import resolve_city_and_hub
+        city_cfg, _ = resolve_city_and_hub(query_hub=hub.hub_id, stops=stops)
+        baseline_fn = city_cfg.baseline_fn
+    except Exception:  # pragma: no cover
+        try:
+            from app.data.demo_mmr import baseline_assignment as baseline_fn
+        except ImportError:
+            from data.demo_mmr import baseline_assignment as baseline_fn
     if all(s.area for s in stops):
-        groups = baseline_assignment(stops)
+        groups = baseline_fn(stops)
     else:
         groups = {}
         for s in stops:
@@ -211,7 +216,13 @@ def plan_dispatch(hub: Hub, stops: list[Stop], params: PlanningParams,
             break
 
     assert result is not None
-    free_drivers = [d for d in DEFAULT_DRIVERS if d not in drivers.values()]
+    try:
+        from app.data.cities import resolve_city_and_hub
+        city_cfg, _ = resolve_city_and_hub(query_hub=hub.hub_id, stops=stops)
+        pool_drivers = city_cfg.default_drivers
+    except Exception:
+        pool_drivers = DEFAULT_DRIVERS
+    free_drivers = [d for d in pool_drivers if d not in drivers.values()]
     routes: list[TruckRoute] = []
     for veh in vehicles:
         if veh.truck_id not in result.routes:

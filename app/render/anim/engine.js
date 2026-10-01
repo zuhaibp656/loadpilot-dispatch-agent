@@ -589,6 +589,9 @@
     var play = $('button', 'lp-btn lp-play', ctr, '&#10074;&#10074;');
     var spd = $('button', 'lp-btn', ctr, '2x');
     var scrub = $('input', 'lp-scrub', ctr); scrub.type = 'range';
+    var gmapsRouteBtn = $('a', 'lp-btn', ctr, '🗺️ Google Maps');
+    gmapsRouteBtn.target = '_blank'; gmapsRouteBtn.style.textDecoration = 'none';
+    gmapsRouteBtn.style.color = '#38bdf8'; gmapsRouteBtn.style.borderColor = '#1a73e8';
     var S = autoSize(cwrap, cv, ctx, function () { if (!fitted) fitAll(); });
 
     var set = 'opt', playing = true, speed = 2, last = null, sel = -1, hover = null, popStop = null, fitted = false;
@@ -596,6 +599,21 @@
     var t0 = D.clock ? D.clock[0] : 420, t1 = D.clock ? D.clock[1] : 1140, t = t0;
     scrub.min = t0; scrub.max = t1; scrub.value = t0;
     var hub = D.hub || { lat: 19, lon: 73, name: 'Hub' }, HX = mx(hub.lon), HY = my(hub.lat);
+
+    function updateGmapsBtn() {
+      var routes = R[set] || [];
+      var r = (sel >= 0 && routes[sel]) ? routes[sel] : (routes.length ? routes[0] : null);
+      if (r && r.stops && r.stops.length) {
+        var wps = r.stops.map(function (s) { return s.lat + ',' + s.lon; }).slice(0, 9).join('|');
+        gmapsRouteBtn.href = 'https://www.google.com/maps/dir/?api=1&origin=' + hub.lat + ',' + hub.lon +
+                             '&destination=' + hub.lat + ',' + hub.lon +
+                             '&waypoints=' + encodeURIComponent(wps) + '&travelmode=driving&dir_action=navigate';
+        gmapsRouteBtn.innerHTML = '🗺️ ' + esc(r.id) + ' in Google Maps (Live Traffic)';
+        gmapsRouteBtn.style.display = 'inline-block';
+      } else {
+        gmapsRouteBtn.style.display = 'none';
+      }
+    }
 
     /* ---- precompute mercator geometry ---- */
     ['opt', 'base'].forEach(function (k) {
@@ -758,6 +776,7 @@
         });
         $('div', 'lp-li', legend, '<span class="lp-num" style="background:#fdd663;color:#111">H</span><div>Back at hub <span class="lp-muted">' + fmtT(r.end) + '</span></div>');
       }
+      updateGmapsBtn();
       void h;
     }
     function focus(i) {
@@ -777,7 +796,11 @@
         (win ? '<span>Window</span><b>' + win + '</b>' : '') +
         '<span>Cartons</span><b>' + s.n + (s.kg ? ' · ' + s.kg + ' kg' : '') + (s.frag ? ' · ' + s.frag + ' fragile' : '') + '</b>' +
         (s.skus ? '<span>Goods</span><b>' + esc(s.skus) + '</b>' : '') +
-        '</div>' + (window.LPgoLoad && set === 'opt' ? '<button class="lp-go">📦 Where are these cartons in the truck?</button>' : '');
+        '</div>' +
+        '<div style="display:flex;gap:6px;padding:0 12px 10px;">' +
+        '<a href="https://www.google.com/maps/dir/?api=1&destination=' + s.lat + ',' + s.lon + '&travelmode=driving&dir_action=navigate" target="_blank" class="lp-btn" style="flex:1;text-align:center;background:#1a73e8;color:#fff;text-decoration:none;padding:7px 10px;border-radius:12px;font-size:12px;font-weight:700;">🗺️ Navigate in Google Maps</a>' +
+        '</div>' +
+        (window.LPgoLoad && set === 'opt' ? '<button class="lp-go">📦 Where are these cartons in the truck?</button>' : '');
       pop.style.display = 'block';
       pop.querySelector('.lp-x').onclick = closePop;
       var go = pop.querySelector('.lp-go'); if (go) go.onclick = function () { window.LPgoLoad(r.id, s.seq); };
@@ -850,11 +873,11 @@
       routes.forEach(function (r, i) {
         var dim = sel >= 0 && sel !== i, pos = posAt(r, t);
         // planned road path
-        ctx.globalAlpha = dim ? 0.12 : 0.5; ctx.strokeStyle = r.color; ctx.lineWidth = sel === i ? 4 : 2.2; ctx.setLineDash(sel === i ? [] : [6, 5]);
+        ctx.globalAlpha = dim ? 0.12 : 0.6; ctx.strokeStyle = r.color; ctx.lineWidth = sel === i ? 5.5 : 3.2; ctx.setLineDash(sel === i ? [] : [7, 6]);
         ctx.beginPath(); r.L.forEach(function (lg) { pathLeg(lg); }); ctx.stroke(); ctx.setLineDash([]);
         // driven trail
         if (!dim) {
-          ctx.globalAlpha = 1; ctx.shadowColor = r.color; ctx.shadowBlur = 8; ctx.lineWidth = sel === i ? 5 : 3.2; ctx.beginPath();
+          ctx.globalAlpha = 1; ctx.shadowColor = r.color; ctx.shadowBlur = 10; ctx.lineWidth = sel === i ? 6.5 : 4.5; ctx.beginPath();
           for (var li = 0; li < r.L.length && li <= pos.leg; li++) pathLeg(r.L[li], li === pos.leg && pos.k ? pos : null);
           ctx.stroke(); ctx.shadowBlur = 0;
         }
@@ -862,34 +885,34 @@
         var big = z >= 10.5 || sel === i;
         r.stops.forEach(function (s) {
           var q = sp(s.X, s.Y), done = t >= s.arr; total++; if (done) delivered++;
-          if (q[0] < -20 || q[1] < -20 || q[0] > S.W + 20 || q[1] > S.H + 20) return;
+          if (q[0] < -25 || q[1] < -25 || q[0] > S.W + 25 || q[1] > S.H + 25) return;
           ctx.globalAlpha = dim ? 0.18 : 1;
-          var rad = big ? 8.5 : 4.5, isPop = popStop && popStop[1] === s;
-          ctx.beginPath(); ctx.arc(q[0], q[1], isPop ? rad + 3 : rad, 0, Math.PI * 2);
-          ctx.fillStyle = done ? r.color : '#0b1020'; ctx.fill(); ctx.strokeStyle = isPop ? '#fff' : r.color; ctx.lineWidth = isPop ? 2.5 : 1.8; ctx.stroke();
-          if (big) { ctx.fillStyle = done ? '#0b1020' : '#fff'; ctx.font = '700 10px Inter,Roboto,Arial'; ctx.textAlign = 'center'; ctx.fillText(s.seq, q[0], q[1] + 3.5); }
+          var rad = big ? 11 : 6.5, isPop = popStop && popStop[1] === s;
+          ctx.beginPath(); ctx.arc(q[0], q[1], isPop ? rad + 4 : rad, 0, Math.PI * 2);
+          ctx.fillStyle = done ? r.color : '#0b1020'; ctx.fill(); ctx.strokeStyle = isPop ? '#fff' : r.color; ctx.lineWidth = isPop ? 3 : 2.2; ctx.stroke();
+          if (big) { ctx.fillStyle = done ? '#0b1020' : '#fff'; ctx.font = '700 11px Inter,Roboto,Arial'; ctx.textAlign = 'center'; ctx.fillText(s.seq, q[0], q[1] + 4); }
           if (done && t - s.arr < 12 && !dim) { ctx.globalAlpha = (1 - (t - s.arr) / 12) * 0.9; ctx.beginPath(); ctx.arc(q[0], q[1], rad + (t - s.arr) * 1.5, 0, Math.PI * 2); ctx.stroke(); }
         });
         // truck marker
         var cp = sp(pos.X, pos.Y);
         ctx.globalAlpha = dim ? 0.25 : 1;
-        ctx.beginPath(); ctx.arc(cp[0], cp[1], 9, 0, Math.PI * 2); ctx.fillStyle = r.color; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = '#fff'; ctx.stroke();
-        ctx.font = '12px Arial'; ctx.textAlign = 'center'; ctx.fillStyle = '#fff'; ctx.fillText('🚚', cp[0], cp[1] + 4);
+        ctx.beginPath(); ctx.arc(cp[0], cp[1], 12, 0, Math.PI * 2); ctx.fillStyle = r.color; ctx.fill(); ctx.lineWidth = 2.5; ctx.strokeStyle = '#fff'; ctx.stroke();
+        ctx.font = '15px Arial'; ctx.textAlign = 'center'; ctx.fillStyle = '#fff'; ctx.fillText('🚚', cp[0], cp[1] + 5);
         if (!dim) {
-          ctx.font = '700 11px Inter,Roboto,Arial'; ctx.textAlign = 'left'; var lbl = r.id;
-          var w = ctx.measureText(lbl).width; ctx.fillStyle = 'rgba(8,12,24,0.85)'; ctx.fillRect(cp[0] + 11, cp[1] - 8, w + 8, 16);
-          ctx.fillStyle = r.color; ctx.fillText(lbl, cp[0] + 15, cp[1] + 4);
+          ctx.font = '700 12.5px Inter,Roboto,Arial'; ctx.textAlign = 'left'; var lbl = r.id + ' · ' + r.driver;
+          var w = ctx.measureText(lbl).width; ctx.fillStyle = 'rgba(8,12,24,0.88)'; ctx.fillRect(cp[0] + 13, cp[1] - 10, w + 10, 20);
+          ctx.fillStyle = r.color; ctx.fillText(lbl, cp[0] + 18, cp[1] + 4.5);
         }
         ctx.globalAlpha = 1;
       });
       // hub
       var hp = sp(HX, HY), pulse = (now / 1000) % 1.6 / 1.6;
-      ctx.beginPath(); ctx.arc(hp[0], hp[1], 10 + pulse * 20, 0, Math.PI * 2); ctx.strokeStyle = 'rgba(253,214,99,' + (1 - pulse) + ')'; ctx.lineWidth = 2; ctx.stroke();
-      ctx.beginPath(); ctx.arc(hp[0], hp[1], 10, 0, Math.PI * 2); ctx.fillStyle = '#fdd663'; ctx.fill();
-      ctx.fillStyle = '#111'; ctx.font = '700 11px Inter,Roboto,Arial'; ctx.textAlign = 'center'; ctx.fillText('H', hp[0], hp[1] + 4);
-      ctx.font = '700 12px Inter,Roboto,Arial'; ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(8,12,24,0.8)';
-      var hn = hub.name || 'Hub', hw = ctx.measureText(hn).width; ctx.fillRect(hp[0] + 13, hp[1] - 9, hw + 8, 18);
-      ctx.fillStyle = '#fdd663'; ctx.fillText(hn, hp[0] + 17, hp[1] + 4);
+      ctx.beginPath(); ctx.arc(hp[0], hp[1], 12 + pulse * 22, 0, Math.PI * 2); ctx.strokeStyle = 'rgba(253,214,99,' + (1 - pulse) + ')'; ctx.lineWidth = 2.5; ctx.stroke();
+      ctx.beginPath(); ctx.arc(hp[0], hp[1], 13, 0, Math.PI * 2); ctx.fillStyle = '#fdd663'; ctx.fill();
+      ctx.fillStyle = '#111'; ctx.font = '800 12px Inter,Roboto,Arial'; ctx.textAlign = 'center'; ctx.fillText('H', hp[0], hp[1] + 4.5);
+      ctx.font = '700 13px Inter,Roboto,Arial'; ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(8,12,24,0.88)';
+      var hn = hub.name || 'Hub', hw = ctx.measureText(hn).width; ctx.fillRect(hp[0] + 15, hp[1] - 10, hw + 10, 20);
+      ctx.fillStyle = '#fdd663'; ctx.fillText(hn, hp[0] + 20, hp[1] + 4.5);
       // popup follows its stop
       if (popStop) {
         var q = sp(popStop[1].X, popStop[1].Y), pw = pop.offsetWidth, ph = pop.offsetHeight;

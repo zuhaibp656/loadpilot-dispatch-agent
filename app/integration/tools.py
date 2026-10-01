@@ -19,6 +19,7 @@ from google.adk.tools import ToolContext
 
 try:
     from app.contracts import Objective, PlanningParams, Stop
+    from app.data.cities import ALL_HUBS, resolve_city_and_hub
     from app.data.demo_mmr import HUBS, build_demo_stops
     from app.data.master_data import (
         CORRIDOR_NAMES, DEFAULT_COST_PROFILE, DEFAULT_FLEET_AVAILABLE, TRUCK_CATALOGUE,
@@ -27,6 +28,7 @@ try:
     from app.optim.dispatch import plan_dispatch as _plan_dispatch
 except ImportError:  # pragma: no cover
     from contracts import Objective, PlanningParams, Stop
+    from data.cities import ALL_HUBS, resolve_city_and_hub
     from data.demo_mmr import HUBS, build_demo_stops
     from data.master_data import (
         CORRIDOR_NAMES, DEFAULT_COST_PROFILE, DEFAULT_FLEET_AVAILABLE, TRUCK_CATALOGUE,
@@ -41,17 +43,19 @@ PARAMS_KEY = "lp_params"
 PENDING_KEY = "lp_pending"
 
 _CACHE: dict[str, dict[str, Any]] = {}
-_DEMO_STOPS: list[Stop] | None = None
+_DEMO_STOPS: dict[str, list[Stop]] = {}
 
 
 # ==============================================================================
 # Session helpers
 # ==============================================================================
-def demo_stops() -> list[Stop]:
+def demo_stops(hub_id: str = "") -> list[Stop]:
     global _DEMO_STOPS
-    if _DEMO_STOPS is None:
-        _DEMO_STOPS = build_demo_stops(seed=42)
-    return _DEMO_STOPS
+    city_cfg, _ = resolve_city_and_hub(query_hub=hub_id)
+    cid = city_cfg.city_id
+    if cid not in _DEMO_STOPS:
+        _DEMO_STOPS[cid] = city_cfg.build_stops_fn(seed=42)
+    return _DEMO_STOPS[cid]
 
 
 def session(state: Any) -> dict[str, Any]:
@@ -94,14 +98,14 @@ def queue(state: Any, kind: str, **extra: Any) -> None:
     state[PENDING_KEY] = {"kind": kind, **extra}
 
 
-def current_stops(sess: dict[str, Any], source: str) -> list[Stop]:
+def current_stops(sess: dict[str, Any], source: str, hub_id: str = "") -> list[Stop]:
     if source == "bigquery":
         try:
             from app.data.bq_source import load_stops_from_bigquery
             return load_stops_from_bigquery()
         except Exception as exc:  # noqa: BLE001 - fall back to the built-in demo book
             logging.warning("BigQuery order source failed, using demo data: %s", exc)
-    base = sess["stops"] if (source == "chat" and sess["stops"]) else demo_stops()
+    base = sess["stops"] if (source == "chat" and sess["stops"]) else demo_stops(hub_id=hub_id)
     if source == "photos" and sess["scanned"]:
         by_stop: dict[str, list] = {}
         for b in sess["scanned"]:
@@ -162,8 +166,10 @@ def _objective(text: str) -> Objective | None:
 def run_plan(state: Any, focus_truck_id: str | None = None) -> dict[str, Any]:
     sess = session(state)
     p = params_from_state(state)
-    hub = HUBS.get(p.hub_id) or HUBS["BHW-DC"]
-    stops = current_stops(sess, p.order_source)
+    stops = current_stops(sess, p.order_source, hub_id=p.hub_id)
+    hub = ALL_HUBS.get(p.hub_id.upper()) if p.hub_id else None
+    if hub is None:
+        _, hub = resolve_city_and_hub(query_hub=p.hub_id, stops=stops)
     plan = _plan_dispatch(hub, stops, p)
     focus = focus_truck_id or (plan.routes[0].truck_id if plan.routes else None)
     plan.focus_truck_id = focus
@@ -189,10 +195,14 @@ def plan_summary(plan: Any) -> dict[str, Any]:
                       "by_type": o.by_type},
         "saved_inr_per_day": round(plan.savings_inr), "saved_pct": round(
             100 * plan.savings_inr / b.cost_total, 1) if b.cost_total else 0,
-        "co2_saved_kg": round(b.co2_kg - o.co2_kg), "lifo_verified_all": all(
-            lp.lifo_ok for lp in plan.loads.values()),
+        "diesel_saved_litres": plan.diesel_saved_litres,
+        "co2_saved_kg": plan.co2_saved_kg,
+        "annual_trees_offset": plan.annual_trees_offset_equiv,
+        "cmvr_axle_compliance_all": all(lp.cmvr_axle_compliant for lp in plan.loads.values()),
+        "lifo_verified_all": all(lp.lifo_ok for lp in plan.loads.values()),
         "trucks": [{"id": r.truck_id, "driver": r.driver, "corridor": r.corridor,
                     "branch": r.branch, "stops": len(r.stops), "truck": r.truck_type.name,
+                    "cmvr_status": plan.loads[r.truck_id].cmvr_axle_status if r.truck_id in plan.loads else "Compliant",
                     "payload_fill_pct": plan.loads[r.truck_id].weight_fill_pct if r.truck_id in plan.loads else None,
                     "volume_fill_pct": plan.loads[r.truck_id].volume_fill_pct if r.truck_id in plan.loads else None}
                    for r in plan.routes],
@@ -220,7 +230,7 @@ def show_planning_wizard(tool_context: ToolContext) -> dict[str, Any]:
 
 def plan_dispatch(tool_context: ToolContext, truck_counts: str = "", objective: str = "",
                   corridor_claims: str = "", fuel_price: float = 0.0, driver_day_cost: float = 0.0,
-                  hub_id: str = "", dispatch_date: str = "", order_source: str = "",
+                  hub_id: str = "", city: str = "", dispatch_date: str = "", order_source: str = "",
                   driver: str = "") -> dict[str, Any]:
     """Optimise today's dispatch: corridors, truck assignment, stop order, LIFO truck loading and
     cost vs today's manual plan. Arguments are optional overrides; anything not given keeps the
@@ -232,7 +242,8 @@ def plan_dispatch(tool_context: ToolContext, truck_counts: str = "", objective: 
         corridor_claims: Driver or truck to corridor, e.g. "Ravi=West; T20-1=North-East".
         fuel_price: Diesel price per litre (INR). 0 keeps the current value.
         driver_day_cost: Driver cost per day (INR). 0 keeps the current value.
-        hub_id: BHW-DC (Bhiwandi) or TLJ-DC (Taloja).
+        hub_id: BHW-DC (Bhiwandi), TLJ-DC (Taloja), BLR-NLG (Nelamangala), BLR-EC (Electronic City).
+        city: mumbai | bangalore | any city name or blank (auto-detected from hub or stops).
         dispatch_date: YYYY-MM-DD.
         driver: ONLY when the user asks for one driver or truck ("for Ravi", "only T17-1"): the fleet is
             still optimised, but the answer, map and 3D show just that driver's truck.
@@ -253,7 +264,10 @@ def plan_dispatch(tool_context: ToolContext, truck_counts: str = "", objective: 
         p.fuel_price_per_litre = float(fuel_price)
     if driver_day_cost:
         p.driver_day_cost = float(driver_day_cost)
-    if hub_id and hub_id.upper() in HUBS:
+    if city:
+        city_cfg, default_hub = resolve_city_and_hub(query_city=city)
+        p.hub_id = default_hub.hub_id
+    elif hub_id and hub_id.upper() in ALL_HUBS:
         p.hub_id = hub_id.upper()
     if dispatch_date:
         p.dispatch_date = dispatch_date[:10]

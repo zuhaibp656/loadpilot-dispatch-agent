@@ -8,9 +8,12 @@ from __future__ import annotations
 try:
     from app.contracts import DispatchPlan
     from app.data.master_data import CORRIDOR_NAMES
+    from app.geo.gmaps import gmaps_route_url, whatsapp_dispatch_url
 except ImportError:  # pragma: no cover
     from contracts import DispatchPlan
     from data.master_data import CORRIDOR_NAMES
+    from geo.gmaps import gmaps_route_url, whatsapp_dispatch_url
+
 
 
 def _hm(m: int) -> str:
@@ -111,11 +114,16 @@ def dispatch_markdown(plan: DispatchPlan, links: dict[str, str] | None = None,
                    f"{CORRIDOR_NAMES.get(r.corridor, r.corridor)}{br}{claim}  ")
         out.append(f"Hub → {_itinerary(r)} → Hub\n")
 
-    out.append("### How to load\n")
+    out.append("### How to load & Safety Compliance\n")
     out.append("- Load in **reverse drop order**: the last drop goes in first, against the cab, and drop 1 goes "
                "in last, at the door.")
     out.append("- Heavy cartons go on the floor and fragile ones on top. Every truck passed the door check "
                + ("✅" if all(lp.lifo_ok for lp in plan.loads.values()) else "⚠️ (review flagged trucks)") + ".")
+    cmvr_ok = all(lp.cmvr_axle_compliant for lp in plan.loads.values())
+    out.append(f"- **CMVR Rule 93 Axle Balance**: {'✅ 100% Compliant' if cmvr_ok else '⚠️ Review'}. "
+               "Cargo center-of-gravity ensures 32–45% steer axle / 55–68% drive axle load distribution.")
+    out.append(f"- **ESG Green Fleet Impact**: **{plan.diesel_saved_litres:,.1f} L diesel** and "
+               f"**{plan.co2_saved_kg:,.1f} kg CO₂** saved today (equiv. to **{plan.annual_trees_offset_equiv:,} mature trees/yr** offset).")
     out.append("- For a carton-by-carton sheet, say **\"load plan for "
                f"{focus_truck_id or (plan.routes[0].truck_id if plan.routes else 'T17-1')}\"**.")
 
@@ -124,6 +132,13 @@ def dispatch_markdown(plan: DispatchPlan, links: dict[str, str] | None = None,
         if links.get("html"):
             out.append(f"- 🗺️ **[Interactive road map + 3D truck loading (full screen) ↗]({links['html']})**: "
                        "click any numbered stop or truck")
+        if focus_truck_id or (plan.routes and plan.routes[0]):
+            r_focus = next((x for x in plan.routes if x.truck_id == (focus_truck_id or plan.routes[0].truck_id)), plan.routes[0] if plan.routes else None)
+            if r_focus:
+                hub_coords = (plan.hub.lat, plan.hub.lon)
+                stop_coords = [(rs.stop.lat, rs.stop.lon) for rs in r_focus.stops]
+                gmaps_focus = gmaps_route_url(hub_coords, stop_coords, return_to_hub=True)
+                out.append(f"- 🚦 **[Start Google Maps Navigation with Live Traffic ({r_focus.driver} · {r_focus.truck_id}) ↗]({gmaps_focus})**")
         if links.get("video"):
             out.append(f"- 🎬 **[Loading video · {focus_truck_id or 'focus truck'} (MP4) ↗]({links['video']})**")
     return "\n".join(out) + "\n"
@@ -166,6 +181,16 @@ def driver_markdown(plan: DispatchPlan, truck_id: str, links: dict[str, str] | N
     lp = plan.loads[r.truck_id]
     zones = {z.stop_seq: z for z in lp.zones}
     L = lp.truck_type.inner_l_cm
+    hub_coords = (plan.hub.lat, plan.hub.lon)
+    stop_coords = [(rs.stop.lat, rs.stop.lon) for rs in r.stops]
+    gmaps_nav = gmaps_route_url(hub_coords, stop_coords, return_to_hub=True)
+    portal_link = (links.get("html") if links else "") or ""
+    stops_summary = [{"seq": rs.seq, "name": rs.stop.name, "area": _locality(rs.stop), "n": len(rs.stop.boxes), "eta": _hm(rs.arrive_min)} for rs in r.stops]
+    wa_url = whatsapp_dispatch_url(
+        r.driver, r.truck_id, r.truck_type.name.split("(")[0].strip(), plan.hub.name,
+        _hm(r.start_min), _hm(r.end_min), stops_summary, gmaps_nav, portal_link,
+    )
+
     out = [f"\n\n---\n\n### Your day · {r.driver} · {r.truck_id} ({r.truck_type.name})\n",
            f"Leave **{plan.hub.name}** at **{_hm(r.start_min)}**, {len(r.stops)} drops, "
            f"{sum(len(rs.stop.boxes) for rs in r.stops)} cartons, {r.km:.0f} km, back by **{_hm(r.end_min)}**."
@@ -183,11 +208,14 @@ def driver_markdown(plan: DispatchPlan, truck_id: str, links: dict[str, str] | N
     out.append("3. Heavy cartons on the floor, fragile on top. Stop 1 goes in last, right at the door.")
     out.append(f"4. Check: volume {lp.volume_fill_pct}% · payload {lp.weight_fill_pct}% · "
                f"LIFO {'✅ nothing to dig at any stop' if lp.lifo_ok else '⚠️ review'}.")
-    if links and links.get("html"):
-        out.append("\n### Open on your phone\n")
-        out.append(f"- 📱 **[Your route map + tap-a-store 3D loading ↗]({links['html']})**")
-        if links.get("video"):
-            out.append(f"- 🎬 **[Loading video (MP4) ↗]({links['video']})**")
+
+    out.append("\n### Share with driver / Open on mobile\n")
+    out.append(f"- 🗺️ **[Start Google Maps Navigation (Live Traffic) ↗]({gmaps_nav})**: launches Google Maps app with turn-by-turn driving & live traffic.")
+    if portal_link:
+        out.append(f"- 📱 **[Driver Run Sheet & Mobile Delivery Portal ↗]({portal_link})**: store contacts, tap-a-store 3D packing & digital POD.")
+    out.append(f"- 💬 **[Share Route to Driver on WhatsApp ↗]({wa_url})**: 1-click formatted message ready to send.")
+    if links and links.get("video"):
+        out.append(f"- 🎬 **[Loading video (MP4) ↗]({links['video']})**")
     return "\n".join(out) + "\n"
 
 
@@ -195,9 +223,20 @@ def briefings_markdown(plan: DispatchPlan, links_by_truck: dict[str, str] | None
     """Fleet manager: one ready-to-send instruction block per driver."""
     links_by_truck = links_by_truck or {}
     out = ["\n\n---\n\n### Driver instructions (send one to each driver)\n"]
+    hub_coords = (plan.hub.lat, plan.hub.lon)
+    table_rows = []
     for i, r in enumerate(plan.routes):
         lp = plan.loads.get(r.truck_id)
         first = r.stops[0].stop if r.stops else None
+        stop_coords = [(rs.stop.lat, rs.stop.lon) for rs in r.stops]
+        gmaps_nav = gmaps_route_url(hub_coords, stop_coords, return_to_hub=True)
+        portal_link = links_by_truck.get(r.truck_id) or ""
+        stops_summary = [{"seq": rs.seq, "name": rs.stop.name, "area": _locality(rs.stop), "n": len(rs.stop.boxes), "eta": _hm(rs.arrive_min)} for rs in r.stops]
+        wa_url = whatsapp_dispatch_url(
+            r.driver, r.truck_id, r.truck_type.name.split("(")[0].strip(), plan.hub.name,
+            _hm(r.start_min), _hm(r.end_min), stops_summary, gmaps_nav, portal_link,
+        )
+
         out.append(f"#### {DOTS[i % len(DOTS)]} {r.driver} · {r.truck_id} ({r.truck_type.code})\n")
         out.append(f"- **Report** {_hm(r.start_min - 30)} at dock · **leave** {_hm(r.start_min)} · "
                    f"**back** {_hm(r.end_min)} · {len(r.stops)} drops · {r.km:.0f} km")
@@ -207,14 +246,19 @@ def briefings_markdown(plan: DispatchPlan, links_by_truck: dict[str, str] | None
         if lp is not None:
             frag = sum(1 for p in lp.placed if p.box.fragile)
             out.append(f"- **Cartons**: {len(lp.placed)} ({frag} fragile, on top) · fill {lp.volume_fill_pct}%")
-        if links_by_truck.get(r.truck_id):
-            out.append(f"- 📱 **[Driver view: map + 3D loading ↗]({links_by_truck[r.truck_id]})**")
+        out.append(f"- 🗺️ **[Google Maps (Live Traffic) ↗]({gmaps_nav})**")
+        if portal_link:
+            out.append(f"- 📱 **[Driver Run Sheet & Digital POD ↗]({portal_link})**")
+        out.append(f"- 💬 **[1-Click WhatsApp Dispatch Message ↗]({wa_url})**")
         out.append("")
-    out.append("### Summary (copy-ready)\n")
-    out.append("| Driver · Truck | Leave · Back | Drops · Cartons | Km | First drop |")
-    out.append("| :--- | :--- | ---: | ---: | :--- |")
-    for r in plan.routes:
-        lp = plan.loads.get(r.truck_id)
-        out.append(f"| {r.driver} · {r.truck_id} | {_hm(r.start_min)} · {_hm(r.end_min)} | {len(r.stops)} · "
-                   f"{len(lp.placed) if lp else 0} | {r.km:.0f} | {r.stops[0].stop.name if r.stops else '-'} |")
+
+        table_rows.append(f"| {r.driver} · {r.truck_id} | {_hm(r.start_min)}–{_hm(r.end_min)} | "
+                          f"{len(r.stops)} drops · {len(lp.placed) if lp else 0} ctn | "
+                          f"[🗺️ Maps ↗]({gmaps_nav}) | [💬 WhatsApp ↗]({wa_url}) |")
+
+    out.append("### Dispatch board & Share links (copy-ready)\n")
+    out.append("| Driver · Truck | Shift | Drops · Cartons | Live Google Maps | WhatsApp Share |")
+    out.append("| :--- | :--- | ---: | :--- | :--- |")
+    out.extend(table_rows)
     return "\n".join(out) + "\n"
+

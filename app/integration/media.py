@@ -53,7 +53,14 @@ def start_publishing(sess: dict[str, Any], plan: DispatchPlan, focus: str | None
                 sess["poster"] = render_poster_png(route, lp)
             if not media_enabled():
                 return
-            html = build_anim_html(plan, mode="both", focus_truck_id=focus, only_truck=only_truck)
+            if only_truck:
+                try:
+                    from app.render.driver_portal_html import build_driver_portal_html
+                except ImportError:
+                    from render.driver_portal_html import build_driver_portal_html
+                html = build_driver_portal_html(plan, only_truck, share_url=links.get("html", ""))
+            else:
+                html = build_anim_html(plan, mode="both", focus_truck_id=focus, only_truck=only_truck)
             ok = upload_bytes(html.encode("utf-8"), html_obj, "text/html; charset=utf-8")
             if not ok:
                 links.clear()
@@ -82,10 +89,15 @@ def start_briefings(sess: dict[str, Any], plan: DispatchPlan) -> dict[str, str]:
     def work() -> None:
         try:
             for tid, obj in objs.items():
-                html = build_anim_html(plan, mode="both", focus_truck_id=tid, only_truck=tid)
+                try:
+                    from app.render.driver_portal_html import build_driver_portal_html
+                except ImportError:
+                    from render.driver_portal_html import build_driver_portal_html
+                html = build_driver_portal_html(plan, tid, share_url=out.get(tid, ""))
                 upload_bytes(html.encode("utf-8"), obj, "text/html; charset=utf-8")
         except Exception as exc:  # pragma: no cover
             logger.warning("briefing publishing failed: %s", exc)
+
 
     t = threading.Thread(target=work, name=f"lp-brief-{plan.plan_id}", daemon=True)
     t.start()

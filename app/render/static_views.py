@@ -58,8 +58,8 @@ def _coast_lines(box: tuple[float, float, float, float]) -> list[dict]:
     return rows
 
 
-def route_view_spec(plan: DispatchPlan, only_truck: str | None = None, width: int = 640,
-                    height: int = 520) -> dict[str, Any]:
+def route_view_spec(plan: DispatchPlan, only_truck: str | None = None, width: int = 700,
+                    height: int = 540) -> dict[str, Any]:
     try:
         from app.geo.roads import _dp, plan_road_legs
     except ImportError:  # pragma: no cover
@@ -92,8 +92,8 @@ def route_view_spec(plan: DispatchPlan, only_truck: str | None = None, width: in
     box = (min(lats) - 0.05, min(lons) - 0.05, max(lats) + 0.05, max(lons) + 0.05) if pts else _plan_box(plan)
     color = {"field": "truck", "type": "nominal", "title": None,
              "scale": {"domain": domain, "range": rng},
-             "legend": None if only_truck else {"orient": "bottom", "columns": 4, "labelFont": FONT,
-                                                "labelFontSize": 11, "symbolType": "stroke"}}
+             "legend": None if only_truck else {"orient": "bottom", "columns": 3, "labelFont": FONT,
+                                                "labelFontSize": 12, "symbolType": "stroke", "symbolStrokeWidth": 3}}
     geo = {"longitude": {"field": "lon", "type": "quantitative"},
            "latitude": {"field": "lat", "type": "quantitative"}}
     tip = [{"field": "truck", "title": "Truck"}, {"field": "seq", "title": "Drop #"},
@@ -106,38 +106,38 @@ def route_view_spec(plan: DispatchPlan, only_truck: str | None = None, width: in
         title = f"Routes on real roads · {plan.optimized.trucks} trucks · {plan.optimized.km:,.0f} km"
     layers: list[dict] = [
         {"data": {"values": _coast_lines(box)},
-         "mark": {"type": "line", "stroke": "#8ec3e6", "strokeWidth": 1.4, "opacity": 0.9},
+         "mark": {"type": "line", "stroke": "#8ec3e6", "strokeWidth": 1.5, "opacity": 0.9},
          "encoding": {**geo, "detail": {"field": "g"}, "order": {"field": "k"}}},
-        {"data": {"values": lines}, "mark": {"type": "line", "strokeWidth": 3.2 if only_truck else 2.4,
-                                             "opacity": 0.9, "strokeJoin": "round"},
+        {"data": {"values": lines}, "mark": {"type": "line", "strokeWidth": 4.5 if only_truck else 3.2,
+                                             "opacity": 0.95, "strokeJoin": "round"},
          "encoding": {**geo, "detail": {"field": "truck"}, "order": {"field": "k"}, "color": color}},
         {"data": {"values": pts},
-         "mark": {"type": "circle", "size": 330 if only_truck else 150, "stroke": "white", "strokeWidth": 1.5,
+         "mark": {"type": "circle", "size": 420 if only_truck else 220, "stroke": "white", "strokeWidth": 2,
                   "opacity": 1},
          "encoding": {**geo, "color": color, "tooltip": tip}},
         {"data": {"values": pts},
-         "mark": {"type": "text", "font": FONT, "fontSize": 11 if only_truck else 8, "fontWeight": "bold",
+         "mark": {"type": "text", "font": FONT, "fontSize": 12 if only_truck else 9, "fontWeight": "bold",
                   "color": "white"},
          "encoding": {**geo, "text": {"field": "seq"}, "tooltip": tip}},
         {"data": {"values": [{"lat": plan.hub.lat, "lon": plan.hub.lon, "n": plan.hub.name}]},
-         "mark": {"type": "point", "shape": "square", "size": 300, "filled": True, "color": "#f9ab00",
-                  "stroke": "#202124", "strokeWidth": 1.5},
+         "mark": {"type": "point", "shape": "square", "size": 380, "filled": True, "color": "#f9ab00",
+                  "stroke": "#202124", "strokeWidth": 2},
          "encoding": {**geo, "tooltip": [{"field": "n", "title": "Hub"}]}},
         {"data": {"values": [{"lat": plan.hub.lat, "lon": plan.hub.lon, "n": plan.hub.name}]},
-         "mark": {"type": "text", "font": FONT, "fontSize": 11, "fontWeight": "bold", "dx": 14, "align": "left",
+         "mark": {"type": "text", "font": FONT, "fontSize": 12, "fontWeight": "bold", "dx": 16, "align": "left",
                   "color": "#b06000"},
          "encoding": {**geo, "text": {"field": "n"}}},
     ]
     if only_truck:  # store names next to the numbered drops
         layers.insert(4, {"data": {"values": pts},
-                          "mark": {"type": "text", "font": FONT, "fontSize": 10, "dx": 12, "align": "left",
-                                   "color": "#3c4043"},
+                          "mark": {"type": "text", "font": FONT, "fontSize": 12, "fontWeight": "bold", "dx": 15, "align": "left",
+                                   "color": "#202124"},
                           "encoding": {**geo, "text": {"field": "name"}}})
     return {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "title": {"text": title, "subtitle": "Numbers = drop order · hover a drop for store, ETA and cartons",
-                  "font": FONT, "fontSize": 15, "anchor": "start", "color": "#202124",
-                  "subtitleFont": FONT, "subtitleColor": "#5f6368"},
+                  "font": FONT, "fontSize": 16, "anchor": "start", "color": "#202124",
+                  "subtitleFont": FONT, "subtitleFontSize": 12, "subtitleColor": "#5f6368"},
         "width": width, "height": height,
         "projection": {"type": "mercator"},
         "layer": layers,
@@ -174,29 +174,30 @@ def load_view_spec(plan: DispatchPlan, only_truck: str | None = None, width: int
     tip = [{"field": "truck", "title": "Truck"}, {"field": "seq", "title": "Drop #"},
            {"field": "store", "title": "Store"}, {"field": "cartons", "title": "Cartons"},
            {"field": "kg", "title": "kg"}, {"field": "where", "title": "Put them"}, {"field": "eta", "title": "ETA"}]
-    order = [f"{rs.seq}. {rs.stop.name[:26]}" for r in routes for rs in r.stops] if only_truck else \
+    order = [f"{rs.seq}. {rs.stop.name[:28]}" for r in routes for rs in r.stops] if only_truck else \
         [f"{r.truck_id} · {r.driver}" for r in routes]
-    h = max(160, 30 * len(order))
+    h = max(200, 36 * len(order))
     x = {"field": "a", "type": "quantitative", "title": "cm from the REAR DOOR  →  toward the CAB",
-         "scale": {"domain": [0, Lmax]}, "axis": {"labelFont": FONT, "titleFont": FONT, "grid": True}}
+         "scale": {"domain": [0, Lmax]},
+         "axis": {"labelFont": FONT, "labelFontSize": 12, "titleFont": FONT, "titleFontSize": 13, "grid": True}}
     title = ("Where each store's cartons sit in the truck" if only_truck else
              "LIFO load plan · every truck: drop 1 at the door, last drop at the cab")
     return {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "title": {"text": title, "subtitle": "Load from the cab end first (highest drop number) · "
                                              "hover a bar for store, cartons and position",
-                  "font": FONT, "fontSize": 15, "anchor": "start", "color": "#202124",
-                  "subtitleFont": FONT, "subtitleColor": "#5f6368"},
+                  "font": FONT, "fontSize": 16, "anchor": "start", "color": "#202124",
+                  "subtitleFont": FONT, "subtitleFontSize": 12, "subtitleColor": "#5f6368"},
         "width": width, "height": h,
         "data": {"values": rows},
         "encoding": {"y": {"field": "row", "type": "nominal", "sort": order, "title": None,
-                           "axis": {"labelFont": FONT, "labelFontSize": 11, "labelLimit": 220}}},
+                           "axis": {"labelFont": FONT, "labelFontSize": 13, "labelLimit": 300}}},
         "layer": [
-            {"mark": {"type": "bar", "cornerRadius": 3, "height": {"band": 0.72}, "opacity": 0.9,
-                      "stroke": "white", "strokeWidth": 1},
+            {"mark": {"type": "bar", "cornerRadius": 4, "height": {"band": 0.8}, "opacity": 0.95,
+                      "stroke": "white", "strokeWidth": 1.5},
              "encoding": {"x": x, "x2": {"field": "b"}, "color": color, "tooltip": tip}},
             {"transform": [{"calculate": "(datum.a + datum.b) / 2", "as": "mid"}],
-             "mark": {"type": "text", "font": FONT, "fontSize": 10, "fontWeight": "bold", "color": "#202124"},
+             "mark": {"type": "text", "font": FONT, "fontSize": 11, "fontWeight": "bold", "color": "#202124"},
              "encoding": {"x": {"field": "mid", "type": "quantitative"}, "text": {"field": "lab"},
                           "tooltip": tip}},
         ],

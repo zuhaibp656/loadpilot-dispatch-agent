@@ -81,3 +81,25 @@ def test_live_bigquery_matches_demo():
     run = DRIVER_RUNS[0]
     sub = load_stops_from_bigquery(stop_ids=run["stop_ids"])
     assert [s.stop_id for s in sub] == sorted(run["stop_ids"])
+
+
+def test_bangalore_demo_and_city_resolver():
+    from app.data.cities import CITIES, resolve_city_and_hub
+    from app.data.demo_blr import build_blr_demo_stops
+
+    blr_stops = build_blr_demo_stops(seed=42)
+    assert len(blr_stops) >= 50
+    assert any("Bengaluru" in s.address for s in blr_stops)
+
+    cfg, hub = resolve_city_and_hub(query_city="bangalore")
+    assert cfg.city_id == "bangalore" and hub.hub_id == "BLR-NLG"
+
+    cfg_m, hub_m = resolve_city_and_hub(query_hub="TLJ-DC")
+    assert cfg_m.city_id == "mumbai" and hub_m.hub_id == "TLJ-DC"
+
+    # Auto-detection from coordinates
+    cfg_auto_blr, _ = resolve_city_and_hub(stops=blr_stops)
+    assert cfg_auto_blr.city_id == "bangalore"
+
+    cfg_auto_mum, _ = resolve_city_and_hub(stops=STOPS)
+    assert cfg_auto_mum.city_id == "mumbai"

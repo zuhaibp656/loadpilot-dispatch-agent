@@ -591,11 +591,12 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
  <div class="wrap-max">
   <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">How LoadPilot Works</span><span class="kicker-sep">/</span><span class="kicker-sub">One conversation · four optimisers</span></div>
   <h2 class="monumental-headline">From order list to <span class="gradient-span">loaded, routed trucks</span> in under a minute.</h2>
-  <div class="steps">
-    <div class="step"><div class="n">1</div><h4>Ingest</h4><p>Orders arrive as a list, a CSV/XLSX, a PDF or an email body. Cartons are captured from photos: QR codes and labels are read with Gemini vision.</p></div>
-    <div class="step"><div class="n">2</div><h4>Corridors &amp; claims</h4><p>Drivers claim a direction, e.g. “I've got West”. If several trucks share a corridor, LoadPilot splits it into branches.</p></div>
-    <div class="step"><div class="n">3</div><h4>Fleet &amp; routes</h4><p>An OR-Tools VRP handles a mixed fleet of 5 truck types, time windows and capacity. It can minimise cost, trucks or finish time.</p></div>
-    <div class="step"><div class="n">4</div><h4>LIFO loading</h4><p>A 3D packer loads in reverse drop order, keeping fragile cartons on top and this-side-up cartons upright. It checks the door rule for every stop.</p></div>
+  <div class="steps" style="grid-template-columns:repeat(5,1fr)">
+    <div class="step"><div class="n">1</div><h4>Ingest &amp; photos</h4><p>Orders from list, CSV/XLSX, PDF or email. Cartons captured from dock photos with QR codes &amp; labels.</p></div>
+    <div class="step"><div class="n">2</div><h4>Corridors &amp; claims</h4><p>Drivers claim directions (“I've got West”). If multiple trucks share a route, LoadPilot branches them.</p></div>
+    <div class="step"><div class="n">3</div><h4>Fleet &amp; routes</h4><p>OR-Tools VRP optimizes 5 truck types, customer time windows, and road-following itineraries.</p></div>
+    <div class="step"><div class="n">4</div><h4>LIFO loading &amp; safety</h4><p>Cab-to-door 3D packing with CMVR Rule 93 axle balance compliance and ESG diesel savings.</p></div>
+    <div class="step"><div class="n">5</div><h4>Google Maps &amp; dispatch</h4><p>1-tap Google Maps route with live traffic, 1-click WhatsApp dispatch, mobile run sheet &amp; digital POD.</p></div>
   </div>
   <div class="split">
    <div class="blueprint-card">
@@ -679,6 +680,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     <div class="arch-node hl"><div class="ic">🧠</div><h4>ADK agent · Gemini</h4><p>8 tools: plan, claim a corridor, load plan, ingest orders, scan cartons, fleet &amp; costs. Callbacks guard against fabricated numbers.</p></div>
     <div class="arch-node"><div class="ic">⚙️</div><h4>Vertex AI Agent Engine</h4><p>Managed runtime with a dedicated service account, min-instance warm start, and the same engine updated in place.</p></div>
     <div class="arch-node"><div class="ic">🧮</div><h4>Optimisation core</h4><p>An OR-Tools VRP with time windows, a height-map LIFO 3D packer, a corridor clusterer and a cost model.</p></div>
+    <div class="arch-node hl"><div class="ic">🗺️</div><h4>Google Maps &amp; Driver Portal</h4><p>Routes API road geometry, Google Maps Navigation with live traffic, 1-click WhatsApp dispatch &amp; mobile POD challans.</p></div>
     <div class="arch-node"><div class="ic">🎬</div><h4>Media &amp; storage</h4><p>A poster PNG, a full-screen HTML animation and an MP4 loading video, delivered from Cloud Storage through signed links.</p></div>
   </div>
   <div class="roadmap">

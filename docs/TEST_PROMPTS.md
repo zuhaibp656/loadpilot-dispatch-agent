@@ -22,23 +22,25 @@ BigQuery dataset: `zuhaibp-ai.loadpilot_demo` (13 tables: stores, orders, carton
 | F7 | `These cartons are staged for store S003, add them` | `cartons_S003_staging.jpg` | Labels read from the photo and attached to S003 |
 | F8 | `Read this dock photo` | `cartons_mixed_dock.jpg`, `label_closeup.png` | Cartons grouped by store |
 
-## 2. Fleet manager → individual driver instructions
+## 2. Fleet manager → individual driver instructions & Google Maps Dispatch
 
 | # | Prompt | What you should see |
 |---|--------|---------------------|
-| M1 | `Send each driver his individual instructions` | One `####` block per driver (route, drops, where each store's cartons sit in the truck) plus a personal link for each driver |
-| M2 | `Give Suresh his briefing only` | A single-driver page |
+| M1 | `Send each driver his individual instructions` | One `####` block per driver with route, drops, Google Maps live traffic navigation link, 1-click WhatsApp dispatch link, and mobile driver run sheet link, plus a 5-column copy-ready dispatch board |
+| M2 | `Give Suresh his briefing only` | A single-driver page with Google Maps navigation link, 1-click WhatsApp dispatch link, and mobile portal link |
+| M3 | `Plan today's dispatch for Bangalore Nelamangala hub with corridor claims Suresh Nair=West, Karthik Gowda=North` | Multi-city dispatch plan for Bangalore hubs (BLR-NLG / BLR-EC) with road-following routes and LIFO loading |
 
-## 3. Driver (one person, one truck)
+## 3. Driver (one person, one truck) & Mobile Delivery Portal
 
 | # | Prompt | Attach | What you should see |
 |---|--------|--------|---------------------|
-| D1 | `I'm Suresh, plan my day and show me how to load my truck` | – | "Your route today": 6 drops, 107 cartons, about 149 km, plus 3D loading |
-| D2 | `Here are my cartons, where do they go?` | `driver_suresh_t14_north_cartons_a.jpg` + `_b.jpg` | Stores read from the photos, then his route and 3D load |
-| D3 | `I'm Ravi, these are my boxes, I drive a T17` | `driver_ravi_t17_west_cartons_a.jpg` + `_b.jpg` | Ravi's West run (8 drops) |
-| D4 | `I'm Imran with a pickup, here are my cartons` | `driver_imran_pkp_south_cartons_a.jpg` + `_b.jpg` | Imran's South pickup run (6 drops) |
+| D1 | `I'm Suresh, plan my day and show me how to load my truck` | – | "Your route today": drops, cartons, km, Google Maps turn-by-turn navigation link, WhatsApp share link, and mobile driver portal link |
+| D2 | `Here are my cartons, where do they go?` | `driver_suresh_t14_north_cartons_a.jpg` + `_b.jpg` | Stores read from the photos, then his route, Google Maps navigation, and 3D load |
+| D3 | `I'm Ravi, these are my boxes, I drive a T17` | `driver_ravi_t17_west_cartons_a.jpg` + `_b.jpg` | Ravi's West run (8 drops) with direct Google Maps route |
+| D4 | `I'm Imran with a pickup, here are my cartons` | `driver_imran_pkp_south_cartons_a.jpg` + `_b.jpg` | Imran's South pickup run with Google Maps navigation |
 | D5 | `My stops are S006, S007, S008, S009, S010, S011. I drive a T14` | – | A route built from the stop ids you typed |
 | D6 | Paste the text of `driver_suresh_t14_north_orders.txt` (the WhatsApp message from the dispatch manager) | – | Stops parsed from the chat, then his route |
+
 
 ## 4. Using the interactive view
 
