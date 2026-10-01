@@ -326,7 +326,7 @@ def append_report(callback_context: CallbackContext | None = None,
     elif plan is not None and pending.get("kind") == "driver":
         extra = driver_markdown(plan, pending.get("focus", ""), sess.get("links"), pending.get("note", ""))
     elif plan is not None and pending.get("kind") == "briefings":
-        extra = briefings_markdown(plan, sess.get("brief_links"))
+        extra = briefings_markdown(plan, sess.get("brief_links"), driver=pending.get("driver") or "")
     elif plan is not None and pending.get("kind") == "truck":
         extra = truck_markdown(plan, pending.get("focus", ""))
         links = sess.get("links") or {}
@@ -371,9 +371,14 @@ def emit_surface(callback_context: CallbackContext | None = None, **_: Any) -> t
             links = sess.get("links") or {}
             if IS_LOCAL and sess.get("poster"):
                 parts.append(types.Part.from_bytes(data=sess["poster"], mime_type="image/png"))
+            only_truck_id = None
+            if pending.get("kind") == "driver":
+                only_truck_id = pending.get("focus")
+            elif pending.get("kind") == "briefings" and pending.get("driver") and pending.get("focus"):
+                only_truck_id = pending.get("focus")
             parts += build_dispatch_surface(surface_id, plan, video_url=links.get("video") or None,
                                             focus_truck_id=pending.get("focus"),
-                                            only_truck=pending.get("focus") if pending.get("kind") == "driver" else None)
+                                            only_truck=only_truck_id)
     except Exception as exc:
         logger.exception("emit_surface failed: %s", exc)
     if not parts:
@@ -399,16 +404,28 @@ TOOLS
   Pass driver name, truck_type if said, stop_ids if listed. Photos attached with a driver
   request go to plan_my_route (NOT scan_box_manifest).
 - driver_briefings: FLEET MANAGER perspective: "send each driver his instructions", "brief my
-  drivers", "individual instructions per driver".
+  drivers", "only send the instructions to Ravi", "give Suresh his instructions". Pass driver="Ravi"
+  whenever one driver is requested! When driver is omitted, sends to all drivers in the fleet.
 - ingest_delivery_orders: the user pastes or attaches an order list (email, CSV, Excel, PDF).
   Then call plan_dispatch(order_source="chat") (or plan_my_route if it is one driver's list).
 - scan_box_manifest: carton / label photos for the whole fleet. Then plan_dispatch(order_source="photos").
 - list_fleet_and_costs, reset_to_demo_data: as named.
 If the user says "plan today's dispatch" (or similar) with no details, call plan_dispatch() directly.
-SCOPE: if the request names ONE driver or truck ("... for Ravi", "only T17-1", "Suresh's route"),
-answer ONLY for that driver: use plan_dispatch(driver="Ravi") (fleet context) or plan_my_route
-(driver speaking / photos / own stop list). Never put a driver's name into corridor_claims unless a
-corridor is stated. Show the whole fleet only when no single driver/truck is named.
+
+CONVERSATIONAL CONTINUITY & FOLLOW-UP RULES (STRICT):
+- Always maintain context across turns. If today's dispatch was already planned in an earlier turn,
+  do NOT re-plan or reset when answering follow-up questions. Follow along with the existing plan.
+- If the user asks a follow-up for ONE driver or truck (e.g. "only send the instructions to ravi",
+  "give suresh his briefing", "send instructions to ravi only", "what about ravi?", "show his loading"):
+  * For instructions / briefing: CALL driver_briefings(driver="Ravi"). NEVER call driver_briefings()
+    with no arguments when the user asks for a specific driver!
+  * For a driver's route / day / consignment: CALL plan_dispatch(driver="Ravi") or plan_my_route.
+  * For 3D loading: CALL get_truck_load_plan(truck_id="Ravi").
+  * NEVER output all drivers or the whole fleet table when the user asks for one driver or uses
+    words like "only", "just", or names a single driver.
+- Pronoun resolution: If the user says "his route", "how does he load?", "send his link", "show his truck",
+  resolve it to the driver/truck discussed in the immediately preceding turns.
+- Show the whole fleet only when no single driver or truck is named.
 
 RESPONSE RULES (strict)
 - After tools finish, write ONLY a 3-bullet headline (<= 60 words total) using the tool's numbers.

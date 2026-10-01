@@ -86,3 +86,33 @@ def test_markdown_reports_include_gmaps():
     assert "Google Maps (Live Traffic)" in b_md
     assert "1-Click WhatsApp Dispatch Message" in b_md
     assert "Dispatch board & Share links" in b_md
+
+    # Test single-driver scoped briefing (follow-up query)
+    b_ravi = briefings_markdown(plan, driver="Ravi")
+    assert "Driver instructions · Ravi" in b_ravi
+    assert "Ravi" in b_ravi
+    assert "Google Maps (Live Traffic)" in b_ravi
+    assert "Dispatch summary · Ravi" in b_ravi
+    # Must NOT include other drivers in single-driver scoped output
+    assert "Suresh" not in b_ravi
+    assert "Imran" not in b_ravi
+
+
+def test_driver_briefings_tool_scoping():
+    from unittest.mock import MagicMock
+    from app.integration.tools import driver_briefings, PENDING_KEY
+
+    ctx = MagicMock()
+    ctx.state = {}
+
+    # 1. Call driver_briefings with driver="Ravi"
+    res = driver_briefings(ctx, driver="Ravi")
+    assert res.get("driver") == "Ravi"
+    assert "truck" in res
+    assert ctx.state.get(PENDING_KEY, {}).get("driver") == "Ravi"
+    assert ctx.state.get("lp_last_driver") == "Ravi"
+
+    # 2. Conversational pronoun follow-up "his" -> resolves to Ravi
+    res_pronoun = driver_briefings(ctx, driver="his")
+    assert res_pronoun.get("driver") == "Ravi"
+

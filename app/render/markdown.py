@@ -219,13 +219,22 @@ def driver_markdown(plan: DispatchPlan, truck_id: str, links: dict[str, str] | N
     return "\n".join(out) + "\n"
 
 
-def briefings_markdown(plan: DispatchPlan, links_by_truck: dict[str, str] | None = None) -> str:
-    """Fleet manager: one ready-to-send instruction block per driver."""
+def briefings_markdown(plan: DispatchPlan, links_by_truck: dict[str, str] | None = None, driver: str = "") -> str:
+    """Fleet manager: ready-to-send instruction blocks. If driver is specified, filters to that driver only."""
     links_by_truck = links_by_truck or {}
-    out = ["\n\n---\n\n### Driver instructions (send one to each driver)\n"]
+    routes = plan.routes
+    who = (driver or "").strip().lower()
+    if who:
+        routes = [r for r in routes if who in (r.driver.lower(), r.truck_id.lower())]
+    if not routes:
+        return f"\n\nNo driver or truck matching '{driver}' found in plan {plan.plan_id}."
+
+    is_single = len(routes) == 1
+    header_title = f"### Driver instructions · {routes[0].driver} ({routes[0].truck_id})" if is_single else "### Driver instructions (send one to each driver)"
+    out = [f"\n\n---\n\n{header_title}\n"]
     hub_coords = (plan.hub.lat, plan.hub.lon)
     table_rows = []
-    for i, r in enumerate(plan.routes):
+    for i, r in enumerate(routes):
         lp = plan.loads.get(r.truck_id)
         first = r.stops[0].stop if r.stops else None
         stop_coords = [(rs.stop.lat, rs.stop.lon) for rs in r.stops]
@@ -256,9 +265,11 @@ def briefings_markdown(plan: DispatchPlan, links_by_truck: dict[str, str] | None
                           f"{len(r.stops)} drops · {len(lp.placed) if lp else 0} ctn | "
                           f"[🗺️ Maps ↗]({gmaps_nav}) | [💬 WhatsApp ↗]({wa_url}) |")
 
-    out.append("### Dispatch board & Share links (copy-ready)\n")
+    table_title = f"### Dispatch summary · {routes[0].driver} (copy-ready)\n" if is_single else "### Dispatch board & Share links (copy-ready)\n"
+    out.append(table_title)
     out.append("| Driver · Truck | Shift | Drops · Cartons | Live Google Maps | WhatsApp Share |")
     out.append("| :--- | :--- | ---: | :--- | :--- |")
     out.extend(table_rows)
     return "\n".join(out) + "\n"
+
 

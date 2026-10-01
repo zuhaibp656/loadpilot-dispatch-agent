@@ -274,11 +274,29 @@ def plan_dispatch(tool_context: ToolContext, truck_counts: str = "", objective: 
     if order_source in ("demo", "chat", "photos", "bigquery"):
         p.order_source = order_source
     save_params(st, p)
+    who = (driver or "").strip().lower()
+    if who in ("he", "him", "his", "this", "that", "it") and st.get("lp_last_driver"):
+        who = st["lp_last_driver"].lower()
+
+    # Fast-path for conversational follow-ups: if fleet was already planned and no parameters changed
+    sess = session(st)
+    if who and sess.get("plan") and not (truck_counts or objective or corridor_claims or fuel_price or driver_day_cost or city or hub_id or dispatch_date or order_source):
+        plan = sess["plan"]
+        r = next((x for x in plan.routes if who in (x.driver.lower(), x.truck_id.lower())), None)
+        if r is not None:
+            st["lp_last_driver"] = r.driver
+            st["lp_last_truck"] = r.truck_id
+            plan.focus_truck_id = r.truck_id
+            sess["links"] = start_publishing_driver(sess, plan, r.truck_id)
+            queue(st, "driver", focus=r.truck_id,
+                  note=f"🗓️ {r.driver}'s part of today's fleet plan {plan.plan_id} "
+                       f"({plan.optimized.trucks} trucks, ₹{plan.savings_inr:,.0f}/day saved fleet-wide).")
+            return _driver_summary(plan, r.truck_id)
+
     try:
         out = run_plan(st)
     except ValueError as exc:
         return {"status": "error", "message": str(exc)}
-    who = (driver or "").strip().lower()
     if who:
         sess = session(st)
         plan = sess["plan"]
@@ -286,6 +304,8 @@ def plan_dispatch(tool_context: ToolContext, truck_counts: str = "", objective: 
         if r is None:
             out["note"] = f"'{driver}' is not driving today; showing the whole fleet."
             return out
+        st["lp_last_driver"] = r.driver
+        st["lp_last_truck"] = r.truck_id
         plan.focus_truck_id = r.truck_id
         sess["links"] = start_publishing_driver(sess, plan, r.truck_id)
         queue(st, "driver", focus=r.truck_id,
@@ -329,10 +349,16 @@ def get_truck_load_plan(tool_context: ToolContext, truck_id: str) -> dict[str, A
         run_plan(st)
         plan = sess["plan"]
     key = truck_id.strip().lower()
+    if key in ("he", "him", "his", "this", "that", "it") and st.get("lp_last_driver"):
+        key = st["lp_last_driver"].lower()
+    elif key in ("he", "him", "his", "this", "that", "it") and st.get("lp_last_truck"):
+        key = st["lp_last_truck"].lower()
     r = next((x for x in plan.routes if key in (x.truck_id.lower(), x.driver.lower())), None)
     if r is None:
         return {"status": "error", "message": f"No truck '{truck_id}' in plan.",
                 "trucks": [x.truck_id for x in plan.routes]}
+    st["lp_last_driver"] = r.driver
+    st["lp_last_truck"] = r.truck_id
     plan.focus_truck_id = r.truck_id
     try:
         from app.integration.media import start_publishing
@@ -576,22 +602,60 @@ def _driver_summary(plan: Any, truck_id: str) -> dict[str, Any]:
             "ui": "Driver route table, loading steps and the tap-a-store map/3D view are attached automatically."}
 
 
-def driver_briefings(tool_context: ToolContext) -> dict[str, Any]:
-    """FLEET MANAGER VIEW: individual, ready-to-send instructions for every driver in today's plan
-    (report/leave/back times, route, first drop, cab-to-door load order) plus a personal link per
-    driver to his own map + tap-a-store 3D loading page."""
+def driver_briefings(tool_context: ToolContext, driver: str = "") -> dict[str, Any]:
+    """FLEET MANAGER VIEW: ready-to-send instructions and shareable links for drivers in today's plan
+    (report/leave/back times, route, first drop, cab-to-door load order, Google Maps navigation,
+    WhatsApp dispatch link, and mobile driver portal link).
+
+    Args:
+        driver: Optional driver name (e.g. "Ravi") or truck id ("T17-1") to send instructions
+            ONLY to that driver. When omitted, sends instructions to all drivers in the fleet.
+    """
     st = tool_context.state
     sess = session(st)
     plan = sess.get("plan")
     if plan is None or len(plan.routes) < 2:
         run_plan(st)
         plan = sess["plan"]
+
+    who = (driver or "").strip().lower()
+    if who in ("he", "him", "his", "this", "that", "it") and st.get("lp_last_driver"):
+        who = st["lp_last_driver"].lower()
+
+    if who:
+        r = next((x for x in plan.routes if who in (x.driver.lower(), x.truck_id.lower())), None)
+        if r is not None:
+            st["lp_last_driver"] = r.driver
+            st["lp_last_truck"] = r.truck_id
+            try:
+                from app.integration.media import start_publishing
+            except ImportError:  # pragma: no cover
+                from integration.media import start_publishing
+            sess["links"] = start_publishing(sess, plan, r.truck_id, only_truck=r.truck_id)
+            if "brief_links" not in sess:
+                sess["brief_links"] = {}
+            if sess["links"].get("html"):
+                sess["brief_links"][r.truck_id] = sess["links"]["html"]
+            queue(st, "briefings", focus=r.truck_id, driver=r.driver)
+            lp = plan.loads.get(r.truck_id)
+            return {
+                "plan_id": plan.plan_id,
+                "driver": r.driver,
+                "truck": r.truck_id,
+                "stops": len(r.stops),
+                "cartons": len(lp.placed) if lp else 0,
+                "leave": f"{r.start_min // 60:02d}:{r.start_min % 60:02d}",
+                "back": f"{r.end_min // 60:02d}:{r.end_min % 60:02d}",
+                "first_drop": r.stops[0].stop.name if r.stops else "-",
+                "ui": f"Instructions and personal links for {r.driver} ({r.truck_id}) are attached automatically."}
+        return {"status": "error", "message": f"No driver or truck matching '{driver}' in today's plan ({', '.join(x.driver for x in plan.routes)})."}
+
     try:
         from app.integration.media import start_briefings
     except ImportError:  # pragma: no cover
         from integration.media import start_briefings
     sess["brief_links"] = start_briefings(sess, plan)
-    queue(st, "briefings", focus=plan.routes[0].truck_id if plan.routes else None)
+    queue(st, "briefings", focus=plan.routes[0].truck_id if plan.routes else None, driver=None)
     return {"plan_id": plan.plan_id, "drivers": [
         {"driver": r.driver, "truck": r.truck_id, "stops": len(r.stops),
          "leave": f"{r.start_min // 60:02d}:{r.start_min % 60:02d}"} for r in plan.routes],
