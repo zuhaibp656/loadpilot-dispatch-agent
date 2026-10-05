@@ -551,6 +551,46 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 
   .dual-subhead{font-family:var(--font-display);font-size:14px;font-weight:700;margin-bottom:4px;color:var(--amber-ink);display:flex;align-items:center;gap:6px}
 
+  /* ── Agent Hero Branding (Slide 0) ───────────────────────────────── */
+  .agent-hero-branding{margin-bottom:14px}
+  .agent-badge-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+  .agent-hero-pill{font-family:var(--font-mono);font-size:11px;font-weight:800;letter-spacing:1.5px;color:#fff;background:var(--grad-road);padding:4px 14px;border-radius:999px;text-transform:uppercase;box-shadow:0 2px 10px rgba(227,116,0,.25)}
+  .agent-ver-pill{font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--text-dim);background:var(--surface-sunk);border:1px solid var(--border-subtle);padding:3px 12px;border-radius:999px}
+  .agent-hero-sub{font-family:var(--font-display);font-size:clamp(16px,1.4vw,22px);font-weight:700;color:var(--teal-ink);margin-top:-6px;margin-bottom:14px;letter-spacing:-.2px}
+
+  /* ── Visual Flow Diagram Architecture (Slide 03) ─────────────────── */
+  .flowchart-board{background:var(--surface-card);border:1px solid var(--border-hairline);border-radius:18px;padding:16px 18px 14px;box-shadow:var(--card-shadow);margin-bottom:16px;position:relative}
+  .flowchart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .flowchart-title{font-family:var(--font-display);font-size:14px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:7px}
+  .flowchart-legend{display:flex;align-items:center;gap:12px;font-family:var(--font-mono);font-size:10px;color:var(--text-dim)}
+  .flow-leg-item{display:flex;align-items:center;gap:5px}
+  .flow-leg-dot{width:8px;height:8px;border-radius:2px}
+  .flow-grid-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;position:relative;align-items:stretch}
+  .flow-cell{display:flex;flex-direction:column;gap:8px;position:relative}
+  .flow-step-card{background:var(--surface-sunk);border:1.5px solid var(--border-hairline);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:3px;position:relative;box-shadow:0 2px 6px rgba(0,0,0,.03)}
+  .flow-step-card.c-blue{border-top:3.5px solid #1A73E8}
+  .flow-step-card.c-amber{border-top:3.5px solid #E37400}
+  .flow-step-card.c-purple{border-top:3.5px solid #8E24AA}
+  .flow-step-card.c-teal{border-top:3.5px solid #00A389}
+  .flow-step-card.c-green{border-top:3.5px solid #188038}
+  .flow-step-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
+  .flow-step-num{font-family:var(--font-mono);font-size:9.5px;font-weight:800;padding:1px 6px;border-radius:4px;color:#fff}
+  .c-blue .flow-step-num{background:#1A73E8} .c-amber .flow-step-num{background:#E37400} .c-purple .flow-step-num{background:#8E24AA} .c-teal .flow-step-num{background:#00A389} .c-green .flow-step-num{background:#188038}
+  .flow-step-pill{font-family:var(--font-mono);font-size:8.5px;font-weight:700;color:var(--text-dim);background:var(--surface);border:1px solid var(--border-hairline);padding:1px 5px;border-radius:3px}
+  .flow-step-name{font-family:var(--font-display);font-size:12.5px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:5px}
+  .flow-step-desc{font-size:11px;color:var(--text-muted);line-height:1.35}
+
+  /* Decision Diamonds */
+  .flow-diamond-card{background:color-mix(in srgb,var(--amber) 12%,var(--surface-sunk));border:1.5px solid var(--amber-deep);border-radius:12px;padding:9px 10px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;position:relative;box-shadow:0 3px 10px rgba(227,116,0,.08)}
+  .flow-diamond-badge{font-family:var(--font-mono);font-size:8px;font-weight:800;letter-spacing:.8px;padding:1px 6px;border-radius:999px;background:var(--amber-deep);color:#fff;text-transform:uppercase}
+  .flow-diamond-q{font-family:var(--font-display);font-size:11.5px;font-weight:800;color:var(--text);line-height:1.22}
+  .flow-diamond-routes{display:flex;gap:5px;width:100%;margin-top:2px}
+  .flow-branch{flex:1;font-family:var(--font-mono);font-size:8px;font-weight:800;padding:2px 4px;border-radius:4px;display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1.15}
+  .flow-branch.yes{background:color-mix(in srgb,#188038 18%,var(--surface));color:var(--green-ink);border:1px solid color-mix(in srgb,#188038 30%,transparent)}
+  .flow-branch.no{background:color-mix(in srgb,#D93025 15%,var(--surface));color:var(--red-ink);border:1px solid color-mix(in srgb,#D93025 30%,transparent)}
+  .flow-arrow-down{text-align:center;font-size:11px;color:var(--amber-ink);line-height:1;margin:1px 0}
+  .flow-cell:not(:last-child)::after{content:"➔";position:absolute;right:-10px;top:28%;color:var(--amber-ink);font-weight:800;font-size:14px;z-index:4}
+
   /* ── Architecture ───────────────────────────────────────────────── */
   .arch{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;align-items:stretch;margin-bottom:16px}
   .arch-node{background:var(--surface-card);border:1px solid var(--border-hairline);border-radius:16px;padding:14px;box-shadow:var(--card-shadow)}
@@ -592,9 +632,15 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <!-- ═════════════ 00 OVERVIEW ═════════════ -->
 <section class="slide-section" data-title="00 Overview">
  <div class="wrap-max">
-  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Retail &amp; CPG Supply Chain</span><span class="kicker-sep">/</span><span class="kicker-sub">Gemini Enterprise · ADK · Vertex AI Agent Engine</span></div>
-  <h1 class="monumental-headline">Load it in reverse.<br><span class="gradient-span">Drive it in order.</span> Deliver it all.</h1>
-  <p class="tagline-lead"><b>FleetFlow</b> is an autonomous dispatch engine for primary and secondary distribution. Each morning it decides <b>which trucks</b> roll out and <b>which corridor</b> each driver takes. It then works out <b>the drop order</b> and <b>where every carton sits</b>, so drop 1 is at the door and the last drop sits behind the cab. Crews stop digging for cartons, and the fleet runs fewer kilometres.</p>
+  <div class="agent-hero-branding">
+    <div class="agent-badge-row">
+      <span class="agent-hero-pill">Autonomous Dispatch Agent</span>
+      <span class="agent-ver-pill">Gemini Enterprise · Google ADK · Vertex AI Agent Engine</span>
+    </div>
+    <h1 class="agent-mega-title"><span class="gradient-span">FleetFlow</span></h1>
+    <div class="agent-hero-sub">Truck Load &amp; Corridor Route Optimization Engine</div>
+  </div>
+  <p class="tagline-lead"><b>FleetFlow</b> is Google Cloud's autonomous dispatch engine for retail and CPG distribution. Each morning it ingests orders, optimizes <b>which trucks</b> roll out, and clusters <b>which corridor</b> each driver takes. It calculates <b>the drop sequence</b> and <b>where every carton sits</b> in 3D space, ensuring drop 1 is at the rear door and the final drop sits behind the cab. Crews eliminate carton digging, and fleets reduce operational mileage and emissions.</p>
 
   <div class="gemini-cockpit">
     <div class="gemini-brand-badge">
@@ -675,57 +721,108 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   <h2 class="monumental-headline">Dual-guard reasoning.<br><span class="gradient-span">Deterministic execution &amp; enterprise security.</span></h2>
   <p class="tagline-lead">How <b>FleetFlow</b> executes each turn: from multimodal order intake and dock carton photos to enterprise security guardrails, mathematical optimization, and multi-channel driver dispatch.</p>
 
-  <!-- Visual 5-Stage Architecture Flowchart -->
-  <div class="v-pipeline">
-    <div class="v-stage s1">
-      <div class="v-stage-head"><div class="v-stage-num">1</div><span class="v-stage-badge">01 Intake</span></div>
-      <div class="v-stage-title"><span>📥</span> Multimodal Intake</div>
-      <div class="v-stage-tags">
-        <span class="v-pill">ERP/DMS List</span>
-        <span class="v-pill">Excel / CSV / PDF</span>
-        <span class="v-pill">OpenCV QR / Barcode</span>
+  <!-- Visual Flow Diagram Architecture with Decision Diamonds & Algorithmic Loops -->
+  <div class="flowchart-board">
+    <div class="flowchart-header">
+      <div class="flowchart-title"><span>🔀</span> Autonomous Decision-Making &amp; Algorithmic Flow Diagram</div>
+      <div class="flowchart-legend">
+        <div class="flow-leg-item"><span class="flow-leg-dot" style="background:#1A73E8"></span><span>Process Node</span></div>
+        <div class="flow-leg-item"><span class="flow-leg-dot" style="background:var(--amber-deep)"></span><span>Decision Diamond</span></div>
+        <div class="flow-leg-item"><span class="flow-leg-dot" style="background:#188038"></span><span>YES Branch</span></div>
+        <div class="flow-leg-item"><span class="flow-leg-dot" style="background:#D93025"></span><span>NO / Loop Branch</span></div>
       </div>
-      <div class="v-stage-desc">Parses dealer order lists or warehouse dock photos. Decodes physical QR labels offline. Auto-resolves city and hub centroids.</div>
     </div>
-    <div class="v-stage s2">
-      <div class="v-stage-head"><div class="v-stage-num">2</div><span class="v-stage-badge">02 Security</span></div>
-      <div class="v-stage-title"><span>🛡️</span> Model Armor &amp; DLP</div>
-      <div class="v-stage-tags">
-        <span class="v-pill sec">Model Armor</span>
-        <span class="v-pill sec">Cloud DLP</span>
-        <span class="v-pill sec">Anti-Jailbreak</span>
+
+    <div class="flow-grid-row">
+      <!-- Col 1: Intake & Security Gate -->
+      <div class="flow-cell">
+        <div class="flow-step-card c-blue">
+          <div class="flow-step-meta"><span class="flow-step-num">01</span><span class="flow-step-pill">INPUT</span></div>
+          <div class="flow-step-name"><span>📥</span> Multimodal Intake</div>
+          <div class="flow-step-desc">ERP list, CSV, PDF, or warehouse dock carton photos with QR.</div>
+        </div>
+        <div class="flow-arrow-down">▼</div>
+        <div class="flow-diamond-card">
+          <span class="flow-diamond-badge">DECISION 1</span>
+          <span class="flow-diamond-q">Model Armor Clean?</span>
+          <div class="flow-diamond-routes">
+            <span class="flow-branch yes"><b>YES ➔</b><span>Sanitize DLP</span></span>
+            <span class="flow-branch no"><b>NO ➔</b><span>Block &amp; Log</span></span>
+          </div>
+        </div>
       </div>
-      <div class="v-stage-desc">Real-time prompt inspection &amp; jailbreak interception. Sensitive Data Protection (DLP) masks dealer PII, GSTIN, and financial data.</div>
-    </div>
-    <div class="v-stage s3">
-      <div class="v-stage-head"><div class="v-stage-num">3</div><span class="v-stage-badge">03 Brain</span></div>
-      <div class="v-stage-title"><span>🧠</span> Gemini 2.5 Flash</div>
-      <div class="v-stage-tags">
-        <span class="v-pill ai">Intent Reasoning</span>
-        <span class="v-pill ai">Pronoun Memory</span>
-        <span class="v-pill ai">8 ADK Tools</span>
+
+      <!-- Col 2: Context Brain & Driver Claims -->
+      <div class="flow-cell">
+        <div class="flow-step-card c-purple">
+          <div class="flow-step-meta"><span class="flow-step-num">02</span><span class="flow-step-pill">AGENT</span></div>
+          <div class="flow-step-name"><span>🧠</span> Gemini 2.5 Flash</div>
+          <div class="flow-step-desc">Resolves driver continuity, intent scoping, and pronoun memory.</div>
+        </div>
+        <div class="flow-arrow-down">▼</div>
+        <div class="flow-diamond-card">
+          <span class="flow-diamond-badge">DECISION 2</span>
+          <span class="flow-diamond-q">Corridor Claimed?</span>
+          <div class="flow-diamond-routes">
+            <span class="flow-branch yes"><b>YES ➔</b><span>Pin Sector</span></span>
+            <span class="flow-branch no"><b>NO ➔</b><span>Polar θ atan2</span></span>
+          </div>
+        </div>
       </div>
-      <div class="v-stage-desc">Classifies intent, manages conversational context (<code>lp_last_driver</code>), resolves pronouns ("his route"), and orchestrates dispatch tools.</div>
-    </div>
-    <div class="v-stage s4">
-      <div class="v-stage-head"><div class="v-stage-num">4</div><span class="v-stage-badge">04 Solver</span></div>
-      <div class="v-stage-title"><span>🧮</span> Optimization Enclave</div>
-      <div class="v-stage-tags">
-        <span class="v-pill opt">OR-Tools VRPTW</span>
-        <span class="v-pill opt">3D Height-Map</span>
-        <span class="v-pill opt">CMVR Rule 93</span>
+
+      <!-- Col 3: Capacity & Highway Routing -->
+      <div class="flow-cell">
+        <div class="flow-step-card c-amber">
+          <div class="flow-step-meta"><span class="flow-step-num">03</span><span class="flow-step-pill">ROUTER</span></div>
+          <div class="flow-step-name"><span>🛣️</span> Corridor Cluster</div>
+          <div class="flow-step-desc">Partitions stops into 8 compass corridors relative to hub.</div>
+        </div>
+        <div class="flow-arrow-down">▼</div>
+        <div class="flow-diamond-card">
+          <span class="flow-diamond-badge">DECISION 3</span>
+          <span class="flow-diamond-q">Volume &gt; Truck Cap?</span>
+          <div class="flow-diamond-routes">
+            <span class="flow-branch yes"><b>YES ➔</b><span>Trunk &amp; Branch</span></span>
+            <span class="flow-branch no"><b>NO ➔</b><span>Solo Corridor</span></span>
+          </div>
+        </div>
       </div>
-      <div class="v-stage-desc">Zero-hallucination execution sandbox: polar corridor clustering, multi-constraint VRPTW solver, 3D LIFO height-map, and axle physics.</div>
-    </div>
-    <div class="v-stage s5">
-      <div class="v-stage-head"><div class="v-stage-num">5</div><span class="v-stage-badge">05 Dispatch</span></div>
-      <div class="v-stage-title"><span>📱</span> Multi-Channel Edge</div>
-      <div class="v-stage-tags">
-        <span class="v-pill">Google Maps Live</span>
-        <span class="v-pill">Mobile Portal</span>
-        <span class="v-pill">WhatsApp</span>
+
+      <!-- Col 4: Mathematical Optimization & 3D Packing -->
+      <div class="flow-cell">
+        <div class="flow-step-card c-teal">
+          <div class="flow-step-meta"><span class="flow-step-num">04</span><span class="flow-step-pill">SOLVER</span></div>
+          <div class="flow-step-name"><span>🧮</span> OR-Tools VRPTW</div>
+          <div class="flow-step-desc">MIP route solver with Google Routes API road geodesics.</div>
+        </div>
+        <div class="flow-arrow-down">▼</div>
+        <div class="flow-diamond-card">
+          <span class="flow-diamond-badge">DECISION 4</span>
+          <span class="flow-diamond-q">LIFO Support ≥ 80%?</span>
+          <div class="flow-diamond-routes">
+            <span class="flow-branch yes"><b>YES ➔</b><span>Place Box</span></span>
+            <span class="flow-branch no"><b>NO ➔</b><span>Elevate Raster</span></span>
+          </div>
+        </div>
       </div>
-      <div class="v-stage-desc">Unified A2UI Canvas2D, zero-login mobile web portal with 1-tap Google Maps Navigation, 1-click WhatsApp link, and print delivery LR challans.</div>
+
+      <!-- Col 5: Safety Physics & Multi-Channel Edge -->
+      <div class="flow-cell">
+        <div class="flow-diamond-card" style="margin-bottom:8px">
+          <span class="flow-diamond-badge">DECISION 5</span>
+          <span class="flow-diamond-q">CMVR Axle Balanced?</span>
+          <div class="flow-diamond-routes">
+            <span class="flow-branch yes"><b>YES ➔</b><span>Certify Load</span></span>
+            <span class="flow-branch no"><b>NO ➔</b><span>Shift C.G. (Δx)</span></span>
+          </div>
+        </div>
+        <div class="flow-arrow-down">▼</div>
+        <div class="flow-step-card c-green">
+          <div class="flow-step-meta"><span class="flow-step-num">05</span><span class="flow-step-pill">DISPATCH</span></div>
+          <div class="flow-step-name"><span>📱</span> Multi-Channel Edge</div>
+          <div class="flow-step-desc">Maps Live Nav, Mobile Driver Portal, WhatsApp, and Challan LR.</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1068,7 +1165,7 @@ goToSlide(parseInt((location.hash||'#0').slice(1))||0);
 
 
 def main() -> None:
-    out = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "loadpilot_executive_presentation.html"
+    out = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "fleetflow_executive_presentation.html"
     out.write_text(build_executive_presentation_html(), encoding="utf-8")
     print(f"wrote {out} ({out.stat().st_size / 1024:.0f} KB)")
 
