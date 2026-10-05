@@ -138,7 +138,8 @@ def build_wizard_surface(surface_id: str, params: PlanningParams, fuel: float, d
 # 2) Dispatch canvas
 # ==============================================================================
 def dispatch_components(plan: DispatchPlan, video_url: str | None, focus_truck_id: str | None,
-                        mode: str | None = None, only_truck: str | None = None) -> list[dict[str, Any]]:
+                        mode: str | None = None, only_truck: str | None = None,
+                        active_trucks: list[str] | None = None) -> list[dict[str, Any]]:
     mode = (mode or os.environ.get("LOADPILOT_UI_MODE", "canvas")).lower()
     b, o = plan.baseline, plan.optimized
     headline = (f"{o.trucks} trucks instead of {b.trucks} · ₹{plan.savings_inr:,.0f} saved today · "
@@ -165,15 +166,30 @@ def dispatch_components(plan: DispatchPlan, video_url: str | None, focus_truck_i
                 {"title": "📊 Today vs FleetFlow", "child": "tab-overview"}]
     card_title = f"FleetFlow · {o.trucks} trucks · ₹{plan.savings_inr:,.0f} saved"
     title = f"🚚 FleetFlow dispatch plan · {plan.plan_id} · {plan.hub.name}"
-    if only_truck:
-        r = next((x for x in plan.routes if x.truck_id == only_truck), None)
-        if r is not None:
-            n_ctn = sum(len(rs.stop.boxes) for rs in r.stops)
-            card_title = f"{r.driver} · {r.truck_id} · {len(r.stops)} drops · {n_ctn} cartons"
-            title = f"🚚 {r.driver}'s day · {r.truck_id} ({r.truck_type.name})"
-            headline = (f"{len(r.stops)} drops · {n_ctn} cartons · {r.km:.0f} km · leave {r.start_min // 60:02d}:"
-                        f"{r.start_min % 60:02d} · open the 3D link in chat to tap a store")
-        tabs = tabs[:1] if use_iframe else tabs[:2]
+
+    if only_truck and not active_trucks:
+        active_trucks = [only_truck]
+
+    if active_trucks:
+        if len(active_trucks) == 1:
+            r = next((x for x in plan.routes if x.truck_id == active_trucks[0]), None)
+            if r is not None:
+                n_ctn = sum(len(rs.stop.boxes) for rs in r.stops)
+                card_title = f"{r.driver} · {r.truck_id} · {len(r.stops)} drops · {n_ctn} cartons"
+                title = f"🚚 {r.driver}'s day · {r.truck_id} ({r.truck_type.name})"
+                headline = (f"{len(r.stops)} drops · {n_ctn} cartons · {r.km:.0f} km · leave {r.start_min // 60:02d}:"
+                            f"{r.start_min % 60:02d} · other fleet routes dimmed")
+            tabs = tabs[:1] if use_iframe else tabs[:2]
+        else:
+            act_names = ", ".join(active_trucks)
+            sum_drops = sum(len(x.stops) for x in plan.routes if x.truck_id in active_trucks)
+            sum_km = sum(x.km for x in plan.routes if x.truck_id in active_trucks)
+            card_title = f"FleetFlow · {len(active_trucks)} trucks ({act_names})"
+            title = f"🚚 FleetFlow dispatch · {len(active_trucks)} trucks highlighted"
+            headline = (f"Showing {act_names} ({sum_drops} drops · {sum_km:.0f} km) · "
+                        f"other {len(plan.routes) - len(active_trucks)} fleet routes dimmed · LIFO verified")
+            tabs = tabs[:1] if use_iframe else tabs[:2]
+
     comps: list[dict[str, Any]] = [
         {"id": "root", "component": "Canvas", "children": ["dc-title", "dc-sub", "dc-steps", "dc-tabs"],
          "autoOpen": True, "autoFullscreen": False,
@@ -196,15 +212,17 @@ def dispatch_components(plan: DispatchPlan, video_url: str | None, focus_truck_i
     if use_iframe:
         comps.append({"id": "tab-live", "component": "IFrameSrcdoc", "height": 720,
                       "htmlContent": build_anim_html(plan, mode="both", focus_truck_id=focus_truck_id,
-                                                     only_truck=only_truck),
+                                                     only_truck=only_truck, active_trucks=active_trucks),
                       "title": "FleetFlow interactive road map and 3D truck loading"})
     else:
         comps += [
-            {"id": "tab-route", "component": "VegaChart", "spec": route_view_spec(plan, only_truck), "height": 640},
-            {"id": "tab-load", "component": "VegaChart", "spec": load_view_spec(plan, only_truck),
+            {"id": "tab-route", "component": "VegaChart",
+             "spec": route_view_spec(plan, only_truck=only_truck, active_trucks=active_trucks), "height": 640},
+            {"id": "tab-load", "component": "VegaChart",
+             "spec": load_view_spec(plan, only_truck=only_truck, active_trucks=active_trucks),
              "height": 560},
         ]
-    if not only_truck:
+    if not (active_trucks and len(active_trucks) < len(plan.routes)):
         comps += [
             {"id": "tab-overview", "component": "Column", "children": ["ov-map", "ov-kpi"]},
             {"id": "ov-map", "component": "VegaChart", "spec": route_map_spec(plan), "height": 500},
@@ -223,5 +241,7 @@ def dispatch_components(plan: DispatchPlan, video_url: str | None, focus_truck_i
 
 def build_dispatch_surface(surface_id: str, plan: DispatchPlan, video_url: str | None = None,
                            focus_truck_id: str | None = None, mode: str | None = None,
-                           only_truck: str | None = None) -> list[types.Part]:
-    return _emit(surface_id, dispatch_components(plan, video_url, focus_truck_id, mode, only_truck), None)
+                           only_truck: str | None = None,
+                           active_trucks: list[str] | None = None) -> list[types.Part]:
+    return _emit(surface_id, dispatch_components(plan, video_url, focus_truck_id, mode, only_truck, active_trucks), None)
+

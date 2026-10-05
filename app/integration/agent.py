@@ -371,14 +371,26 @@ def emit_surface(callback_context: CallbackContext | None = None, **_: Any) -> t
             links = sess.get("links") or {}
             if IS_LOCAL and sess.get("poster"):
                 parts.append(types.Part.from_bytes(data=sess["poster"], mime_type="image/png"))
+            focus_id = pending.get("focus")
+            active_trucks = pending.get("active_trucks")
             only_truck_id = None
-            if pending.get("kind") == "driver":
-                only_truck_id = pending.get("focus")
-            elif pending.get("kind") == "briefings" and pending.get("driver") and pending.get("focus"):
-                only_truck_id = pending.get("focus")
+            if pending.get("kind") in ("driver", "truck"):
+                if not active_trucks and focus_id:
+                    active_trucks = [focus_id]
+                if active_trucks and len(active_trucks) == 1:
+                    only_truck_id = active_trucks[0]
+            elif pending.get("kind") == "briefings" and pending.get("driver"):
+                if not active_trucks and focus_id:
+                    active_trucks = [focus_id]
+                if active_trucks and len(active_trucks) == 1:
+                    only_truck_id = active_trucks[0]
+            elif active_trucks and len(active_trucks) == 1:
+                only_truck_id = active_trucks[0]
+
             parts += build_dispatch_surface(surface_id, plan, video_url=links.get("video") or None,
-                                            focus_truck_id=pending.get("focus"),
-                                            only_truck=only_truck_id)
+                                            focus_truck_id=focus_id,
+                                            only_truck=only_truck_id,
+                                            active_trucks=active_trucks)
     except Exception as exc:
         logger.exception("emit_surface failed: %s", exc)
     if not parts:

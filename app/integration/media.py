@@ -31,16 +31,26 @@ def media_enabled() -> bool:
 
 
 def start_publishing(sess: dict[str, Any], plan: DispatchPlan, focus: str | None,
-                     only_truck: str | None = None) -> dict[str, str]:
+                     only_truck: str | None = None,
+                     active_trucks: list[str] | None = None) -> dict[str, str]:
     """Kick off rendering+upload; return {'html','video'} browser links (may be empty).
 
     only_truck: driver view (that truck's route + load only).
+    active_trucks: 1, 3, or subset of trucks highlighted while others dimmed.
     """
+    if only_truck and not active_trucks:
+        active_trucks = [only_truck]
     route = next((r for r in plan.routes if r.truck_id == focus), None)
     lp = plan.loads.get(focus) if focus else None
     sess["poster"] = None
     links: dict[str, str] = {}
-    html_obj = f"plans/{plan.plan_id}/{'driver' if only_truck else 'dispatch'}_{focus or 'all'}.html"
+    if only_truck:
+        html_tag = f"driver_{only_truck}"
+    elif active_trucks and len(active_trucks) <= 3:
+        html_tag = f"dispatch_{'-'.join(sorted(active_trucks))}"
+    else:
+        html_tag = f"dispatch_{focus or 'all'}"
+    html_obj = f"plans/{plan.plan_id}/{html_tag}.html"
     mp4_obj = f"plans/{plan.plan_id}/loading_{focus}.mp4"
     if media_enabled():
         h, v = links_for(html_obj), links_for(mp4_obj)
@@ -60,7 +70,7 @@ def start_publishing(sess: dict[str, Any], plan: DispatchPlan, focus: str | None
                     from render.driver_portal_html import build_driver_portal_html
                 html = build_driver_portal_html(plan, only_truck, share_url=links.get("html", ""))
             else:
-                html = build_anim_html(plan, mode="both", focus_truck_id=focus, only_truck=only_truck)
+                html = build_anim_html(plan, mode="both", focus_truck_id=focus, only_truck=only_truck, active_trucks=active_trucks)
             ok = upload_bytes(html.encode("utf-8"), html_obj, "text/html; charset=utf-8")
             if not ok:
                 links.clear()

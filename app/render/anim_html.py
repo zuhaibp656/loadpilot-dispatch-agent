@@ -28,76 +28,103 @@ BASE_COLORS = ["#90a4ae", "#b0bec5", "#78909c", "#cfd8dc", "#a1887f", "#bcaaa4",
                "#b39ddb", "#80cbc4", "#ef9a9a"]
 
 _CSS = """
-*{box-sizing:border-box}html,body{margin:0;height:100%;background:#070b16;color:#e8eaed;
-font:14px/1.4 Inter,Roboto,'Google Sans',Arial,sans-serif;overflow:hidden}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#090d1a;color:#e2e8f0;
+font:13.5px/1.45 Inter,-apple-system,BlinkMacSystemFont,'Google Sans',Roboto,sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased}
 #lp-app{height:100%;display:flex;flex-direction:column}
-.lp-tabs{display:flex;gap:6px;padding:8px 10px 0}.lp-tab{background:#121a2e;color:#9aa0a6;border:1px solid #243049;
-border-bottom:none;border-radius:10px 10px 0 0;padding:8px 16px;cursor:pointer;font-weight:700;font-size:13.5px}
-.lp-tab.on{background:#1a2440;color:#fff;border-color:#3b4b72}
-.lp-pane{flex:1;display:flex;flex-direction:column;min-height:0;border-top:1px solid #1f2a44}
-.lp-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 14px;
-background:linear-gradient(90deg,#0f1730,#111b36);flex-wrap:wrap}
-.lp-title{font-size:16px;font-weight:700}.lp-muted{color:#8a94a6;font-weight:400}
-.lp-stats{display:flex;gap:7px;flex-wrap:wrap}.kv{background:#16203a;border:1px solid #243049;border-radius:10px;
-padding:5px 10px;display:flex;flex-direction:column;min-width:82px}.kv span{font-size:11px;color:#8a94a6;
-text-transform:uppercase;letter-spacing:.05em;font-weight:600}.kv b{font-size:14.5px;font-weight:700}
-.ok{color:#5bf59a}.bad{color:#ff8a80}
-.lp-body{flex:1;display:flex;min-height:0}.lp-cwrap{flex:1;position:relative;min-width:0}
+.lp-tabs{display:flex;gap:4px;padding:8px 14px 0;background:rgba(9,13,26,0.95)}
+.lp-tab{background:rgba(18,26,48,0.7);color:#94a3b8;border:1px solid rgba(255,255,255,0.07);
+border-bottom:none;border-radius:10px 10px 0 0;padding:8px 18px;cursor:pointer;font-weight:700;font-size:13px;
+transition:all .18s ease;display:inline-flex;align-items:center;gap:6px}
+.lp-tab:hover{color:#e2e8f0;background:rgba(30,41,69,0.8)}
+.lp-tab.on{background:rgba(26,38,68,0.95);color:#38bdf8;border-color:rgba(56,189,248,0.35);box-shadow:0 -2px 10px rgba(56,189,248,0.08)}
+.lp-pane{flex:1;display:flex;flex-direction:column;min-height:0;border-top:1px solid rgba(255,255,255,0.08)}
+.lp-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;
+background:linear-gradient(90deg,rgba(15,23,42,0.92),rgba(20,30,55,0.88));backdrop-filter:blur(14px);flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,0.06)}
+.lp-title{font-size:15px;font-weight:700;color:#f8fafc;display:flex;align-items:center;gap:6px}.lp-muted{color:#94a3b8;font-weight:400;font-size:12.5px}
+.lp-stats{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.kv{background:rgba(22,32,58,0.65);border:1px solid rgba(255,255,255,0.07);border-radius:10px;
+padding:5px 12px;display:flex;flex-direction:column;min-width:76px;transition:border-color .15s}
+.kv:hover{border-color:rgba(56,189,248,0.3)}
+.kv span{font-size:10.5px;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.kv b{font-size:13.5px;font-weight:700;color:#f1f5f9}
+.ok{color:#4ade80}.bad{color:#f87171}
+.lp-body{flex:1;display:flex;min-height:0}.lp-cwrap{flex:1;position:relative;min-width:0;overflow:hidden}
 .lp-canvas{display:block;width:100%;height:100%;cursor:grab}
-.lp-legend{width:290px;overflow:auto;padding:10px 12px;background:#0b1224;border-left:1px solid #1f2a44}
-.lp-lh{font-size:12px;color:#8ab4f8;text-transform:uppercase;letter-spacing:.06em;margin:3px 0 9px;font-weight:800}
-.lp-li{display:flex;gap:8px;align-items:baseline;padding:6px 8px;border-radius:8px;font-size:13.5px;cursor:default;line-height:1.35}
-.lp-li i{width:12px;height:12px;border-radius:3px;flex:none;transform:translateY(1px)}
-.lp-li.on{background:#1d2a4a;outline:1px solid #3b4b72}.lp-li:hover{background:#15203a}
-.lp-hud{position:absolute;left:14px;bottom:12px;background:rgba(10,16,32,.88);border:1px solid #243049;
-border-radius:10px;padding:7px 12px;font-size:13px}
-.lp-banner{position:absolute;left:50%;top:12px;transform:translateX(-50%);background:rgba(16,24,48,.95);
-border:1px solid #3b4b72;border-radius:12px;padding:9px 16px;font-size:14px;transition:opacity .3s;opacity:0;
-white-space:nowrap;font-weight:600}.lp-banner i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:8px}
-.lp-clock{position:absolute;right:16px;top:10px;font:700 28px 'Roboto Mono',monospace;color:#fdd663;
-text-shadow:0 0 14px rgba(253,214,99,.5)}
-.lp-ctrl{display:flex;align-items:center;gap:9px;padding:9px 12px;background:#0b1224;border-top:1px solid #1f2a44;
-flex-wrap:wrap}.lp-btn{background:#1a2440;color:#e8eaed;border:1px solid #3b4b72;border-radius:18px;
-padding:6px 14px;cursor:pointer;font-weight:700;font-size:13px}.lp-btn:hover{background:#22305a}.lp-play{min-width:48px}
-.lp-scrub{flex:1;min-width:130px;accent-color:#8ab4f8}
-.lp-trucks{display:flex;gap:6px;flex-wrap:wrap}.lp-chip{background:#121a2e;color:#e8eaed;border:1px solid #3b4b72;
-border-left-width:4px;border-radius:14px;padding:5px 11px;cursor:pointer;font-weight:700;font-size:13px}
-.lp-chip small{color:#8a94a6;font-weight:400}.lp-chip.on{background:#22305a}
-.lp-seg{display:flex;border:1px solid #3b4b72;border-radius:18px;overflow:hidden}
-.lp-seg button{background:#121a2e;color:#9aa0a6;border:none;padding:6px 14px;cursor:pointer;font-weight:700;font-size:12.5px}
-.lp-seg button.on{background:#8ab4f8;color:#0b1020}
+.lp-legend{width:310px;overflow-y:auto;padding:12px 14px;background:rgba(11,17,33,0.95);border-left:1px solid rgba(255,255,255,0.07);backdrop-filter:blur(12px)}
+.lp-lh{font-size:11.5px;color:#38bdf8;text-transform:uppercase;letter-spacing:.07em;margin:4px 0 10px;font-weight:800;display:flex;align-items:center;justify-content:space-between}
+.lp-li{display:flex;gap:9px;align-items:baseline;padding:8px 10px;border-radius:10px;font-size:13px;cursor:default;line-height:1.4;transition:all .15s ease;margin-bottom:3px}
+.lp-li i{width:11px;height:11px;border-radius:3px;flex:none;transform:translateY(1px)}
+.lp-li.on{background:rgba(30,45,77,0.85);outline:1px solid rgba(56,189,248,0.45);box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+.lp-li:hover{background:rgba(24,36,64,0.75)}
+.lp-li.dim{opacity:0.42}
+.lp-li.dim:hover{opacity:0.85}
+.lp-hud{position:absolute;left:16px;bottom:14px;background:rgba(15,23,42,0.88);backdrop-filter:blur(10px);
+border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:8px 14px;font-size:12.5px;box-shadow:0 8px 24px rgba(0,0,0,0.4)}
+.lp-banner{position:absolute;left:50%;top:14px;transform:translateX(-50%);background:rgba(15,23,42,0.92);backdrop-filter:blur(12px);
+border:1px solid rgba(56,189,248,0.4);border-radius:14px;padding:9px 18px;font-size:13.5px;transition:opacity .3s,transform .3s;opacity:0;
+white-space:nowrap;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
+.lp-banner i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:8px}
+.lp-clock{position:absolute;right:18px;top:14px;font:700 24px 'Roboto Mono',monospace;color:#facc15;
+background:rgba(15,23,42,0.82);backdrop-filter:blur(8px);padding:4px 12px;border-radius:10px;border:1px solid rgba(250,204,21,0.25);
+text-shadow:0 0 12px rgba(250,204,21,0.35);letter-spacing:1px}
+.lp-ctrl{display:flex;align-items:center;gap:10px;padding:10px 16px;background:rgba(11,17,33,0.96);border-top:1px solid rgba(255,255,255,0.07);
+backdrop-filter:blur(12px);flex-wrap:wrap}
+.lp-btn{background:rgba(26,38,68,0.8);color:#e2e8f0;border:1px solid rgba(255,255,255,0.12);border-radius:20px;
+padding:6px 15px;cursor:pointer;font-weight:700;font-size:12.5px;transition:all .18s ease;display:inline-flex;align-items:center;gap:6px}
+.lp-btn:hover{background:rgba(40,58,98,0.95);border-color:rgba(56,189,248,0.4);color:#fff}
+.lp-play{min-width:44px;justify-content:center}
+.lp-scrub{flex:1;min-width:140px;height:6px;accent-color:#38bdf8;cursor:pointer;border-radius:3px}
+.lp-truck-bar{display:flex;gap:7px;padding:8px 16px;background:rgba(13,20,38,0.9);border-bottom:1px solid rgba(255,255,255,0.06);overflow-x:auto;align-items:center}
+.lp-truck-bar-lbl{font-size:11px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-right:4px;flex:none}
+.lp-chip{background:rgba(22,32,58,0.7);color:#cbd5e1;border:1px solid rgba(255,255,255,0.1);
+border-left-width:4px;border-radius:18px;padding:5px 13px;cursor:pointer;font-weight:700;font-size:12.5px;transition:all .18s;white-space:nowrap}
+.lp-chip small{color:#94a3b8;font-weight:400;margin-left:4px}
+.lp-chip:hover{background:rgba(34,48,82,0.9);color:#fff}
+.lp-chip.on{background:rgba(30,50,90,0.95);color:#fff;border-color:rgba(56,189,248,0.6);box-shadow:0 0 12px rgba(56,189,248,0.25)}
+.lp-chip.dim{opacity:0.55}
+.lp-seg{display:flex;border:1px solid rgba(255,255,255,0.12);border-radius:20px;overflow:hidden;background:rgba(18,26,48,0.6)}
+.lp-seg button{background:transparent;color:#94a3b8;border:none;padding:6px 14px;cursor:pointer;font-weight:700;font-size:12px;transition:all .15s}
+.lp-seg button.on{background:#38bdf8;color:#090d1a}
 @media (max-width:640px){.lp-legend{display:none}}
 .lp-li.lp-click{cursor:pointer}.lp-li div{min-width:0}
 .lp-num{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;border-radius:11px;
-font:700 12px Inter,Roboto,Arial;color:#0b1020;flex:none;padding:0 6px}
-.lp-pop{position:absolute;z-index:5;width:330px;background:rgba(12,18,36,.98);border:1px solid #3b4b72;border-radius:14px;
-box-shadow:0 14px 35px rgba(0,0,0,.6);font-size:13.5px;overflow:hidden}
-.lp-pop-h{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-left:5px solid;background:#111a33}
-.lp-pop-h b{font-size:15px}.lp-x{margin-left:auto;background:none;border:none;color:#9aa0a6;font-size:20px;cursor:pointer;line-height:1}
-.lp-pop-g{display:grid;grid-template-columns:76px 1fr;gap:6px 12px;padding:12px 14px}
-.lp-pop-g span{color:#8a94a6;font-size:12px;text-transform:uppercase;letter-spacing:.05em;padding-top:1px;font-weight:600}
-.lp-zoom{position:absolute;right:14px;top:54px;display:flex;flex-direction:column;gap:5px;z-index:4}
-.lp-zoom button{width:36px;height:36px;border-radius:10px;border:1px solid #3b4b72;background:rgba(16,24,48,.94);color:#e8eaed;
-font:700 18px Inter,Roboto,Arial;cursor:pointer}.lp-zoom button:hover{background:#22305a}
-.lp-attr{position:absolute;right:10px;bottom:8px;font-size:11px;color:#9aa0a6;background:rgba(8,12,24,.8);padding:3px 7px;border-radius:6px}
-.lp-card{position:absolute;left:14px;top:14px;z-index:5;width:350px;max-height:calc(100% - 75px);overflow:auto;
-background:rgba(12,18,36,.98);border:1px solid #3b4b72;border-radius:14px;box-shadow:0 14px 35px rgba(0,0,0,.6);font-size:13.5px}
-.lp-card .lp-pop-g{grid-template-columns:70px 1fr}
-.lp-tip{position:absolute;z-index:6;pointer-events:none;max-width:340px;background:rgba(8,12,24,.97);border:1px solid #5b6b92;
-border-radius:11px;padding:8px 12px;font-size:13px;line-height:1.5;box-shadow:0 10px 24px rgba(0,0,0,.6)}
-.lp-li.sel{background:#2a3a66;outline:2px solid #fdd663}
-.lp-go{display:block;width:calc(100% - 24px);margin:0 12px 14px;background:#fdd663;color:#111;border:none;border-radius:18px;
-padding:8px 12px;font-weight:800;font-size:13px;cursor:pointer}.lp-go:hover{background:#ffe38a}
-.lp-btn-sm{padding:3px 9px;font-size:11px;border-radius:12px;font-weight:700}
-.lp-step-tag{display:inline-block;background:#243049;color:#8ab4f8;font-size:11px;font-weight:800;padding:2px 6px;border-radius:4px;margin-right:5px}
-.lp-vmodes{display:flex;gap:5px;padding:7px 12px;background:#141d36;border-bottom:1px solid #243049;flex-wrap:wrap;align-items:center}
-.lp-vbtn{background:#1b243d;color:#9aa0a6;border:1px solid #3b4b72;border-radius:13px;padding:4px 10px;font-size:12px;cursor:pointer;font-weight:700}
-.lp-vbtn:hover{background:#28365a;color:#fff}
-.lp-vbtn.on{background:#8ab4f8;color:#0b1020;border-color:#8ab4f8}
-.lp-vbtn.lp-rep{margin-left:auto;background:#2a3a66;color:#fdd663;border-color:#fdd663}
-.lp-vbtn.lp-rep:hover{background:#3b4f88}
-.lp-btn.lp-active{background:#8ab4f8;color:#0b1020;border-color:#8ab4f8}
+font:700 11.5px Inter,-apple-system,sans-serif;color:#090d1a;flex:none;padding:0 5px}
+.lp-pop{position:absolute;z-index:10;width:340px;background:rgba(15,23,42,0.96);backdrop-filter:blur(16px);
+border:1px solid rgba(56,189,248,0.3);border-radius:16px;box-shadow:0 20px 45px rgba(0,0,0,0.65);font-size:13px;overflow:hidden}
+.lp-pop-h{display:flex;gap:10px;align-items:flex-start;padding:13px 15px;border-left:5px solid;background:rgba(20,30,55,0.85)}
+.lp-pop-h b{font-size:14.5px}.lp-x{margin-left:auto;background:none;border:none;color:#94a3b8;font-size:20px;cursor:pointer;line-height:1}
+.lp-x:hover{color:#fff}
+.lp-pop-g{display:grid;grid-template-columns:76px 1fr;gap:7px 12px;padding:13px 15px}
+.lp-pop-g span{color:#94a3b8;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;padding-top:1px;font-weight:600}
+.lp-zoom{position:absolute;right:16px;top:60px;display:flex;flex-direction:column;gap:6px;z-index:4}
+.lp-zoom button{width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(15,23,42,0.9);
+backdrop-filter:blur(8px);color:#e2e8f0;font:700 17px Inter,sans-serif;cursor:pointer;transition:all .15s}
+.lp-zoom button:hover{background:rgba(30,45,77,0.95);border-color:rgba(56,189,248,0.4);color:#fff}
+.lp-attr{position:absolute;right:12px;bottom:8px;font-size:10.5px;color:#94a3b8;background:rgba(9,13,26,0.85);backdrop-filter:blur(4px);padding:3px 8px;border-radius:6px}
+.lp-card{position:absolute;left:16px;top:16px;z-index:10;width:355px;max-height:calc(100% - 80px);overflow-y:auto;
+background:rgba(15,23,42,0.96);backdrop-filter:blur(16px);border:1px solid rgba(56,189,248,0.3);border-radius:16px;
+box-shadow:0 20px 45px rgba(0,0,0,0.65);font-size:13px}
+.lp-card .lp-pop-g{grid-template-columns:72px 1fr}
+.lp-tip{position:absolute;z-index:12;pointer-events:none;max-width:340px;background:rgba(15,23,42,0.96);backdrop-filter:blur(12px);
+border:1px solid rgba(56,189,248,0.4);border-radius:12px;padding:8px 13px;font-size:12.5px;line-height:1.5;box-shadow:0 12px 28px rgba(0,0,0,0.6)}
+.lp-li.sel{background:rgba(34,54,92,0.9);outline:2px solid #38bdf8}
+.lp-go{display:block;width:calc(100% - 26px);margin:0 13px 14px;background:#38bdf8;color:#090d1a;border:none;border-radius:20px;
+padding:9px 14px;font-weight:800;font-size:12.5px;cursor:pointer;transition:all .18s;box-shadow:0 4px 14px rgba(56,189,248,0.3)}
+.lp-go:hover{background:#7dd3fc;box-shadow:0 6px 18px rgba(56,189,248,0.45)}
+.lp-btn-sm{padding:3px 10px;font-size:11px;border-radius:14px;font-weight:700}
+.lp-step-tag{display:inline-block;background:rgba(56,189,248,0.14);color:#38bdf8;border:1px solid rgba(56,189,248,0.3);
+font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:6px;margin-right:6px}
+.lp-active-pill{display:inline-block;background:rgba(74,222,128,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.35);
+font-size:10px;font-weight:800;padding:1px 6px;border-radius:4px;margin-left:6px;text-transform:uppercase}
+.lp-vmodes{display:flex;gap:6px;padding:8px 14px;background:rgba(20,30,55,0.7);border-bottom:1px solid rgba(255,255,255,0.07);flex-wrap:wrap;align-items:center}
+.lp-vbtn{background:rgba(26,38,68,0.7);color:#94a3b8;border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:5px 11px;font-size:11.5px;cursor:pointer;font-weight:700;transition:all .15s}
+.lp-vbtn:hover{background:rgba(40,58,98,0.9);color:#fff}
+.lp-vbtn.on{background:#38bdf8;color:#090d1a;border-color:#38bdf8}
+.lp-vbtn.lp-rep{margin-left:auto;background:rgba(40,58,98,0.8);color:#facc15;border-color:rgba(250,204,21,0.35)}
+.lp-vbtn.lp-rep:hover{background:rgba(55,80,135,0.95)}
+.lp-btn.lp-active{background:rgba(56,189,248,0.2);color:#38bdf8;border-color:#38bdf8}
 """
+
 
 
 def _hhmm(m: int) -> str:
@@ -203,10 +230,16 @@ def _route_json(r: TruckRoute, color: str, legs: list | None, eps: float = 0.000
 
 
 def _load_trucks(plan: DispatchPlan, focus_truck_id: str | None, max_trucks: int | None,
-                 only_truck: str | None = None) -> list[dict]:
+                 only_truck: str | None = None, active_trucks: list[str] | None = None) -> list[dict]:
     trucks = []
     routes = [r for r in plan.routes if not only_truck or r.truck_id == only_truck]
-    if focus_truck_id:
+    if active_trucks:
+        # Sort active trucks to the front, with focus_truck_id first if specified
+        routes = sorted(routes, key=lambda r: (
+            r.truck_id not in active_trucks,
+            r.truck_id != focus_truck_id if focus_truck_id else False,
+        ))
+    elif focus_truck_id:
         routes = sorted(routes, key=lambda r: r.truck_id != focus_truck_id)
     for r in routes[: max_trucks or len(routes)]:
         lp = plan.loads.get(r.truck_id)
@@ -219,6 +252,7 @@ def _load_trucks(plan: DispatchPlan, focus_truck_id: str | None, max_trucks: int
             "color": ROUTE_COLORS[plan.routes.index(r) % len(ROUTE_COLORS)], "driver": r.driver,
             "corridor": r.corridor, "branch": r.branch, "fill": lp.volume_fill_pct,
             "wfill": lp.weight_fill_pct, "lifo": lp.lifo_ok,
+            "active": (r.truck_id in active_trucks) if active_trucks else True,
             "zones": [[z.stop_seq, z.x_start, z.x_end] for z in lp.zones],
             "stops": [{"seq": rs.seq, "name": rs.stop.name[:32], "n": len(rs.stop.boxes),
                        "eta": _hhmm(rs.arrive_min),
@@ -234,13 +268,18 @@ def _load_trucks(plan: DispatchPlan, focus_truck_id: str | None, max_trucks: int
 
 def plan_to_anim_data(plan: DispatchPlan, focus_truck_id: str | None = None,
                       max_trucks: int | None = None, mode: str = "both",
-                      only_truck: str | None = None, start: str | None = None) -> dict:
-    """only_truck: driver view (one truck's route + load). start: 'load' opens the 3D tab first."""
+                      only_truck: str | None = None, start: str | None = None,
+                      active_trucks: list[str] | None = None) -> dict:
+    """only_truck: driver view (one truck's route + load). active_trucks: list of highlighted trucks (others dimmed)."""
+    if only_truck and not active_trucks:
+        active_trucks = [only_truck]
     data: dict = {"hub": {"name": plan.hub.name, "lat": plan.hub.lat, "lon": plan.hub.lon}}
     if start:
         data["start"] = start
+    if active_trucks:
+        data["active_trucks"] = list(active_trucks)
     if mode in ("both", "load"):
-        data["trucks"] = _load_trucks(plan, focus_truck_id, max_trucks, only_truck)
+        data["trucks"] = _load_trucks(plan, focus_truck_id, max_trucks, only_truck=only_truck, active_trucks=active_trucks)
     if mode in ("both", "routes"):
         try:
             from app.geo.roads import plan_road_legs, provider_name
@@ -281,9 +320,9 @@ def plan_to_anim_data(plan: DispatchPlan, focus_truck_id: str | None = None,
 
 def build_anim_html(plan: DispatchPlan, mode: str = "both", focus_truck_id: str | None = None,
                     max_trucks: int | None = None, only_truck: str | None = None,
-                    start: str | None = None) -> str:
+                    start: str | None = None, active_trucks: list[str] | None = None) -> str:
     data = plan_to_anim_data(plan, focus_truck_id=focus_truck_id, max_trucks=max_trucks, mode=mode,
-                             only_truck=only_truck, start=start)
+                             only_truck=only_truck, start=start, active_trucks=active_trucks)
     payload = json.dumps(data, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
     engine_js = (Path(__file__).parent / "anim" / "engine.js").read_text(encoding="utf-8")
     return (

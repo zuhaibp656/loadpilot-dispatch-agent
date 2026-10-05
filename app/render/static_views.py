@@ -58,8 +58,9 @@ def _coast_lines(box: tuple[float, float, float, float]) -> list[dict]:
     return rows
 
 
-def route_view_spec(plan: DispatchPlan, only_truck: str | None = None, width: int = 700,
-                    height: int = 540) -> dict[str, Any]:
+def route_view_spec(plan: DispatchPlan, only_truck: str | None = None,
+                    active_trucks: list[str] | None = None,
+                    width: int = 700, height: int = 540) -> dict[str, Any]:
     try:
         from app.geo.roads import _dp, plan_road_legs
     except ImportError:  # pragma: no cover
@@ -68,13 +69,17 @@ def route_view_spec(plan: DispatchPlan, only_truck: str | None = None, width: in
         road = plan_road_legs(plan)["opt"]
     except Exception:  # noqa: BLE001
         road = {}
-    routes = [(i, r) for i, r in enumerate(plan.routes) if not only_truck or r.truck_id == only_truck]
+    if only_truck and not active_trucks:
+        active_trucks = [only_truck]
+    active_set = set(active_trucks) if active_trucks else None
+
+    # Keep all routes so the full fleet context is visible, highlighting active_trucks and dimming others
+    routes = list(enumerate(plan.routes))
     lines, pts = [], []
-    domain, rng = [], []
     for i, r in routes:
+        is_active = (active_set is None) or (r.truck_id in active_set)
         label = f"{r.truck_id} · {r.driver}"
-        domain.append(label)
-        rng.append(ROUTE_COLORS[i % len(ROUTE_COLORS)])
+        r_color = ROUTE_COLORS[i % len(ROUTE_COLORS)] if is_active else "#94a3b8"
         legs = road.get(r.truck_id)
         if legs:
             seq = [p for lg in legs for p in _dp(list(lg), 0.0012)]
@@ -82,42 +87,58 @@ def route_view_spec(plan: DispatchPlan, only_truck: str | None = None, width: in
             seq = [(plan.hub.lat, plan.hub.lon)] + [(rs.stop.lat, rs.stop.lon) for rs in r.stops] + [
                 (plan.hub.lat, plan.hub.lon)]
         for k, (la, lo) in enumerate(seq):
-            lines.append({"truck": label, "k": k, "lat": round(la, 4), "lon": round(lo, 4)})
+            lines.append({
+                "truck": label, "k": k, "lat": round(la, 4), "lon": round(lo, 4),
+                "color": r_color,
+                "stroke_width": 4.5 if (is_active and active_set and len(active_set) <= 3) else (3.2 if is_active else 1.6),
+                "opacity": 0.95 if is_active else 0.18,
+            })
         for rs in r.stops:
-            pts.append({"truck": label, "lat": rs.stop.lat, "lon": rs.stop.lon, "seq": rs.seq,
-                        "name": rs.stop.name, "area": rs.stop.area, "eta": _hm(rs.arrive_min),
-                        "cartons": len(rs.stop.boxes)})
+            pts.append({
+                "truck": label, "lat": rs.stop.lat, "lon": rs.stop.lon,
+                "seq": str(rs.seq) if is_active else "",
+                "name": rs.stop.name, "area": rs.stop.area, "eta": _hm(rs.arrive_min),
+                "cartons": len(rs.stop.boxes),
+                "color": r_color,
+                "size": (420 if active_set and len(active_set) == 1 else 230) if is_active else 30,
+                "opacity": 1.0 if is_active else 0.22,
+            })
     lats = [p["lat"] for p in pts] + [plan.hub.lat]
     lons = [p["lon"] for p in pts] + [plan.hub.lon]
     box = (min(lats) - 0.05, min(lons) - 0.05, max(lats) + 0.05, max(lons) + 0.05) if pts else _plan_box(plan)
-    color = {"field": "truck", "type": "nominal", "title": None,
-             "scale": {"domain": domain, "range": rng},
-             "legend": None if only_truck else {"orient": "bottom", "columns": 3, "labelFont": FONT,
-                                                "labelFontSize": 12, "symbolType": "stroke", "symbolStrokeWidth": 3}}
     geo = {"longitude": {"field": "lon", "type": "quantitative"},
            "latitude": {"field": "lat", "type": "quantitative"}}
     tip = [{"field": "truck", "title": "Truck"}, {"field": "seq", "title": "Drop #"},
            {"field": "name", "title": "Store"}, {"field": "area", "title": "Area"},
            {"field": "eta", "title": "ETA"}, {"field": "cartons", "title": "Cartons"}]
-    if only_truck and routes:
-        r = routes[0][1]
-        title = f"{r.driver}'s route · {r.truck_id} · {len(r.stops)} drops · {r.km:.0f} km · {_hm(r.start_min)}–{_hm(r.end_min)}"
+
+    if active_set and len(active_set) == 1:
+        r_act = next((r for r in plan.routes if r.truck_id in active_set), plan.routes[0])
+        title = f"{r_act.driver}'s route · {r_act.truck_id} · {len(r_act.stops)} drops · {r_act.km:.0f} km (others dimmed)"
+    elif active_set and len(active_set) <= 3:
+        title = f"Routes for {', '.join(sorted(active_set))} ({len(active_set)} trucks highlighted · others dimmed)"
     else:
         title = f"Routes on real roads · {plan.optimized.trucks} trucks · {plan.optimized.km:,.0f} km"
+
     layers: list[dict] = [
         {"data": {"values": _coast_lines(box)},
          "mark": {"type": "line", "stroke": "#8ec3e6", "strokeWidth": 1.5, "opacity": 0.9},
          "encoding": {**geo, "detail": {"field": "g"}, "order": {"field": "k"}}},
-        {"data": {"values": lines}, "mark": {"type": "line", "strokeWidth": 4.5 if only_truck else 3.2,
-                                             "opacity": 0.95, "strokeJoin": "round"},
-         "encoding": {**geo, "detail": {"field": "truck"}, "order": {"field": "k"}, "color": color}},
+        {"data": {"values": lines},
+         "mark": {"type": "line", "strokeJoin": "round"},
+         "encoding": {**geo, "detail": {"field": "truck"}, "order": {"field": "k"},
+                      "color": {"field": "color", "type": "nominal", "scale": None},
+                      "strokeWidth": {"field": "stroke_width", "type": "quantitative", "scale": None},
+                      "opacity": {"field": "opacity", "type": "quantitative", "scale": None}}},
         {"data": {"values": pts},
-         "mark": {"type": "circle", "size": 420 if only_truck else 220, "stroke": "white", "strokeWidth": 2,
-                  "opacity": 1},
-         "encoding": {**geo, "color": color, "tooltip": tip}},
-        {"data": {"values": pts},
-         "mark": {"type": "text", "font": FONT, "fontSize": 12 if only_truck else 9, "fontWeight": "bold",
-                  "color": "white"},
+         "mark": {"type": "circle", "stroke": "white", "strokeWidth": 1.5},
+         "encoding": {**geo, "color": {"field": "color", "type": "nominal", "scale": None},
+                      "size": {"field": "size", "type": "quantitative", "scale": None},
+                      "opacity": {"field": "opacity", "type": "quantitative", "scale": None},
+                      "tooltip": tip}},
+        {"data": {"values": [p for p in pts if p["seq"]]},
+         "mark": {"type": "text", "font": FONT, "fontSize": 12 if active_set and len(active_set) == 1 else 9,
+                  "fontWeight": "bold", "color": "white"},
          "encoding": {**geo, "text": {"field": "seq"}, "tooltip": tip}},
         {"data": {"values": [{"lat": plan.hub.lat, "lon": plan.hub.lon, "n": plan.hub.name}]},
          "mark": {"type": "point", "shape": "square", "size": 380, "filled": True, "color": "#f9ab00",
@@ -128,8 +149,8 @@ def route_view_spec(plan: DispatchPlan, only_truck: str | None = None, width: in
                   "color": "#b06000"},
          "encoding": {**geo, "text": {"field": "n"}}},
     ]
-    if only_truck:  # store names next to the numbered drops
-        layers.insert(4, {"data": {"values": pts},
+    if active_set and len(active_set) == 1:
+        layers.insert(4, {"data": {"values": [p for p in pts if p["seq"]]},
                           "mark": {"type": "text", "font": FONT, "fontSize": 12, "fontWeight": "bold", "dx": 15, "align": "left",
                                    "color": "#202124"},
                           "encoding": {**geo, "text": {"field": "name"}}})
@@ -145,10 +166,16 @@ def route_view_spec(plan: DispatchPlan, only_truck: str | None = None, width: in
     }
 
 
-def load_view_spec(plan: DispatchPlan, only_truck: str | None = None, width: int = 620) -> dict[str, Any]:
+def load_view_spec(plan: DispatchPlan, only_truck: str | None = None,
+                   active_trucks: list[str] | None = None, width: int = 620) -> dict[str, Any]:
     """Where each store's cartons sit, measured from the rear door (0 = door)."""
+    if only_truck and not active_trucks:
+        active_trucks = [only_truck]
+    active_set = set(active_trucks) if active_trucks else None
     rows = []
-    routes = [r for r in plan.routes if not only_truck or r.truck_id == only_truck]
+    # If active_trucks specified, filter to active trucks (e.g. 1 truck or 3 trucks)
+    routes = [r for r in plan.routes if not active_set or r.truck_id in active_set]
+    is_single = len(routes) == 1
     for r in routes:
         lp = plan.loads.get(r.truck_id)
         if lp is None:
@@ -160,11 +187,11 @@ def load_view_spec(plan: DispatchPlan, only_truck: str | None = None, width: int
             if z is None:
                 continue
             a, b = max(0.0, L - z.x_end), L - z.x_start
-            row = f"{rs.seq}. {rs.stop.name[:26]}" if only_truck else f"{r.truck_id} · {r.driver}"
+            row = f"{rs.seq}. {rs.stop.name[:26]}" if is_single else f"{r.truck_id} · {r.driver}"
             rows.append({"row": row, "truck": r.truck_id, "seq": rs.seq, "store": rs.stop.name,
                          "a": round(a), "b": round(b), "L": L, "cartons": len(rs.stop.boxes),
                          "kg": round(sum(x.weight_kg for x in rs.stop.boxes)),
-                         "eta": _hm(rs.arrive_min), "lab": f"S{rs.seq}" if not only_truck else f"{len(rs.stop.boxes)} ctn",
+                         "eta": _hm(rs.arrive_min), "lab": f"S{rs.seq}" if not is_single else f"{len(rs.stop.boxes)} ctn",
                          "where": f"{round(a)}–{round(b)} cm from door"})
     Lmax = max((x["L"] for x in rows), default=500)
     seqs = sorted({x["seq"] for x in rows})
@@ -174,14 +201,14 @@ def load_view_spec(plan: DispatchPlan, only_truck: str | None = None, width: int
     tip = [{"field": "truck", "title": "Truck"}, {"field": "seq", "title": "Drop #"},
            {"field": "store", "title": "Store"}, {"field": "cartons", "title": "Cartons"},
            {"field": "kg", "title": "kg"}, {"field": "where", "title": "Put them"}, {"field": "eta", "title": "ETA"}]
-    order = [f"{rs.seq}. {rs.stop.name[:28]}" for r in routes for rs in r.stops] if only_truck else \
+    order = [f"{rs.seq}. {rs.stop.name[:28]}" for r in routes for rs in r.stops] if is_single else \
         [f"{r.truck_id} · {r.driver}" for r in routes]
     h = max(200, 36 * len(order))
     x = {"field": "a", "type": "quantitative", "title": "cm from the REAR DOOR  →  toward the CAB",
          "scale": {"domain": [0, Lmax]},
          "axis": {"labelFont": FONT, "labelFontSize": 12, "titleFont": FONT, "titleFontSize": 13, "grid": True}}
-    title = ("Where each store's cartons sit in the truck" if only_truck else
-             "LIFO load plan · every truck: drop 1 at the door, last drop at the cab")
+    title = ("Where each store's cartons sit in the truck" if is_single else
+             f"LIFO load plan · {len(routes)} trucks: drop 1 at the door, last drop at the cab")
     return {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "title": {"text": title, "subtitle": "Load from the cab end first (highest drop number) · "
@@ -203,3 +230,4 @@ def load_view_spec(plan: DispatchPlan, only_truck: str | None = None, width: int
         ],
         "config": {"view": {"stroke": None}, "background": "white"},
     }
+

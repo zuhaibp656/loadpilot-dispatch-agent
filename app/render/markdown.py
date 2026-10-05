@@ -224,8 +224,13 @@ def briefings_markdown(plan: DispatchPlan, links_by_truck: dict[str, str] | None
     links_by_truck = links_by_truck or {}
     routes = plan.routes
     who = (driver or "").strip().lower()
-    if who:
-        routes = [r for r in routes if who in (r.driver.lower(), r.truck_id.lower())]
+    if who and who not in ("all", "fleet", "all drivers", "everyone"):
+        import re
+        parts = [p.strip() for p in re.split(r"[,;+&]|\band\b", who) if p.strip() and p.strip() not in ("and", "&")]
+        if parts:
+            routes = [r for r in routes if any(p in r.driver.lower() or p in r.truck_id.lower()
+                                               or r.truck_id.lower() in p or r.driver.lower() in p
+                                               for p in parts)]
     if not routes:
         return f"\n\nNo driver or truck matching '{driver}' found in plan {plan.plan_id}."
 

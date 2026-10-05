@@ -119,7 +119,11 @@ def test_truck_tool(planned):
     ctx, out = planned
     tid = out["trucks"][0]["id"]
     r = T.get_truck_load_plan(ctx, tid)
-    assert r["lifo_ok"] and ctx.state[T.PENDING_KEY] == {"kind": "truck", "focus": tid}
+    assert r["lifo_ok"] and ctx.state[T.PENDING_KEY] == {
+        "kind": "truck",
+        "focus": tid,
+        "active_trucks": [tid],
+    }
     resp = A.append_report(ctx, A.LlmResponse(content=types.Content(role="model", parts=[
         types.Part(text="ok")])))
     assert f"Loading sheet · {tid}" in resp.content.parts[-1].text

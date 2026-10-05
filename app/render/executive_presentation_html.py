@@ -632,15 +632,9 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <!-- ═════════════ 00 OVERVIEW ═════════════ -->
 <section class="slide-section" data-title="00 Overview">
  <div class="wrap-max">
-  <div class="agent-hero-branding">
-    <div class="agent-badge-row">
-      <span class="agent-hero-pill">Autonomous Dispatch Agent</span>
-      <span class="agent-ver-pill">Gemini Enterprise · Google ADK · Vertex AI Agent Engine</span>
-    </div>
-    <h1 class="agent-mega-title"><span class="gradient-span">FleetFlow</span></h1>
-    <div class="agent-hero-sub">Truck Load &amp; Corridor Route Optimization Engine</div>
-  </div>
-  <p class="tagline-lead"><b>FleetFlow</b> is Google Cloud's autonomous dispatch engine for retail and CPG distribution. Each morning it ingests orders, optimizes <b>which trucks</b> roll out, and clusters <b>which corridor</b> each driver takes. It calculates <b>the drop sequence</b> and <b>where every carton sits</b> in 3D space, ensuring drop 1 is at the rear door and the final drop sits behind the cab. Crews eliminate carton digging, and fleets reduce operational mileage and emissions.</p>
+  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">FleetFlow · Retail &amp; CPG Supply Chain</span><span class="kicker-sep">/</span><span class="kicker-sub">Gemini Enterprise · Google ADK · Vertex AI Agent Engine</span></div>
+  <h1 class="monumental-headline">Load it in reverse.<br><span class="gradient-span">Drive it in order.</span> Deliver it all.</h1>
+  <p class="tagline-lead"><b>FleetFlow</b> is an autonomous dispatch engine for primary and secondary distribution. Each morning it decides <b>which trucks</b> roll out and <b>which corridor</b> each driver takes. It then works out <b>the drop order</b> and <b>where every carton sits</b>, so drop 1 is at the door and the last drop sits behind the cab. Crews stop digging for cartons, and the fleet runs fewer kilometres.</p>
 
   <div class="gemini-cockpit">
     <div class="gemini-brand-badge">

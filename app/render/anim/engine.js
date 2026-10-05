@@ -61,15 +61,17 @@
     var el = $('div', 'lp-pane', host), self = this; this.el = el;
     var top = $('div', 'lp-top', el);
     var title = $('div', 'lp-title', top), stats = $('div', 'lp-stats', top);
+    var truckBar = $('div', 'lp-truck-bar', el);
+    $('span', 'lp-truck-bar-lbl', truckBar, '🚚 Fleet:');
+    var sel = $('div', 'lp-trucks', truckBar);
     var body = $('div', 'lp-body', el);
     var cwrap = $('div', 'lp-cwrap', body), cv = $('canvas', 'lp-canvas', cwrap), ctx = cv.getContext('2d');
     var hud = $('div', 'lp-hud', cwrap), banner = $('div', 'lp-banner', cwrap);
     var legend = $('div', 'lp-legend', body);
     var ctr = $('div', 'lp-ctrl', el);
-    var sel = $('div', 'lp-trucks', ctr);
     var play = $('button', 'lp-btn lp-play', ctr, '&#10074;&#10074;');
-    var prevStopBtn = $('button', 'lp-btn lp-step-btn', ctr, '⏮ Prev Stop');
-    var nextStopBtn = $('button', 'lp-btn lp-step-btn', ctr, 'Next Stop ⏭');
+    var prevStopBtn = $('button', 'lp-btn lp-step-btn', ctr, '⏮ Prev');
+    var nextStopBtn = $('button', 'lp-btn lp-step-btn', ctr, 'Next ⏭');
     var pauseStepBtn = $('button', 'lp-btn lp-active', ctr, 'Step Pause: ON');
     var modeB = $('button', 'lp-btn', ctr, 'Unload replay');
     var spd = $('button', 'lp-btn', ctr, '1x');
@@ -90,8 +92,10 @@
     var hint = $('div', 'lp-hint', cwrap, '👆 Click a store on the right (or any carton) to see exactly where its boxes go');
 
     trucks.forEach(function (tr, i) {
-      var b = $('button', 'lp-chip', sel, esc(tr.id) + ' <small>' + esc(tr.driver) + '</small>');
-      b.style.borderColor = tr.color; b.onclick = function () { pick(i); };
+      var isAct = tr.active !== false;
+      var tag = isAct && D.active_trucks && D.active_trucks.length < trucks.length ? ' • Active' : '';
+      var b = $('button', 'lp-chip' + (isAct ? '' : ' dim'), sel, esc(tr.id) + ' <small>' + esc(tr.driver) + tag + '</small>');
+      b.style.borderLeftColor = tr.color; b.onclick = function () { pick(i); };
     });
     function stopInfo(seq) {  // derived from the placed cartons: zone, layers, load steps
       var bx = T.boxes, o = { n: 0, kg: 0, frag: 0, x0: 1e9, x1: -1e9, z1: 0, y0: 1e9, y1: -1e9, s0: 1e9, s1: -1, skus: {} };
@@ -753,15 +757,24 @@
         kv('Cost / day', a.cost + ' &rarr; <span class="ok">' + b.cost + '</span>') +
         kv('Saved', '<span class="ok">' + (K.saved || '') + '</span>');
     })();
+    var activeTrucks = (D.active_trucks && D.active_trucks.length) ? new Set(D.active_trucks) : null;
     function buildLegend() {
       var routes = R[set] || [];
       legend.innerHTML = '';
-      var h = $('div', 'lp-lh', legend, set === 'opt' ? 'FleetFlow trucks' : 'Today: one truck per sales area');
-      var all = $('div', 'lp-li' + (sel < 0 ? ' on' : ''), legend, '<i style="background:#fdd663"></i><b>All trucks</b> <span class="lp-muted">' + routes.length + ' routes</span>');
-      all.onclick = function () { sel = -1; closePop(); buildLegend(); fitAll(); };
+      var h = $('div', 'lp-lh', legend);
+      if (activeTrucks && set === 'opt') {
+        h.innerHTML = '<span>FleetFlow Trucks</span><span class="lp-step-tag" style="margin:0;">' + activeTrucks.size + ' of ' + routes.length + ' active</span>';
+      } else {
+        h.innerHTML = '<span>' + (set === 'opt' ? 'FleetFlow trucks' : 'Today: one truck per sales area') + '</span>';
+      }
+      var isAll = sel < 0 && !activeTrucks;
+      var all = $('div', 'lp-li' + (isAll ? ' on' : ''), legend, '<i style="background:#fdd663"></i><b>All trucks</b> <span class="lp-muted">' + routes.length + ' routes</span>');
+      all.onclick = function () { sel = -1; activeTrucks = null; closePop(); buildLegend(); fitAll(); };
       routes.forEach(function (r, i) {
-        var row = $('div', 'lp-li lp-click' + (sel === i ? ' on' : ''), legend, '<i style="background:' + r.color + '"></i><div><b>' + esc(r.id) +
-          '</b> ' + esc(r.driver) + '<br><span class="lp-muted">' + esc(r.cname || r.corridor) + (r.branch && r.branch !== 'solo' && r.branch !== 'area' ? ' · ' + esc(r.branch) : '') +
+        var isAct = !activeTrucks || activeTrucks.has(r.id);
+        var actChip = (isAct && activeTrucks && activeTrucks.size < routes.length) ? '<span class="lp-active-pill">ACTIVE</span>' : '';
+        var row = $('div', 'lp-li lp-click' + (sel === i ? ' on' : '') + (!isAct && sel < 0 ? ' dim' : ''), legend, '<i style="background:' + r.color + '"></i><div><b>' + esc(r.id) +
+          '</b> ' + esc(r.driver) + actChip + '<br><span class="lp-muted">' + esc(r.cname || r.corridor) + (r.branch && r.branch !== 'solo' && r.branch !== 'area' ? ' · ' + esc(r.branch) : '') +
           ' · ' + r.stops.length + ' drops · ' + r.km + ' km · ' + fmtT(r.start) + '–' + fmtT(r.end) + '</span></div>');
         row.onclick = function () { focus(i); };
       });
@@ -871,37 +884,68 @@
       var routes = R[set] || [], delivered = 0, total = 0;
       ctx.lineJoin = 'round'; ctx.lineCap = 'round';
       routes.forEach(function (r, i) {
-        var dim = sel >= 0 && sel !== i, pos = posAt(r, t);
+        var isDimmed = (activeTrucks && !activeTrucks.has(r.id)) || (sel >= 0 && sel !== i);
+        var pos = posAt(r, t);
         // planned road path
-        ctx.globalAlpha = dim ? 0.12 : 0.6; ctx.strokeStyle = r.color; ctx.lineWidth = sel === i ? 5.5 : 3.2; ctx.setLineDash(sel === i ? [] : [7, 6]);
-        ctx.beginPath(); r.L.forEach(function (lg) { pathLeg(lg); }); ctx.stroke(); ctx.setLineDash([]);
+        if (isDimmed) {
+          ctx.globalAlpha = 0.14; ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1.8; ctx.setLineDash([5, 5]);
+          ctx.beginPath(); r.L.forEach(function (lg) { pathLeg(lg); }); ctx.stroke(); ctx.setLineDash([]);
+        } else {
+          ctx.globalAlpha = 0.8; ctx.strokeStyle = r.color; ctx.lineWidth = (sel === i || (activeTrucks && activeTrucks.size <= 3)) ? 4.5 : 3.2; ctx.setLineDash([]);
+          ctx.beginPath(); r.L.forEach(function (lg) { pathLeg(lg); }); ctx.stroke();
+        }
         // driven trail
-        if (!dim) {
-          ctx.globalAlpha = 1; ctx.shadowColor = r.color; ctx.shadowBlur = 10; ctx.lineWidth = sel === i ? 6.5 : 4.5; ctx.beginPath();
+        if (!isDimmed) {
+          ctx.globalAlpha = 1; ctx.shadowColor = r.color; ctx.shadowBlur = 10; ctx.lineWidth = (sel === i || (activeTrucks && activeTrucks.size <= 3)) ? 5.8 : 4.5; ctx.beginPath();
           for (var li = 0; li < r.L.length && li <= pos.leg; li++) pathLeg(r.L[li], li === pos.leg && pos.k ? pos : null);
           ctx.stroke(); ctx.shadowBlur = 0;
         }
         // stops
-        var big = z >= 10.5 || sel === i;
+        var big = z >= 10.5 || sel === i || (activeTrucks && activeTrucks.has(r.id));
         r.stops.forEach(function (s) {
           var q = sp(s.X, s.Y), done = t >= s.arr; total++; if (done) delivered++;
           if (q[0] < -25 || q[1] < -25 || q[0] > S.W + 25 || q[1] > S.H + 25) return;
-          ctx.globalAlpha = dim ? 0.18 : 1;
-          var rad = big ? 11 : 6.5, isPop = popStop && popStop[1] === s;
-          ctx.beginPath(); ctx.arc(q[0], q[1], isPop ? rad + 4 : rad, 0, Math.PI * 2);
-          ctx.fillStyle = done ? r.color : '#0b1020'; ctx.fill(); ctx.strokeStyle = isPop ? '#fff' : r.color; ctx.lineWidth = isPop ? 3 : 2.2; ctx.stroke();
-          if (big) { ctx.fillStyle = done ? '#0b1020' : '#fff'; ctx.font = '700 11px Inter,Roboto,Arial'; ctx.textAlign = 'center'; ctx.fillText(s.seq, q[0], q[1] + 4); }
-          if (done && t - s.arr < 12 && !dim) { ctx.globalAlpha = (1 - (t - s.arr) / 12) * 0.9; ctx.beginPath(); ctx.arc(q[0], q[1], rad + (t - s.arr) * 1.5, 0, Math.PI * 2); ctx.stroke(); }
+          if (isDimmed) {
+            ctx.globalAlpha = 0.16;
+            ctx.beginPath(); ctx.arc(q[0], q[1], 4.5, 0, Math.PI * 2);
+            ctx.fillStyle = '#64748b'; ctx.fill();
+          } else {
+            ctx.globalAlpha = 1;
+            var rad = big ? 11 : 6.5, isPop = popStop && popStop[1] === s;
+            ctx.beginPath(); ctx.arc(q[0], q[1], isPop ? rad + 4 : rad, 0, Math.PI * 2);
+            ctx.fillStyle = done ? r.color : '#0b1020'; ctx.fill(); ctx.strokeStyle = isPop ? '#fff' : r.color; ctx.lineWidth = isPop ? 3 : 2.2; ctx.stroke();
+            if (big) { ctx.fillStyle = done ? '#0b1020' : '#fff'; ctx.font = '700 11px Inter,Roboto,Arial'; ctx.textAlign = 'center'; ctx.fillText(s.seq, q[0], q[1] + 4); }
+            if (done && t - s.arr < 12) { ctx.globalAlpha = (1 - (t - s.arr) / 12) * 0.9; ctx.beginPath(); ctx.arc(q[0], q[1], rad + (t - s.arr) * 1.5, 0, Math.PI * 2); ctx.stroke(); }
+          }
         });
         // truck marker
         var cp = sp(pos.X, pos.Y);
-        ctx.globalAlpha = dim ? 0.25 : 1;
-        ctx.beginPath(); ctx.arc(cp[0], cp[1], 12, 0, Math.PI * 2); ctx.fillStyle = r.color; ctx.fill(); ctx.lineWidth = 2.5; ctx.strokeStyle = '#fff'; ctx.stroke();
-        ctx.font = '15px Arial'; ctx.textAlign = 'center'; ctx.fillStyle = '#fff'; ctx.fillText('🚚', cp[0], cp[1] + 5);
-        if (!dim) {
-          ctx.font = '700 12.5px Inter,Roboto,Arial'; ctx.textAlign = 'left'; var lbl = r.id + ' · ' + r.driver;
-          var w = ctx.measureText(lbl).width; ctx.fillStyle = 'rgba(8,12,24,0.88)'; ctx.fillRect(cp[0] + 13, cp[1] - 10, w + 10, 20);
-          ctx.fillStyle = r.color; ctx.fillText(lbl, cp[0] + 18, cp[1] + 4.5);
+        if (isDimmed) {
+          ctx.globalAlpha = 0.22;
+          ctx.beginPath(); ctx.arc(cp[0], cp[1], 7, 0, Math.PI * 2); ctx.fillStyle = '#64748b'; ctx.fill();
+        } else {
+          ctx.globalAlpha = 1;
+          ctx.beginPath(); ctx.arc(cp[0], cp[1], 12, 0, Math.PI * 2); ctx.fillStyle = r.color; ctx.fill(); ctx.lineWidth = 2.5; ctx.strokeStyle = '#fff'; ctx.stroke();
+          ctx.font = '15px Arial'; ctx.textAlign = 'center'; ctx.fillStyle = '#fff'; ctx.fillText('🚚', cp[0], cp[1] + 5);
+          var distToHub = Math.hypot(cp[0] - hp[0], cp[1] - hp[1]);
+          var isHoveredOrSelected = (hover && hover.r === r) || (sel === i);
+          var showLabel = isHoveredOrSelected || (distToHub > 48) || (activeTrucks && activeTrucks.size <= 3 && distToHub > 25);
+          if (showLabel) {
+            ctx.font = '700 12px Inter,-apple-system,sans-serif'; ctx.textAlign = 'left'; var lbl = r.id + ' · ' + r.driver;
+            var w = ctx.measureText(lbl).width;
+            var lx = cp[0] + 14;
+            var ly = (distToHub < 65) ? (hp[1] - 28 - (i % 4) * 26) : (cp[1] - 11);
+            if (distToHub < 65 && i % 2 === 1) lx = hp[0] - w - 26;
+            if (lx + w + 16 > S.W) lx = cp[0] - w - 24;
+            if (lx < 10) lx = 10;
+            ctx.fillStyle = 'rgba(15,23,42,0.92)';
+            ctx.beginPath();
+            if (ctx.roundRect) ctx.roundRect(lx, ly, w + 12, 22, 6);
+            else ctx.rect(lx, ly, w + 12, 22);
+            ctx.fill();
+            ctx.strokeStyle = r.color; ctx.lineWidth = 1; ctx.stroke();
+            ctx.fillStyle = '#fff'; ctx.fillText(lbl, lx + 6, ly + 15);
+          }
         }
         ctx.globalAlpha = 1;
       });

@@ -156,6 +156,49 @@ def _objective(text: str) -> Objective | None:
     return None
 
 
+def parse_target_trucks(query: str, plan: Any) -> list[str] | None:
+    """Parse truck IDs, driver names, or counts from a user query against a dispatch plan.
+    - Returns None if the query asks for all trucks, or if query is empty.
+    - Returns list of matching truck IDs (e.g. ['T17-1'] for 1 truck, ['T17-1', 'T14-3', 'ACE-2'] for 3 trucks).
+    """
+    if not query or not plan or not getattr(plan, "routes", None):
+        return None
+    q = query.strip().lower()
+    if q in ("all", "all trucks", "everyone", "fleet", "whole fleet", "entire fleet", "all routes", "both"):
+        return None
+
+    # Check for numeric truck requests e.g. "3 trucks", "3 routes", "first 3", "1 truck"
+    m_count = re.search(r"\b(\d+)\s*(?:trucks?|routes?)\b", q)
+    if not m_count:
+        m_count = re.search(r"\b(?:first|show|give|display)\s*(\d+)\b", q)
+    if m_count:
+        n = int(m_count.group(1))
+        if 0 < n < len(plan.routes):
+            return [r.truck_id for r in plan.routes[:n]]
+        elif n >= len(plan.routes):
+            return None
+
+    matched: list[str] = []
+    # Match specific truck IDs, driver names, or corridors
+    for r in plan.routes:
+        tid = r.truck_id.lower()
+        drv = r.driver.lower()
+        cor = r.corridor.lower()
+        if re.search(rf"\b{re.escape(tid)}\b", q) or re.search(rf"\b{re.escape(drv)}\b", q) or tid in q or drv in q:
+            if r.truck_id not in matched:
+                matched.append(r.truck_id)
+        elif cor and re.search(rf"\b{re.escape(cor)}\b", q):
+            if r.truck_id not in matched:
+                matched.append(r.truck_id)
+
+    if matched:
+        if len(matched) == len(plan.routes):
+            return None  # All trucks
+        return matched
+
+    return None
+
+
 # ==============================================================================
 # Plan runner shared by tools
 # ==============================================================================
@@ -280,16 +323,34 @@ def plan_dispatch(tool_context: ToolContext, truck_counts: str = "", objective: 
     sess = session(st)
     if who and sess.get("plan") and not (truck_counts or objective or corridor_claims or fuel_price or driver_day_cost or city or hub_id or dispatch_date or order_source):
         plan = sess["plan"]
-        r = next((x for x in plan.routes if who in (x.driver.lower(), x.truck_id.lower())), None)
-        if r is not None:
-            st["lp_last_driver"] = r.driver
-            st["lp_last_truck"] = r.truck_id
-            plan.focus_truck_id = r.truck_id
-            sess["links"] = start_publishing_driver(sess, plan, r.truck_id)
-            queue(st, "driver", focus=r.truck_id,
-                  note=f"🗓️ {r.driver}'s part of today's fleet plan {plan.plan_id} "
-                       f"({plan.optimized.trucks} trucks, ₹{plan.savings_inr:,.0f}/day saved fleet-wide).")
-            return _driver_summary(plan, r.truck_id)
+        targets = parse_target_trucks(who, plan)
+        if targets:
+            focus_r = next((x for x in plan.routes if x.truck_id in targets), plan.routes[0])
+            st["lp_last_driver"] = focus_r.driver
+            st["lp_last_truck"] = focus_r.truck_id
+            plan.focus_truck_id = focus_r.truck_id
+            try:
+                from app.integration.media import start_publishing
+            except ImportError:  # pragma: no cover
+                from integration.media import start_publishing
+            sess["links"] = start_publishing(sess, plan, focus_r.truck_id,
+                                             only_truck=(focus_r.truck_id if len(targets) == 1 else None),
+                                             active_trucks=targets)
+            if len(targets) == 1:
+                queue(st, "driver", focus=focus_r.truck_id, active_trucks=targets,
+                      note=f"🗓️ {focus_r.driver}'s part of today's fleet plan {plan.plan_id} "
+                           f"({plan.optimized.trucks} trucks, ₹{plan.savings_inr:,.0f}/day saved fleet-wide).")
+                return _driver_summary(plan, focus_r.truck_id)
+            else:
+                queue(st, "dispatch", focus=focus_r.truck_id, active_trucks=targets)
+                return {
+                    "status": "ok",
+                    "highlighted_trucks": targets,
+                    "trucks": [{"id": r.truck_id, "driver": r.driver, "corridor": r.corridor,
+                                "stops": len(r.stops), "km": r.km} for r in plan.routes if r.truck_id in targets],
+                    "ui": f"Routes for {len(targets)} trucks ({', '.join(targets)}) are highlighted; "
+                          f"{len(plan.routes) - len(targets)} other fleet routes are dimmed."
+                }
 
     try:
         out = run_plan(st)
@@ -298,18 +359,37 @@ def plan_dispatch(tool_context: ToolContext, truck_counts: str = "", objective: 
     if who:
         sess = session(st)
         plan = sess["plan"]
-        r = next((x for x in plan.routes if who in (x.driver.lower(), x.truck_id.lower())), None)
-        if r is None:
-            out["note"] = f"'{driver}' is not driving today; showing the whole fleet."
+        targets = parse_target_trucks(who, plan)
+        if targets:
+            focus_r = next((x for x in plan.routes if x.truck_id in targets), plan.routes[0])
+            st["lp_last_driver"] = focus_r.driver
+            st["lp_last_truck"] = focus_r.truck_id
+            plan.focus_truck_id = focus_r.truck_id
+            try:
+                from app.integration.media import start_publishing
+            except ImportError:  # pragma: no cover
+                from integration.media import start_publishing
+            sess["links"] = start_publishing(sess, plan, focus_r.truck_id,
+                                             only_truck=(focus_r.truck_id if len(targets) == 1 else None),
+                                             active_trucks=targets)
+            if len(targets) == 1:
+                queue(st, "driver", focus=focus_r.truck_id, active_trucks=targets,
+                      note=f"🗓️ {focus_r.driver}'s part of today's fleet plan {plan.plan_id} "
+                           f"({plan.optimized.trucks} trucks, ₹{plan.savings_inr:,.0f}/day saved fleet-wide).")
+                return _driver_summary(plan, focus_r.truck_id)
+            else:
+                queue(st, "dispatch", focus=focus_r.truck_id, active_trucks=targets)
+                return {
+                    "status": "ok",
+                    "highlighted_trucks": targets,
+                    "trucks": [{"id": r.truck_id, "driver": r.driver, "corridor": r.corridor,
+                                "stops": len(r.stops), "km": r.km} for r in plan.routes if r.truck_id in targets],
+                    "ui": f"Routes for {len(targets)} trucks ({', '.join(targets)}) are highlighted; "
+                          f"{len(plan.routes) - len(targets)} other fleet routes are dimmed."
+                }
+        else:
+            out["note"] = f"'{driver}' was not matched to a specific truck; showing the whole fleet."
             return out
-        st["lp_last_driver"] = r.driver
-        st["lp_last_truck"] = r.truck_id
-        plan.focus_truck_id = r.truck_id
-        sess["links"] = start_publishing_driver(sess, plan, r.truck_id)
-        queue(st, "driver", focus=r.truck_id,
-              note=f"🗓️ {r.driver}'s part of today's fleet plan {plan.plan_id} "
-                   f"({plan.optimized.trucks} trucks, ₹{plan.savings_inr:,.0f}/day saved fleet-wide).")
-        return _driver_summary(plan, r.truck_id)
     return out
 
 
@@ -335,10 +415,12 @@ def claim_corridor(tool_context: ToolContext, driver: str, corridor: str) -> dic
 
 
 def get_truck_load_plan(tool_context: ToolContext, truck_id: str) -> dict[str, Any]:
-    """Show the loading sheet, 3D loading animation and loader video for one truck (focus truck).
+    """Show the loading sheet, 3D loading animation and loader video for one truck, 3 trucks, or the whole fleet.
 
     Args:
-        truck_id: Truck id from the plan, e.g. "T17-1", or a driver name.
+        truck_id: Truck id(s) or driver name(s) from the plan, e.g. "T17-1", "T17-1, T14-3, ACE-2",
+            "3 trucks", "Ravi", or "all". When 1 or 3 trucks are given, those trucks are highlighted
+            and others are dimmed. When "all" is given, all trucks are shown at full brightness.
     """
     st = tool_context.state
     sess = session(st)
@@ -346,32 +428,59 @@ def get_truck_load_plan(tool_context: ToolContext, truck_id: str) -> dict[str, A
     if plan is None:
         run_plan(st)
         plan = sess["plan"]
-    key = truck_id.strip().lower()
+    key = (truck_id or "").strip().lower()
     if key in ("he", "him", "his", "this", "that", "it") and st.get("lp_last_driver"):
         key = st["lp_last_driver"].lower()
     elif key in ("he", "him", "his", "this", "that", "it") and st.get("lp_last_truck"):
         key = st["lp_last_truck"].lower()
-    r = next((x for x in plan.routes if key in (x.truck_id.lower(), x.driver.lower())), None)
-    if r is None:
-        return {"status": "error", "message": f"No truck '{truck_id}' in plan.",
-                "trucks": [x.truck_id for x in plan.routes]}
-    st["lp_last_driver"] = r.driver
-    st["lp_last_truck"] = r.truck_id
-    plan.focus_truck_id = r.truck_id
+
+    targets = parse_target_trucks(key, plan)
     try:
         from app.integration.media import start_publishing
     except ImportError:  # pragma: no cover
         from integration.media import start_publishing
-    sess["links"] = start_publishing(sess, plan, r.truck_id)
-    queue(st, "truck", focus=r.truck_id)
-    lp = plan.loads[r.truck_id]
-    return {"truck": r.truck_id, "driver": r.driver, "type": r.truck_type.name,
-            "corridor": r.corridor, "branch": r.branch, "stops": len(r.stops),
-            "cartons": len(lp.placed), "volume_fill_pct": lp.volume_fill_pct,
-            "payload_fill_pct": lp.weight_fill_pct, "lifo_ok": lp.lifo_ok,
-            "load_first": f"stop {len(r.stops)} (last delivery) at the cab wall",
-            "load_last": "stop 1 (first delivery) at the rear door",
-            "ui": "Loading sheet, 3D animation and video are attached automatically."}
+
+    if targets is None:
+        focus = plan.routes[0].truck_id if plan.routes else None
+        plan.focus_truck_id = focus
+        sess["links"] = start_publishing(sess, plan, focus, active_trucks=None)
+        queue(st, "truck", focus=focus, active_trucks=None)
+        return {"status": "ok", "scope": "all_trucks",
+                "trucks": [{"id": r.truck_id, "driver": r.driver,
+                            "cartons": len(plan.loads[r.truck_id].placed) if r.truck_id in plan.loads else 0,
+                            "fill": plan.loads[r.truck_id].volume_fill_pct if r.truck_id in plan.loads else None}
+                           for r in plan.routes],
+                "ui": "All trucks loading sheets and 3D views are shown in full brightness."}
+
+    focus_r = next((x for x in plan.routes if x.truck_id in targets), plan.routes[0])
+    st["lp_last_driver"] = focus_r.driver
+    st["lp_last_truck"] = focus_r.truck_id
+    plan.focus_truck_id = focus_r.truck_id
+    sess["links"] = start_publishing(sess, plan, focus_r.truck_id,
+                                     only_truck=(focus_r.truck_id if len(targets) == 1 else None),
+                                     active_trucks=targets)
+    queue(st, "truck", focus=focus_r.truck_id, active_trucks=targets)
+
+    if len(targets) == 1:
+        r = focus_r
+        lp = plan.loads[r.truck_id]
+        return {"truck": r.truck_id, "driver": r.driver, "type": r.truck_type.name,
+                "corridor": r.corridor, "branch": r.branch, "stops": len(r.stops),
+                "cartons": len(lp.placed), "volume_fill_pct": lp.volume_fill_pct,
+                "payload_fill_pct": lp.weight_fill_pct, "lifo_ok": lp.lifo_ok,
+                "load_first": f"stop {len(r.stops)} (last delivery) at the cab wall",
+                "load_last": "stop 1 (first delivery) at the rear door",
+                "ui": f"Loading plan for {r.truck_id} ({r.driver}) is highlighted; other fleet trucks are dimmed."}
+    else:
+        act_str = ", ".join(targets)
+        return {"status": "ok", "highlighted_trucks": targets,
+                "trucks": [{"id": r.truck_id, "driver": r.driver, "type": r.truck_type.name,
+                            "stops": len(r.stops),
+                            "cartons": len(plan.loads[r.truck_id].placed) if r.truck_id in plan.loads else 0,
+                            "volume_fill_pct": plan.loads[r.truck_id].volume_fill_pct if r.truck_id in plan.loads else None}
+                           for r in plan.routes if r.truck_id in targets],
+                "ui": f"Loading plans for {len(targets)} trucks ({act_str}) are highlighted; "
+                      f"{len(plan.routes) - len(targets)} other fleet trucks are dimmed."}
 
 
 def ingest_delivery_orders(tool_context: ToolContext, text: str = "") -> dict[str, Any]:
@@ -606,8 +715,9 @@ def driver_briefings(tool_context: ToolContext, driver: str = "") -> dict[str, A
     WhatsApp dispatch link, and mobile driver portal link).
 
     Args:
-        driver: Optional driver name (e.g. "Ravi") or truck id ("T17-1") to send instructions
-            ONLY to that driver. When omitted, sends instructions to all drivers in the fleet.
+        driver: Optional driver name(s) (e.g. "Ravi"), truck id(s) ("T17-1", "T17-1, T14-3, ACE-2", "3 trucks")
+            to send instructions ONLY to those drivers/trucks. When omitted or "all", sends instructions to
+            all drivers in the fleet.
     """
     st = tool_context.state
     sess = session(st)
@@ -620,32 +730,49 @@ def driver_briefings(tool_context: ToolContext, driver: str = "") -> dict[str, A
     if who in ("he", "him", "his", "this", "that", "it") and st.get("lp_last_driver"):
         who = st["lp_last_driver"].lower()
 
-    if who:
-        r = next((x for x in plan.routes if who in (x.driver.lower(), x.truck_id.lower())), None)
-        if r is not None:
-            st["lp_last_driver"] = r.driver
-            st["lp_last_truck"] = r.truck_id
-            try:
-                from app.integration.media import start_publishing
-            except ImportError:  # pragma: no cover
-                from integration.media import start_publishing
-            sess["links"] = start_publishing(sess, plan, r.truck_id, only_truck=r.truck_id)
-            if "brief_links" not in sess:
-                sess["brief_links"] = {}
-            if sess["links"].get("html"):
-                sess["brief_links"][r.truck_id] = sess["links"]["html"]
-            queue(st, "briefings", focus=r.truck_id, driver=r.driver)
-            lp = plan.loads.get(r.truck_id)
+    targets = parse_target_trucks(who, plan) if who else None
+    if targets:
+        try:
+            from app.integration.media import start_publishing
+        except ImportError:  # pragma: no cover
+            from integration.media import start_publishing
+
+        focus_r = next((x for x in plan.routes if x.truck_id in targets), plan.routes[0])
+        st["lp_last_driver"] = focus_r.driver
+        st["lp_last_truck"] = focus_r.truck_id
+        sess["links"] = start_publishing(sess, plan, focus_r.truck_id,
+                                         only_truck=(focus_r.truck_id if len(targets) == 1 else None),
+                                         active_trucks=targets)
+        if "brief_links" not in sess:
+            sess["brief_links"] = {}
+        if sess["links"].get("html"):
+            sess["brief_links"][focus_r.truck_id] = sess["links"]["html"]
+
+        if len(targets) == 1:
+            queue(st, "briefings", focus=focus_r.truck_id, driver=focus_r.driver, active_trucks=targets)
+            lp = plan.loads.get(focus_r.truck_id)
             return {
                 "plan_id": plan.plan_id,
-                "driver": r.driver,
-                "truck": r.truck_id,
-                "stops": len(r.stops),
+                "driver": focus_r.driver,
+                "truck": focus_r.truck_id,
+                "stops": len(focus_r.stops),
                 "cartons": len(lp.placed) if lp else 0,
-                "leave": f"{r.start_min // 60:02d}:{r.start_min % 60:02d}",
-                "back": f"{r.end_min // 60:02d}:{r.end_min % 60:02d}",
-                "first_drop": r.stops[0].stop.name if r.stops else "-",
-                "ui": f"Instructions and personal links for {r.driver} ({r.truck_id}) are attached automatically."}
+                "leave": f"{focus_r.start_min // 60:02d}:{focus_r.start_min % 60:02d}",
+                "back": f"{focus_r.end_min // 60:02d}:{focus_r.end_min % 60:02d}",
+                "first_drop": focus_r.stops[0].stop.name if focus_r.stops else "-",
+                "ui": f"Instructions and personal links for {focus_r.driver} ({focus_r.truck_id}) are attached automatically; other trucks dimmed."
+            }
+        else:
+            queue(st, "briefings", focus=focus_r.truck_id, driver=driver, active_trucks=targets)
+            return {
+                "plan_id": plan.plan_id,
+                "highlighted_trucks": targets,
+                "drivers": [{"driver": r.driver, "truck": r.truck_id, "stops": len(r.stops),
+                             "leave": f"{r.start_min // 60:02d}:{r.start_min % 60:02d}"}
+                            for r in plan.routes if r.truck_id in targets],
+                "ui": f"Instructions and links for {len(targets)} drivers ({', '.join(targets)}) are attached; others dimmed."
+            }
+    elif who and who not in ("all", "fleet", "all drivers", "everyone"):
         return {"status": "error", "message": f"No driver or truck matching '{driver}' in today's plan ({', '.join(x.driver for x in plan.routes)})."}
 
     try:
@@ -653,11 +780,11 @@ def driver_briefings(tool_context: ToolContext, driver: str = "") -> dict[str, A
     except ImportError:  # pragma: no cover
         from integration.media import start_briefings
     sess["brief_links"] = start_briefings(sess, plan)
-    queue(st, "briefings", focus=plan.routes[0].truck_id if plan.routes else None, driver=None)
+    queue(st, "briefings", focus=plan.routes[0].truck_id if plan.routes else None, driver=None, active_trucks=None)
     return {"plan_id": plan.plan_id, "drivers": [
         {"driver": r.driver, "truck": r.truck_id, "stops": len(r.stops),
          "leave": f"{r.start_min // 60:02d}:{r.start_min % 60:02d}"} for r in plan.routes],
-        "ui": "One instruction block and personal link per driver is attached automatically."}
+        "ui": "One instruction block and personal link per driver is attached automatically for all drivers."}
 
 
 ALL_TOOLS = [show_planning_wizard, plan_dispatch, claim_corridor, get_truck_load_plan,
