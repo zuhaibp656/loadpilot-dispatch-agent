@@ -386,7 +386,7 @@ def emit_surface(callback_context: CallbackContext | None = None, **_: Any) -> t
     return types.Content(role="model", parts=parts)
 
 
-INSTRUCTION = """You are LoadPilot, a dispatch co-pilot for retail / CPG distribution (paints, FMCG,
+INSTRUCTION = """You are FleetFlow, an autonomous dispatch engine for retail / CPG distribution (paints, FMCG,
 apparel, electronics, building materials). Each morning trucks leave a hub with 8-12 fixed
 deliveries. You (1) group stops into corridors so no two trucks drive the same road, (2) choose the
 truck mix and stop order, (3) load each truck LIFO (last delivery at the cab, first delivery at the
@@ -418,7 +418,6 @@ CONVERSATIONAL CONTINUITY & FOLLOW-UP RULES (STRICT):
 - If the user asks a follow-up for ONE driver or truck (e.g. "only send the instructions to ravi",
   "give suresh his briefing", "send instructions to ravi only", "what about ravi?", "show his loading"):
   * For instructions / briefing: CALL driver_briefings(driver="Ravi"). NEVER call driver_briefings()
-    with no arguments when the user asks for a specific driver!
   * For a driver's route / day / consignment: CALL plan_dispatch(driver="Ravi") or plan_my_route.
   * For 3D loading: CALL get_truck_load_plan(truck_id="Ravi").
   * NEVER output all drivers or the whole fleet table when the user asks for one driver or uses
@@ -429,7 +428,7 @@ CONVERSATIONAL CONTINUITY & FOLLOW-UP RULES (STRICT):
 
 RESPONSE RULES (strict)
 - After tools finish, write ONLY a 3-bullet headline (<= 60 words total) using the tool's numbers.
-  Fleet plan: trucks today vs LoadPilot, INR saved per day (and %), and why drop counts differ
+  Fleet plan: trucks today vs FleetFlow, INR saved per day (and %), and why drop counts differ
   (trucks are filled to payload/space limits: small trucks fewer drops, big trucks more).
   Driver view: drops + cartons + leave/back time, first drop, what goes in first at the cab.
   Briefings: number of drivers briefed, earliest departure, that each has a personal link.
@@ -441,8 +440,8 @@ RESPONSE RULES (strict)
 """
 
 root_agent = Agent(
-    name="loadpilot_agent",
-    description="LoadPilot: truck LIFO loading + corridor route optimisation with cost savings for "
+    name="fleetflow_agent",
+    description="FleetFlow: truck LIFO loading + corridor route optimisation with cost savings for "
                 "retail / CPG dispatch, with animated 3D loading and route plans.",
     model=Gemini(model=MODEL, retry_options=types.HttpRetryOptions(attempts=3)),
     generate_content_config=types.GenerateContentConfig(
@@ -456,12 +455,12 @@ root_agent = Agent(
     after_agent_callback=emit_surface,
 )
 
-app = App(root_agent=root_agent, name="loadpilot_agent")
+app = App(root_agent=root_agent, name="fleetflow_agent")
 
 try:
     from vertexai.preview.reasoning_engines import AdkApp
 
-    class LoadPilotAdkApp(AdkApp):
+    class FleetFlowAdkApp(AdkApp):
         """Agent Engine wrapper that pins Vertex env vars for query / stream_query."""
 
         def __init__(self, agent: Agent = root_agent, **kwargs: Any) -> None:
@@ -481,8 +480,10 @@ try:
             self._env()
             yield from super().stream_query(*args, **kwargs)
 
-    def get_app() -> LoadPilotAdkApp:
-        return LoadPilotAdkApp(agent=root_agent, enable_tracing=True)
+    LoadPilotAdkApp = FleetFlowAdkApp
+
+    def get_app() -> FleetFlowAdkApp:
+        return FleetFlowAdkApp(agent=root_agent, enable_tracing=True)
 
 except ImportError:  # pragma: no cover
     pass

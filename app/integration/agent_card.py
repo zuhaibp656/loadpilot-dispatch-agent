@@ -47,14 +47,14 @@ def build_agent_capabilities() -> AgentCapabilities:
 def get_agent_card() -> dict[str, Any]:
     """Compatibility agent card dictionary for JSON-RPC endpoints."""
     return {
-        "id": "LOADPILOT-DISPATCH",
-        "name": "LoadPilot Dispatch Agent",
+        "id": "FLEETFLOW-DISPATCH",
+        "name": "FleetFlow Dispatch Engine",
         "version": "1.0.0",
         "protocol": "a2a-jsonrpc-1.0",
         "description": "Truck LIFO loading, corridor route optimisation and cost savings for retail / CPG dispatch with animated A2UI surfaces",
         "endpoints": {
-            "jsonrpc": "/a2a/loadpilot_agent",
-            "agent_card": "/a2a/loadpilot_agent/.well-known/agent-card.json",
+            "jsonrpc": "/a2a/fleetflow_agent",
+            "agent_card": "/a2a/fleetflow_agent/.well-known/agent-card.json",
         },
         "capabilities": {
             "streaming": True,

@@ -42,7 +42,7 @@ def planned():
 
 def test_plan_tool_summary(planned):
     ctx, out = planned
-    assert out["loadpilot"]["trucks"] < out["today"]["trucks"]
+    assert (out.get("fleetflow") or out.get("loadpilot"))["trucks"] < out["today"]["trucks"]
     assert out["saved_inr_per_day"] > 0 and out["lifo_verified_all"]
     assert ctx.state[T.PENDING_KEY]["kind"] == "dispatch"
     assert len(json.dumps(ctx.state)) < 4000  # heavy objects stay out of session state
@@ -53,7 +53,7 @@ def test_report_and_surface(planned):
     resp = A.LlmResponse(content=types.Content(role="model", parts=[types.Part(text="- 8 trucks")]))
     resp = A.append_report(ctx, resp)
     md = resp.content.parts[-1].text
-    assert "### Today vs LoadPilot" in md and "### Truck plan (copy-ready)" in md
+    assert ("### Today vs FleetFlow" in md or "### Today vs LoadPilot" in md) and "### Truck plan (copy-ready)" in md
     assert "### Where each truck goes" in md
     for line in md.splitlines():
         if line.startswith("|"):

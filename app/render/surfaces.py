@@ -63,8 +63,8 @@ def wizard_components(counts: dict[str, int]) -> list[dict[str, Any]]:
         {"id": "wz-col", "component": "Column", "children": [
             "wz-title", "wz-sub", "wz-row1", "wz-source", "wz-types", "wz-counts-lbl", "wz-counts",
             "wz-objective", "wz-claims", "wz-costs", "wz-div", "wz-go"]},
-        _t("wz-title", "🚚 LoadPilot · Plan today's dispatch", "h3"),
-        _t("wz-sub", "Pick the fleet and goal. LoadPilot plans corridors, routes, LIFO truck loading "
+        _t("wz-title", "🚚 FleetFlow · Plan today's dispatch", "h3"),
+        _t("wz-sub", "Pick the fleet and goal. FleetFlow plans corridors, routes, LIFO truck loading "
                      "and costs in seconds. You can also type all of this in chat.", "caption"),
         {"id": "wz-row1", "component": "Row", "children": ["wz-date", "wz-hub"]},
         {"id": "wz-date", "component": "DateTimeInput", "value": {"path": "/form/date"},
@@ -147,7 +147,7 @@ def dispatch_components(plan: DispatchPlan, video_url: str | None, focus_truck_i
         return [
             {"id": "root", "component": "Card", "child": "dc-col"},
             {"id": "dc-col", "component": "Column", "children": ["dc-title", "dc-sub", "dc-map", "dc-kpi"]},
-            _t("dc-title", f"LoadPilot dispatch plan · {plan.plan_id}", "h4"),
+            _t("dc-title", f"FleetFlow dispatch plan · {plan.plan_id}", "h4"),
             _t("dc-sub", headline, "caption"),
             {"id": "dc-map", "component": "VegaChart", "spec": route_map_spec(plan), "height": 500},
             {"id": "dc-kpi", "component": "VegaChart", "spec": kpi_spec(plan), "height": 300},
@@ -162,9 +162,9 @@ def dispatch_components(plan: DispatchPlan, video_url: str | None, focus_truck_i
     else:
         tabs = [{"title": "🗺️ Route map", "child": "tab-route"},
                 {"title": "📦 Load plan", "child": "tab-load"},
-                {"title": "📊 Today vs LoadPilot", "child": "tab-overview"}]
-    card_title = f"LoadPilot · {o.trucks} trucks · ₹{plan.savings_inr:,.0f} saved"
-    title = f"🚚 LoadPilot dispatch plan · {plan.plan_id} · {plan.hub.name}"
+                {"title": "📊 Today vs FleetFlow", "child": "tab-overview"}]
+    card_title = f"FleetFlow · {o.trucks} trucks · ₹{plan.savings_inr:,.0f} saved"
+    title = f"🚚 FleetFlow dispatch plan · {plan.plan_id} · {plan.hub.name}"
     if only_truck:
         r = next((x for x in plan.routes if x.truck_id == only_truck), None)
         if r is not None:
@@ -197,7 +197,7 @@ def dispatch_components(plan: DispatchPlan, video_url: str | None, focus_truck_i
         comps.append({"id": "tab-live", "component": "IFrameSrcdoc", "height": 720,
                       "htmlContent": build_anim_html(plan, mode="both", focus_truck_id=focus_truck_id,
                                                      only_truck=only_truck),
-                      "title": "LoadPilot interactive road map and 3D truck loading"})
+                      "title": "FleetFlow interactive road map and 3D truck loading"})
     else:
         comps += [
             {"id": "tab-route", "component": "VegaChart", "spec": route_view_spec(plan, only_truck), "height": 640},

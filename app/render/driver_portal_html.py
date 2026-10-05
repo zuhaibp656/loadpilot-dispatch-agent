@@ -234,7 +234,7 @@ def build_driver_portal_html(
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>LoadPilot · {html.escape(r.driver)} · {r.truck_id}</title>
+  <title>FleetFlow · {html.escape(r.driver)} · {r.truck_id}</title>
   <style>{_CSS}</style>
 </head>
 <body>
@@ -243,7 +243,7 @@ def build_driver_portal_html(
     <div class="header">
       <div class="header-top">
         <div>
-          <div class="brand">LoadPilot Smart Dispatch</div>
+          <div class="brand">FleetFlow Smart Dispatch</div>
           <div class="driver-name">🚚 {html.escape(r.driver)}</div>
           <span class="truck-badge">{html.escape(r.truck_id)} · {html.escape(r.truck_type.name)}</span>
         </div>

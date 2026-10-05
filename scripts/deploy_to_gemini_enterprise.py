@@ -41,9 +41,9 @@ import google.auth  # noqa: E402
 import google.oauth2.credentials  # noqa: E402
 from google.auth.transport.requests import Request  # noqa: E402
 
-DISPLAY_NAME = "LoadPilot - Truck Load & Route Optimizer"
-GE_DISPLAY_NAME = "LoadPilot Dispatch Co-pilot"
-DESCRIPTION = ("LoadPilot plans daily truck dispatch for retail / CPG: corridor routes, driver claims with "
+DISPLAY_NAME = "FleetFlow - Truck Load & Route Optimizer"
+GE_DISPLAY_NAME = "FleetFlow Dispatch Engine"
+DESCRIPTION = ("FleetFlow plans daily truck dispatch for retail / CPG: corridor routes, driver claims with "
                "trunk-and-branch splitting, LIFO truck loading (first drop at the door) with 3D "
                "animation + loader video, and cost savings vs today's manual plan.")
 SA_ID = "loadpilot-agent"

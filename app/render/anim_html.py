@@ -289,7 +289,7 @@ def build_anim_html(plan: DispatchPlan, mode: str = "both", focus_truck_id: str 
     return (
         "<!doctype html><html><head><meta charset='utf-8'>"
         "<meta name='viewport' content='width=device-width,initial-scale=1'>"
-        f"<title>LoadPilot · {plan.plan_id}</title><style>{_CSS}</style></head>"
+        f"<title>FleetFlow · {plan.plan_id}</title><style>{_CSS}</style></head>"
         "<body><div id='lp-app'></div>"
         f"<script>window.LP={payload};window.LP_MODE={json.dumps(mode)};</script>"
         f"<script>{engine_js}</script></body></html>"

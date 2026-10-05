@@ -72,8 +72,8 @@ def dispatch_markdown(plan: DispatchPlan, links: dict[str, str] | None = None,
     b, o = plan.baseline, plan.optimized
     pct = 100 * plan.savings_inr / b.cost_total if b.cost_total else 0
     out: list[str] = []
-    out.append("\n\n---\n\n### Today vs LoadPilot\n")
-    out.append("| Metric | Today (manual) | LoadPilot | Change |")
+    out.append("\n\n---\n\n### Today vs FleetFlow\n")
+    out.append("| Metric | Today (manual) | FleetFlow | Change |")
     out.append("| :--- | ---: | ---: | ---: |")
     rows = [("Trucks on the road", b.trucks, o.trucks, ""), ("Road km", b.km, o.km, " km"),
             ("Crew hours", b.hours, o.hours, " h"), ("Diesel", b.litres, o.litres, " L"),

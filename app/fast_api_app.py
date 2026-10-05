@@ -68,8 +68,8 @@ app: FastAPI = get_fast_api_app(
     otel_to_cloud=otel_to_cloud,
     lifespan=lifespan,
 )
-app.title = "LoadPilot Dispatch Agent"
-app.description = "API for interacting with the LoadPilot Dispatch Agent"
+app.title = "FleetFlow Dispatch Engine"
+app.description = "API for interacting with the FleetFlow Dispatch Engine"
 
 attach_reasoning_engine_routes(app)
 

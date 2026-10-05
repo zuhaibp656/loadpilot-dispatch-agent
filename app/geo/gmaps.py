@@ -99,7 +99,7 @@ def whatsapp_dispatch_url(
     """Create a 1-click WhatsApp dispatch message URL for the driver/helper."""
     total_cartons = sum(s.get("n", 0) for s in stops_summary)
     lines = [
-        f"🚚 *LoadPilot Dispatch · {driver_name}*",
+        f"🚚 *FleetFlow Dispatch · {driver_name}*",
         f"🚛 *Truck:* {truck_id} ({truck_type})",
         f"📍 *Hub:* {hub_name}",
         f"⏰ *Shift:* Leave {leave_time} | Return {back_time}",

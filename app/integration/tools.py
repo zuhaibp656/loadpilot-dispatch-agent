@@ -191,6 +191,8 @@ def plan_summary(plan: Any) -> dict[str, Any]:
         "stops": sum(len(r.stops) for r in plan.routes), "unassigned_stops": len(plan.unassigned),
         "cartons": sum(len(lp.placed) for lp in plan.loads.values()),
         "today": {"trucks": b.trucks, "km": b.km, "cost_inr": b.cost_total},
+        "fleetflow": {"trucks": o.trucks, "km": o.km, "cost_inr": o.cost_total,
+                      "by_type": o.by_type},
         "loadpilot": {"trucks": o.trucks, "km": o.km, "cost_inr": o.cost_total,
                       "by_type": o.by_type},
         "saved_inr_per_day": round(plan.savings_inr), "saved_pct": round(

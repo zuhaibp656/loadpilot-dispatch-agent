@@ -1,6 +1,6 @@
-# 🚚 LoadPilot: truck load and route optimiser (ADK + Gemini Enterprise)
+# 🚚 FleetFlow: truck load and route optimiser (ADK + Gemini Enterprise)
 
-LoadPilot is a cross-industry dispatch co-pilot for retail and CPG companies (paints, FMCG, apparel, electronics, building materials).
+FleetFlow is a cross-industry autonomous dispatch engine for retail and CPG companies (paints, FMCG, apparel, electronics, building materials).
 
 **The problem.** Every morning, trucks leave a hub with 8–12 fixed deliveries each. Today, dispatch is planned by sales area:
 
@@ -8,7 +8,7 @@ LoadPilot is a cross-industry dispatch co-pilot for retail and CPG companies (pa
 - cartons are loaded in random order, so drivers dig for boxes at every stop;
 - nobody knows the true cost of the plan.
 
-**What LoadPilot does:**
+**What FleetFlow does:**
 
 1. **Corridors.** It splits stops into 8 compass corridors from the hub. When a driver claims a corridor (for example, "Ravi has the West route"), the best stops in that corridor are pinned to his truck. Other trucks going the same way branch off a shared trunk.
 2. **Routes.** It chooses the truck mix, stop order and time windows with an OR-Tools CVRPTW solver, costed per truck type. You can optimise for lowest cost, fewest trucks, fastest finish or balanced workload.

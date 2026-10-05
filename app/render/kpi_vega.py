@@ -26,7 +26,7 @@ def _kpi_rows(plan: DispatchPlan) -> list[dict[str, Any]]:
         pct = 0 if not bv else round(100 * (bv - ov) / bv)
         fmt = (lambda v: f"₹{v:,.0f}") if name == "Cost / day" else (lambda v, u=unit: f"{v:,.0f}{u}")
         rows.append({"metric": name, "plan": "Today (manual)", "idx": 100, "label": fmt(bv), "pct": ""})
-        rows.append({"metric": name, "plan": "LoadPilot", "idx": round(100 * ov / bv) if bv else 0,
+        rows.append({"metric": name, "plan": "FleetFlow", "idx": round(100 * ov / bv) if bv else 0,
                      "label": fmt(ov), "pct": f"−{pct}%" if pct > 0 else ""})
     return rows
 
@@ -34,7 +34,7 @@ def _kpi_rows(plan: DispatchPlan) -> list[dict[str, Any]]:
 def kpi_spec(plan: DispatchPlan, width: int = 620) -> dict[str, Any]:
     return {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "title": {"text": f"Today vs LoadPilot — saves ₹{plan.savings_inr:,.0f}/day, "
+        "title": {"text": f"Today vs FleetFlow — saves ₹{plan.savings_inr:,.0f}/day, "
                           f"{plan.trucks_saved} truck(s) fewer", "font": FONT, "fontSize": 15,
                   "anchor": "start", "color": "#202124"},
         "width": width, "height": 230,
@@ -42,7 +42,7 @@ def kpi_spec(plan: DispatchPlan, width: int = 620) -> dict[str, Any]:
         "encoding": {
             "y": {"field": "metric", "type": "nominal", "sort": None, "title": None,
                   "axis": {"labelFont": FONT, "labelFontSize": 12, "domain": False, "ticks": False}},
-            "yOffset": {"field": "plan", "sort": ["Today (manual)", "LoadPilot"]},
+            "yOffset": {"field": "plan", "sort": ["Today (manual)", "FleetFlow"]},
         },
         "layer": [
             {"mark": {"type": "bar", "cornerRadiusEnd": 5, "height": {"band": 0.42}},
@@ -50,7 +50,7 @@ def kpi_spec(plan: DispatchPlan, width: int = 620) -> dict[str, Any]:
                  "x": {"field": "idx", "type": "quantitative", "title": "Index (today = 100)",
                        "scale": {"domain": [0, 125]}, "axis": {"grid": False, "labelFont": FONT}},
                  "color": {"field": "plan", "type": "nominal", "title": None,
-                           "scale": {"domain": ["Today (manual)", "LoadPilot"],
+                           "scale": {"domain": ["Today (manual)", "FleetFlow"],
                                      "range": ["#bdc1c6", "#1a73e8"]},
                            "legend": {"orient": "top", "labelFont": FONT}},
                  "tooltip": [{"field": "metric"}, {"field": "plan"}, {"field": "label"}]}},
@@ -85,7 +85,7 @@ def route_map_spec(plan: DispatchPlan, width: int = 620, height: int = 430,
     return {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "title": {"text": ("Today: one truck per sales area" if baseline else
-                           f"LoadPilot corridors — {plan.optimized.trucks} trucks, overlap {plan.overlap_km:.0f} km"),
+                           f"FleetFlow corridors — {plan.optimized.trucks} trucks, overlap {plan.overlap_km:.0f} km"),
                   "font": FONT, "fontSize": 15, "anchor": "start", "color": "#202124"},
         "width": width, "height": height,
         "projection": {"type": "mercator"},

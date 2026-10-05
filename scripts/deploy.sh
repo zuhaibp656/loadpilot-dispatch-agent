@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# LoadPilot one-command deploy: resources + Agent Engine (create or update in place) + Gemini Enterprise.
+# FleetFlow one-command deploy: resources + Agent Engine (create or update in place) + Gemini Enterprise.
 #
 #   ./scripts/deploy.sh                       # zuhaibp-ai / us-central1, auto-discover GE apps
 #   PROJECT=my-proj REGION=us-central1 GE_APP_ID=my-ge-app VIEWER_DOMAIN=example.com ./scripts/deploy.sh
@@ -21,7 +21,7 @@ uv sync --python 3.13 --quiet
 echo "==> Unit tests"
 LOADPILOT_PUBLISH_MEDIA=false uv run pytest tests/unit -q
 
-echo "==> Deploying LoadPilot to ${PROJECT} (${REGION})"
+echo "==> Deploying FleetFlow to ${PROJECT} (${REGION})"
 ARGS=(--project "$PROJECT" --region "$REGION" --model "$MODEL")
 [[ -n "${GE_APP_ID:-}" ]] && ARGS+=(--gemini-app-id "$GE_APP_ID" --gemini-app-location "${GE_APP_LOCATION:-global}")
 [[ -n "${VIEWER_DOMAIN:-}" ]] && ARGS+=(--viewer-domain "$VIEWER_DOMAIN")

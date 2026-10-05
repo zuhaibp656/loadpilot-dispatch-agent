@@ -247,7 +247,7 @@ def plan_dispatch(hub: Hub, stops: list[Stop], params: PlanningParams,
         plan_id=f"LP-{uuid.uuid4().hex[:6].upper()}", dispatch_date=params.dispatch_date, hub=hub,
         params=params, routes=routes, loads=loads, corridors=build_corridors(hub, stops),
         baseline=_summary("Today (manual, area-based)", baseline_routes, profile, lifo=False),
-        optimized=_summary("LoadPilot (optimised)", routes, profile, lifo=True),
+        optimized=_summary("FleetFlow (optimised)", routes, profile, lifo=True),
         overlap_km=overlap_km(hub, routes), unassigned=[stops[i] for i in result.dropped],
         notes=notes, solve_ms=int((time.time() - t0) * 1000),
     )

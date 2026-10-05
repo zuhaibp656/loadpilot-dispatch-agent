@@ -1,7 +1,7 @@
 [project]
 name = "loadpilot-dispatch-agent"
 version = "0.1.0"
-description = "LoadPilot - Cross-industry Fleet Dispatch, Corridor Route & LIFO Truck-Load Optimizer Agent with animated A2UI surfaces for Gemini Enterprise"
+description = "FleetFlow - Cross-industry Fleet Dispatch, Corridor Route & LIFO Truck-Load Optimizer Agent with animated A2UI surfaces for Gemini Enterprise"
 authors = [
     {name = "Zuhaib P", email = "zuhaibp656@users.noreply.github.com"},
 ]

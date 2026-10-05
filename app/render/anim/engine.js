@@ -585,7 +585,7 @@
     var legend = $('div', 'lp-legend', body);
     var ctr = $('div', 'lp-ctrl', el);
     var tog = $('div', 'lp-seg', ctr);
-    var bOpt = $('button', 'on', tog, 'LoadPilot plan'), bBase = $('button', '', tog, 'Today (manual)');
+    var bOpt = $('button', 'on', tog, 'FleetFlow plan'), bBase = $('button', '', tog, 'Today (manual)');
     var play = $('button', 'lp-btn lp-play', ctr, '&#10074;&#10074;');
     var spd = $('button', 'lp-btn', ctr, '2x');
     var scrub = $('input', 'lp-scrub', ctr); scrub.type = 'range';
@@ -756,7 +756,7 @@
     function buildLegend() {
       var routes = R[set] || [];
       legend.innerHTML = '';
-      var h = $('div', 'lp-lh', legend, set === 'opt' ? 'LoadPilot trucks' : 'Today: one truck per sales area');
+      var h = $('div', 'lp-lh', legend, set === 'opt' ? 'FleetFlow trucks' : 'Today: one truck per sales area');
       var all = $('div', 'lp-li' + (sel < 0 ? ' on' : ''), legend, '<i style="background:#fdd663"></i><b>All trucks</b> <span class="lp-muted">' + routes.length + ' routes</span>');
       all.onclick = function () { sel = -1; closePop(); buildLegend(); fitAll(); };
       routes.forEach(function (r, i) {
@@ -920,7 +920,7 @@
         pop.style.left = left + 'px'; pop.style.top = topp + 'px';
       }
       clock.innerHTML = fmtT(t);
-      hud.innerHTML = (set === 'opt' ? 'LoadPilot plan' : 'Today\'s manual plan') + ' &middot; delivered <b>' + delivered + '</b> / ' + total;
+      hud.innerHTML = (set === 'opt' ? 'FleetFlow plan' : 'Today\'s manual plan') + ' &middot; delivered <b>' + delivered + '</b> / ' + total;
     }
     this.frame = frame;
   }
