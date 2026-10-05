@@ -68,11 +68,20 @@ app: FastAPI = get_fast_api_app(
     otel_to_cloud=otel_to_cloud,
     lifespan=lifespan,
 )
-app.title = "FleetFlow Dispatch Engine"
-app.description = "API for interacting with the FleetFlow Dispatch Engine"
+app.title = "FleetFlow Dispatch Engine & Control Tower"
+app.description = "Dual-deployment Supply Chain Control Tower UI & Gemini Enterprise Agent Engine"
 
 attach_reasoning_engine_routes(app)
 
+from app.web.api import router as web_router, serve_control_tower_ui  # noqa: E402
+
+# Override root '/' so container / local root opens the FleetFlow Control Tower UI directly
+app.router.routes = [r for r in app.router.routes if getattr(r, "path", None) != "/"]
+app.add_api_route("/", serve_control_tower_ui, methods=["GET"], include_in_schema=False)
+app.include_router(web_router)
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", "8085"))
+    uvicorn.run(app, host="0.0.0.0", port=port)
+

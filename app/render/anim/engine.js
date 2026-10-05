@@ -11,7 +11,6 @@
  */
 (function () {
   'use strict';
-  var D = window.LP || {}, MODE = window.LP_MODE || 'both';
   var PAL = ['#ff6d00', '#00b8d4', '#ffd600', '#d500f9', '#64dd17', '#ff1744', '#2979ff', '#1de9b6',
              '#ffab00', '#f50057', '#76ff03', '#651fff', '#00e5ff', '#c6ff00', '#ff3d00', '#aa00ff'];
   function stopColor(seq) { return PAL[(seq - 1) % PAL.length]; }
@@ -43,18 +42,24 @@
     st.fit = fit; return st;
   }
 
-  var root = document.getElementById('lp-app');
-  var tabs = null, panes = {};
-  if (MODE === 'both') {
-    tabs = $('div', 'lp-tabs', root);
-    [['routes', '🗺️ Route map'], ['load', '📦 3D truck loading']].forEach(function (k) {
-      var b = $('button', 'lp-tab', tabs, k[1]); b.onclick = function () { show(k[0]); }; b.dataset.k = k[0];
-    });
-  }
-  function show(k) {
-    Object.keys(panes).forEach(function (p) { panes[p].el.style.display = p === k ? 'flex' : 'none'; });
-    if (tabs) Array.prototype.forEach.call(tabs.children, function (b) { b.classList.toggle('on', b.dataset.k === k); });
-  }
+  window.mountFleetFlowEngine = function (rootArg, dataArg, modeArg) {
+    var root = typeof rootArg === 'string' ? document.getElementById(rootArg) : rootArg;
+    if (!root) return null;
+    if (root._ffCleanup) root._ffCleanup();
+    root.innerHTML = '';
+    var D = dataArg || window.LP || {}, MODE = modeArg || window.LP_MODE || 'both';
+    var tabs = null, panes = {}, alive = true;
+    root._ffCleanup = function () { alive = false; };
+    if (MODE === 'both') {
+      tabs = $('div', 'lp-tabs', root);
+      [['routes', '🗺️ Route map'], ['load', '📦 3D truck loading']].forEach(function (k) {
+        var b = $('button', 'lp-tab', tabs, k[1]); b.onclick = function () { show(k[0]); }; b.dataset.k = k[0];
+      });
+    }
+    function show(k) {
+      Object.keys(panes).forEach(function (p) { panes[p].el.style.display = p === k ? 'flex' : 'none'; });
+      if (tabs) Array.prototype.forEach.call(tabs.children, function (b) { b.classList.toggle('on', b.dataset.k === k); });
+    }
 
   /* ============================== 3D LOADING VIEW ============================== */
   function LoadView(host) {
@@ -882,6 +887,7 @@
       if (!drewTiles) drawVectorBase(); else if (D.labels) drawTiles(D.labels);
       attr.innerHTML = (drewTiles ? esc(D.tileAttr || '© OpenStreetMap') : '© OpenStreetMap contributors') + (D.router ? ' · roads: ' + esc(D.router) : '');
       var routes = R[set] || [], delivered = 0, total = 0;
+      var hp = sp(HX, HY);
       ctx.lineJoin = 'round'; ctx.lineCap = 'round';
       routes.forEach(function (r, i) {
         var isDimmed = (activeTrucks && !activeTrucks.has(r.id)) || (sel >= 0 && sel !== i);
@@ -950,7 +956,7 @@
         ctx.globalAlpha = 1;
       });
       // hub
-      var hp = sp(HX, HY), pulse = (now / 1000) % 1.6 / 1.6;
+      var pulse = (now / 1000) % 1.6 / 1.6;
       ctx.beginPath(); ctx.arc(hp[0], hp[1], 12 + pulse * 22, 0, Math.PI * 2); ctx.strokeStyle = 'rgba(253,214,99,' + (1 - pulse) + ')'; ctx.lineWidth = 2.5; ctx.stroke();
       ctx.beginPath(); ctx.arc(hp[0], hp[1], 13, 0, Math.PI * 2); ctx.fillStyle = '#fdd663'; ctx.fill();
       ctx.fillStyle = '#111'; ctx.font = '800 12px Inter,Roboto,Arial'; ctx.textAlign = 'center'; ctx.fillText('H', hp[0], hp[1] + 4.5);
@@ -969,15 +975,22 @@
     this.frame = frame;
   }
 
-  if (MODE === 'both') window.LPgoLoad = function (id, seq) { show('load'); if (panes.load) panes.load.focusTruckStop(id, seq); };
-  if (MODE === 'both' || MODE === 'routes') panes.routes = new MapView(root);
-  if (MODE === 'both' || MODE === 'load') panes.load = new LoadView(root);
-  show(MODE === 'load' || D.start === 'load' ? 'load' : 'routes');
-  function loop(now) {
-    Object.keys(panes).forEach(function (k) {
-      if (panes[k].el.style.display !== 'none') { try { panes[k].frame(now); } catch (e) { if (window.console) console.error(e); } }
-    });
+    if (MODE === 'both') window.LPgoLoad = function (id, seq) { show('load'); if (panes.load) panes.load.focusTruckStop(id, seq); };
+    if (MODE === 'both' || MODE === 'routes') panes.routes = new MapView(root);
+    if (MODE === 'both' || MODE === 'load') panes.load = new LoadView(root);
+    show(MODE === 'load' || D.start === 'load' ? 'load' : 'routes');
+    function loop(now) {
+      if (!alive) return;
+      Object.keys(panes).forEach(function (k) {
+        if (panes[k].el.style.display !== 'none') { try { panes[k].frame(now); } catch (e) { if (window.console) console.error(e); } }
+      });
+      requestAnimationFrame(loop);
+    }
     requestAnimationFrame(loop);
+    return { panes: panes, show: show };
+  };
+
+  if (document.getElementById('lp-app') && window.LP) {
+    window.mountFleetFlowEngine('lp-app', window.LP, window.LP_MODE || 'both');
   }
-  requestAnimationFrame(loop);
 })();
