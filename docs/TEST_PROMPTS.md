@@ -1,11 +1,11 @@
-# LoadPilot test prompts (Gemini Enterprise / adk web)
+# FleetFlow test prompts (Gemini Enterprise / Web Control Tower / adk web)
 
 Sample files: `app/data/samples/` in the repo, and in GCS at
-`https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/demo-data/samples/<file>`.
-Download them to your phone or laptop, then attach them in the Gemini Enterprise chat.
+`https://storage.cloud.google.com/<YOUR_PROJECT_ID>-fleetflow-media/demo-data/samples/<file>`.
+Download them to your phone or laptop, then attach them in the Gemini Enterprise chat or upload in the Control Tower UI.
 
-Demo data explorer: https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/demo-data/loadpilot_demo_data.html
-BigQuery dataset: `zuhaibp-ai.loadpilot_demo` (13 tables: stores, orders, cartons, skus, truck_types, fleet, drivers, driver_runs, ...)
+Demo data explorer: `https://storage.cloud.google.com/<YOUR_PROJECT_ID>-fleetflow-media/demo-data/loadpilot_demo_data.html`
+BigQuery dataset: `<YOUR_PROJECT_ID>.fleetflow_demo` (13 tables: stores, orders, cartons, skus, truck_types, fleet, drivers, driver_runs, ...)
 
 ---
 

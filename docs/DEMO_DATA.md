@@ -1,19 +1,17 @@
-# LoadPilot demo data
+# FleetFlow demo data
 
 All demo data is **synthetic and deterministic** (seed 42): a Mumbai Metropolitan Region
-order book dispatched from the **Bhiwandi Regional DC** (ABG demo profile). It is generated
-from code, snapshotted as CSV in the repo, and published to **BigQuery** and **GCS** so it can
-be shown to customers.
+order book dispatched from the **Bhiwandi Regional DC** (ABG demo profile) plus a Bengaluru
+order book (**Nelamangala & Electronic City DCs**). It is generated from code, snapshotted as
+CSV in the repo, and published to **BigQuery** and **Cloud Storage (GCS)** so it can be queried
+live by both the Gemini Enterprise agent and the Cloud Run Control Tower UI.
 
 | | Where |
 |---|---|
-| Explorer page (share this) | https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/demo-data/loadpilot_demo_data.html |
-| BigQuery dataset | [`zuhaibp-ai.loadpilot_demo`](https://console.cloud.google.com/bigquery?project=zuhaibp-ai&ws=!1m4!1m3!3m2!1szuhaibp-ai!2sloadpilot_demo) (us-central1, labels `app=loadpilot, purpose=demo`) |
-| GCS | `gs://zuhaibp-ai-loadpilot-media/demo-data/` → `tables/*.csv`, `samples/*`, `loadpilot_demo_data.html` |
+| Explorer page | `https://storage.cloud.google.com/<YOUR_PROJECT_ID>-fleetflow-media/demo-data/loadpilot_demo_data.html` |
+| BigQuery dataset | `<YOUR_PROJECT_ID>.fleetflow_demo` (us-central1, labels `app=fleetflow, purpose=demo`) |
+| GCS | `gs://<YOUR_PROJECT_ID>-fleetflow-media/demo-data/` → `tables/*.csv`, `samples/*`, `loadpilot_demo_data.html` |
 | Repo | `demo_data/*.csv`, `demo_data/loadpilot_demo_data.html`, `app/data/samples/*` |
-
-GCS objects open with any `zuhaibp.altostrat.com` account (bucket grants the domain
-`roles/storage.objectViewer`).
 
 ## How it is generated
 
@@ -27,7 +25,7 @@ GCS objects open with any `zuhaibp.altostrat.com` account (bucket grants the dom
 | `scripts/build_demo_data_page.py` | Builds and uploads the explorer page |
 | `app/data/bq_source.py` | `load_stops_from_bigquery(...)` → `list[Stop]` identical to `build_demo_stops()` |
 
-## Tables (`zuhaibp-ai.loadpilot_demo`)
+## Tables (`<YOUR_PROJECT_ID>.fleetflow_demo`)
 
 | Table | Rows | Grain / contents |
 |---|---:|---|
@@ -52,7 +50,7 @@ Example query:
 
 ```sql
 SELECT s.sales_area, COUNT(*) outlets, SUM(o.cartons) cartons, ROUND(SUM(o.weight_kg)) kg
-FROM `zuhaibp-ai.loadpilot_demo.stores` s JOIN `zuhaibp-ai.loadpilot_demo.orders` o USING (stop_id)
+FROM `<YOUR_PROJECT_ID>.fleetflow_demo.stores` s JOIN `<YOUR_PROJECT_ID>.fleetflow_demo.orders` o USING (stop_id)
 GROUP BY 1 ORDER BY kg DESC;
 ```
 
@@ -109,6 +107,4 @@ grants `roles/bigquery.dataViewer` + `roles/bigquery.jobUser` and enables
 LOADPILOT_LIVE_BQ=1 .venv/bin/python -m pytest tests/unit/test_demo_data.py   # incl. live BQ check
 ```
 
-Auth for the scripts: authorized-user ADC file `~/.config/gcloud/argolis_admin_adc.json`
-(override `LOADPILOT_ADC_FILE`), else `google.auth.default()`; set
-`GOOGLE_API_USE_CLIENT_CERTIFICATE=false` on CloudTop.
+Auth for the scripts: `google.auth.default()` (standard `gcloud auth application-default login` or `$FLEETFLOW_ADC_FILE`); set `GOOGLE_API_USE_CLIENT_CERTIFICATE=false` on CloudTop.

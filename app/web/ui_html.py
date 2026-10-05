@@ -1,10 +1,17 @@
 """Single-Page Application HTML/CSS/JS generator for FleetFlow Supply Chain Control Tower & 3D Load Studio.
 
-Designed for both non-technical supply chain operators and enterprise architects:
-  * Fluid, uncluttered workspace inspired by Accenture Control Tower, EasyCargo 3D, and Locus.
-  * Direct integration with `engine.js` (`window.mountFleetFlowEngine`) for 60fps 2D road maps and 3D LIFO bays.
-  * Interactive dropdowns, truck calculators, custom carton packers, dock QR scanner, driver portals,
-    and live GCP BigQuery / Vertex AI / Model Armor telemetry.
+Design Highlights:
+  * Google Gemini Minimalist Light Theme (default) + Midnight Dark Theme toggle.
+  * Left-Side App Navigation Rail (collapsible) with macOS Dock & Genie spring-physics animations.
+  * Clean, practical 4-metric KPI strip (Trucks Dispatched, Daily Savings, Stops & Cartons, Route Distance)
+    without unnecessary clutter.
+  * 6 Workspaces:
+      1. 🗺️ Dispatch & Map (1/3/All Fleet Focus, Driver Corridor Pinning, 60fps Road Map)
+      2. 📦 3D Load Studio (Interactive Truck Type What-If Calculator, Custom Carton Packer, 3D LIFO Bay)
+      3. 🚚 Fleet & Cost Simulator (Fleet Mix Steppers, Cost Inputs, Copy-Ready Google Sheets / CSV)
+      4. 📸 Dock QR & Intake (Warehouse QR Vision Scanner + Unstructured ERP/WhatsApp Order Intake)
+      5. 📱 Driver Hub & BigQuery (Mobile Driver Portal Preview, 1-Tap Google Maps, Live BigQuery SQL)
+      6. 📘 Architecture & How-To (Dual Deployment Guide, GCP Service Roles: BigQuery, GCS, Vertex AI, Cloud Run, Model Armor)
 """
 
 from __future__ import annotations
@@ -13,73 +20,144 @@ from pathlib import Path
 
 from app.render.anim_html import _CSS as ANIM_CSS
 
-_ENGINE_JS = (Path(__file__).resolve().parents[1] / "render" / "anim" / "engine.js").read_text(encoding="utf-8")
-
 _UI_HTML = r"""<!DOCTYPE html>
-<html lang="en" class="theme-dark">
+<html lang="en" class="theme-light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FleetFlow Control Tower · Autonomous Supply Chain & 3D Load Studio</title>
+  <title>FleetFlow Control Tower · Supply Chain & 3D Load Studio</title>
   <meta name="description" content="Enterprise Supply Chain Control Tower, 3D LIFO Truck Load Studio, and Route Optimization powered by Google Cloud, BigQuery, Vertex AI, and Google Maps Platform.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..800;1,9..40,400..700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     /* ── Engine Base CSS ── */
     __ANIM_CSS__
 
-    /* ── Control Tower Design System (Fluid, Vibrant, Uncluttered) ── */
-    :root, html.theme-dark {
-      --bg-canvas: #060a14;
-      --bg-elevated: #0c1324;
-      --bg-card: rgba(15, 23, 42, 0.82);
-      --bg-card-hover: rgba(22, 34, 62, 0.92);
-      --bg-input: rgba(9, 14, 28, 0.9);
-      --bg-glass: rgba(12, 19, 36, 0.86);
-      --border-subtle: rgba(148, 163, 184, 0.14);
-      --border-focus: rgba(56, 189, 248, 0.55);
-      --text-main: #f8fafc;
-      --text-secondary: #cbd5e1;
-      --text-muted: #94a3b8;
-      --accent-cyan: #00e5ff;
-      --accent-blue: #38bdf8;
-      --accent-amber: #ffab00;
-      --accent-emerald: #10b981;
-      --accent-rose: #f43f5e;
-      --shadow-soft: 0 12px 32px -8px rgba(0, 0, 0, 0.55);
-      --shadow-glow: 0 0 24px rgba(56, 189, 248, 0.18);
-      --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    /* ── Google Gemini Minimalist Light Theme (Default) ── */
+    :root, html.theme-light {
+      --bg-canvas: #f4f7fb;
+      --bg-sidebar: #ffffff;
+      --bg-elevated: #f8fafd;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f1f5f9;
+      --bg-input: #f8fafc;
+      --bg-glass: rgba(255, 255, 255, 0.92);
+      --border-subtle: #e2e8f0;
+      --border-focus: #1a73e8;
+      --text-main: #1f2937;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --accent-primary: #1a73e8;
+      --accent-primary-soft: rgba(26, 115, 232, 0.10);
+      --accent-cyan: #0284c7;
+      --accent-blue: #1a73e8;
+      --accent-amber: #d97706;
+      --accent-emerald: #059669;
+      --accent-emerald-soft: rgba(5, 150, 105, 0.10);
+      --accent-rose: #e11d48;
+      --shadow-soft: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04);
+      --shadow-float: 0 16px 40px -8px rgba(15, 23, 42, 0.12);
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
 
-    html.theme-light {
-      --bg-canvas: #f4f6fb;
-      --bg-elevated: #ffffff;
-      --bg-card: rgba(255, 255, 255, 0.94);
-      --bg-card-hover: #ffffff;
-      --bg-input: #f8fafc;
-      --bg-glass: rgba(255, 255, 255, 0.92);
-      --border-subtle: rgba(15, 23, 42, 0.11);
-      --border-focus: rgba(2, 132, 199, 0.6);
-      --text-main: #0f172a;
-      --text-secondary: #334155;
-      --text-muted: #64748b;
-      --accent-cyan: #0284c7;
-      --accent-blue: #0369a1;
-      --accent-amber: #d97706;
-      --accent-emerald: #059669;
-      --accent-rose: #e11d48;
-      --shadow-soft: 0 10px 28px -6px rgba(15, 23, 42, 0.08);
-      --shadow-glow: 0 0 20px rgba(2, 132, 199, 0.12);
+    /* ── Midnight Dark Theme ── */
+    html.theme-dark {
+      --bg-canvas: #070b14;
+      --bg-sidebar: #0c1222;
+      --bg-elevated: #0f172a;
+      --bg-card: #111a2e;
+      --bg-card-hover: #17233d;
+      --bg-input: #0b1120;
+      --bg-glass: rgba(15, 23, 42, 0.90);
+      --border-subtle: rgba(148, 163, 184, 0.15);
+      --border-focus: #38bdf8;
+      --text-main: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --accent-primary: #38bdf8;
+      --accent-primary-soft: rgba(56, 189, 248, 0.14);
+      --accent-cyan: #38bdf8;
+      --accent-blue: #60a5fa;
+      --accent-amber: #f59e0b;
+      --accent-emerald: #10b981;
+      --accent-emerald-soft: rgba(16, 185, 129, 0.14);
+      --accent-rose: #f43f5e;
+      --shadow-soft: 0 10px 28px -6px rgba(0, 0, 0, 0.50);
+      --shadow-float: 0 20px 48px -10px rgba(0, 0, 0, 0.70);
     }
 
-    * { box-sizing: border-box; }
-    html, body {
+    /* Harmonize embedded Engine Map/3D chrome in Light Theme */
+    html.theme-light .lp-wrap {
+      background: #ffffff !important;
+      color: #1f2937 !important;
+      border-color: #e2e8f0 !important;
+    }
+    html.theme-light .lp-hdr,
+    html.theme-light .lp-bar {
+      background: #f8fafd !important;
+      border-color: #e2e8f0 !important;
+      color: #1f2937 !important;
+    }
+    html.theme-light .lp-title {
+      color: #1f2937 !important;
+    }
+    html.theme-light .lp-kpi {
+      background: #ffffff !important;
+      border-color: #e2e8f0 !important;
+    }
+    html.theme-light .lp-kpi b {
+      color: #1f2937 !important;
+    }
+    html.theme-light .lp-side {
+      background: #f8fafd !important;
+      border-color: #e2e8f0 !important;
+      color: #1f2937 !important;
+    }
+    html.theme-light .lp-item {
+      background: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      color: #1f2937 !important;
+    }
+    html.theme-light .lp-item:hover,
+    html.theme-light .lp-item.on {
+      background: rgba(26, 115, 232, 0.08) !important;
+      border-color: #1a73e8 !important;
+    }
+    html.theme-light .lp-btn,
+    html.theme-light .lp-seg {
+      background: #ffffff !important;
+      border-color: #cbd5e1 !important;
+      color: #334155 !important;
+    }
+    html.theme-light .lp-seg button {
+      color: #475569 !important;
+    }
+    html.theme-light .lp-seg button.on {
+      background: #1a73e8 !important;
+      color: #ffffff !important;
+    }
+    html.theme-light .lp-chip {
+      background: #ffffff !important;
+      border-color: #cbd5e1 !important;
+      color: #334155 !important;
+    }
+    html.theme-light .lp-chip.on {
+      background: rgba(26, 115, 232, 0.12) !important;
+      border-color: #1a73e8 !important;
+      color: #1a73e8 !important;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      height: 100%;
+    }
+
+    html, body {
       width: 100%;
+      height: 100%;
       background: var(--bg-canvas);
       color: var(--text-main);
       font-family: var(--font-sans);
@@ -87,418 +165,736 @@ _UI_HTML = r"""<!DOCTYPE html>
       line-height: 1.45;
       overflow: hidden;
       -webkit-font-smoothing: antialiased;
+      transition: background-color 0.25s ease, color 0.25s ease;
     }
 
-    /* App Shell Layout */
-    .ct-shell {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      width: 100vw;
+    /* ── Google 4-Color Revolving Neon Aura & Orbital Ring Keyframes ── */
+    @property --g-angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+
+    @keyframes spinGoogleAngle {
+      to { --g-angle: 360deg; }
+    }
+
+    @keyframes spinOrbital {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes spinOrbitalReverse {
+      0% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    /* ── macOS Genie & Spring Physics Keyframes ── */
+    @keyframes genieWorkspaceOpen {
+      0% {
+        opacity: 0;
+        transform: perspective(1200px) translate3d(-20px, 14px, -30px) scale3d(0.95, 0.90, 1) rotateX(3deg);
+        filter: blur(4px);
+      }
+      65% {
+        opacity: 1;
+        transform: perspective(1200px) translate3d(2px, -2px, 0) scale3d(1.004, 1.004, 1) rotateX(0deg);
+        filter: blur(0px);
+      }
+      100% {
+        opacity: 1;
+        transform: perspective(1200px) translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0deg);
+        filter: blur(0px);
+      }
+    }
+
+    @keyframes genieCardPop {
+      0% { opacity: 0; transform: translateY(14px) scale(0.96); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes genieToastPop {
+      0% { opacity: 0; transform: perspective(800px) translateY(28px) scale(0.84) rotateX(10deg); }
+      70% { opacity: 1; transform: perspective(800px) translateY(-3px) scale(1.02) rotateX(0deg); }
+      100% { opacity: 1; transform: perspective(800px) translateY(0) scale(1) rotateX(0deg); }
+    }
+
+    /* ── Revolving Google 4-Color Neon Border Container ── */
+    .google-revolving-box {
+      position: relative;
+      border-radius: 22px;
+      padding: 3px;
+      background: conic-gradient(
+        from var(--g-angle, 0deg),
+        #4285F4 0deg,
+        #EA4335 90deg,
+        #FBBC04 180deg,
+        #34A853 270deg,
+        #4285F4 360deg
+      );
+      animation: spinGoogleAngle 4.5s linear infinite;
+      box-shadow:
+        0 14px 40px -8px rgba(66, 133, 244, 0.25),
+        0 0 28px rgba(234, 67, 53, 0.14),
+        0 0 28px rgba(52, 168, 83, 0.14);
+      overflow: visible;
+    }
+
+    .google-revolving-box::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 25px;
+      background: conic-gradient(
+        from var(--g-angle, 0deg),
+        rgba(66, 133, 244, 0.55),
+        rgba(234, 67, 53, 0.55),
+        rgba(251, 188, 4, 0.55),
+        rgba(52, 168, 83, 0.55),
+        rgba(66, 133, 244, 0.55)
+      );
+      filter: blur(14px);
+      opacity: 0.65;
+      z-index: 0;
+      animation: spinGoogleAngle 4.5s linear infinite;
+      pointer-events: none;
+    }
+
+    .google-revolving-inner {
+      position: relative;
+      z-index: 1;
+      background: var(--bg-card);
+      border-radius: 19px;
+      padding: 24px 28px;
+    }
+
+    /* ── Moving Orbital Neon Rings (Logo, Hero & KPI Accents) ── */
+    .orbital-ring-wrap {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .orbital-ring-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2.5px solid transparent;
+      border-top-color: #4285F4;
+      border-right-color: #EA4335;
+      border-bottom-color: #FBBC04;
+      border-left-color: #34A853;
+      animation: spinOrbital 3.6s linear infinite;
+      box-shadow: 0 0 12px rgba(66, 133, 244, 0.35);
+    }
+
+    .orbital-ring-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 5px;
+      border-radius: 50%;
+      border: 1.5px dashed rgba(66, 133, 244, 0.55);
+      border-top-color: #34A853;
+      border-bottom-color: #EA4335;
+      animation: spinOrbitalReverse 6s linear infinite;
+    }
+
+    .orbital-ring-core {
+      position: relative;
+      z-index: 2;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    /* ── Neon Colored Card & Box Outlines (Light & Dark Mode) ── */
+    .neon-blue {
+      border: 1.5px solid rgba(66, 133, 244, 0.65) !important;
+      box-shadow: 0 6px 22px -4px rgba(66, 133, 244, 0.16), inset 0 0 0 1px rgba(66, 133, 244, 0.10) !important;
+    }
+    .neon-green {
+      border: 1.5px solid rgba(52, 168, 83, 0.65) !important;
+      box-shadow: 0 6px 22px -4px rgba(52, 168, 83, 0.16), inset 0 0 0 1px rgba(52, 168, 83, 0.10) !important;
+    }
+    .neon-amber {
+      border: 1.5px solid rgba(251, 188, 4, 0.78) !important;
+      box-shadow: 0 6px 22px -4px rgba(251, 188, 4, 0.18), inset 0 0 0 1px rgba(251, 188, 4, 0.12) !important;
+    }
+    .neon-red {
+      border: 1.5px solid rgba(234, 67, 53, 0.65) !important;
+      box-shadow: 0 6px 22px -4px rgba(234, 67, 53, 0.16), inset 0 0 0 1px rgba(234, 67, 53, 0.10) !important;
+    }
+
+    html.theme-dark .neon-blue {
+      border-color: #4285F4 !important;
+      box-shadow: 0 0 22px rgba(66, 133, 244, 0.32), inset 0 0 12px rgba(66, 133, 244, 0.10) !important;
+    }
+    html.theme-dark .neon-green {
+      border-color: #34A853 !important;
+      box-shadow: 0 0 22px rgba(52, 168, 83, 0.32), inset 0 0 12px rgba(52, 168, 83, 0.10) !important;
+    }
+    html.theme-dark .neon-amber {
+      border-color: #FBBC04 !important;
+      box-shadow: 0 0 22px rgba(251, 188, 4, 0.30), inset 0 0 12px rgba(251, 188, 4, 0.10) !important;
+    }
+    html.theme-dark .neon-red {
+      border-color: #EA4335 !important;
+      box-shadow: 0 0 22px rgba(234, 67, 53, 0.32), inset 0 0 12px rgba(234, 67, 53, 0.10) !important;
+    }
+
+    /* Bold Big Headings with Google Color Accents */
+    .google-gradient-text {
+      background: linear-gradient(90deg, #4285F4 0%, #EA4335 36%, #FBBC04 68%, #34A853 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .ct-big-heading {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.18;
+      color: var(--text-main);
+    }
+
+    .ct-section-heading {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    /* ── Clean Collapsible Accordion Drawers (Hides Clutter on Front Page & Sidebars) ── */
+    details.ct-accordion {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 16px;
       overflow: hidden;
-      background:
-        radial-gradient(circle at 12% 8%, rgba(0, 229, 255, 0.06), transparent 32%),
-        radial-gradient(circle at 88% 12%, rgba(255, 171, 0, 0.05), transparent 32%),
-        var(--bg-canvas);
+      transition: border-color 0.22s ease, box-shadow 0.22s ease;
     }
 
-    /* ── Top Header Bar ── */
-    .ct-header {
+    details.ct-accordion:hover {
+      border-color: #4285F4;
+      box-shadow: 0 4px 18px rgba(66, 133, 244, 0.12);
+    }
+
+    details.ct-accordion[open] {
+      border-color: #4285F4;
+      box-shadow: 0 8px 26px rgba(66, 133, 244, 0.16);
+    }
+
+    details.ct-accordion > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 14px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 14px;
-      padding: 10px 20px;
-      background: var(--bg-glass);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid var(--border-subtle);
-      z-index: 30;
+      gap: 12px;
+      font-size: 14.5px;
+      font-weight: 800;
+      color: var(--text-main);
+      background: var(--bg-elevated);
+      user-select: none;
+      transition: background-color 0.18s ease;
+    }
+
+    details.ct-accordion > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.ct-accordion > summary:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .ct-acc-chevron {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: var(--accent-primary-soft);
+      color: var(--accent-primary);
+      font-size: 12px;
+      font-weight: 800;
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    details.ct-accordion[open] .ct-acc-chevron {
+      transform: rotate(180deg);
+      background: #4285F4;
+      color: #ffffff;
+    }
+
+    .ct-acc-body {
+      padding: 16px 18px;
+      border-top: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+    }
+
+    /* ── App Layout Shell (Left Sidebar + Right Main Stage) ── */
+    .ct-app-layout {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Left Navigation Sidebar (Gemini / macOS Style with Neon Highlights) ── */
+    .ct-left-rail {
+      width: 264px;
+      background: var(--bg-sidebar);
+      border-right: 1.5px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px 14px;
       flex-shrink: 0;
+      z-index: 30;
+      box-shadow: var(--shadow-soft);
+      transition: width 0.32s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.25s ease;
+      overflow-y: auto;
     }
 
     .ct-brand {
       display: flex;
       align-items: center;
       gap: 12px;
-      flex-shrink: 0;
-    }
-
-    .ct-logo-mark {
-      width: 38px;
-      height: 38px;
-      border-radius: 11px;
-      background: linear-gradient(135deg, #00e5ff 0%, #2979ff 55%, #ffab00 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      box-shadow: 0 4px 14px rgba(0, 229, 255, 0.3);
+      padding: 4px 6px 16px;
+      border-bottom: 1px solid var(--border-subtle);
     }
 
     .ct-brand-title {
-      font-size: 18px;
+      font-size: 18.5px;
       font-weight: 800;
-      letter-spacing: -0.4px;
+      letter-spacing: -0.02em;
       color: var(--text-main);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .ct-brand-badge {
       font-family: var(--font-mono);
-      font-size: 10.5px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      padding: 2px 8px;
+      font-size: 9.5px;
+      font-weight: 800;
+      padding: 2px 7px;
       border-radius: 999px;
-      background: rgba(16, 185, 129, 0.16);
-      color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.35);
+      background: var(--accent-primary-soft);
+      color: var(--accent-primary);
+      border: 1px solid rgba(66, 133, 244, 0.35);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .ct-brand-sub {
-      font-size: 11.5px;
+      font-size: 11px;
       color: var(--text-muted);
-      font-weight: 500;
+      font-weight: 600;
     }
 
-    /* Main Workspace Navigation Pills */
-    .ct-nav-tabs {
+    /* Navigation Menu Items */
+    .ct-nav-section-lbl {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      padding: 14px 10px 6px;
+    }
+
+    .ct-nav-list {
       display: flex;
-      align-items: center;
+      flex-direction: column;
       gap: 5px;
-      background: var(--bg-input);
-      padding: 4px;
-      border-radius: 14px;
-      border: 1px solid var(--border-subtle);
     }
 
     .ct-nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      width: 100%;
+      padding: 10.5px 13px;
+      border-radius: 13px;
+      border: 1.5px solid transparent;
       background: transparent;
-      color: var(--text-muted);
-      border: none;
-      border-radius: 10px;
-      padding: 8px 14px;
+      color: var(--text-secondary);
       font-family: var(--font-sans);
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 700;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-      white-space: nowrap;
+      text-align: left;
+      transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .ct-nav-btn .nav-ico {
+      font-size: 17px;
+      width: 24px;
+      text-align: center;
+      transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .ct-nav-btn:hover {
+      background: var(--bg-card-hover);
       color: var(--text-main);
-      background: rgba(56, 189, 248, 0.08);
+      border-color: rgba(66, 133, 244, 0.35);
+      transform: translateX(4px);
+    }
+
+    .ct-nav-btn:hover .nav-ico {
+      transform: scale(1.18);
     }
 
     .ct-nav-btn.active {
-      background: linear-gradient(135deg, rgba(0, 229, 255, 0.2), rgba(41, 121, 255, 0.22));
-      color: var(--accent-cyan);
-      box-shadow: inset 0 0 0 1px rgba(0, 229, 255, 0.4), 0 4px 12px rgba(0, 0, 0, 0.2);
+      background: var(--accent-primary-soft);
+      color: var(--accent-primary);
+      border-color: #4285F4;
+      font-weight: 800;
+      box-shadow: 0 4px 14px rgba(66, 133, 244, 0.20);
     }
 
-    /* Global Quick Selectors in Header */
-    .ct-header-controls {
+    /* Left Sidebar Quick Dispatch Config */
+    .ct-rail-config {
+      margin-top: 8px;
+      padding: 12px;
+      border-radius: 14px;
+      background: var(--bg-elevated);
+      border: 1.5px solid var(--border-subtle);
       display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: nowrap;
+      flex-direction: column;
+      gap: 9px;
     }
 
     .ct-select-group {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 3px;
     }
 
     .ct-select-lbl {
-      font-size: 9.5px;
-      font-weight: 700;
+      font-size: 10.5px;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.04em;
       color: var(--text-muted);
-      padding-left: 4px;
     }
 
     .ct-select, .ct-input {
-      background: var(--bg-input);
+      width: 100%;
+      background: var(--bg-card);
       color: var(--text-main);
-      border: 1px solid var(--border-subtle);
+      border: 1.5px solid var(--border-subtle);
       border-radius: 10px;
-      padding: 6px 11px;
+      padding: 8px 11px;
       font-family: var(--font-sans);
-      font-size: 12.5px;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 700;
       outline: none;
-      cursor: pointer;
       transition: border-color 0.18s, box-shadow 0.18s;
     }
 
-    .ct-select:hover, .ct-input:hover, .ct-select:focus, .ct-input:focus {
-      border-color: var(--border-focus);
-      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
+    .ct-select:focus, .ct-input:focus {
+      border-color: #4285F4;
+      box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.20);
     }
 
     .ct-btn-primary {
-      background: linear-gradient(135deg, #00e5ff 0%, #2563eb 100%);
-      color: #fff;
-      border: none;
-      border-radius: 11px;
-      padding: 9px 16px;
-      font-family: var(--font-sans);
-      font-size: 13px;
-      font-weight: 800;
-      cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      box-shadow: 0 4px 16px rgba(0, 229, 255, 0.28);
-      transition: transform 0.16s ease, box-shadow 0.18s ease, opacity 0.18s;
-      white-space: nowrap;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: 1.5px solid rgba(255, 255, 255, 0.28);
+      background: linear-gradient(135deg, #4285F4 0%, #1a73e8 50%, #0284c7 100%);
+      color: #ffffff;
+      font-family: var(--font-sans);
+      font-size: 13.5px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(66, 133, 244, 0.34);
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s;
     }
 
     .ct-btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 22px rgba(0, 229, 255, 0.42);
-    }
-
-    .ct-btn-primary:active {
-      transform: translateY(0);
+      transform: translateY(-2px) scale(1.015);
+      box-shadow: 0 10px 26px rgba(66, 133, 244, 0.48);
     }
 
     .ct-btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 11px;
+      border: 1.5px solid var(--border-subtle);
       background: var(--bg-card);
       color: var(--text-main);
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
-      padding: 7px 12px;
       font-family: var(--font-sans);
       font-size: 12.5px;
       font-weight: 700;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.18s;
       text-decoration: none;
+      transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .ct-btn-secondary:hover {
-      border-color: var(--border-focus);
+      border-color: #4285F4;
+      color: var(--accent-primary);
       background: var(--bg-card-hover);
+      box-shadow: 0 4px 14px rgba(66, 133, 244, 0.16);
+      transform: translateY(-1px);
     }
 
-    /* ── Main Content Body ── */
-    .ct-main {
+    .ct-rail-footer {
+      padding-top: 12px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      gap: 8px;
+    }
+
+    /* ── Right Workspace Area ── */
+    .ct-workspace-col {
       flex: 1;
-      min-height: 0;
       display: flex;
       flex-direction: column;
-      padding: 12px 20px 8px;
-      gap: 10px;
+      height: 100vh;
       overflow: hidden;
+      min-width: 0;
     }
 
-    /* KPI Ribbon */
+    .ct-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 14px 20px;
+      gap: 14px;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    /* ── Clean, Neon-Outlined 4-Metric Operational Strip ── */
     .ct-kpi-ribbon {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 12px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
       flex-shrink: 0;
     }
 
     .ct-kpi-card {
       background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 14px;
-      padding: 10px 14px;
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 13px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
       box-shadow: var(--shadow-soft);
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.2s ease, border-color 0.2s ease;
+      animation: genieCardPop 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+      transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s;
     }
 
     .ct-kpi-card:hover {
-      transform: translateY(-2px);
-      border-color: var(--border-focus);
-    }
-
-    .ct-kpi-card::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 4px;
-      background: var(--kpi-color, var(--accent-cyan));
+      transform: translateY(-2.5px);
     }
 
     .ct-kpi-label {
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       color: var(--text-muted);
     }
 
     .ct-kpi-val {
-      font-size: 21px;
+      font-size: 22px;
       font-weight: 800;
-      letter-spacing: -0.5px;
+      letter-spacing: -0.025em;
       color: var(--text-main);
-      margin-top: 1px;
+      margin-top: 2px;
     }
 
     .ct-kpi-sub {
-      font-family: var(--font-mono);
-      font-size: 11px;
+      font-size: 11.5px;
+      font-weight: 600;
       color: var(--text-secondary);
       margin-top: 2px;
     }
 
     .ct-kpi-badge {
       font-family: var(--font-mono);
-      font-size: 11.5px;
-      font-weight: 700;
-      padding: 4px 9px;
-      border-radius: 8px;
-      background: rgba(16, 185, 129, 0.15);
-      color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.3);
+      font-size: 11px;
+      font-weight: 800;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--accent-emerald-soft);
+      color: var(--accent-emerald);
+      border: 1px solid rgba(52, 168, 83, 0.35);
       white-space: nowrap;
     }
 
-    /* Workspace Views */
+    /* ── Workspace Views with Genie Spring Animation ── */
     .ct-view {
       display: none;
       flex: 1;
       min-height: 0;
       gap: 14px;
-      animation: viewFade 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+      transform-origin: left center;
     }
 
     .ct-view.active {
       display: flex;
+      animation: genieWorkspaceOpen 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
-    @keyframes viewFade {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Glass Panels & Sidebars */
+    /* Left/Center Canvas Stage */
     .ct-stage {
       flex: 1;
-      min-width: 0;
-      min-height: 0;
       background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 18px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       box-shadow: var(--shadow-soft);
+      min-width: 0;
     }
 
-    .ct-sidebar {
-      width: 370px;
-      flex-shrink: 0;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-      padding: 14px;
-      gap: 14px;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .ct-panel-title {
-      font-size: 13.5px;
-      font-weight: 800;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 6px;
-    }
-
-    .ct-panel-sub {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-bottom: 10px;
-    }
-
-    /* Quick Scope Bar (1, 3, All Trucks) */
     .ct-scope-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      padding: 8px 14px;
+      padding: 10px 16px;
       background: var(--bg-elevated);
       border-bottom: 1px solid var(--border-subtle);
+      gap: 10px;
       flex-wrap: wrap;
     }
 
     .ct-scope-group {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
     .ct-scope-btn {
-      background: var(--bg-input);
-      color: var(--text-secondary);
-      border: 1px solid var(--border-subtle);
+      padding: 6px 14px;
       border-radius: 999px;
-      padding: 5px 12px;
-      font-size: 12px;
+      border: 1.5px solid var(--border-subtle);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-family: var(--font-sans);
+      font-size: 12.5px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.16s;
+      transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .ct-scope-btn:hover {
-      border-color: var(--border-focus);
-      color: var(--text-main);
+      border-color: #4285F4;
+      color: var(--accent-primary);
+      transform: scale(1.03);
     }
 
     .ct-scope-btn.active {
-      background: var(--accent-cyan);
-      color: #060a14;
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 12px rgba(0, 229, 255, 0.35);
+      background: linear-gradient(135deg, #4285F4, #1a73e8);
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(66, 133, 244, 0.32);
     }
 
     .ct-engine-mount {
       flex: 1;
-      min-height: 0;
       width: 100%;
+      min-height: 440px;
       position: relative;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
+      color: #e2e8f0;
     }
 
-    /* Card blocks inside sidebars */
+    /* Hide duplicate KPI header bar and duplicate map truck sidebar inside embedded engine so screen stays clutter-free */
+    .ct-engine-mount .lp-hdr,
+    .ct-engine-mount .lp-bar,
+    .ct-engine-mount .lp-top,
+    #ct-map-mount .lp-side,
+    #ct-map-mount .lp-legend {
+      display: none !important;
+    }
+
+    .ct-engine-mount .lp-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      height: 100%;
+      border-top: none;
+    }
+
+    .ct-engine-mount .lp-body {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+      height: 100%;
+    }
+
+    .ct-engine-mount .lp-cwrap {
+      flex: 1;
+      position: relative;
+      min-width: 0;
+      min-height: 380px;
+      height: 100%;
+      background: #090d1a;
+      overflow: hidden;
+    }
+
+    /* Right Inspector Panel */
+    .ct-sidebar {
+      width: 360px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+      box-shadow: var(--shadow-soft);
+      flex-shrink: 0;
+    }
+
+    .ct-panel-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .ct-panel-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      margin-bottom: 8px;
+    }
+
     .ct-box {
       background: var(--bg-elevated);
-      border: 1px solid var(--border-subtle);
-      border-radius: 13px;
-      padding: 12px;
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 14px;
     }
 
     .ct-form-grid {
@@ -515,16 +911,16 @@ _UI_HTML = r"""<!DOCTYPE html>
 
     .ct-field label {
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
 
-    /* Progress & Gauge Bars */
     .ct-gauge-track {
+      width: 100%;
       height: 8px;
-      background: rgba(148, 163, 184, 0.15);
+      background: var(--border-subtle);
       border-radius: 999px;
       overflow: hidden;
       margin-top: 4px;
@@ -533,24 +929,24 @@ _UI_HTML = r"""<!DOCTYPE html>
     .ct-gauge-fill {
       height: 100%;
       border-radius: 999px;
-      transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    /* Route & Fleet Cards */
     .ct-route-item {
-      background: var(--bg-input);
-      border: 1px solid var(--border-subtle);
-      border-left: 4px solid var(--route-c, #38bdf8);
-      border-radius: 11px;
-      padding: 10px 12px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-subtle);
+      border-left: 5px solid var(--route-c, #4285F4);
+      border-radius: 13px;
+      padding: 11px 13px;
       cursor: pointer;
-      transition: all 0.18s;
-      margin-bottom: 8px;
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s, border-color 0.2s;
+      margin-bottom: 9px;
     }
 
     .ct-route-item:hover {
-      border-color: var(--border-focus);
-      transform: translateX(2px);
+      border-color: #4285F4;
+      transform: translateX(3px) scale(1.01);
+      box-shadow: 0 6px 18px rgba(66, 133, 244, 0.16);
     }
 
     .ct-route-item.dimmed {
@@ -558,8 +954,9 @@ _UI_HTML = r"""<!DOCTYPE html>
     }
 
     .ct-route-item.selected {
-      background: rgba(56, 189, 248, 0.12);
-      border-color: var(--accent-cyan);
+      background: var(--accent-primary-soft);
+      border-color: #4285F4;
+      box-shadow: 0 4px 16px rgba(66, 133, 244, 0.20);
     }
 
     /* Tables */
@@ -596,19 +993,20 @@ _UI_HTML = r"""<!DOCTYPE html>
     }
 
     .ct-table tr:hover td {
-      background: rgba(56, 189, 248, 0.05);
+      background: var(--accent-primary-soft);
       color: var(--text-main);
     }
 
-    /* ── Bottom AI Copilot Bar ── */
+    /* ── Bottom AI Copilot Bar (Shown on Inner Workspaces) ── */
     .ct-copilot-dock {
-      display: flex;
+      display: none;
       align-items: center;
       gap: 12px;
-      padding: 8px 20px;
+      padding: 10px 20px;
       background: var(--bg-glass);
       backdrop-filter: blur(18px);
-      border-top: 1px solid var(--border-subtle);
+      border-top: 2px solid #4285F4;
+      box-shadow: 0 -6px 24px rgba(66, 133, 244, 0.14);
       flex-shrink: 0;
       z-index: 25;
     }
@@ -617,9 +1015,9 @@ _UI_HTML = r"""<!DOCTYPE html>
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 800;
-      color: var(--accent-cyan);
+      color: var(--accent-primary);
       white-space: nowrap;
     }
 
@@ -627,63 +1025,66 @@ _UI_HTML = r"""<!DOCTYPE html>
       flex: 1;
       background: var(--bg-input);
       color: var(--text-main);
-      border: 1px solid var(--border-subtle);
+      border: 1.5px solid var(--border-subtle);
       border-radius: 999px;
-      padding: 8px 16px;
+      padding: 9px 18px;
       font-family: var(--font-sans);
-      font-size: 13px;
+      font-size: 13.5px;
+      font-weight: 600;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     .ct-copilot-input:focus {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.18);
+      border-color: #4285F4;
+      box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.20);
     }
 
     .ct-quick-chips {
       display: flex;
       gap: 6px;
       overflow-x: auto;
-      max-width: 48vw;
+      max-width: 44vw;
     }
 
     .ct-chip-btn {
       background: var(--bg-card);
-      color: var(--text-secondary);
-      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      border: 1.5px solid var(--border-subtle);
       border-radius: 999px;
-      padding: 5px 11px;
-      font-size: 11.5px;
-      font-weight: 600;
+      padding: 6px 13px;
+      font-size: 12px;
+      font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
-      transition: all 0.15s;
+      transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .ct-chip-btn:hover {
-      border-color: var(--accent-cyan);
-      color: var(--accent-cyan);
+      border-color: #4285F4;
+      color: var(--accent-primary);
+      box-shadow: 0 4px 12px rgba(66, 133, 244, 0.18);
+      transform: translateY(-1px);
     }
 
-    /* Toast / AI Reply Banner */
+    /* Toast / AI Reply Banner with Genie Effect */
     .ct-toast {
       position: fixed;
-      bottom: 62px;
+      bottom: 64px;
       right: 24px;
       max-width: 520px;
-      background: rgba(12, 19, 36, 0.96);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--accent-cyan);
-      border-left: 4px solid var(--accent-cyan);
+      background: var(--bg-card);
+      border: 1.5px solid #4285F4;
+      border-left: 5px solid #4285F4;
       border-radius: 14px;
-      padding: 12px 16px;
-      color: #f8fafc;
+      padding: 13px 16px;
+      color: var(--text-main);
       font-size: 13px;
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65);
+      box-shadow: var(--shadow-float);
       z-index: 100;
       display: none;
-      animation: viewFade 0.22s ease;
+      transform-origin: bottom right;
+      animation: genieToastPop 0.34s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
     /* Photo Gallery Grid */
@@ -694,17 +1095,18 @@ _UI_HTML = r"""<!DOCTYPE html>
     }
 
     .ct-photo-card {
-      background: var(--bg-input);
-      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-subtle);
       border-radius: 12px;
       overflow: hidden;
       cursor: pointer;
-      transition: all 0.18s;
+      transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s, border-color 0.22s;
     }
 
     .ct-photo-card:hover, .ct-photo-card.active {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 14px rgba(0, 229, 255, 0.25);
+      border-color: #4285F4;
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: var(--shadow-float);
     }
 
     .ct-photo-card img {
@@ -715,536 +1117,1088 @@ _UI_HTML = r"""<!DOCTYPE html>
     }
 
     .ct-photo-card div {
-      padding: 6px 10px;
+      padding: 7px 10px;
       font-size: 11.5px;
       font-weight: 700;
       color: var(--text-secondary);
     }
 
-    @media (max-width: 1200px) {
-      .ct-kpi-ribbon { grid-template-columns: repeat(3, 1fr); }
+    /* Architecture & How-To Blueprint Cards */
+    .arch-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .arch-card {
+      background: var(--bg-elevated);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 14px;
+      transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s, border-color 0.22s;
+    }
+
+    .arch-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(66, 133, 244, 0.16);
+      border-color: #4285F4;
+    }
+
+    .arch-code {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      padding: 10px 12px;
+      border-radius: 10px;
+      color: var(--text-main);
+      overflow-x: auto;
+      margin-top: 6px;
+    }
+
+    /* ── Launchpad Front Page Clean Cards & Controls ── */
+    .lp-hub-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .lp-hub-card {
+      background: var(--bg-elevated);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 11px;
+      padding: 8px 10px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .lp-hub-card:hover {
+      border-color: #4285F4;
+      transform: translateY(-1.5px);
+    }
+
+    .lp-hub-card.active {
+      background: var(--accent-primary-soft);
+      border-color: #4285F4;
+      box-shadow: 0 4px 14px rgba(66, 133, 244, 0.22);
+    }
+
+    .lp-corr-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      border: 1.5px solid var(--border-subtle);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .lp-corr-chip.active {
+      background: #4285F4;
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 3px 10px rgba(66, 133, 244, 0.25);
+    }
+
+    .lp-rule-row {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-subtle);
+      border-left: 5px solid #4285F4;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      animation: genieCardPop 0.28s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    }
+
+    .lp-synth-cta {
+      background: linear-gradient(135deg, #4285F4 0%, #1a73e8 45%, #34A853 100%);
+      color: #ffffff;
+      border: 2px solid rgba(255, 255, 255, 0.32);
+      border-radius: 14px;
+      padding: 14px 28px;
+      font-family: var(--font-sans);
+      font-size: 15.5px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 10px 28px rgba(66, 133, 244, 0.38), 0 0 18px rgba(52, 168, 83, 0.24);
+      transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s;
+    }
+
+    .lp-synth-cta:hover {
+      transform: translateY(-2.5px) scale(1.02);
+      box-shadow: 0 14px 36px rgba(66, 133, 244, 0.50), 0 0 24px rgba(52, 168, 83, 0.35);
+    }
+
+    .lp-step-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-subtle);
+      color: var(--text-muted);
+      transition: all 0.22s;
+    }
+
+    .lp-step-pill.active {
+      background: var(--accent-primary-soft);
+      border-color: #4285F4;
+      color: var(--accent-primary);
+      box-shadow: 0 0 12px rgba(66, 133, 244, 0.25);
+    }
+
+    .lp-step-pill.done {
+      background: var(--accent-emerald-soft);
+      border-color: #34A853;
+      color: var(--accent-emerald);
+    }
+
+    @media (max-width: 1280px) {
+      .ct-left-rail { width: 230px; }
+      .ct-kpi-ribbon { grid-template-columns: repeat(2, 1fr); }
       .ct-sidebar { width: 320px; }
+      .arch-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
-<div class="ct-shell">
+<div class="ct-app-layout">
 
-  <!-- ═══════════════ TOP COMMAND HEADER ═══════════════ -->
-  <header class="ct-header">
-    <div class="ct-brand">
-      <div class="ct-logo-mark">🚚</div>
-      <div>
-        <div class="ct-brand-title">
-          FleetFlow
-          <span class="ct-brand-badge">GCP Control Tower</span>
+  <!-- ═══════════════ LEFT SIDEBAR NAVIGATION PANE ═══════════════ -->
+  <aside class="ct-left-rail">
+    <div>
+      <div class="ct-brand">
+        <div class="orbital-ring-wrap" style="width:42px;height:42px">
+          <span class="orbital-ring-core">🚚</span>
         </div>
-        <div class="ct-brand-sub">Autonomous Route VRPTW &amp; 3D LIFO Load Studio</div>
+        <div>
+          <div class="ct-brand-title">
+            FleetFlow
+            <span class="ct-brand-badge">GCP AI</span>
+          </div>
+          <div class="ct-brand-sub">Route &amp; 3D Load Control Tower</div>
+        </div>
+      </div>
+
+      <div class="ct-nav-section-lbl">Workspaces</div>
+      <nav class="ct-nav-list" id="mainNavTabs">
+        <button class="ct-nav-btn active" data-view="launchpad" onclick="switchWorkspace('launchpad')">
+          <span class="nav-ico">🚀</span>
+          <span>Dispatch Launchpad</span>
+        </button>
+        <button class="ct-nav-btn" data-view="tower" onclick="switchWorkspace('tower')">
+          <span class="nav-ico">🗺️</span>
+          <span>Dispatch &amp; Map</span>
+        </button>
+        <button class="ct-nav-btn" data-view="studio3d" onclick="switchWorkspace('studio3d')">
+          <span class="nav-ico">📦</span>
+          <span>3D Load Studio</span>
+        </button>
+        <button class="ct-nav-btn" data-view="simulator" onclick="switchWorkspace('simulator')">
+          <span class="nav-ico">🚛</span>
+          <span>Fleet &amp; Cost Simulator</span>
+        </button>
+        <button class="ct-nav-btn" data-view="intake" onclick="switchWorkspace('intake')">
+          <span class="nav-ico">📸</span>
+          <span>Dock QR &amp; Intake</span>
+        </button>
+        <button class="ct-nav-btn" data-view="gcp" onclick="switchWorkspace('gcp')">
+          <span class="nav-ico">📱</span>
+          <span>Driver Hub &amp; BigQuery</span>
+        </button>
+        <button class="ct-nav-btn" data-view="howto" onclick="switchWorkspace('howto')">
+          <span class="nav-ico">📘</span>
+          <span>Architecture &amp; How-To</span>
+        </button>
+      </nav>
+
+      <!-- Global Dispatch Configuration in Left Sidebar -->
+      <div class="ct-nav-section-lbl">Quick Hub &amp; Run</div>
+      <div class="ct-rail-config neon-blue">
+        <div class="ct-select-group">
+          <span class="ct-select-lbl">Distribution Hub</span>
+          <select id="selHub" class="ct-select" onchange="onSidebarHubChange(this.value)">
+            <option value="BHW-DC">Mumbai · Bhiwandi DC</option>
+            <option value="TLJ-DC">Mumbai · Taloja DC</option>
+            <option value="BLR-NLG">Bengaluru · Nelamangala</option>
+            <option value="BLR-EC">Bengaluru · Electronic City</option>
+          </select>
+        </div>
+
+        <div class="ct-select-group">
+          <span class="ct-select-lbl">Optimization Goal</span>
+          <select id="selObjective" class="ct-select" onchange="syncLaunchpadObjective(this.value)">
+            <option value="lowest_cost">Lowest Cost (₹)</option>
+            <option value="fewest_trucks">Fewest Trucks</option>
+            <option value="balanced">Balanced Fleet</option>
+            <option value="fastest_finish">Fastest Completion</option>
+          </select>
+        </div>
+
+        <div class="ct-select-group">
+          <span class="ct-select-lbl">Order Source</span>
+          <select id="selSource" class="ct-select" onchange="onSidebarSourceChange(this.value)">
+            <option value="demo">Hub Order Book</option>
+            <option value="bigquery">BigQuery Warehouse</option>
+            <option value="chat">Uploaded Spreadsheet / CSV</option>
+            <option value="photos">Scanned Dock QR</option>
+          </select>
+        </div>
+
+        <button class="ct-btn-primary" id="btnOptimize" style="width:100%;margin-top:2px" onclick="synthesizeFromLaunchpad(true)">
+          <span>🚀</span> Synthesize &amp; Run Agent
+        </button>
       </div>
     </div>
 
-    <!-- 5 Fluid Workspace Tabs -->
-    <nav class="ct-nav-tabs" id="mainNavTabs">
-      <button class="ct-nav-btn active" data-view="tower" onclick="switchWorkspace('tower')">
-        <span>🗺️</span> Dispatch &amp; Map
+    <!-- Bottom Left Theme & Deck Controls -->
+    <div class="ct-rail-footer">
+      <button class="ct-btn-secondary neon-amber" id="btnThemeToggle" style="flex:1" onclick="toggleCtTheme()" title="Switch between Gemini Light and Midnight Dark theme">
+        🌙 Dark Mode
       </button>
-      <button class="ct-nav-btn" data-view="studio3d" onclick="switchWorkspace('studio3d')">
-        <span>📦</span> 3D Load Studio
-      </button>
-      <button class="ct-nav-btn" data-view="simulator" onclick="switchWorkspace('simulator')">
-        <span>🚛</span> Fleet &amp; Cost Simulator
-      </button>
-      <button class="ct-nav-btn" data-view="intake" onclick="switchWorkspace('intake')">
-        <span>📸</span> Dock QR &amp; Intake
-      </button>
-      <button class="ct-nav-btn" data-view="gcp" onclick="switchWorkspace('gcp')">
-        <span>☁️</span> Driver Hub &amp; GCP SQL
-      </button>
-    </nav>
-
-    <!-- Global Controls -->
-    <div class="ct-header-controls">
-      <div class="ct-select-group">
-        <span class="ct-select-lbl">Distribution Hub</span>
-        <select id="selHub" class="ct-select" onchange="triggerPlanUpdate()">
-          <option value="BHW-DC">Mumbai · Bhiwandi DC (BHW-DC)</option>
-          <option value="TLJ-DC">Mumbai · Taloja DC (TLJ-DC)</option>
-          <option value="BLR-NLG">Bengaluru · Nelamangala (BLR-NLG)</option>
-          <option value="BLR-EC">Bengaluru · Electronic City (BLR-EC)</option>
-        </select>
-      </div>
-
-      <div class="ct-select-group">
-        <span class="ct-select-lbl">Optimization Goal</span>
-        <select id="selObjective" class="ct-select" onchange="triggerPlanUpdate()">
-          <option value="lowest_cost">Lowest Cost (₹)</option>
-          <option value="fewest_trucks">Fewest Trucks</option>
-          <option value="balanced">Balanced Fleet</option>
-          <option value="fastest_finish">Fastest Completion</option>
-        </select>
-      </div>
-
-      <div class="ct-select-group">
-        <span class="ct-select-lbl">Data Source</span>
-        <select id="selSource" class="ct-select" onchange="triggerPlanUpdate()">
-          <option value="demo">Live Order Book</option>
-          <option value="bigquery">BigQuery Warehouse</option>
-          <option value="photos">Scanned Dock QR</option>
-        </select>
-      </div>
-
-      <button class="ct-btn-primary" id="btnOptimize" onclick="triggerPlanUpdate()">
-        <span>⚡</span> Optimize
-      </button>
-
       <a href="/deck" target="_blank" class="ct-btn-secondary" title="Open Executive Presentation Deck">
-        📊 Deck
+        📊 Deck ↗
       </a>
-
-      <button class="ct-btn-secondary" onclick="toggleCtTheme()" title="Switch Dark / Light Mode">
-        🌓
-      </button>
     </div>
-  </header>
+  </aside>
 
-  <!-- ═══════════════ MAIN WORKSPACE BODY ═══════════════ -->
-  <main class="ct-main">
+  <!-- ═══════════════ RIGHT MAIN STAGE + COPILOT BAR ═══════════════ -->
+  <div class="ct-workspace-col">
+    <main class="ct-main">
 
-    <!-- ── Top KPI Ribbon ── -->
-    <section class="ct-kpi-ribbon">
-      <div class="ct-kpi-card" style="--kpi-color:#00e5ff">
-        <div>
-          <div class="ct-kpi-label">Fleet Right-Sized</div>
-          <div class="ct-kpi-val" id="kpiTrucks">10 → 7 Trucks</div>
-          <div class="ct-kpi-sub" id="kpiStopsSub">70 stops · 1,260 cartons</div>
-        </div>
-        <div class="ct-kpi-badge" id="kpiTrucksBadge">-3 trucks</div>
-      </div>
-
-      <div class="ct-kpi-card" style="--kpi-color:#10b981">
-        <div>
-          <div class="ct-kpi-label">Daily Net Savings</div>
-          <div class="ct-kpi-val" id="kpiSavings">₹21,194 / day</div>
-          <div class="ct-kpi-sub" id="kpiCostCompare">₹64,345 → ₹43,151</div>
-        </div>
-        <div class="ct-kpi-badge" id="kpiSavingsPct">-33.0%</div>
-      </div>
-
-      <div class="ct-kpi-card" style="--kpi-color:#ffab00">
-        <div>
-          <div class="ct-kpi-label">3D Bay Utilization</div>
-          <div class="ct-kpi-val" id="kpiFill">78.4% Vol</div>
-          <div class="ct-kpi-sub" id="kpiWeightSub">Payload fill: 81.2%</div>
-        </div>
-        <div class="ct-kpi-badge">100% LIFO</div>
-      </div>
-
-      <div class="ct-kpi-card" style="--kpi-color:#38bdf8">
-        <div>
-          <div class="ct-kpi-label">Axle Physics &amp; Safety</div>
-          <div class="ct-kpi-val" id="kpiCmvr">CMVR Rule 93</div>
-          <div class="ct-kpi-sub">Steer 34–42% · Drive 58–66%</div>
-        </div>
-        <div class="ct-kpi-badge">CERTIFIED</div>
-      </div>
-
-      <div class="ct-kpi-card" style="--kpi-color:#34d399">
-        <div>
-          <div class="ct-kpi-label">Green Logistics ESG</div>
-          <div class="ct-kpi-val" id="kpiCo2">112 kg CO₂</div>
-          <div class="ct-kpi-sub" id="kpiDieselSub">42.1 L diesel saved today</div>
-        </div>
-        <div class="ct-kpi-badge" id="kpiTreesBadge">1,540 trees/yr</div>
-      </div>
-    </section>
-
-    <!-- ═══════════════ VIEW 1: CONTROL TOWER & ROUTE MAP ═══════════════ -->
-    <section class="ct-view active" id="view-tower">
-      <div class="ct-stage">
-        <!-- Scope Filter Bar (All / 1 Truck / 3 Trucks / Specific Truck Dropdown) -->
-        <div class="ct-scope-bar">
-          <div class="ct-scope-group">
-            <span style="font-size:11.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase;margin-right:4px">🎯 Fleet Focus:</span>
-            <button class="ct-scope-btn active" id="scopeAllBtn" onclick="applyTruckScope('all')">All Fleet</button>
-            <button class="ct-scope-btn" id="scope1Btn" onclick="applyTruckScope('1')">1 Truck Only</button>
-            <button class="ct-scope-btn" id="scope3Btn" onclick="applyTruckScope('3')">Top 3 Trucks</button>
-            <select id="selFocusTruckMap" class="ct-select" style="padding:4px 10px;font-size:12px" onchange="applySingleTruckDropdown(this.value)">
-              <option value="all">Select specific truck / driver...</option>
-            </select>
-          </div>
-          <div class="ct-scope-group">
-            <button class="ct-btn-secondary" style="padding:4px 10px;font-size:11.5px" onclick="switchWorkspace('studio3d')">
-              📦 Open Focused Truck in 3D Studio →
-            </button>
-          </div>
-        </div>
-
-        <!-- Interactive Road Map Canvas Mount -->
-        <div id="ct-map-mount" class="ct-engine-mount">
-          <div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);font-size:13px;gap:10px">
-            <span>⚡ Initializing OR-Tools VRPTW &amp; 3D LIFO Packing Engine...</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right Sidebar: Corridor Assignment & Active Fleet List -->
-      <aside class="ct-sidebar">
-        <div class="ct-box">
-          <div class="ct-panel-title">
-            <span>🧭 Driver Corridor Pinning</span>
-            <span style="font-size:11px;color:var(--accent-cyan);font-family:var(--font-mono)">Trunk &amp; Branch</span>
-          </div>
-          <div class="ct-panel-sub">Assign a driver to a preferred highway sector; remaining volume splits around them automatically.</div>
-          <div class="ct-form-grid">
-            <div class="ct-field">
-              <label>Driver</label>
-              <select id="selClaimDriver" class="ct-select"></select>
-            </div>
-            <div class="ct-field">
-              <label>Compass Sector</label>
-              <select id="selClaimCorridor" class="ct-select"></select>
-            </div>
-          </div>
-          <div style="display:flex;gap:8px;margin-top:10px">
-            <button class="ct-btn-primary" style="flex:1;justify-content:center;padding:8px" onclick="submitCorridorClaim()">
-              📌 Pin &amp; Re-Optimize
-            </button>
-            <button class="ct-btn-secondary" onclick="clearCorridorClaims()" title="Clear all corridor claims">
-              Reset
-            </button>
-          </div>
-          <div id="activeClaimsPills" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>
-        </div>
-
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <span style="font-size:12px;font-weight:800;text-transform:uppercase;color:var(--text-muted)">🚚 Dispatched Fleet Routes</span>
-          <span id="routeCountLbl" style="font-size:11.5px;color:var(--accent-cyan);font-weight:700"></span>
-        </div>
-        <div id="towerRoutesList" style="flex:1;overflow-y:auto"></div>
-      </aside>
-    </section>
-
-    <!-- ═══════════════ VIEW 2: 3D LOAD STUDIO & CALCULATOR ═══════════════ -->
-    <section class="ct-view" id="view-studio3d">
-      <div class="ct-stage">
-        <div class="ct-scope-bar">
-          <div class="ct-scope-group">
-            <span style="font-size:12px;font-weight:800;color:var(--accent-cyan)">📦 3D LIFO Cargo Studio</span>
-            <span style="font-size:12px;color:var(--text-muted)">Last delivery loaded first at cab wall (X=0) · Stop 1 right at rear roll-up door</span>
-          </div>
-          <div class="ct-scope-group">
-            <span id="studioBannerBadge" class="ct-kpi-badge">LIFO &amp; CMVR Verified</span>
-          </div>
-        </div>
-        <div id="ct-load-mount" class="ct-engine-mount"></div>
-      </div>
-
-      <!-- Right Sidebar: Interactive Truck & Carton Calculator -->
-      <aside class="ct-sidebar">
-        <div class="ct-box">
-          <div class="ct-panel-title">
-            <span>🧮 Truck Type Calculator</span>
-            <span style="font-size:11px;color:var(--accent-amber);font-family:var(--font-mono)">What-If Simulator</span>
-          </div>
-          <div class="ct-panel-sub">Select any dispatched route and test packing its cartons into different vehicle sizes in real time.</div>
-          <div class="ct-field" style="margin-bottom:8px">
-            <label>1. Select Route / Driver Consignment</label>
-            <select id="selStudioRoute" class="ct-select" onchange="onStudioRouteSelect(this.value)"></select>
-          </div>
-          <div class="ct-field" style="margin-bottom:10px">
-            <label>2. Test Vehicle Class (Body Dimensions &amp; Payload)</label>
-            <select id="selStudioTruckType" class="ct-select" onchange="runStudioRepack()"></select>
-          </div>
-          <button class="ct-btn-primary" style="width:100%;justify-content:center" onclick="runStudioRepack()">
-            🔄 Recalculate 3D Load &amp; Axle Physics
-          </button>
-        </div>
-
-        <!-- Live Physics & Utilization Readout -->
-        <div class="ct-box" id="studioStatsCard">
-          <div class="ct-panel-title">
-            <span>⚖️ Load &amp; Axle Telemetry</span>
-            <span id="stLifoStatus" class="ct-kpi-badge" style="font-size:10.5px">LIFO OK</span>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px">
-            <div>
-              <div style="font-size:11px;color:var(--text-muted)">Volume Fill</div>
-              <div style="font-size:17px;font-weight:800" id="stVolFill">78.5%</div>
-              <div class="ct-gauge-track"><div id="stVolBar" class="ct-gauge-fill" style="width:78%;background:var(--accent-cyan)"></div></div>
-            </div>
-            <div>
-              <div style="font-size:11px;color:var(--text-muted)">Payload Fill</div>
-              <div style="font-size:17px;font-weight:800" id="stWtFill">82.1%</div>
-              <div class="ct-gauge-track"><div id="stWtBar" class="ct-gauge-fill" style="width:82%;background:var(--accent-amber)"></div></div>
-            </div>
-          </div>
-          <div style="margin-top:10px">
-            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)">
-              <span>Steer Axle: <b id="stFrontAxle" style="color:var(--text-main)">38%</b></span>
-              <span>Drive Axle: <b id="stRearAxle" style="color:var(--text-main)">62%</b></span>
-            </div>
-            <div class="ct-gauge-track" style="height:10px;background:#1e293b">
-              <div id="stAxleBar" class="ct-gauge-fill" style="width:38%;background:linear-gradient(90deg,#10b981,#00e5ff)"></div>
-            </div>
-            <div id="stCmvrNote" style="font-size:11px;color:#34d399;margin-top:4px;font-weight:600">✓ CMVR Rule 93 Balanced</div>
-          </div>
-          <div id="stOverflowWarn" style="display:none;margin-top:8px;padding:8px;border-radius:8px;background:rgba(244,63,94,0.15);border:1px solid rgba(244,63,94,0.4);color:#fda4af;font-size:11.5px;font-weight:700"></div>
-        </div>
-
-        <!-- Add Custom Cartons to 3D Truck -->
-        <div class="ct-box">
-          <div class="ct-panel-title">
-            <span>➕ Add Custom Cartons</span>
-            <button class="ct-btn-secondary" style="padding:2px 8px;font-size:10.5px" onclick="clearCustomBoxes()">Clear Added</button>
-          </div>
-          <div class="ct-field" style="margin-bottom:8px">
-            <label>SKU Preset (or Custom Size below)</label>
-            <select id="selCustomSku" class="ct-select" onchange="onCustomSkuChange(this.value)"></select>
-          </div>
-          <div class="ct-form-grid" style="margin-bottom:8px">
-            <div class="ct-field">
-              <label>Quantity</label>
-              <input type="number" id="inpCustomQty" class="ct-input" value="4" min="1" max="40">
-            </div>
-            <div class="ct-field">
-              <label>Delivery Stop #</label>
-              <input type="number" id="inpCustomStop" class="ct-input" value="1" min="1" max="20">
-            </div>
-          </div>
-          <div class="ct-form-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:10px">
-            <div class="ct-field"><label>L (cm)</label><input type="number" id="inpCustomL" class="ct-input" value="34"></div>
-            <div class="ct-field"><label>W (cm)</label><input type="number" id="inpCustomW" class="ct-input" value="34"></div>
-            <div class="ct-field"><label>H (cm)</label><input type="number" id="inpCustomH" class="ct-input" value="38"></div>
-            <div class="ct-field"><label>Kg</label><input type="number" id="inpCustomKg" class="ct-input" value="24"></div>
-          </div>
-          <button class="ct-btn-secondary" style="width:100%;justify-content:center;border-color:var(--accent-cyan);color:var(--accent-cyan)" onclick="addCustomBoxAndPack()">
-            + Pack into 3D Cargo Bay
-          </button>
-          <div id="addedCustomBoxesList" style="margin-top:8px;font-size:11.5px;color:var(--text-muted)"></div>
-        </div>
-      </aside>
-    </section>
-
-    <!-- ═══════════════ VIEW 3: FLEET & COST SIMULATOR ═══════════════ -->
-    <section class="ct-view" id="view-simulator">
-      <aside class="ct-sidebar" style="width:400px">
-        <div class="ct-box">
-          <div class="ct-panel-title">
-            <span>🚛 Available Fleet Mix at Hub</span>
-            <span style="font-size:11px;color:var(--accent-cyan)">OR-Tools VRPTW</span>
-          </div>
-          <div class="ct-panel-sub">Adjust how many vehicles of each class are available on the dock today and re-solve the MIP.</div>
-          <div id="fleetControlsContainer" style="display:flex;flex-direction:column;gap:8px"></div>
-        </div>
-
-        <div class="ct-box">
-          <div class="ct-panel-title"><span>⛽ Operating Cost Parameters</span></div>
-          <div class="ct-form-grid">
-            <div class="ct-field">
-              <label>Diesel Price (₹ / Litre)</label>
-              <input type="number" id="inpSimFuel" class="ct-input" value="92" step="1">
-            </div>
-            <div class="ct-field">
-              <label>Driver Bata (₹ / Day)</label>
-              <input type="number" id="inpSimDriverCost" class="ct-input" value="1100" step="50">
-            </div>
-          </div>
-          <button class="ct-btn-primary" style="width:100%;justify-content:center;margin-top:12px" onclick="runSimulatorOptimization()">
-            ⚡ Re-Solve Fleet &amp; Cost Matrix
-          </button>
-        </div>
-      </aside>
-
-      <div class="ct-stage" style="padding:16px">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <!-- ── Clean, Neon-Outlined 4-Metric Operational Strip (With Moving Orbital Rings) ── -->
+      <section class="ct-kpi-ribbon">
+        <div class="ct-kpi-card neon-blue">
           <div>
-            <div style="font-size:16px;font-weight:800">Dispatch Schedule, Fill Rates &amp; Route Cost Ledger</div>
-            <div style="font-size:12px;color:var(--text-muted)">Atomic copy-ready table for Google Sheets / ERP export</div>
+            <div class="ct-kpi-label" id="kpiLbl1">Selected Hub</div>
+            <div class="ct-kpi-val" id="kpiTrucks">Mumbai · Bhiwandi DC</div>
+            <div class="ct-kpi-sub" id="kpiTrucksSub">Select hub, drivers &amp; trucks below</div>
           </div>
-          <div style="display:flex;gap:8px">
-            <button class="ct-btn-secondary" onclick="copyScheduleTable()">📋 Copy for Google Sheets</button>
-            <button class="ct-btn-secondary" onclick="exportScheduleCsv()">⬇ Export CSV</button>
-          </div>
-        </div>
-        <div class="ct-table-wrap">
-          <table class="ct-table" id="simScheduleTable">
-            <thead>
-              <tr>
-                <th>Truck ID</th>
-                <th>Vehicle Class</th>
-                <th>Driver</th>
-                <th>Corridor / Branch</th>
-                <th>Stops</th>
-                <th>Cartons</th>
-                <th>Vol Fill</th>
-                <th>Wt Fill</th>
-                <th>Distance</th>
-                <th>Shift</th>
-                <th>Route Cost</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="simScheduleBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════ VIEW 4: DOCK QR SCANNER & SMART ORDER INTAKE ═══════════════ -->
-    <section class="ct-view" id="view-intake">
-      <!-- Left: Dock Camera QR & Thermal Label Vision Scanner -->
-      <div class="ct-stage" style="padding:16px;overflow-y:auto">
-        <div class="ct-panel-title" style="font-size:16px">
-          <span>📸 Warehouse Dock QR &amp; Vision Carton Scanner</span>
-          <span class="ct-kpi-badge">OpenCV + Gemini Vision</span>
-        </div>
-        <div class="ct-panel-sub">Click any staging floor photo below (or upload your own smartphone carton photo) to decode QR labels, match SKU dimensions, and add cartons into today's 3D load plan.</div>
-
-        <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center">
-          <label class="ct-btn-secondary" style="cursor:pointer">
-            📤 Upload Custom Carton Photo
-            <input type="file" accept="image/*" style="display:none" onchange="uploadCustomPhoto(this)">
-          </label>
-          <span id="scanStatusText" style="font-size:12.5px;color:var(--accent-cyan);font-weight:700"></span>
-        </div>
-
-        <div class="ct-photo-grid" id="samplePhotosGrid"></div>
-
-        <div class="ct-box" style="margin-top:14px" id="scanResultBox">
-          <div class="ct-panel-title"><span>🔍 Decoded Carton Manifest</span></div>
-          <div id="scanResultContent" style="font-family:var(--font-mono);font-size:12px;color:var(--text-secondary)">
-            Select a staging floor photo above to run live QR &amp; label recognition.
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+            <div class="orbital-ring-wrap" style="width:32px;height:32px"><span class="orbital-ring-core" style="font-size:14px">📍</span></div>
+            <div class="ct-kpi-badge" id="kpiTrucksBadge">READY</div>
           </div>
         </div>
-      </div>
 
-      <!-- Right: Unstructured Order List / Email / CSV Intake -->
-      <div class="ct-stage" style="padding:16px;overflow-y:auto">
-        <div class="ct-panel-title" style="font-size:16px">
-          <span>📝 Unstructured ERP, Email &amp; WhatsApp Order Intake</span>
-          <span class="ct-kpi-badge">Auto-Geocode + SKU Match</span>
-        </div>
-        <div class="ct-panel-sub">Load a preset dealer order manifest or paste raw text/CSV from an email or WhatsApp message to build a fresh route &amp; 3D load plan.</div>
-
-        <div id="sampleOrdersBtns" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>
-
-        <textarea id="inpOrderText" class="ct-input" style="width:100%;height:230px;font-family:var(--font-mono);font-size:12px;line-height:1.5;resize:vertical" placeholder="Paste dealer orders here (e.g. Store name, locality, SKU codes and carton quantities)..."></textarea>
-
-        <div style="display:flex;gap:10px;margin-top:10px">
-          <button class="ct-btn-primary" onclick="submitOrderText()">
-            ⚡ Parse Orders &amp; Build Dispatch Plan
-          </button>
-          <button class="ct-btn-secondary" onclick="resetToDefaultDemo()">
-            🔄 Reset to Full 70-Stop Demo Book
-          </button>
-        </div>
-
-        <div class="ct-box" style="margin-top:14px">
-          <div class="ct-panel-title"><span>📋 Intake &amp; Geocoding Summary</span></div>
-          <div id="ingestResultContent" style="font-size:12.5px;color:var(--text-secondary)">
-            Ready to ingest unstructured dealer orders.
+        <div class="ct-kpi-card neon-green">
+          <div>
+            <div class="ct-kpi-label" id="kpiLbl2">Staged Order Manifest</div>
+            <div class="ct-kpi-val" id="kpiSavings">70 Retail Outlets</div>
+            <div class="ct-kpi-sub" id="kpiCostCompare">1,260 cartons · 8 corridors</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+            <div class="orbital-ring-wrap" style="width:32px;height:32px"><span class="orbital-ring-core" style="font-size:14px">📦</span></div>
+            <div class="ct-kpi-badge" id="kpiSavingsPct">BigQuery / CSV</div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- ═══════════════ VIEW 5: DRIVER DISPATCH HUB & GCP BIGQUERY STUDIO ═══════════════ -->
-    <section class="ct-view" id="view-gcp">
-      <!-- Left: Driver Mobile Portal & Google Maps Live Navigation Hub -->
-      <div class="ct-stage" style="padding:16px;overflow-y:auto;flex:0.95">
-        <div class="ct-panel-title" style="font-size:16px">
-          <span>📱 Driver Mobile Portal, Google Maps &amp; WhatsApp Hub</span>
-          <span class="ct-kpi-badge">Zero-Login Edge</span>
-        </div>
-        <div class="ct-panel-sub">Select any driver to launch 1-tap Google Maps turn-by-turn navigation with live traffic, send a 1-click WhatsApp dispatch, or preview their standalone mobile run sheet &amp; printable LR Challan.</div>
-
-        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
-          <select id="selPortalTruck" class="ct-select" style="flex:1" onchange="updateDriverHubPreview(this.value)"></select>
-          <a id="btnOpenMapsNav" href="#" target="_blank" class="ct-btn-primary" style="text-decoration:none;background:linear-gradient(135deg,#22c55e,#16a34a)">
-            🗺️ 1-Tap Google Maps Nav
-          </a>
-          <a id="btnOpenWhatsApp" href="#" target="_blank" class="ct-btn-secondary" style="color:#4ade80;border-color:rgba(74,222,128,0.4)">
-            💬 WhatsApp Driver
-          </a>
-          <a id="btnOpenPortalTab" href="#" target="_blank" class="ct-btn-secondary">
-            ↗ Full Screen / Print LR
-          </a>
+        <div class="ct-kpi-card neon-amber">
+          <div>
+            <div class="ct-kpi-label" id="kpiLbl3">Hub Fleet &amp; Roster</div>
+            <div class="ct-kpi-val" id="kpiStopsVal">10 Trucks · 12 Drivers</div>
+            <div class="ct-kpi-sub" id="kpiStopsSub">Dynamic roster for BHW-DC</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+            <div class="orbital-ring-wrap" style="width:32px;height:32px"><span class="orbital-ring-core" style="font-size:14px">🚛</span></div>
+            <div class="ct-kpi-badge" id="kpiCargoBadge">5 Vehicle Classes</div>
+          </div>
         </div>
 
-        <div style="flex:1;min-height:380px;border:1px solid var(--border-subtle);border-radius:14px;overflow:hidden;background:#0a0f1d">
-          <iframe id="driverPortalIframe" style="width:100%;height:100%;border:none" title="Driver Mobile Portal Preview"></iframe>
+        <div class="ct-kpi-card neon-red">
+          <div>
+            <div class="ct-kpi-label" id="kpiLbl4">Manager Rules &amp; Status</div>
+            <div class="ct-kpi-val" id="kpiDistanceVal">Ready to Synthesize</div>
+            <div class="ct-kpi-sub" id="kpiDistanceSub">Click 'Synthesize &amp; Run Agent'</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+            <div class="orbital-ring-wrap" style="width:32px;height:32px"><span class="orbital-ring-core" style="font-size:14px">⚡</span></div>
+            <div class="ct-kpi-badge" id="kpiDistanceBadge">Step 1 · Setup</div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Right: GCP Cloud Architecture & Live BigQuery SQL Studio -->
-      <div class="ct-stage" style="padding:16px;overflow-y:auto;flex:1.05">
-        <div class="ct-panel-title" style="font-size:16px">
-          <span>☁️ Google Cloud Infrastructure &amp; BigQuery Analytics Studio</span>
-          <span class="ct-kpi-badge">Cloud Run · BigQuery · Model Armor</span>
+      <!-- ═══════════════ VIEW 0 (FRONT PAGE): CLEAN, UNCLUTTERED DISPATCH LAUNCHPAD ═══════════════ -->
+      <section class="ct-view active" id="view-launchpad">
+        <div class="ct-stage" style="padding:22px 28px;overflow-y:auto;gap:18px">
+          <div style="max-width:1100px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:18px">
+
+            <!-- Clean Top Hero Header with Moving Orbital Ring & Bold Big Heading -->
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px">
+              <div style="display:flex;align-items:center;gap:16px">
+                <div class="orbital-ring-wrap" style="width:56px;height:56px">
+                  <span class="orbital-ring-core" style="font-size:26px">🚀</span>
+                </div>
+                <div>
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+                    <span class="ct-kpi-badge" style="background:var(--accent-primary-soft);color:var(--accent-primary);border-color:rgba(66,133,244,0.4)">LOGISTICS MANAGER LAUNCHPAD</span>
+                    <span id="lpActiveHubBadge" style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted);font-weight:800">HUB: BHW-DC (MUMBAI)</span>
+                  </div>
+                  <h1 class="ct-big-heading">
+                    FleetFlow <span class="google-gradient-text">AI Dispatch &amp; 3D Load</span> Command Center
+                  </h1>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:center">
+                <button class="ct-btn-secondary neon-amber" id="btnHeroThemeToggle" onclick="toggleCtTheme()">
+                  🌙 Switch Dark / Light Mode
+                </button>
+              </div>
+            </div>
+
+            <!-- 5-Stage Synthesis Progress Bar (Shown Only While Agent Synthesizes) -->
+            <div id="lpSynthesisBar" class="neon-blue" style="display:none;background:var(--bg-elevated);border-radius:14px;padding:14px 18px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                <span style="font-size:13.5px;font-weight:800;color:var(--accent-primary)" id="lpSynthStatusTitle">⚡ FleetFlow Agent Synthesizing Dispatch Plan...</span>
+                <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">OR-Tools CVRPTW + 3D Height-Map Enclave</span>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <div class="lp-step-pill" id="lpStep1">1. Hub &amp; Manifest Intake</div>
+                <div class="lp-step-pill" id="lpStep2">2. 8-Way Corridors &amp; Manager Rules</div>
+                <div class="lp-step-pill" id="lpStep3">3. OR-Tools Fleet &amp; Route Solver</div>
+                <div class="lp-step-pill" id="lpStep4">4. 3D LIFO Cargo Packing</div>
+                <div class="lp-step-pill" id="lpStep5">5. Cost vs. Manual Audit</div>
+              </div>
+            </div>
+
+            <!-- STEP 1: 3 CLEAN, NEON-OUTLINED CORE OPTION BOXES -->
+            <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:14px">
+
+              <!-- Box 1: Distribution Hub -->
+              <div class="ct-box neon-blue">
+                <div class="ct-panel-title">
+                  <span>📍 1. Distribution Hub</span>
+                  <span style="font-size:11px;color:var(--accent-primary);font-family:var(--font-mono)" id="lpHubDriverCountLbl">12 Drivers · 70 Outlets</span>
+                </div>
+                <div style="margin-top:8px">
+                  <select id="lpSelHubQuick" class="ct-select" onchange="onLaunchpadHubChange(this.value)">
+                    <option value="BHW-DC">🏙️ Mumbai · Bhiwandi Regional DC (BHW-DC)</option>
+                    <option value="BLR-NLG">🌳 Bengaluru · Nelamangala Hub (BLR-NLG)</option>
+                    <option value="TLJ-DC">⚓ Navi Mumbai · Taloja Hub (TLJ-DC)</option>
+                    <option value="BLR-EC">💻 Bengaluru · Electronic City Hub (BLR-EC)</option>
+                  </select>
+                </div>
+                <div class="lp-hub-grid" id="lpHubCardsGrid">
+                  <div class="lp-hub-card active" data-hub="BHW-DC" onclick="onLaunchpadHubChange('BHW-DC')">
+                    <div style="font-weight:800;font-size:11.5px">Mumbai BHW</div>
+                  </div>
+                  <div class="lp-hub-card" data-hub="BLR-NLG" onclick="onLaunchpadHubChange('BLR-NLG')">
+                    <div style="font-weight:800;font-size:11.5px">BLR Nelamangala</div>
+                  </div>
+                  <div class="lp-hub-card" data-hub="TLJ-DC" onclick="onLaunchpadHubChange('TLJ-DC')">
+                    <div style="font-weight:800;font-size:11.5px">Navi Mumbai</div>
+                  </div>
+                  <div class="lp-hub-card" data-hub="BLR-EC" onclick="onLaunchpadHubChange('BLR-EC')">
+                    <div style="font-weight:800;font-size:11.5px">BLR Elec. City</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Box 2: Order Manifest & Spreadsheet Upload -->
+              <div class="ct-box neon-green">
+                <div class="ct-panel-title">
+                  <span>📂 2. Delivery Manifest</span>
+                  <span id="lpManifestStatusBadge" style="font-size:11px;font-weight:800;color:var(--accent-emerald)">✓ Live Hub Book</span>
+                </div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+                  <label class="ct-btn-secondary" style="flex:1;cursor:pointer;border-color:#34A853;color:var(--accent-emerald)">
+                    📗 Upload Excel / CSV
+                    <input type="file" accept=".xlsx,.xls,.csv,.tsv,.txt" style="display:none" onchange="uploadLaunchpadSpreadsheet(this)">
+                  </label>
+                  <button class="ct-btn-secondary" onclick="loadLaunchpadSampleSheet('orders_morning.csv')">
+                    📄 Sample CSV
+                  </button>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+                  <span style="font-size:11.5px;color:var(--text-secondary)">Supports `.xlsx`, `.csv`, BigQuery</span>
+                  <button class="ct-chip-btn" style="padding:3px 9px;font-size:11px" onclick="resetLaunchpadToHubBook()">Reset Full Book</button>
+                </div>
+              </div>
+
+              <!-- Box 3: Optimization Goal & Fleet Scope -->
+              <div class="ct-box neon-amber">
+                <div class="ct-panel-title">
+                  <span>🎯 3. Goal &amp; View Scope</span>
+                  <span style="font-size:11px;color:var(--accent-amber);font-family:var(--font-mono)" id="lpTotalFleetPoolLbl">12 Trucks Available</span>
+                </div>
+                <div class="ct-form-grid" style="margin-top:8px">
+                  <div class="ct-field">
+                    <label>Optimization Goal</label>
+                    <select id="lpSelObjective" class="ct-select" onchange="document.getElementById('selObjective').value=this.value">
+                      <option value="lowest_cost">Lowest Cost (₹)</option>
+                      <option value="fewest_trucks">Fewest Trucks</option>
+                      <option value="balanced">Balanced Fleet</option>
+                      <option value="fastest_finish">Fastest Finish</option>
+                    </select>
+                  </div>
+                  <div class="ct-field">
+                    <label>Initial View Scope</label>
+                    <select id="lpSelScope" class="ct-select">
+                      <option value="all">All Fleet</option>
+                      <option value="3">Top 3 Trucks</option>
+                      <option value="1">1 Truck Only</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- STEP 2 (CENTERPIECE): BIG CENTERED AI COMMAND BOX WITH GOOGLE REVOLVING 4-COLOR NEON RING -->
+            <div style="max-width:980px;width:100%;margin:4px auto">
+              <div class="google-revolving-box">
+                <div class="google-revolving-inner">
+                  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+                    <div style="display:flex;align-items:center;gap:12px">
+                      <div class="orbital-ring-wrap" style="width:42px;height:42px">
+                        <span class="orbital-ring-core" style="font-size:19px">✨</span>
+                      </div>
+                      <div>
+                        <h2 style="font-size:21px;font-weight:800;letter-spacing:-0.02em;color:var(--text-main)">
+                          Enter Dispatch Details, Driver Assignments &amp; Natural-Language Instructions
+                        </h2>
+                        <div style="font-size:12.5px;color:var(--text-secondary)">
+                          Type instructions below or click a quick preset — e.g. assign a driver to a smaller truck on West and automatically split overflow stops.
+                        </div>
+                      </div>
+                    </div>
+                    <span class="ct-kpi-badge" style="background:var(--accent-primary-soft);color:var(--accent-primary);border-color:#4285F4">
+                      Gemini 2.5 Flash + OR-Tools
+                    </span>
+                  </div>
+
+                  <textarea
+                    id="inpLaunchpadPrompt"
+                    class="ct-input"
+                    style="width:100%;height:118px;font-size:15.5px;line-height:1.5;padding:14px 16px;border-radius:14px;border:2px solid rgba(66,133,244,0.45);resize:vertical"
+                    placeholder="Type dispatch instructions here... Example: 'Plan today's dispatch for this hub. Give Ravi the West route in a smaller T14 truck and distribute the remaining West stops to a backup truck.'"
+                  ></textarea>
+
+                  <!-- Highlighted Quick Scenario Chips -->
+                  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;margin-bottom:16px">
+                    <button class="ct-chip-btn neon-blue" onclick="applyLaunchpadPreset('smaller_west'); setLaunchpadPrompt('Give our lead driver the West route in a smaller T14 (14ft) truck and automatically distribute overflow West stops to a secondary truck')">
+                      ⚡ Driver 1 → West in Smaller Truck (T14) + Split Overflow
+                    </button>
+                    <button class="ct-chip-btn neon-green" onclick="applyLaunchpadPreset('two_leads'); setLaunchpadPrompt('Pin two corridor lead drivers (West in T14 and South in T17) and optimize the rest of the fleet for lowest cost')">
+                      📌 Pin 2 Corridor Leads (West + South)
+                    </button>
+                    <button class="ct-chip-btn neon-amber" onclick="onLaunchpadHubChange('BLR-NLG'); setLaunchpadPrompt('Plan dispatch for Bengaluru Nelamangala hub and highlight the top 3 trucks')">
+                      🌳 Switch to Bengaluru Hub (Karthik, Ramesh...)
+                    </button>
+                    <button class="ct-chip-btn" onclick="applyLaunchpadPreset('clear'); setLaunchpadPrompt('Plan today\'s full fleet dispatch for lowest total cost in ₹ across all corridors')">
+                      🧹 100% Auto-Optimize Lowest Cost
+                    </button>
+                  </div>
+
+                  <!-- Prominent Action Footer Inside Revolving Box -->
+                  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding-top:12px;border-top:1px solid var(--border-subtle)">
+                    <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--text-secondary)">
+                      <span>🛡️ Zero-Hallucination Math Enclave</span>
+                      <span>·</span>
+                      <span id="lpQuickRuleSummary" style="color:var(--accent-primary)">1 Driver Rule Staged</span>
+                    </div>
+                    <button class="lp-synth-cta" id="btnHeroSynthesize" onclick="synthesizeFromLaunchpad(true)">
+                      <span>🚀</span> Synthesize &amp; Run FleetFlow Agent →
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 3: PROGRESSIVE DISCLOSURE — ALL DETAILED CONTROLS HIDDEN BEHIND CLEAN DROPDOWN ACCORDIONS -->
+            <div style="display:flex;flex-direction:column;gap:12px;max-width:980px;width:100%;margin:0 auto">
+
+              <!-- Accordion 1: Driver, Truck Size & Corridor Rules Builder -->
+              <details class="ct-accordion">
+                <summary>
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <span style="font-size:18px">👨‍✈️</span>
+                    <span>Driver, Truck Size &amp; Corridor Rules Builder</span>
+                    <span class="ct-kpi-badge" style="font-size:10.5px;background:var(--accent-primary-soft);color:var(--accent-primary)">Dropdown Controls + Overflow Diagnosis</span>
+                  </div>
+                  <span class="ct-acc-chevron">▼</span>
+                </summary>
+                <div class="ct-acc-body">
+                  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+                    <div style="font-size:12.5px;color:var(--text-secondary)">
+                      Assign specific regional drivers to a compass corridor and vehicle class (`ACE`, `PKP`, `T14`, `T17`, `T20`). Assigning a smaller truck automatically triggers trunk-and-branch overflow distribution.
+                    </div>
+                    <button class="ct-btn-secondary neon-blue" onclick="addLaunchpadDriverRule()">
+                      + Add Driver / Truck Rule
+                    </button>
+                  </div>
+                  <div id="lpDriverRulesContainer"></div>
+                </div>
+              </details>
+
+              <!-- Accordion 2: Available Fleet Pool Steppers & Fuel / Driver Cost Rates -->
+              <details class="ct-accordion">
+                <summary>
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <span style="font-size:18px">🚛</span>
+                    <span>Available Hub Fleet Pool &amp; Diesel / Driver Cost Rates</span>
+                    <span class="ct-kpi-badge" style="font-size:10.5px">5 Vehicle Classes · ₹/km Rates</span>
+                  </div>
+                  <span class="ct-acc-chevron">▼</span>
+                </summary>
+                <div class="ct-acc-body">
+                  <div id="lpFleetPoolGrid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:12px"></div>
+                  <div class="ct-form-grid" style="max-width:420px">
+                    <div class="ct-field">
+                      <label>Diesel Price (₹ / Litre)</label>
+                      <input type="number" id="lpInpFuel" class="ct-input" value="92" step="1">
+                    </div>
+                    <div class="ct-field">
+                      <label>Driver Bata (₹ / Day)</label>
+                      <input type="number" id="lpInpDriverCost" class="ct-input" value="1100" step="50">
+                    </div>
+                  </div>
+                </div>
+              </details>
+
+              <!-- Accordion 3: 8-Corridor Filter Chips, Regional Store Demand Table & Enterprise Connectors -->
+              <details class="ct-accordion">
+                <summary>
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <span style="font-size:18px">🧭</span>
+                    <span>8-Corridor Sector Filter, Regional Demand Table &amp; Data Connectors</span>
+                    <span id="lpPreviewSummaryBadge" class="ct-kpi-badge" style="font-size:10.5px">8 Sectors Active</span>
+                  </div>
+                  <span class="ct-acc-chevron">▼</span>
+                </summary>
+                <div class="ct-acc-body">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                    <span style="font-size:11.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase">Toggle Active Delivery Corridors:</span>
+                    <button class="ct-chip-btn" style="padding:3px 10px;font-size:11px" onclick="selectAllLaunchpadCorridors()">Select All 8 Sectors</button>
+                  </div>
+                  <div id="lpCorridorFilterChips" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px"></div>
+
+                  <div class="ct-table-wrap" style="max-height:220px;border:1px solid var(--border-subtle);border-radius:12px;margin-bottom:14px">
+                    <table class="ct-table" style="font-size:12px">
+                      <thead>
+                        <tr>
+                          <th>Sector</th>
+                          <th>Key Localities</th>
+                          <th>Outlets</th>
+                          <th>Cartons</th>
+                          <th>Volume</th>
+                          <th>Weight</th>
+                          <th>Fit Class</th>
+                        </tr>
+                      </thead>
+                      <tbody id="lpCorridorPreviewBody"></tbody>
+                    </table>
+                  </div>
+
+                  <div style="font-size:11.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px">Pluggable Enterprise Data Connectors:</div>
+                  <div id="lpConnectorsRow" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px"></div>
+                </div>
+              </details>
+
+            </div>
+
+          </div>
         </div>
-        <div id="gcpServiceGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px"></div>
+      </section>
 
-        <!-- Live BigQuery SQL Runner -->
-        <div class="ct-box" style="display:flex;flex-direction:column;gap:8px;flex:1">
-          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
-            <span style="font-size:13px;font-weight:800;color:var(--accent-cyan)">📊 BigQuery SQL Studio (zuhaibp-ai.loadpilot_demo)</span>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <button class="ct-chip-btn" onclick="loadBqPreset(0)">Corridor Cost &amp; Fill</button>
-              <button class="ct-chip-btn" onclick="loadBqPreset(1)">SKU Volume Breakdown</button>
-              <button class="ct-chip-btn" onclick="loadBqPreset(2)">Fragile Cargo Audit</button>
+      <!-- ═══════════════ VIEW 1: CONTROL TOWER & ROUTE MAP ═══════════════ -->
+      <section class="ct-view" id="view-tower">
+        <div class="ct-stage neon-blue">
+          <div class="ct-scope-bar">
+            <div class="ct-scope-group">
+              <span style="font-size:15px;font-weight:800;color:var(--text-main);margin-right:6px">🗺️ Live Highway Route Network</span>
+              <button class="ct-scope-btn active" id="scopeAllBtn" onclick="applyTruckScope('all')">All Fleet</button>
+              <button class="ct-scope-btn" id="scope1Btn" onclick="applyTruckScope('1')">1 Truck Only</button>
+              <button class="ct-scope-btn" id="scope3Btn" onclick="applyTruckScope('3')">Top 3 Trucks</button>
+              <select id="selFocusTruckMap" class="ct-select" style="width:auto;padding:5px 12px;font-size:12.5px" onchange="applySingleTruckDropdown(this.value)">
+                <option value="all">Select specific truck / driver...</option>
+              </select>
+            </div>
+            <div class="ct-scope-group">
+              <button class="ct-btn-secondary neon-blue" style="padding:6px 13px;font-size:12.5px" onclick="switchWorkspace('studio3d')">
+                📦 Inspect Focused Truck in 3D Studio →
+              </button>
             </div>
           </div>
-          <textarea id="inpBqSql" class="ct-input" style="width:100%;height:86px;font-family:var(--font-mono);font-size:11.5px"></textarea>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <span id="bqEngineStatus" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">Ready</span>
-            <button class="ct-btn-primary" style="padding:6px 14px;font-size:12px" onclick="executeBqQuery()">▶ Run BigQuery SQL</button>
+
+          <div id="ct-map-mount" class="ct-engine-mount">
+            <div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);font-size:14px;gap:10px">
+              <span>⚡ Loading live route network &amp; 3D dispatch plan...</span>
+            </div>
           </div>
-          <div class="ct-table-wrap" style="max-height:195px;border:1px solid var(--border-subtle);border-radius:10px">
-            <table class="ct-table" id="bqResultTable">
-              <thead id="bqResultHead"></thead>
-              <tbody id="bqResultBody"></tbody>
+        </div>
+
+        <aside class="ct-sidebar neon-green">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="ct-section-heading" style="font-size:17px">🚚 Dispatched Fleet</span>
+            <span id="routeCountLbl" class="ct-kpi-badge"></span>
+          </div>
+
+          <div id="towerRoutesList" style="flex:1;overflow-y:auto"></div>
+
+          <!-- Progressive Disclosure: Corridor Pinning tucked in a clean expandable drawer -->
+          <details class="ct-accordion">
+            <summary style="padding:11px 14px;font-size:13px">
+              <span>📌 Pin Driver to Highway Corridor</span>
+              <span class="ct-acc-chevron">▼</span>
+            </summary>
+            <div class="ct-acc-body" style="padding:12px">
+              <div class="ct-form-grid">
+                <div class="ct-field">
+                  <label>Driver</label>
+                  <select id="selClaimDriver" class="ct-select"></select>
+                </div>
+                <div class="ct-field">
+                  <label>Compass Sector</label>
+                  <select id="selClaimCorridor" class="ct-select"></select>
+                </div>
+              </div>
+              <div style="display:flex;gap:8px;margin-top:10px">
+                <button class="ct-btn-primary" style="flex:1;padding:8px" onclick="submitCorridorClaim()">
+                  📌 Pin &amp; Re-Plan
+                </button>
+                <button class="ct-btn-secondary" onclick="clearCorridorClaims()">Reset</button>
+              </div>
+              <div id="activeClaimsPills" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>
+            </div>
+          </details>
+        </aside>
+      </section>
+
+      <!-- ═══════════════ VIEW 2: 3D LOAD STUDIO & CALCULATOR ═══════════════ -->
+      <section class="ct-view" id="view-studio3d">
+        <div class="ct-stage neon-blue">
+          <div class="ct-scope-bar">
+            <div class="ct-scope-group">
+              <span style="font-size:16px;font-weight:800;color:var(--text-main)">📦 3D LIFO Cargo Bay Studio</span>
+              <span style="font-size:12.5px;color:var(--text-secondary)">Last stop loaded first at cab wall (X=0) · Stop 1 at rear door</span>
+            </div>
+            <div class="ct-scope-group">
+              <span id="studioBannerBadge" class="ct-kpi-badge">100% Unobstructed LIFO</span>
+            </div>
+          </div>
+          <div id="ct-load-mount" class="ct-engine-mount"></div>
+        </div>
+
+        <aside class="ct-sidebar neon-amber">
+          <div class="ct-box neon-blue">
+            <div class="ct-panel-title">
+              <span>🧮 Truck Type Calculator</span>
+              <span style="font-size:11px;color:var(--accent-primary);font-family:var(--font-mono)">What-If Fit</span>
+            </div>
+            <div class="ct-panel-sub">Select any driver route and test-pack its cartons into any vehicle class.</div>
+            <div class="ct-field" style="margin-bottom:8px">
+              <label>1. Route / Driver Consignment</label>
+              <select id="selStudioRoute" class="ct-select" onchange="onStudioRouteSelect(this.value)"></select>
+            </div>
+            <div class="ct-field" style="margin-bottom:10px">
+              <label>2. Test Vehicle Class (Dimensions)</label>
+              <select id="selStudioTruckType" class="ct-select" onchange="runStudioRepack()"></select>
+            </div>
+            <button class="ct-btn-primary" style="width:100%" onclick="runStudioRepack()">
+              🔄 Recalculate 3D Packing
+            </button>
+          </div>
+
+          <div class="ct-box neon-green" id="studioStatsCard">
+            <div class="ct-panel-title">
+              <span>📐 Cargo Fit Summary</span>
+              <span id="stLifoStatus" class="ct-kpi-badge" style="font-size:10.5px">LIFO OK</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
+              <div>
+                <div style="font-size:11px;color:var(--text-muted);font-weight:700">Volume Fill</div>
+                <div style="font-size:20px;font-weight:800" id="stVolFill">78.5%</div>
+                <div class="ct-gauge-track"><div id="stVolBar" class="ct-gauge-fill" style="width:78%;background:#4285F4"></div></div>
+              </div>
+              <div>
+                <div style="font-size:11px;color:var(--text-muted);font-weight:700">Payload Fill</div>
+                <div style="font-size:20px;font-weight:800" id="stWtFill">82.1%</div>
+                <div class="ct-gauge-track"><div id="stWtBar" class="ct-gauge-fill" style="width:82%;background:#FBBC04"></div></div>
+              </div>
+            </div>
+            <div style="margin-top:8px;display:none">
+              <span id="stFrontAxle">38%</span><span id="stRearAxle">62%</span>
+              <div id="stAxleBar"></div><div id="stCmvrNote"></div>
+            </div>
+            <div id="stOverflowWarn" style="display:none;margin-top:8px;padding:8px;border-radius:8px;background:rgba(225,29,72,0.10);border:1px solid rgba(225,29,72,0.3);color:var(--accent-rose);font-size:11.5px;font-weight:700"></div>
+          </div>
+
+          <!-- Custom Cartons tucked neatly inside an accordion -->
+          <details class="ct-accordion">
+            <summary style="padding:11px 14px;font-size:13px">
+              <span>➕ Inject Custom Cartons into Bay</span>
+              <span class="ct-acc-chevron">▼</span>
+            </summary>
+            <div class="ct-acc-body" style="padding:12px">
+              <div class="ct-field" style="margin-bottom:8px">
+                <label>SKU Preset</label>
+                <select id="selCustomSku" class="ct-select" onchange="onCustomSkuChange(this.value)"></select>
+              </div>
+              <div class="ct-form-grid" style="margin-bottom:8px">
+                <div class="ct-field">
+                  <label>Quantity</label>
+                  <input type="number" id="inpCustomQty" class="ct-input" value="4" min="1" max="40">
+                </div>
+                <div class="ct-field">
+                  <label>Delivery Stop #</label>
+                  <input type="number" id="inpCustomStop" class="ct-input" value="1" min="1" max="20">
+                </div>
+              </div>
+              <div class="ct-form-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:10px">
+                <div class="ct-field"><label>L</label><input type="number" id="inpCustomL" class="ct-input" value="34"></div>
+                <div class="ct-field"><label>W</label><input type="number" id="inpCustomW" class="ct-input" value="34"></div>
+                <div class="ct-field"><label>H</label><input type="number" id="inpCustomH" class="ct-input" value="38"></div>
+                <div class="ct-field"><label>Kg</label><input type="number" id="inpCustomKg" class="ct-input" value="24"></div>
+              </div>
+              <div style="display:flex;gap:6px">
+                <button class="ct-btn-primary" style="flex:1;padding:8px" onclick="addCustomBoxAndPack()">+ Pack Cartons</button>
+                <button class="ct-btn-secondary" style="padding:8px" onclick="clearCustomBoxes()">Clear</button>
+              </div>
+              <div id="addedCustomBoxesList" style="margin-top:8px;font-size:11.5px;color:var(--text-muted)"></div>
+            </div>
+          </details>
+        </aside>
+      </section>
+
+      <!-- ═══════════════ VIEW 3: FLEET & COST SIMULATOR ═══════════════ -->
+      <section class="ct-view" id="view-simulator">
+        <aside class="ct-sidebar neon-blue" style="width:370px">
+          <div class="ct-box">
+            <div class="ct-panel-title">
+              <span>🚛 Available Fleet Mix</span>
+              <span style="font-size:11px;color:var(--accent-primary)">OR-Tools VRPTW</span>
+            </div>
+            <div class="ct-panel-sub">Adjust available trucks at the hub and re-solve the cost matrix.</div>
+            <div id="fleetControlsContainer" style="display:flex;flex-direction:column;gap:8px"></div>
+          </div>
+
+          <div class="ct-box neon-amber">
+            <div class="ct-panel-title"><span>⛽ Operating Cost Rates</span></div>
+            <div class="ct-form-grid" style="margin-top:6px">
+              <div class="ct-field">
+                <label>Diesel (₹ / Litre)</label>
+                <input type="number" id="inpSimFuel" class="ct-input" value="92" step="1">
+              </div>
+              <div class="ct-field">
+                <label>Driver Bata (₹ / Day)</label>
+                <input type="number" id="inpSimDriverCost" class="ct-input" value="1100" step="50">
+              </div>
+            </div>
+            <button class="ct-btn-primary" style="width:100%;margin-top:12px" onclick="runSimulatorOptimization()">
+              ⚡ Re-Solve Fleet &amp; Cost Matrix
+            </button>
+          </div>
+        </aside>
+
+        <div class="ct-stage neon-green" style="padding:18px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <div>
+              <h2 class="ct-section-heading">📊 Dispatch Schedule &amp; Route Cost Ledger</h2>
+              <div style="font-size:12.5px;color:var(--text-muted)">Atomic copy-ready table for Google Sheets or CSV export</div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button class="ct-btn-secondary neon-blue" onclick="copyScheduleTable()">📋 Copy for Google Sheets</button>
+              <button class="ct-btn-secondary neon-green" onclick="exportScheduleCsv()">⬇ Export CSV</button>
+            </div>
+          </div>
+          <div class="ct-table-wrap">
+            <table class="ct-table" id="simScheduleTable">
+              <thead>
+                <tr>
+                  <th>Truck ID</th>
+                  <th>Vehicle Class</th>
+                  <th>Driver</th>
+                  <th>Corridor / Branch</th>
+                  <th>Stops</th>
+                  <th>Cartons</th>
+                  <th>Vol Fill</th>
+                  <th>Wt Fill</th>
+                  <th>Distance</th>
+                  <th>Shift</th>
+                  <th>Route Cost</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="simScheduleBody"></tbody>
             </table>
           </div>
         </div>
+      </section>
 
-        <!-- Model Armor & DLP Live Security Audit Stream -->
-        <div class="ct-box" style="margin-top:10px">
-          <div class="ct-panel-title" style="margin-bottom:4px">
-            <span>🛡️ Model Armor, Cloud DLP &amp; Enclave Telemetry</span>
-            <span style="font-family:var(--font-mono);font-size:10.5px;color:#34d399">ZERO-TRUST ACTIVE</span>
+      <!-- ═══════════════ VIEW 4: DOCK QR SCANNER & SMART ORDER INTAKE ═══════════════ -->
+      <section class="ct-view" id="view-intake">
+        <div class="ct-stage neon-blue" style="padding:18px;overflow-y:auto">
+          <div class="ct-panel-title" style="font-size:18px">
+            <span>📸 Warehouse Dock QR &amp; Carton Vision Scanner</span>
+            <span class="ct-kpi-badge">OpenCV + Gemini Vision</span>
           </div>
-          <div id="securityAuditList" style="font-family:var(--font-mono);font-size:11px;color:var(--text-secondary);max-height:90px;overflow-y:auto"></div>
+          <div class="ct-panel-sub">Click a staging floor photo or upload a carton image to decode QR labels and pack cartons into today's 3D load plan.</div>
+
+          <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center">
+            <label class="ct-btn-secondary neon-blue" style="cursor:pointer">
+              📤 Upload Custom Carton Photo
+              <input type="file" accept="image/*" style="display:none" onchange="uploadCustomPhoto(this)">
+            </label>
+            <span id="scanStatusText" style="font-size:12.5px;color:var(--accent-primary);font-weight:700"></span>
+          </div>
+
+          <div class="ct-photo-grid" id="samplePhotosGrid"></div>
+
+          <div class="ct-box neon-green" style="margin-top:14px" id="scanResultBox">
+            <div class="ct-panel-title"><span>🔍 Decoded Carton Manifest</span></div>
+            <div id="scanResultContent" style="font-family:var(--font-mono);font-size:12px;color:var(--text-secondary);margin-top:6px">
+              Select a staging floor photo above to run live QR &amp; label recognition.
+            </div>
+          </div>
         </div>
+
+        <div class="ct-stage neon-amber" style="padding:18px;overflow-y:auto">
+          <div class="ct-panel-title" style="font-size:18px">
+            <span>📝 Unstructured ERP, Email &amp; WhatsApp Order Intake</span>
+            <span class="ct-kpi-badge">Auto-Geocode + SKU Match</span>
+          </div>
+          <div class="ct-panel-sub">Load a preset dealer manifest or paste raw text/CSV from an email or WhatsApp message.</div>
+
+          <div id="sampleOrdersBtns" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>
+
+          <textarea id="inpOrderText" class="ct-input" style="width:100%;height:220px;font-family:var(--font-mono);font-size:12px;line-height:1.5;resize:vertical" placeholder="Paste dealer orders here (e.g. Store name, locality, SKU codes and carton quantities)..."></textarea>
+
+          <div style="display:flex;gap:10px;margin-top:10px">
+            <button class="ct-btn-primary" onclick="submitOrderText()">
+              ⚡ Parse Orders &amp; Build Dispatch Plan
+            </button>
+            <button class="ct-btn-secondary" onclick="resetToDefaultDemo()">
+              🔄 Reset to Full Hub Book
+            </button>
+          </div>
+
+          <div class="ct-box" style="margin-top:14px">
+            <div class="ct-panel-title"><span>📋 Intake &amp; Geocoding Summary</span></div>
+            <div id="ingestResultContent" style="font-size:12.5px;color:var(--text-secondary);margin-top:6px">
+              Ready to ingest unstructured dealer orders.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════ VIEW 5: DRIVER DISPATCH HUB & GCP BIGQUERY STUDIO ═══════════════ -->
+      <section class="ct-view" id="view-gcp">
+        <div class="ct-stage neon-green" style="padding:18px;overflow-y:auto;flex:0.95">
+          <div class="ct-panel-title" style="font-size:18px">
+            <span>📱 Driver Mobile Portal, Google Maps &amp; WhatsApp Hub</span>
+            <span class="ct-kpi-badge">Zero-Login Edge</span>
+          </div>
+          <div class="ct-panel-sub">Launch 1-tap Google Maps turn-by-turn navigation, WhatsApp dispatch, or printable LR Challan.</div>
+
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+            <select id="selPortalTruck" class="ct-select" style="flex:1" onchange="updateDriverHubPreview(this.value)"></select>
+            <a id="btnOpenMapsNav" href="#" target="_blank" class="ct-btn-primary" style="text-decoration:none;background:linear-gradient(135deg,#16a34a,#059669)">
+              🗺️ 1-Tap Google Maps Nav
+            </a>
+            <a id="btnOpenWhatsApp" href="#" target="_blank" class="ct-btn-secondary neon-green">
+              💬 WhatsApp Driver
+            </a>
+            <a id="btnOpenPortalTab" href="#" target="_blank" class="ct-btn-secondary">
+              ↗ Full Screen / Print LR
+            </a>
+          </div>
+
+          <div style="flex:1;min-height:380px;border:1.5px solid var(--border-subtle);border-radius:14px;overflow:hidden;background:#0a0f1d">
+            <iframe id="driverPortalIframe" style="width:100%;height:100%;border:none" title="Driver Mobile Portal Preview"></iframe>
+          </div>
+        </div>
+
+        <div class="ct-stage neon-blue" style="padding:18px;overflow-y:auto;flex:1.05;gap:12px">
+          <div class="ct-panel-title" style="font-size:18px">
+            <span>☁️ Google Cloud Infrastructure &amp; BigQuery Studio</span>
+            <span class="ct-kpi-badge">Cloud Run · BigQuery · Model Armor</span>
+          </div>
+
+          <div class="ct-box neon-blue" style="display:flex;flex-direction:column;gap:8px;flex:1">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+              <span style="font-size:14px;font-weight:800;color:var(--accent-primary)" id="bqStudioTitle">📊 BigQuery SQL Studio</span>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <button class="ct-chip-btn" onclick="loadBqPreset(0)">Corridor Cost &amp; Fill</button>
+                <button class="ct-chip-btn" onclick="loadBqPreset(1)">SKU Volume Breakdown</button>
+                <button class="ct-chip-btn" onclick="loadBqPreset(2)">Fragile Cargo Audit</button>
+              </div>
+            </div>
+            <textarea id="inpBqSql" class="ct-input" style="width:100%;height:86px;font-family:var(--font-mono);font-size:11.5px"></textarea>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span id="bqEngineStatus" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">Ready</span>
+              <button class="ct-btn-primary" style="padding:6px 14px;font-size:12px" onclick="executeBqQuery()">▶ Run BigQuery SQL</button>
+            </div>
+            <div class="ct-table-wrap" style="max-height:210px;border:1px solid var(--border-subtle);border-radius:10px">
+              <table class="ct-table" id="bqResultTable">
+                <thead id="bqResultHead"></thead>
+                <tbody id="bqResultBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <details class="ct-accordion">
+            <summary style="padding:11px 14px;font-size:13px">
+              <span>☁️ Active GCP Services &amp; Model Armor Security Log</span>
+              <span class="ct-acc-chevron">▼</span>
+            </summary>
+            <div class="ct-acc-body" style="padding:12px">
+              <div id="gcpServiceGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px"></div>
+              <div id="securityAuditList" style="font-family:var(--font-mono);font-size:11px;color:var(--text-secondary);max-height:90px;overflow-y:auto"></div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ═══════════════ VIEW 6: ARCHITECTURE, HOW-TO & DUAL DEPLOYMENT GUIDE ═══════════════ -->
+      <section class="ct-view" id="view-howto">
+        <div class="ct-stage neon-blue" style="padding:22px;overflow-y:auto;gap:18px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
+            <div>
+              <h2 class="ct-big-heading" style="font-size:24px">📘 FleetFlow Architecture, How-To Guide &amp; Dual-Deployment</h2>
+              <div style="font-size:13px;color:var(--text-secondary);margin-top:2px">
+                One shared Python optimization &amp; ADK backend powering both <b>Gemini Enterprise (Conversational A2UI)</b> and <b>Google Cloud Run (Standalone Web Control Tower)</b>.
+              </div>
+            </div>
+            <a href="/deck" target="_blank" class="ct-btn-primary" style="text-decoration:none">
+              📊 Open Full 8-Slide Executive Presentation ↗
+            </a>
+          </div>
+
+          <div>
+            <div style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--accent-primary);margin-bottom:8px">
+              1. How to Use FleetFlow (Step-by-Step Operator Workflow)
+            </div>
+            <div class="arch-grid">
+              <div class="arch-card neon-blue">
+                <div style="font-weight:800;font-size:14.5px;margin-bottom:4px">🚀 Step 1 · Launchpad Setup</div>
+                <div style="font-size:12.5px;color:var(--text-secondary)">
+                  Pick your <b>Distribution Hub</b> (Mumbai or Bengaluru), upload an Excel/CSV sheet or use BigQuery, enter natural-language instructions in the centered Google-colored prompt box, and click <b>Synthesize &amp; Run FleetFlow Agent</b>.
+                </div>
+              </div>
+              <div class="arch-card neon-green">
+                <div style="font-weight:800;font-size:14.5px;margin-bottom:4px">📦 Step 2 · 3D Load Studio Calculator</div>
+                <div style="font-size:12.5px;color:var(--text-secondary)">
+                  Open <b>3D Load Studio</b> to inspect step-by-step LIFO bay loading (last delivery at the cab wall `X=0`, Stop 1 right at the rear door). Test-pack any route into `ACE`, `PKP`, `T14`, `T17`, or `T20`.
+                </div>
+              </div>
+              <div class="arch-card neon-amber">
+                <div style="font-weight:800;font-size:14.5px;margin-bottom:4px">📱 Step 3 · Dock Scan &amp; Driver Dispatch</div>
+                <div style="font-size:12.5px;color:var(--text-secondary)">
+                  In <b>Dock QR &amp; Intake</b>, scan staging photos or paste email/WhatsApp orders. In <b>Driver Hub &amp; BigQuery</b>, share the zero-login <b>Mobile Driver Portal</b> or launch <b>1-Tap Google Maps Navigation</b>.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--accent-primary);margin-bottom:8px">
+              2. Google Cloud Services Architecture
+            </div>
+            <div class="arch-grid">
+              <div class="arch-card">
+                <div style="font-weight:800;font-size:13.5px;color:var(--accent-primary)">📊 Google BigQuery (`app/data/bq_source.py`)</div>
+                <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">
+                  Enterprise storage for retail outlets, daily SKU order books, fleet catalogues, and live SQL analytics.
+                </div>
+              </div>
+              <div class="arch-card">
+                <div style="font-weight:800;font-size:13.5px;color:var(--accent-primary)">☁️ Google Cloud Storage (`app/render/publish.py`)</div>
+                <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">
+                  Zero-login distribution of 3D MP4 loading animations and standalone mobile driver portals via V4 signed URLs.
+                </div>
+              </div>
+              <div class="arch-card">
+                <div style="font-weight:800;font-size:13.5px;color:var(--accent-primary)">🧠 Vertex AI Agent Engine (`app/integration/agent.py`)</div>
+                <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">
+                  Managed orchestration for Gemini 2.5 Flash + Google ADK tool calling and multimodal vision.
+                </div>
+              </div>
+              <div class="arch-card">
+                <div style="font-weight:800;font-size:13.5px;color:var(--accent-primary)">🚀 Google Cloud Run (`app/fast_api_app.py`)</div>
+                <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">
+                  Serverless container hosting for this Web Control Tower &amp; 3D Load Studio (`Dockerfile`, auto-scaling).
+                </div>
+              </div>
+              <div class="arch-card">
+                <div style="font-weight:800;font-size:13.5px;color:var(--accent-primary)">🗺️ Google Maps Routes API (`app/geo/roads.py`)</div>
+                <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">
+                  Real highway geometry, accurate travel times, and 1-tap turn-by-turn driver navigation links.
+                </div>
+              </div>
+              <div class="arch-card">
+                <div style="font-weight:800;font-size:13.5px;color:var(--accent-primary)">🛡️ Model Armor &amp; Cloud DLP (`app/integration/`)</div>
+                <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">
+                  Pre-turn prompt injection filtering, Cloud DLP PII masking, and an isolated OR-Tools + 3D math enclave.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--accent-primary);margin-bottom:8px">
+              3. Portable Deployment Options (Zero Hardcoded Accounts or API Keys)
+            </div>
+            <div class="arch-grid">
+              <div class="arch-card">
+                <div style="font-weight:800;font-size:13.5px">Option A · Standalone Web UI (Cloud Run)</div>
+                <pre class="arch-code">./scripts/deploy.sh --target ui --project YOUR_GCP_PROJECT_ID</pre>
+              </div>
+              <div class="arch-card">
+                <div style="font-weight:800;font-size:13.5px">Option B · Gemini Enterprise Agent</div>
+                <pre class="arch-code">./scripts/deploy.sh --target gemini-enterprise --project YOUR_GCP_PROJECT_ID</pre>
+              </div>
+              <div class="arch-card">
+                <div style="font-weight:800;font-size:13.5px">Option C · Deploy Both + Seed BigQuery &amp; GCS</div>
+                <pre class="arch-code">./scripts/deploy.sh --target all --publish-data --project YOUR_GCP_PROJECT_ID</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ═══════════════ BOTTOM AI COPILOT COMMAND BAR (HIDDEN ON LAUNCHPAD, SHOWN ON INNER WORKSPACES) ═══════════════ -->
+    <footer class="ct-copilot-dock" id="ctCopilotDock">
+      <div class="ct-copilot-pill">
+        <span>✨</span> FleetFlow AI Agent
       </div>
-    </section>
+      <input
+        type="text"
+        id="inpAgentPrompt"
+        class="ct-copilot-input"
+        placeholder="Ask the shared backend agent: 'Show only Ravi's truck', 'Highlight 3 trucks', 'Pin Suresh to South corridor', 'Switch to Bengaluru'..."
+        onkeydown="if(event.key==='Enter') sendAgentPrompt()"
+      >
+      <button class="ct-btn-primary" style="padding:7px 15px;border-radius:999px" onclick="sendAgentPrompt()">
+        Send ↵
+      </button>
+      <div class="ct-quick-chips">
+        <button class="ct-chip-btn" onclick="quickPrompt('Only show Ravi')">Only Ravi (1 Truck)</button>
+        <button class="ct-chip-btn" onclick="quickPrompt('Show 3 trucks')">Top 3 Trucks</button>
+        <button class="ct-chip-btn" onclick="quickPrompt('Show all trucks')">All Fleet</button>
+        <button class="ct-chip-btn" onclick="quickPrompt('Pin Suresh to South corridor')">Pin Suresh → South</button>
+        <button class="ct-chip-btn" onclick="quickPrompt('Switch to Bengaluru Nelamangala hub')">Bengaluru Hub</button>
+      </div>
+    </footer>
+  </div>
 
-  </main>
-
-  <!-- ═══════════════ BOTTOM AI COPILOT COMMAND BAR ═══════════════ -->
-  <footer class="ct-copilot-dock">
-    <div class="ct-copilot-pill">
-      <span>✨</span> FleetFlow AI Agent
-    </div>
-    <input
-      type="text"
-      id="inpAgentPrompt"
-      class="ct-copilot-input"
-      placeholder="Ask the same backend agent: 'Show only Ravi's truck', 'Highlight 3 trucks', 'Pin Suresh to South corridor', 'Switch to Bengaluru'..."
-      onkeydown="if(event.key==='Enter') sendAgentPrompt()"
-    >
-    <button class="ct-btn-primary" style="padding:7px 14px;border-radius:999px" onclick="sendAgentPrompt()">
-      Send ↵
-    </button>
-    <div class="ct-quick-chips">
-      <button class="ct-chip-btn" onclick="quickPrompt('Only show Ravi')">Only Ravi (1 Truck)</button>
-      <button class="ct-chip-btn" onclick="quickPrompt('Show 3 trucks')">Top 3 Trucks</button>
-      <button class="ct-chip-btn" onclick="quickPrompt('Show all trucks')">All Fleet</button>
-      <button class="ct-chip-btn" onclick="quickPrompt('Pin Suresh to South corridor')">Pin Suresh → South</button>
-      <button class="ct-chip-btn" onclick="quickPrompt('Switch to Bengaluru Nelamangala hub')">Bengaluru Hub</button>
-    </div>
-  </footer>
-
-  <!-- Toast Notification for AI Copilot & Re-Optimization -->
+  <!-- Toast Notification with Genie Spring Effect -->
   <div id="ctToast" class="ct-toast"></div>
 
 </div>
@@ -1254,638 +2208,1216 @@ _UI_HTML = r"""<!DOCTYPE html>
 __ENGINE_JS__
 </script>
 
-<!-- Control Tower SPA Application Logic -->
+<!-- Control Tower Application Logic -->
 <script>
-let META = null;
-let CURRENT_BUNDLE = null;
-let ACTIVE_VIEW = 'tower';
-let CUSTOM_BOXES = [];
-let CORRIDOR_CLAIMS = {};
-let FLEET_COUNTS = {};
+const CT = {
+  meta: null,
+  hubContext: null,
+  bundle: null,
+  currentView: 'launchpad',
+  activeHubId: 'BHW-DC',
+  activeOrderSource: 'demo',
+  scope: 'all',
+  focusTruckId: '',
+  corridorClaims: {},
+  driverRules: [],
+  selectedCorridors: ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'],
+  fleetCounts: {},
+  customBoxes: [],
+  mapEngine: null,
+  loadEngine: null,
+};
 
-const BQ_PRESETS = [
-  `SELECT corridor, COUNT(*) AS trucks, SUM(stops) AS total_stops, SUM(cartons) AS total_cartons, ROUND(AVG(volume_fill_pct), 1) AS avg_vol_fill_pct, SUM(cost_inr) AS total_cost_inr\nFROM \`zuhaibp-ai.loadpilot_demo.routes\`\nGROUP BY corridor\nORDER BY total_cost_inr DESC`,
-  `SELECT sku, description, category, COUNT(*) AS carton_count, ROUND(SUM(weight_kg), 1) AS total_weight_kg\nFROM \`zuhaibp-ai.loadpilot_demo.cartons\`\nGROUP BY sku, description, category\nORDER BY carton_count DESC\nLIMIT 10`,
-  `SELECT s.sales_area, COUNT(DISTINCT s.stop_id) AS outlets, SUM(c.fragile) AS fragile_cartons, ROUND(SUM(c.weight_kg), 1) AS total_kg\nFROM \`zuhaibp-ai.loadpilot_demo.stores\` s\nJOIN \`zuhaibp-ai.loadpilot_demo.cartons\` c USING (stop_id)\nGROUP BY s.sales_area\nORDER BY fragile_cartons DESC`
-];
+function getBqPresets() {
+  const proj = (CT.meta && CT.meta.gcp_config && CT.meta.gcp_config.project_id) || 'your-gcp-project';
+  const ds = (CT.meta && CT.meta.gcp_config && CT.meta.gcp_config.dataset) || 'fleetflow_demo';
+  return [
+    `SELECT corridor, COUNT(*) AS trucks, SUM(stops) AS total_stops, SUM(cartons) AS total_cartons, ROUND(AVG(volume_fill_pct), 1) AS avg_vol_fill_pct, SUM(cost_inr) AS total_cost_inr\nFROM \`${proj}.${ds}.routes\`\nGROUP BY corridor\nORDER BY total_cost_inr DESC`,
+    `SELECT category, sku, description, COUNT(*) AS carton_qty, ROUND(SUM(weight_kg), 1) AS total_weight_kg, SUM(fragile) AS fragile_boxes\nFROM \`${proj}.${ds}.cartons\`\nGROUP BY category, sku, description\nORDER BY total_weight_kg DESC\nLIMIT 12`,
+    `SELECT s.sales_area, COUNT(DISTINCT s.stop_id) AS outlets, COUNT(c.box_id) AS cartons, SUM(c.fragile) AS fragile_cartons, ROUND(SUM(c.weight_kg), 1) AS total_kg\nFROM \`${proj}.${ds}.stores\` s\nJOIN \`${proj}.${ds}.cartons\` c ON s.stop_id = c.stop_id\nGROUP BY s.sales_area\nORDER BY total_kg DESC`
+  ];
+}
 
-function showToast(htmlMsg, durationMs = 4800) {
+function showToast(html, durationMs = 4800) {
   const el = document.getElementById('ctToast');
-  el.innerHTML = htmlMsg;
+  el.innerHTML = html;
   el.style.display = 'block';
   clearTimeout(el._timer);
   el._timer = setTimeout(() => { el.style.display = 'none'; }, durationMs);
 }
 
 function toggleCtTheme() {
-  const h = document.documentElement;
-  const isDark = h.classList.contains('theme-dark');
-  h.classList.toggle('theme-dark', !isDark);
-  h.classList.toggle('theme-light', isDark);
+  const root = document.documentElement;
+  const btn = document.getElementById('btnThemeToggle');
+  const heroBtn = document.getElementById('btnHeroThemeToggle');
+  if (root.classList.contains('theme-dark')) {
+    root.classList.remove('theme-dark');
+    root.classList.add('theme-light');
+    if (btn) btn.innerHTML = '🌙 Dark Mode';
+    if (heroBtn) heroBtn.innerHTML = '🌙 Switch to Dark Mode';
+  } else {
+    root.classList.remove('theme-light');
+    root.classList.add('theme-dark');
+    if (btn) btn.innerHTML = '☀️ Light Mode';
+    if (heroBtn) heroBtn.innerHTML = '☀️ Switch to Light Mode';
+  }
 }
 
-function switchWorkspace(viewId) {
-  ACTIVE_VIEW = viewId;
-  document.querySelectorAll('.ct-view').forEach(v => v.classList.remove('active'));
-  const target = document.getElementById('view-' + viewId);
-  if (target) target.classList.add('active');
-  document.querySelectorAll('#mainNavTabs .ct-nav-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.view === viewId);
+async function switchWorkspace(viewId) {
+  CT.currentView = viewId;
+  document.querySelectorAll('#mainNavTabs .ct-nav-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-view') === viewId);
   });
-  if (CURRENT_BUNDLE) {
-    requestAnimationFrame(() => renderActiveCanvases());
+  document.querySelectorAll('.ct-view').forEach(sec => {
+    sec.classList.toggle('active', sec.id === 'view-' + viewId);
+  });
+
+  // Hide the bottom AI Copilot dock when on the Launchpad (which has the big centered Google command box)
+  const dock = document.getElementById('ctCopilotDock');
+  if (dock) {
+    dock.style.display = (viewId === 'launchpad') ? 'none' : 'flex';
+  }
+
+  // If user jumps directly to a dispatch workspace before running synthesis, synthesize automatically
+  if (!CT.bundle && ['tower', 'studio3d', 'simulator', 'gcp'].includes(viewId)) {
+    await synthesizeFromLaunchpad(false);
+  }
+
+  if (viewId === 'tower' && CT.bundle) {
+    setTimeout(() => mountMapCanvas(CT.bundle.anim_data), 35);
+  } else if (viewId === 'studio3d' && CT.bundle) {
+    setTimeout(() => runStudioRepack(), 35);
+  } else if (viewId === 'gcp' && CT.bundle) {
+    const sel = document.getElementById('selPortalTruck');
+    if (sel && sel.value) updateDriverHubPreview(sel.value);
+    loadBqPreset(0);
   }
 }
 
-function renderActiveCanvases() {
-  if (!CURRENT_BUNDLE || !CURRENT_BUNDLE.anim_data) return;
-  if (ACTIVE_VIEW === 'tower') {
-    window.mountFleetFlowEngine('ct-map-mount', CURRENT_BUNDLE.anim_data, 'routes');
-  } else if (ACTIVE_VIEW === 'studio3d') {
-    window.mountFleetFlowEngine('ct-load-mount', CURRENT_BUNDLE.anim_data, 'load');
-  }
+function mountMapCanvas(animData) {
+  const mount = document.getElementById('ct-map-mount');
+  if (!mount || !window.mountFleetFlowEngine || !animData) return;
+  const d = JSON.parse(JSON.stringify(animData));
+  d.start = 'routes';
+  CT.mapEngine = window.mountFleetFlowEngine(mount, d, 'routes');
 }
 
-window.LPgoLoad = function(truckId, stopSeq) {
-  switchWorkspace('studio3d');
-  const sel = document.getElementById('selStudioRoute');
-  if (sel && truckId) {
-    sel.value = truckId;
-    onStudioRouteSelect(truckId);
-  }
-};
+function mountLoadCanvas(animData) {
+  const mount = document.getElementById('ct-load-mount');
+  if (!mount || !window.mountFleetFlowEngine || !animData) return;
+  const d = JSON.parse(JSON.stringify(animData));
+  d.start = 'load';
+  CT.loadEngine = window.mountFleetFlowEngine(mount, d, 'load');
+}
 
 async function initControlTower() {
   try {
-    const res = await fetch('/api/meta');
-    META = await res.json();
-    FLEET_COUNTS = {};
-    META.truck_types.forEach(t => { FLEET_COUNTS[t.code] = t.default_count; });
+    // Load metadata without pre-running a hardcoded dispatch plan so the Front Page Launchpad is first
+    const res = await fetch('/api/meta?include_plan=false');
+    const meta = await res.json();
+    CT.meta = meta;
 
-    populateStaticDropdowns();
-    if (META.initial_plan) {
-      applyBundle(META.initial_plan);
+    const corrSel = document.getElementById('selClaimCorridor');
+    corrSel.innerHTML = meta.corridors.map(c => `<option value="${c.code}">${c.code} · ${c.name}</option>`).join('');
+
+    const tSel = document.getElementById('selStudioTruckType');
+    tSel.innerHTML = meta.truck_types.map(t =>
+      `<option value="${t.code}">${t.code} · ${t.name} (${t.inner_l_cm}×${t.inner_w_cm}×${t.inner_h_cm} cm · ${(t.payload_kg/1000).toFixed(1)}t)</option>`
+    ).join('');
+
+    const skuSel = document.getElementById('selCustomSku');
+    skuSel.innerHTML = meta.skus.map(s =>
+      `<option value="${s.sku}">${s.sku} · ${s.description} (${s.l_cm}×${s.w_cm}×${s.h_cm} cm · ${s.weight_kg} kg)</option>`
+    ).join('');
+    onCustomSkuChange(meta.skus[0]?.sku || '');
+
+    meta.truck_types.forEach(t => { CT.fleetCounts[t.code] = t.default_count; });
+
+    document.getElementById('inpSimFuel').value = meta.default_costs.fuel_price_per_litre;
+    document.getElementById('inpSimDriverCost').value = meta.default_costs.driver_day_cost;
+    document.getElementById('lpInpFuel').value = meta.default_costs.fuel_price_per_litre;
+    document.getElementById('lpInpDriverCost').value = meta.default_costs.driver_day_cost;
+
+    const photoGrid = document.getElementById('samplePhotosGrid');
+    photoGrid.innerHTML = meta.sample_photos.slice(0, 6).map(p => `
+      <div class="ct-photo-card" onclick="scanSamplePhoto('${p.filename}', this)">
+        <img src="${p.url}" alt="${p.label}" loading="lazy">
+        <div>📸 ${p.label}</div>
+      </div>
+    `).join('');
+
+    const orderBtns = document.getElementById('sampleOrdersBtns');
+    orderBtns.innerHTML = meta.sample_orders.map((o, idx) => `
+      <button class="ct-chip-btn" onclick="loadSampleOrder(${idx})">📄 ${o.label}</button>
+    `).join('');
+
+    const gcpGrid = document.getElementById('gcpServiceGrid');
+    gcpGrid.innerHTML = meta.gcp_services.map(s => `
+      <div class="ct-box" style="padding:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font-weight:800;font-size:12px">${s.icon} ${s.name}</span>
+          <span class="ct-kpi-badge" style="font-size:9.5px;padding:2px 6px">${s.status}</span>
+        </div>
+        <div style="font-size:11px;color:var(--accent-primary);font-weight:600;margin-top:2px">${s.role}</div>
+        <div style="font-size:10.5px;color:var(--text-muted);margin-top:3px">${s.detail}</div>
+      </div>
+    `).join('');
+
+    if (meta.gcp_config) {
+      const titleEl = document.getElementById('bqStudioTitle');
+      if (titleEl) titleEl.textContent = `📊 BigQuery SQL Studio (${meta.gcp_config.project_id}.${meta.gcp_config.dataset})`;
     }
-    loadBqPreset(0);
-    executeBqQuery();
+
+    // Populate the Front Page Launchpad with the initial Hub context (Mumbai BHW-DC)
+    if (meta.hub_context) {
+      applyHubContextToLaunchpad(meta.hub_context, true);
+    } else {
+      await onLaunchpadHubChange('BHW-DC');
+    }
   } catch (err) {
     console.error('Failed to initialize Control Tower:', err);
   }
 }
 
-function populateStaticDropdowns() {
-  // Corridor claims dropdowns
-  const drvSel = document.getElementById('selClaimDriver');
-  drvSel.innerHTML = META.drivers.map(d => `<option value="${d}">${d}</option>`).join('');
+/* ═══════════════ LAUNCHPAD FRONT PAGE LOGIC ═══════════════ */
+async function onLaunchpadHubChange(hubId) {
+  CT.activeHubId = hubId;
+  document.getElementById('selHub').value = hubId;
+  const quickHub = document.getElementById('lpSelHubQuick');
+  if (quickHub) quickHub.value = hubId;
+  document.querySelectorAll('#lpHubCardsGrid .lp-hub-card').forEach(card => {
+    card.classList.toggle('active', card.getAttribute('data-hub') === hubId);
+  });
 
-  const corSel = document.getElementById('selClaimCorridor');
-  corSel.innerHTML = META.corridors.map(c => `<option value="${c.code}">${c.code} · ${c.name}</option>`).join('');
-
-  // Studio 3D truck type dropdown
-  const ttSel = document.getElementById('selStudioTruckType');
-  ttSel.innerHTML = META.truck_types.map(t =>
-    `<option value="${t.code}">${t.code} · ${t.name} (${t.inner_l_cm}×${t.inner_w_cm}×${t.inner_h_cm}cm · ${t.payload_kg}kg)</option>`
-  ).join('');
-
-  // Custom SKU dropdown
-  const skuSel = document.getElementById('selCustomSku');
-  skuSel.innerHTML = META.skus.map(s =>
-    `<option value="${s.sku}">${s.sku} · ${s.description} (${s.l_cm}×${s.w_cm}×${s.h_cm}cm · ${s.weight_kg}kg)</option>`
-  ).join('');
-
-  // Fleet Simulator steppers
-  renderFleetSteppers();
-
-  // Sample dock photos
-  const pg = document.getElementById('samplePhotosGrid');
-  pg.innerHTML = META.sample_photos.map(p => `
-    <div class="ct-photo-card" onclick="scanSamplePhoto('${p.filename}', this)">
-      <img src="${p.url}" alt="${p.label}" loading="lazy">
-      <div>📷 ${p.label}</div>
-    </div>
-  `).join('');
-
-  // Sample order buttons
-  const ob = document.getElementById('sampleOrdersBtns');
-  ob.innerHTML = META.sample_orders.map((o, idx) => `
-    <button class="ct-chip-btn" onclick="loadSampleOrder(${idx})">📄 ${o.label}</button>
-  `).join('');
-
-  // GCP Service Cards
-  const gg = document.getElementById('gcpServiceGrid');
-  gg.innerHTML = META.gcp_services.map(s => `
-    <div class="ct-box" style="padding:10px">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <span style="font-weight:800;font-size:12.5px">${s.icon} ${s.name}</span>
-        <span class="ct-kpi-badge" style="font-size:9.5px;padding:2px 6px">${s.status}</span>
-      </div>
-      <div style="font-size:11px;color:var(--accent-cyan);font-weight:600;margin-top:2px">${s.role}</div>
-      <div style="font-size:11px;color:var(--text-muted);margin-top:3px">${s.detail}</div>
-    </div>
-  `).join('');
+  const res = await fetch(`/api/hub-context?hub_id=${encodeURIComponent(hubId)}&order_source=${encodeURIComponent(CT.activeOrderSource)}`);
+  const hc = await res.json();
+  applyHubContextToLaunchpad(hc, true);
+  showToast(`📍 Loaded <b>${hc.hub.name}</b> roster: <b>${hc.drivers.length} regional drivers</b> &amp; <b>${hc.total_stops} retail outlets</b>.`);
 }
 
-function renderFleetSteppers() {
-  const c = document.getElementById('fleetControlsContainer');
-  c.innerHTML = META.truck_types.map(t => {
-    const cnt = FLEET_COUNTS[t.code] ?? t.default_count;
+async function onSidebarHubChange(hubId) {
+  await onLaunchpadHubChange(hubId);
+  if (CT.currentView !== 'launchpad' && CT.bundle) {
+    await triggerPlanUpdate({ hub_id: hubId });
+  }
+}
+
+function syncLaunchpadObjective(val) {
+  const lpObj = document.getElementById('lpSelObjective');
+  if (lpObj) lpObj.value = val;
+  if (CT.currentView !== 'launchpad' && CT.bundle) {
+    triggerPlanUpdate({ objective: val });
+  }
+}
+
+async function onSidebarSourceChange(val) {
+  CT.activeOrderSource = val;
+  await onLaunchpadHubChange(CT.activeHubId);
+  if (CT.currentView !== 'launchpad' && CT.bundle) {
+    await triggerPlanUpdate({ order_source: val });
+  }
+}
+
+function applyHubContextToLaunchpad(hc, resetRulesOnCityChange = false) {
+  const prevCity = CT.hubContext?.city_id;
+  CT.hubContext = hc;
+  CT.activeHubId = hc.hub.hub_id;
+  document.getElementById('selHub').value = hc.hub.hub_id;
+  const quickHub = document.getElementById('lpSelHubQuick');
+  if (quickHub) quickHub.value = hc.hub.hub_id;
+
+  document.querySelectorAll('#lpHubCardsGrid .lp-hub-card').forEach(card => {
+    card.classList.toggle('active', card.getAttribute('data-hub') === hc.hub.hub_id);
+  });
+
+  // Update sidebar driver dropdown to match active Hub's roster
+  const drvSel = document.getElementById('selClaimDriver');
+  if (drvSel) {
+    drvSel.innerHTML = hc.drivers.map(d => `<option value="${d.name}">${d.name} (${d.home_corridor})</option>`).join('');
+  }
+
+  // Update fleet counts from hub defaults
+  if (hc.truck_counts) {
+    CT.fleetCounts = { ...hc.truck_counts };
+  }
+  renderFleetControls();
+  renderLaunchpadFleetPool();
+
+  // Update top badge & driver count
+  document.getElementById('lpActiveHubBadge').textContent = `HUB: ${hc.hub.hub_id} (${hc.city_name.toUpperCase()})`;
+  document.getElementById('lpHubDriverCountLbl').textContent = `${hc.drivers.length} Drivers · ${hc.total_stops} Outlets`;
+
+  // Render connectors
+  const connRow = document.getElementById('lpConnectorsRow');
+  if (connRow && hc.connectors) {
+    connRow.innerHTML = hc.connectors.map(c => `
+      <div style="padding:7px 9px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:9px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:11.5px;font-weight:800">${c.icon} ${c.name}</span>
+        </div>
+        <div style="font-size:10px;color:var(--accent-primary);font-weight:700;margin-top:2px">${c.status}</div>
+      </div>
+    `).join('');
+  }
+
+  // Render 8-Corridor filter chips & demand table
+  renderLaunchpadCorridorChips();
+  renderLaunchpadCorridorTable();
+
+  // Initialize or remap driver rules so driver names belong to the selected Hub's roster
+  if (resetRulesOnCityChange && (!CT.driverRules.length || prevCity !== hc.city_id)) {
+    const d0 = hc.drivers[0]?.name || 'Ravi';
+    CT.driverRules = [
+      { driver: d0, truck_type: 'T14', corridor: 'W' }
+    ];
+  }
+  renderLaunchpadDriverRules();
+
+  // If no synthesis has run yet, update the 4 KPI cards with the staged Hub readiness
+  if (!CT.bundle) {
+    updateStagedKpiStrip();
+  }
+}
+
+function updateStagedKpiStrip() {
+  const hc = CT.hubContext;
+  if (!hc) return;
+  const totalTrucks = Object.values(CT.fleetCounts).reduce((a, b) => a + b, 0);
+  const activeCorrCount = CT.selectedCorridors.length;
+
+  document.getElementById('kpiLbl1').textContent = 'Selected Hub';
+  document.getElementById('kpiTrucks').textContent = hc.hub.name;
+  document.getElementById('kpiTrucksSub').textContent = `${hc.city_name} · ${hc.hub.hub_id}`;
+  document.getElementById('kpiTrucksBadge').textContent = 'STAGED';
+
+  document.getElementById('kpiLbl2').textContent = 'Staged Order Manifest';
+  document.getElementById('kpiSavings').textContent = `${hc.total_stops} Retail Outlets`;
+  document.getElementById('kpiCostCompare').textContent = `${hc.total_cartons.toLocaleString('en-IN')} cartons · ${hc.total_volume_m3} m³ (${activeCorrCount}/8 sectors)`;
+  document.getElementById('kpiSavingsPct').textContent = CT.activeOrderSource === 'chat' ? 'Excel / CSV' : 'BigQuery Book';
+
+  document.getElementById('kpiLbl3').textContent = 'Hub Fleet & Roster';
+  document.getElementById('kpiStopsVal').textContent = `${totalTrucks} Trucks · ${hc.drivers.length} Drivers`;
+  document.getElementById('kpiStopsSub').textContent = `Roster: ${hc.drivers.slice(0, 4).map(d => d.name).join(', ')}...`;
+
+  document.getElementById('kpiLbl4').textContent = 'Manager Rules & Status';
+  document.getElementById('kpiDistanceVal').textContent = CT.driverRules.length ? `${CT.driverRules.length} Driver Rule(s) Active` : 'Auto Solver Mode';
+  document.getElementById('kpiDistanceSub').textContent = `Click 'Synthesize & Run Agent' to solve`;
+  document.getElementById('kpiDistanceBadge').textContent = 'Awaiting Run';
+}
+
+function renderLaunchpadCorridorChips() {
+  const hc = CT.hubContext;
+  const wrap = document.getElementById('lpCorridorFilterChips');
+  if (!hc || !wrap) return;
+  wrap.innerHTML = hc.corridor_summary.map(c => {
+    const isAct = CT.selectedCorridors.includes(c.code);
     return `
-      <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg-input);padding:8px 12px;border-radius:10px;border:1px solid var(--border-subtle);border-left:4px solid ${t.color}">
-        <div>
-          <div style="font-weight:800;font-size:13px">${t.code} · ${t.name}</div>
-          <div style="font-size:11px;color:var(--text-muted)">${t.volume_m3} m³ · ${t.payload_kg} kg · ₹${t.fixed_daily_cost_inr}/day + ₹${t.cost_per_km_inr}/km</div>
+      <button class="lp-corr-chip ${isAct ? 'active' : ''}" onclick="toggleLaunchpadCorridor('${c.code}')">
+        <span>${isAct ? '✓' : '+'} ${c.code} · ${c.name}</span>
+        <span style="opacity:0.82;font-family:var(--font-mono);font-size:10.5px">(${c.stops} stops · ${c.volume_m3}m³)</span>
+      </button>
+    `;
+  }).join('');
+}
+
+function toggleLaunchpadCorridor(code) {
+  if (CT.selectedCorridors.includes(code)) {
+    if (CT.selectedCorridors.length > 1) {
+      CT.selectedCorridors = CT.selectedCorridors.filter(c => c !== code);
+    }
+  } else {
+    CT.selectedCorridors.push(code);
+  }
+  renderLaunchpadCorridorChips();
+  renderLaunchpadCorridorTable();
+  if (!CT.bundle) updateStagedKpiStrip();
+}
+
+function selectAllLaunchpadCorridors() {
+  CT.selectedCorridors = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+  renderLaunchpadCorridorChips();
+  renderLaunchpadCorridorTable();
+  if (!CT.bundle) updateStagedKpiStrip();
+}
+
+function renderLaunchpadCorridorTable() {
+  const hc = CT.hubContext;
+  const tbody = document.getElementById('lpCorridorPreviewBody');
+  if (!hc || !tbody) return;
+  const activeRows = hc.corridor_summary.filter(c => CT.selectedCorridors.includes(c.code));
+  const totalStops = activeRows.reduce((s, r) => s + r.stops, 0);
+  const totalCartons = activeRows.reduce((s, r) => s + r.cartons, 0);
+  const badge = document.getElementById('lpPreviewSummaryBadge');
+  if (badge) badge.textContent = `${activeRows.length} Sectors · ${totalStops} Outlets · ${totalCartons} Cartons`;
+
+  tbody.innerHTML = hc.corridor_summary.map(c => {
+    const included = CT.selectedCorridors.includes(c.code);
+    return `
+      <tr style="${included ? '' : 'opacity:0.38'}">
+        <td style="font-family:var(--font-mono);font-weight:800;color:var(--accent-primary)">${c.code} · ${c.name}</td>
+        <td style="font-size:11.5px;color:var(--text-muted)">${c.sample_areas}</td>
+        <td style="font-weight:700">${c.stops}</td>
+        <td>${c.cartons}</td>
+        <td style="font-family:var(--font-mono)">${c.volume_m3} m³</td>
+        <td style="font-family:var(--font-mono)">${Math.round(c.weight_kg)} kg</td>
+        <td><span class="ct-kpi-badge" style="font-size:10px;padding:2px 6px">${c.recommended_truck}</span></td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function renderLaunchpadDriverRules() {
+  const hc = CT.hubContext;
+  const container = document.getElementById('lpDriverRulesContainer');
+  const summaryEl = document.getElementById('lpQuickRuleSummary');
+  if (!hc || !container) return;
+
+  if (summaryEl) {
+    if (!CT.driverRules.length) {
+      summaryEl.textContent = '100% Auto Solver Assignment';
+    } else {
+      const r0 = CT.driverRules[0];
+      summaryEl.textContent = `${CT.driverRules.length} Rule(s): ${r0.driver} → ${r0.truck_type || 'Auto'} → ${r0.corridor}`;
+    }
+  }
+
+  if (!CT.driverRules.length) {
+    container.innerHTML = `
+      <div style="padding:12px;background:var(--bg-elevated);border:1px dashed var(--border-subtle);border-radius:10px;font-size:12px;color:var(--text-muted);text-align:center">
+        No manual driver/truck pins set — OR-Tools will autonomously assign all ${hc.drivers.length} ${hc.city_name} drivers &amp; trucks across corridors. Click <b>+ Add Driver / Truck Rule</b> above to pin specific drivers or truck sizes.
+      </div>
+    `;
+    return;
+  }
+
+  const truckCatalog = CT.meta?.truck_types || [];
+  container.innerHTML = CT.driverRules.map((rule, idx) => {
+    const corrInfo = hc.corridor_summary.find(c => c.code === rule.corridor) || hc.corridor_summary[0];
+    const tSpec = truckCatalog.find(t => t.code === rule.truck_type);
+    let diagHtml = '';
+    if (corrInfo) {
+      if (tSpec) {
+        const effCap = +(tSpec.volume_m3 * 0.85).toFixed(1);
+        if (corrInfo.volume_m3 > effCap) {
+          const overflowM3 = +(corrInfo.volume_m3 - effCap).toFixed(1);
+          diagHtml = `<div style="margin-top:6px;font-size:11.5px;color:var(--accent-amber);font-weight:700">⚡ Smaller Truck Selected (${tSpec.code} · ${effCap}m³ usable vs ${corrInfo.volume_m3}m³ in ${corrInfo.code}): Pins inner ${corrInfo.name} stops to ${rule.driver}'s ${tSpec.code} &amp; automatically distributes ~${overflowM3}m³ overflow to a shared-trunk branch truck!</div>`;
+        } else {
+          diagHtml = `<div style="margin-top:6px;font-size:11.5px;color:var(--accent-emerald);font-weight:700">✓ Single-Truck Fit (${tSpec.code} · ${effCap}m³ usable ≥ ${corrInfo.volume_m3}m³ demand in ${corrInfo.code}): All ${corrInfo.stops} ${corrInfo.name} stops fit in ${rule.driver}'s truck.</div>`;
+        }
+      } else {
+        diagHtml = `<div style="margin-top:6px;font-size:11.5px;color:var(--accent-primary);font-weight:600">🧭 Auto Truck Sizing: Solver picks optimal vehicle for ${rule.driver} on ${corrInfo.code} · ${corrInfo.name} (${corrInfo.stops} stops, ${corrInfo.volume_m3}m³) + trunk-and-branch split if needed.</div>`;
+      }
+    }
+
+    return `
+      <div class="lp-rule-row">
+        <div style="display:grid;grid-template-columns:1.1fr 1.35fr 1.25fr auto;gap:8px;align-items:end">
+          <div class="ct-field">
+            <label>Hub Driver (${hc.hub.hub_id})</label>
+            <select class="ct-select" onchange="updateLaunchpadRule(${idx}, 'driver', this.value)">
+              ${hc.drivers.map(d => `<option value="${d.name}" ${d.name === rule.driver ? 'selected' : ''}>${d.name} (Home: ${d.home_corridor})</option>`).join('')}
+            </select>
+          </div>
+          <div class="ct-field">
+            <label>Assigned Truck Class</label>
+            <select class="ct-select" onchange="updateLaunchpadRule(${idx}, 'truck_type', this.value)">
+              <option value="" ${!rule.truck_type ? 'selected' : ''}>Auto · Solver Best Fit</option>
+              ${truckCatalog.map(t => `<option value="${t.code}" ${t.code === rule.truck_type ? 'selected' : ''}>${t.code} · ${t.name} (${t.volume_m3}m³ · ${(t.payload_kg/1000).toFixed(1)}t)</option>`).join('')}
+            </select>
+          </div>
+          <div class="ct-field">
+            <label>Target Compass Corridor</label>
+            <select class="ct-select" onchange="updateLaunchpadRule(${idx}, 'corridor', this.value)">
+              ${hc.corridor_summary.map(c => `<option value="${c.code}" ${c.code === rule.corridor ? 'selected' : ''}>${c.code} · ${c.name} (${c.stops} stops · ${c.volume_m3}m³)</option>`).join('')}
+            </select>
+          </div>
+          <button class="ct-btn-secondary" style="padding:7px 10px;color:var(--accent-rose)" onclick="removeLaunchpadRule(${idx})" title="Remove rule">✕</button>
         </div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <button class="ct-btn-secondary" style="padding:3px 9px" onclick="adjFleetCount('${t.code}', -1)">−</button>
-          <span id="fc-${t.code}" style="font-family:var(--font-mono);font-size:14px;font-weight:800;min-width:20px;text-align:center">${cnt}</span>
-          <button class="ct-btn-secondary" style="padding:3px 9px" onclick="adjFleetCount('${t.code}', 1)">+</button>
-        </div>
+        ${diagHtml}
       </div>
     `;
   }).join('');
 }
 
-function adjFleetCount(code, delta) {
-  FLEET_COUNTS[code] = Math.max(0, Math.min(12, (FLEET_COUNTS[code] || 0) + delta));
-  const el = document.getElementById('fc-' + code);
-  if (el) el.textContent = FLEET_COUNTS[code];
+function addLaunchpadDriverRule() {
+  const hc = CT.hubContext;
+  if (!hc) return;
+  const usedDrivers = new Set(CT.driverRules.map(r => r.driver));
+  const nextDrv = hc.drivers.find(d => !usedDrivers.has(d.name)) || hc.drivers[0];
+  const corrs = ['W', 'S', 'NE', 'N', 'E', 'NW', 'SE', 'SW'];
+  const nextCorr = corrs[CT.driverRules.length % corrs.length];
+  CT.driverRules.push({
+    driver: nextDrv ? nextDrv.name : 'Ravi',
+    truck_type: 'T14',
+    corridor: nextCorr
+  });
+  renderLaunchpadDriverRules();
+  if (!CT.bundle) updateStagedKpiStrip();
 }
 
-function applyBundle(b) {
-  CURRENT_BUNDLE = b;
-  const k = b.kpi;
+function updateLaunchpadRule(idx, field, val) {
+  if (!CT.driverRules[idx]) return;
+  CT.driverRules[idx][field] = val;
+  renderLaunchpadDriverRules();
+  if (!CT.bundle) updateStagedKpiStrip();
+}
 
-  // Sync top selectors
-  if (b.hub && b.hub.hub_id) document.getElementById('selHub').value = b.hub.hub_id;
-  if (b.objective) document.getElementById('selObjective').value = b.objective;
-  if (b.order_source && ['demo', 'bigquery', 'photos'].includes(b.order_source)) {
-    document.getElementById('selSource').value = b.order_source;
+function removeLaunchpadRule(idx) {
+  CT.driverRules.splice(idx, 1);
+  renderLaunchpadDriverRules();
+  if (!CT.bundle) updateStagedKpiStrip();
+}
+
+function applyLaunchpadPreset(presetName) {
+  const hc = CT.hubContext;
+  if (!hc) return;
+  const d0 = hc.drivers[0]?.name || 'Ravi';
+  const d1 = hc.drivers[1]?.name || 'Suresh';
+  if (presetName === 'smaller_west') {
+    CT.driverRules = [
+      { driver: d0, truck_type: 'T14', corridor: 'W' }
+    ];
+    showToast(`⚡ Configured <b>${d0}</b> on <b>West</b> in a smaller <b>T14 (14ft)</b> truck — excess West stops will distribute to a branch truck.`);
+  } else if (presetName === 'two_leads') {
+    CT.driverRules = [
+      { driver: d0, truck_type: 'T14', corridor: 'W' },
+      { driver: d1, truck_type: 'T17', corridor: 'S' }
+    ];
+    showToast(`⚡ Configured 2 corridor leads: <b>${d0} (West · T14)</b> and <b>${d1} (South · T17)</b>.`);
+  } else {
+    CT.driverRules = [];
+    showToast(`🧹 Cleared manual rules — 100% autonomous OR-Tools assignment enabled.`);
+  }
+  renderLaunchpadDriverRules();
+  if (!CT.bundle) updateStagedKpiStrip();
+}
+
+function renderLaunchpadFleetPool() {
+  const grid = document.getElementById('lpFleetPoolGrid');
+  if (!grid || !CT.meta) return;
+  const total = Object.values(CT.fleetCounts).reduce((a, b) => a + b, 0);
+  const lbl = document.getElementById('lpTotalFleetPoolLbl');
+  if (lbl) lbl.textContent = `${total} Trucks Available`;
+
+  grid.innerHTML = CT.meta.truck_types.map(t => `
+    <div style="padding:8px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-top:3px solid ${t.color};border-radius:10px;text-align:center">
+      <div style="font-weight:800;font-size:12px">${t.code}</div>
+      <div style="font-size:10px;color:var(--text-muted)">${t.volume_m3}m³ · ${(t.payload_kg/1000).toFixed(1)}t</div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:6px">
+        <button class="ct-btn-secondary" style="padding:2px 7px;font-size:11px" onclick="stepFleetCount('${t.code}', -1)">-</button>
+        <span id="lpFleetCnt-${t.code}" style="font-family:var(--font-mono);font-weight:800;font-size:12.5px">${CT.fleetCounts[t.code] ?? 2}</span>
+        <button class="ct-btn-secondary" style="padding:2px 7px;font-size:11px" onclick="stepFleetCount('${t.code}', 1)">+</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function uploadLaunchpadSpreadsheet(inputEl) {
+  const file = inputEl.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  const badge = document.getElementById('lpManifestStatusBadge');
+  if (badge) badge.textContent = `⏳ Parsing ${file.name}...`;
+
+  reader.onload = async () => {
+    try {
+      const res = await fetch('/api/upload-manifest', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          filename: file.name,
+          mime_type: file.type || '',
+          file_base64: reader.result,
+          hub_id: CT.activeHubId
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showToast(`❌ ${data.detail || 'Could not parse spreadsheet'}`);
+        return;
+      }
+      CT.activeOrderSource = 'chat';
+      document.getElementById('selSource').value = 'chat';
+      if (badge) badge.textContent = `✓ Loaded Spreadsheet: ${data.filename} (${data.stops_parsed} stops · ${data.cartons_parsed} cartons)`;
+      if (data.hub_context) {
+        applyHubContextToLaunchpad(data.hub_context, false);
+      }
+      showToast(`📗 Loaded <b>${data.filename}</b>: <b>${data.stops_parsed} outlets</b> &amp; <b>${data.cartons_parsed} cartons</b> staged for synthesis!`);
+    } catch (e) {
+      showToast(`❌ Upload failed: ${e.message}`);
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+async function loadLaunchpadSampleSheet(sampleFilename) {
+  const badge = document.getElementById('lpManifestStatusBadge');
+  if (badge) badge.textContent = `⏳ Loading ${sampleFilename}...`;
+  const res = await fetch('/api/upload-manifest', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      sample_file: sampleFilename,
+      hub_id: CT.activeHubId
+    })
+  });
+  const data = await res.json();
+  if (res.ok && data.hub_context) {
+    CT.activeOrderSource = 'chat';
+    document.getElementById('selSource').value = 'chat';
+    if (badge) badge.textContent = `✓ Loaded Sample CSV: ${data.filename} (${data.stops_parsed} stops · ${data.cartons_parsed} cartons)`;
+    applyHubContextToLaunchpad(data.hub_context, false);
+    showToast(`📄 Staged sample sheet <b>${data.filename}</b> (${data.stops_parsed} outlets, ${data.cartons_parsed} cartons). Click <b>Synthesize &amp; Run Agent</b>!`);
+  }
+}
+
+async function resetLaunchpadToHubBook() {
+  CT.activeOrderSource = 'demo';
+  document.getElementById('selSource').value = 'demo';
+  const badge = document.getElementById('lpManifestStatusBadge');
+  if (badge) badge.textContent = `✓ Connected: Live Hub Order Book`;
+  await onLaunchpadHubChange(CT.activeHubId);
+}
+
+function setLaunchpadPrompt(txt) {
+  const el = document.getElementById('inpLaunchpadPrompt');
+  if (el) el.value = txt;
+}
+
+async function synthesizeFromLaunchpad(switchAfter = true) {
+  const bar = document.getElementById('lpSynthesisBar');
+  const heroBtn = document.getElementById('btnHeroSynthesize');
+  const botBtn = document.getElementById('btnBottomSynthesize');
+  const sideBtn = document.getElementById('btnOptimize');
+
+  if (bar) bar.style.display = 'block';
+  const steps = ['lpStep1', 'lpStep2', 'lpStep3', 'lpStep4', 'lpStep5'].map(id => document.getElementById(id));
+  steps.forEach(s => { if (s) { s.classList.remove('active', 'done'); } });
+
+  const setStage = (idx) => {
+    steps.forEach((s, i) => {
+      if (!s) return;
+      s.classList.toggle('done', i < idx);
+      s.classList.toggle('active', i === idx);
+    });
+  };
+
+  if (heroBtn) heroBtn.innerHTML = '<span>⏳</span> Synthesizing Dispatch Plan...';
+  if (botBtn) botBtn.innerHTML = '<span>⏳</span> Synthesizing Dispatch Plan...';
+  if (sideBtn) sideBtn.innerHTML = '<span>⏳</span> Synthesizing...';
+
+  setStage(0);
+  await new Promise(r => setTimeout(r, 140));
+  setStage(1);
+
+  const hubId = CT.activeHubId || document.getElementById('selHub').value;
+  const objective = document.getElementById('lpSelObjective')?.value || document.getElementById('selObjective').value;
+  const scopeVal = document.getElementById('lpSelScope')?.value || CT.scope || 'all';
+  const fuel = parseFloat(document.getElementById('lpInpFuel')?.value || document.getElementById('inpSimFuel').value || '92');
+  const drvCost = parseFloat(document.getElementById('lpInpDriverCost')?.value || document.getElementById('inpSimDriverCost').value || '950');
+  const promptTxt = (document.getElementById('inpLaunchpadPrompt')?.value || '').trim();
+
+  // Build corridor_claims map from CT.driverRules as well as driver_assignments list
+  const claimsMap = {};
+  CT.driverRules.forEach(r => {
+    if (r.driver && r.corridor) {
+      claimsMap[r.driver] = r.truck_type ? `${r.corridor}|${r.truck_type}` : r.corridor;
+    }
+  });
+  CT.corridorClaims = claimsMap;
+  CT.scope = scopeVal;
+
+  try {
+    setStage(2);
+    const res = await fetch('/api/plan', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        hub_id: hubId,
+        objective: objective,
+        order_source: CT.activeOrderSource,
+        truck_counts: CT.fleetCounts,
+        corridor_claims: claimsMap,
+        driver_assignments: CT.driverRules,
+        selected_corridors: CT.selectedCorridors,
+        prompt: promptTxt,
+        fuel_price: fuel,
+        driver_day_cost: drvCost,
+        scope: scopeVal
+      })
+    });
+    setStage(3);
+    const bundle = await res.json();
+    setStage(4);
+    await new Promise(r => setTimeout(r, 160));
+    steps.forEach(s => { if (s) { s.classList.remove('active'); s.classList.add('done'); } });
+
+    applyBundle(bundle);
+    if (bundle.hub_context) {
+      CT.hubContext = bundle.hub_context;
+    }
+
+    if (switchAfter) {
+      await switchWorkspace('tower');
+      const noteMsg = (bundle.notes && bundle.notes.length) ? `<br><span style="font-size:11.5px;color:var(--text-secondary)">📌 ${bundle.notes[0]}</span>` : '';
+      showToast(`🚀 <b>Agent Synthesis Complete (${bundle.plan_id}):</b> Dispatched <b>${bundle.kpi.optimized_trucks} trucks</b> for <b>${bundle.hub.name}</b> — saving <b>₹${bundle.kpi.savings_inr.toLocaleString('en-IN')}/day (-${bundle.kpi.savings_pct}%)</b>!${noteMsg}`, 6800);
+    }
+  } finally {
+    if (heroBtn) heroBtn.innerHTML = '<span>🚀</span> Synthesize &amp; Run FleetFlow Agent →';
+    if (botBtn) botBtn.innerHTML = '<span>🚀</span> Synthesize &amp; Run FleetFlow Agent →';
+    if (sideBtn) sideBtn.innerHTML = '<span>🚀</span> Synthesize &amp; Run Agent';
+  }
+}
+
+function applyBundle(bundle) {
+  if (!bundle) return;
+  CT.bundle = bundle;
+  CT.focusTruckId = bundle.focus_truck_id || (bundle.routes[0]?.truck_id || '');
+  CT.corridorClaims = bundle.corridor_claims || {};
+
+  if (bundle.hub?.hub_id) {
+    CT.activeHubId = bundle.hub.hub_id;
+    document.getElementById('selHub').value = bundle.hub.hub_id;
+  }
+  if (bundle.objective) {
+    document.getElementById('selObjective').value = bundle.objective;
+    const lpObj = document.getElementById('lpSelObjective');
+    if (lpObj) lpObj.value = bundle.objective;
   }
 
-  // Update KPI Ribbon
+  // Update Clean 4-Metric Operational Ribbon with Live Synthesized KPIs
+  const k = bundle.kpi;
+  document.getElementById('kpiLbl1').textContent = 'Trucks Dispatched';
   document.getElementById('kpiTrucks').textContent = `${k.baseline_trucks} → ${k.optimized_trucks} Trucks`;
-  document.getElementById('kpiStopsSub').textContent = `${k.stops} stops · ${k.cartons.toLocaleString('en-IN')} cartons (${k.weight_tonnes} t)`;
+  document.getElementById('kpiTrucksSub').textContent = `Right-sized fleet for ${bundle.hub?.name || 'Hub'}`;
   document.getElementById('kpiTrucksBadge').textContent = k.trucks_saved > 0 ? `-${k.trucks_saved} trucks` : `${k.optimized_trucks} active`;
 
+  document.getElementById('kpiLbl2').textContent = 'Daily Cost Savings';
   document.getElementById('kpiSavings').textContent = `₹${k.savings_inr.toLocaleString('en-IN')} / day`;
   document.getElementById('kpiCostCompare').textContent = `₹${k.baseline_cost_inr.toLocaleString('en-IN')} → ₹${k.optimized_cost_inr.toLocaleString('en-IN')}`;
   document.getElementById('kpiSavingsPct').textContent = `-${k.savings_pct}%`;
 
-  document.getElementById('kpiFill').textContent = `${k.avg_vol_fill_pct}% Vol`;
-  document.getElementById('kpiWeightSub').textContent = `Payload fill: ${k.avg_wt_fill_pct}%`;
+  document.getElementById('kpiLbl3').textContent = 'Deliveries & Cargo';
+  document.getElementById('kpiStopsVal').textContent = `${k.stops} Stops`;
+  document.getElementById('kpiStopsSub').textContent = `${k.cartons.toLocaleString('en-IN')} cartons · ${k.weight_tonnes}t payload`;
+  const cargoB = document.getElementById('kpiCargoBadge');
+  if (cargoB) cargoB.textContent = `${k.unassigned || 0} Unassigned`;
 
-  document.getElementById('kpiCo2').textContent = `${k.co2_saved_kg} kg CO₂`;
-  document.getElementById('kpiDieselSub').textContent = `${k.diesel_saved_litres} L diesel saved (${k.km_saved} km less)`;
-  document.getElementById('kpiTreesBadge').textContent = `${k.trees_offset} trees/yr`;
+  document.getElementById('kpiLbl4').textContent = 'Total Route Distance';
+  document.getElementById('kpiDistanceVal').textContent = `${k.optimized_km.toLocaleString('en-IN')} km`;
+  document.getElementById('kpiDistanceSub').textContent = `Down from ${k.baseline_km.toLocaleString('en-IN')} km manual`;
+  document.getElementById('kpiDistanceBadge').textContent = k.km_saved > 0 ? `-${k.km_saved} km` : `Optimized`;
 
-  // Populate Truck Focus Dropdown on Map
-  const mapSel = document.getElementById('selFocusTruckMap');
-  mapSel.innerHTML = `<option value="all">All Fleet (${b.routes.length} trucks)</option>` +
-    b.routes.map(r => `<option value="${r.truck_id}" ${b.active_trucks && b.active_trucks.length===1 && b.active_trucks[0]===r.truck_id ? 'selected' : ''}>${r.truck_id} · ${r.driver} (${r.corridor} · ${r.stops_count} stops)</option>`).join('');
+  const mapDrop = document.getElementById('selFocusTruckMap');
+  mapDrop.innerHTML = `<option value="all">All Fleet (${bundle.routes.length} trucks)</option>` +
+    bundle.routes.map(r => `<option value="${r.truck_id}">${r.truck_id} · ${r.driver} (${r.corridor_name} · ${r.stops_count} stops)</option>`).join('');
 
-  // Update Scope Buttons highlight
-  const actLen = b.active_trucks ? b.active_trucks.length : 0;
-  document.getElementById('scopeAllBtn').classList.toggle('active', !b.active_trucks);
-  document.getElementById('scope1Btn').classList.toggle('active', actLen === 1);
-  document.getElementById('scope3Btn').classList.toggle('active', actLen === 3);
+  if (bundle.active_trucks && bundle.active_trucks.length === 1) {
+    mapDrop.value = bundle.active_trucks[0];
+  } else {
+    mapDrop.value = 'all';
+  }
 
-  // Render active corridor claims pills
-  CORRIDOR_CLAIMS = b.corridor_claims || {};
-  const cp = document.getElementById('activeClaimsPills');
-  cp.innerHTML = Object.entries(CORRIDOR_CLAIMS).map(([drv, cor]) =>
-    `<span class="ct-kpi-badge" style="font-size:10.5px">📌 ${drv} → ${cor}</span>`
+  const isAll = !bundle.active_trucks;
+  const is1 = bundle.active_trucks && bundle.active_trucks.length === 1;
+  const is3 = bundle.active_trucks && bundle.active_trucks.length === 3;
+  document.getElementById('scopeAllBtn').classList.toggle('active', isAll);
+  document.getElementById('scope1Btn').classList.toggle('active', !!is1);
+  document.getElementById('scope3Btn').classList.toggle('active', !!is3);
+
+  const claimsDiv = document.getElementById('activeClaimsPills');
+  const entries = Object.entries(CT.corridorClaims);
+  claimsDiv.innerHTML = entries.map(([drv, corr]) =>
+    `<span class="ct-kpi-badge" style="font-size:10.5px">📌 ${drv} → ${corr}</span>`
   ).join('');
 
-  // Render Right Sidebar Route List
-  document.getElementById('routeCountLbl').textContent = b.active_trucks
-    ? `${b.active_trucks.length} highlighted / ${b.routes.length} total`
-    : `${b.routes.length} active`;
-
-  const rl = document.getElementById('towerRoutesList');
-  rl.innerHTML = b.routes.map(r => `
-    <div class="ct-route-item ${r.active ? '' : 'dimmed'}" style="--route-c:${r.color}" onclick="applySingleTruckDropdown('${r.truck_id}')">
+  const activeCount = bundle.routes.filter(r => r.active).length;
+  document.getElementById('routeCountLbl').textContent = `${activeCount} active`;
+  const rList = document.getElementById('towerRoutesList');
+  rList.innerHTML = bundle.routes.map(r => `
+    <div class="ct-route-item ${r.active ? '' : 'dimmed'} ${r.truck_id === CT.focusTruckId ? 'selected' : ''}"
+         style="--route-c:${r.color}"
+         onclick="focusTruckFromSidebar('${r.truck_id}')">
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <span style="font-weight:800;font-size:13.5px;color:var(--text-main)">${r.truck_id} · ${r.driver}</span>
+        <span style="font-weight:800;font-size:13px">${r.truck_id} · ${r.driver}</span>
         <span style="font-family:var(--font-mono);font-size:11px;color:${r.color};font-weight:700">${r.corridor} (${r.branch})</span>
       </div>
-      <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px">${r.truck_name}</div>
-      <div style="display:flex;gap:10px;margin-top:6px;font-size:11.5px;color:var(--text-secondary);flex-wrap:wrap">
-        <span>📍 <b>${r.stops_count}</b> stops</span>
-        <span>📦 <b>${r.cartons_count}</b> boxes</span>
-        <span>📊 <b>${r.volume_fill_pct}%</b> vol</span>
-        <span>🛣️ <b>${r.km}</b> km</span>
-        <span>₹<b>${r.cost_total.toLocaleString('en-IN')}</b></span>
+      <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px">
+        ${r.truck_name} · ${r.stops_count} stops · ${r.cartons_count} boxes · ${r.km} km
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px;font-size:11.5px">
+        <span>Fill: <b>${r.volume_fill_pct}% vol</b> / <b>${r.weight_fill_pct}% wt</b></span>
+        <span style="font-family:var(--font-mono);font-weight:700;color:var(--text-main)">₹${r.cost_total.toLocaleString('en-IN')}</span>
       </div>
     </div>
   `).join('');
 
-  // Populate Studio 3D Route Selector
-  const stRouteSel = document.getElementById('selStudioRoute');
-  stRouteSel.innerHTML = b.routes.map(r =>
-    `<option value="${r.truck_id}" ${r.truck_id === b.focus_truck_id ? 'selected' : ''}>${r.truck_id} · ${r.driver} (${r.truck_code} · ${r.cartons_count} cartons)</option>`
+  const stSel = document.getElementById('selStudioRoute');
+  stSel.innerHTML = bundle.routes.map(r =>
+    `<option value="${r.truck_id}" data-code="${r.truck_code}">${r.truck_id} · ${r.driver} (${r.truck_code} · ${r.cartons_count} cartons)</option>`
   ).join('');
-  const focusRoute = b.routes.find(r => r.truck_id === b.focus_truck_id) || b.routes[0];
-  if (focusRoute) {
-    document.getElementById('selStudioTruckType').value = focusRoute.truck_code;
-    updateStudioTelemetryFromRoute(focusRoute);
+  if (CT.focusTruckId) stSel.value = CT.focusTruckId;
+  const activeRouteObj = bundle.routes.find(r => r.truck_id === stSel.value) || bundle.routes[0];
+  if (activeRouteObj) {
+    document.getElementById('selStudioTruckType').value = activeRouteObj.truck_code;
   }
 
-  // Populate Simulator Schedule Table
-  const tb = document.getElementById('simScheduleBody');
-  tb.innerHTML = b.routes.map(r => `
-    <tr>
-      <td><b style="color:${r.color}">${r.truck_id}</b></td>
-      <td>${r.truck_name}</td>
-      <td><b>${r.driver}</b></td>
-      <td>${r.corridor_name} <small style="color:var(--text-muted)">(${r.branch})</small></td>
-      <td>${r.stops_count}</td>
-      <td>${r.cartons_count}</td>
-      <td><b style="color:var(--accent-cyan)">${r.volume_fill_pct}%</b></td>
-      <td>${r.weight_fill_pct}%</td>
-      <td>${r.km} km</td>
-      <td>${r.leave}–${r.back}</td>
-      <td><b>₹${r.cost_total.toLocaleString('en-IN')}</b></td>
-      <td>
-        <div style="display:flex;gap:4px">
-          <button class="ct-chip-btn" onclick="window.LPgoLoad('${r.truck_id}', 1)">3D Load</button>
-          <button class="ct-chip-btn" onclick="openDriverHubFor('${r.truck_id}')">Portal</button>
-        </div>
-      </td>
-    </tr>
-  `).join('');
+  renderSimulatorTable(bundle.routes);
 
-  // Populate Driver Hub Selector
   const pSel = document.getElementById('selPortalTruck');
-  pSel.innerHTML = b.routes.map(r =>
-    `<option value="${r.truck_id}" ${r.truck_id === b.focus_truck_id ? 'selected' : ''}>${r.truck_id} · ${r.driver} (${r.corridor_name} · ${r.stops_count} stops)</option>`
+  pSel.innerHTML = bundle.routes.map(r =>
+    `<option value="${r.truck_id}">${r.truck_id} · ${r.driver} (${r.corridor_name} · ${r.stops_count} stops)</option>`
   ).join('');
-  if (focusRoute) {
-    updateDriverHubPreview(focusRoute.truck_id);
+  if (CT.focusTruckId) pSel.value = CT.focusTruckId;
+  if (pSel.value) updateDriverHubPreview(pSel.value);
+
+  renderAuditLog(bundle.audit_log || []);
+
+  if (CT.currentView === 'tower') {
+    mountMapCanvas(bundle.anim_data);
+  } else if (CT.currentView === 'studio3d') {
+    runStudioRepack();
   }
-
-  // Render Audit Log
-  renderAuditLog(b.audit_log);
-
-  // Mount / refresh active 2D/3D canvas
-  renderActiveCanvases();
 }
 
-function renderAuditLog(logs) {
-  if (!logs || !logs.length) return;
-  const el = document.getElementById('securityAuditList');
-  el.innerHTML = logs.map(a => `
-    <div style="padding:4px 0;border-bottom:1px dashed var(--border-subtle)">
-      <span style="color:var(--accent-cyan)">[${a.ts}]</span>
-      <b>${a.tool}</b> (${a.latency_ms}ms) · ${a.detail}
-      <span style="color:#34d399"> · 🛡️ ${a.model_armor} · ${a.cloud_dlp}</span>
-    </div>
-  `).join('');
-}
-
-async function triggerPlanUpdate(scopeOverride = null, focusOverride = null) {
+async function triggerPlanUpdate(extra = {}) {
+  const payload = {
+    hub_id: document.getElementById('selHub').value,
+    objective: document.getElementById('selObjective').value,
+    order_source: document.getElementById('selSource').value,
+    corridor_claims: CT.corridorClaims,
+    scope: CT.scope,
+    focus_truck_id: CT.focusTruckId,
+    ...extra
+  };
   const btn = document.getElementById('btnOptimize');
-  btn.textContent = '⏳ Optimizing...';
+  const origTxt = btn.innerHTML;
+  btn.innerHTML = '<span>⏳</span> Solving...';
   try {
-    const payload = {
-      hub_id: document.getElementById('selHub').value,
-      objective: document.getElementById('selObjective').value,
-      order_source: document.getElementById('selSource').value,
-      corridor_claims: CORRIDOR_CLAIMS,
-      scope: scopeOverride || 'all',
-      focus_truck_id: focusOverride || ''
-    };
     const res = await fetch('/api/plan', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(payload)
     });
     const bundle = await res.json();
     applyBundle(bundle);
   } finally {
-    btn.innerHTML = '<span>⚡</span> Optimize';
+    btn.innerHTML = origTxt;
   }
 }
 
-function applyTruckScope(scopeMode) {
-  if (!CURRENT_BUNDLE) return;
-  const focusId = document.getElementById('selFocusTruckMap').value;
-  const focus = (focusId && focusId !== 'all') ? focusId : (CURRENT_BUNDLE.routes[0]?.truck_id || '');
-  triggerPlanUpdate(scopeMode, focus);
+function applyTruckScope(scopeVal) {
+  CT.scope = scopeVal;
+  triggerPlanUpdate({ scope: scopeVal });
 }
 
-function applySingleTruckDropdown(truckId) {
-  if (!truckId || truckId === 'all') {
-    triggerPlanUpdate('all', '');
+function applySingleTruckDropdown(val) {
+  if (val === 'all') {
+    CT.scope = 'all';
+    triggerPlanUpdate({ scope: 'all' });
   } else {
-    document.getElementById('selFocusTruckMap').value = truckId;
-    triggerPlanUpdate(truckId, truckId);
+    CT.scope = val;
+    CT.focusTruckId = val;
+    triggerPlanUpdate({ scope: val, focus_truck_id: val });
   }
 }
 
-async function submitCorridorClaim() {
-  const drv = document.getElementById('selClaimDriver').value;
-  const cor = document.getElementById('selClaimCorridor').value;
-  CORRIDOR_CLAIMS[drv] = cor;
-  await triggerPlanUpdate('all', '');
-  showToast(`📌 Pinned <b>${drv}</b> to corridor <b>${cor}</b> with automatic trunk-and-branch splitting.`);
+function focusTruckFromSidebar(truckId) {
+  CT.focusTruckId = truckId;
+  CT.scope = truckId;
+  triggerPlanUpdate({ scope: truckId, focus_truck_id: truckId });
 }
 
-async function clearCorridorClaims() {
-  CORRIDOR_CLAIMS = {};
-  await triggerPlanUpdate('all', '');
+function submitCorridorClaim() {
+  const drv = document.getElementById('selClaimDriver').value;
+  const corr = document.getElementById('selClaimCorridor').value;
+  if (!drv || !corr) return;
+  CT.corridorClaims[drv] = corr;
+  CT.scope = 'all';
+  triggerPlanUpdate({ corridor_claims: CT.corridorClaims, scope: 'all' });
+  showToast(`📌 Pinned <b>${drv}</b> to <b>${corr}</b> corridor with trunk-and-branch splitting.`);
+}
+
+function clearCorridorClaims() {
+  CT.corridorClaims = {};
+  CT.driverRules = [];
+  renderLaunchpadDriverRules();
+  CT.scope = 'all';
+  triggerPlanUpdate({ corridor_claims: {}, driver_assignments: [], scope: 'all' });
   showToast(`Cleared all driver corridor claims.`);
 }
 
-/* ── 3D Load Studio & What-If Truck Calculator ── */
 function onStudioRouteSelect(truckId) {
-  if (!CURRENT_BUNDLE) return;
-  const r = CURRENT_BUNDLE.routes.find(x => x.truck_id === truckId);
+  CT.focusTruckId = truckId;
+  const r = (CT.bundle?.routes || []).find(x => x.truck_id === truckId);
   if (r) {
     document.getElementById('selStudioTruckType').value = r.truck_code;
-    CUSTOM_BOXES = [];
-    document.getElementById('addedCustomBoxesList').textContent = '';
-    runStudioRepack();
   }
-}
-
-function updateStudioTelemetryFromRoute(r) {
-  document.getElementById('stVolFill').textContent = r.volume_fill_pct + '%';
-  document.getElementById('stVolBar').style.width = Math.min(100, r.volume_fill_pct) + '%';
-  document.getElementById('stWtFill').textContent = r.weight_fill_pct + '%';
-  document.getElementById('stWtBar').style.width = Math.min(100, r.weight_fill_pct) + '%';
-  document.getElementById('stFrontAxle').textContent = r.front_axle_pct + '%';
-  document.getElementById('stRearAxle').textContent = r.rear_axle_pct + '%';
-  document.getElementById('stAxleBar').style.width = Math.min(100, r.front_axle_pct) + '%';
-  document.getElementById('stCmvrNote').textContent = '✓ ' + r.cmvr_status;
-  document.getElementById('stLifoStatus').textContent = r.lifo_ok ? '100% LIFO OK' : 'OVERFLOW';
-  document.getElementById('stOverflowWarn').style.display = 'none';
+  runStudioRepack();
 }
 
 function onCustomSkuChange(skuCode) {
-  if (!META) return;
-  const s = META.skus.find(x => x.sku === skuCode);
-  if (s) {
-    document.getElementById('inpCustomL').value = s.l_cm;
-    document.getElementById('inpCustomW').value = s.w_cm;
-    document.getElementById('inpCustomH').value = s.h_cm;
-    document.getElementById('inpCustomKg').value = s.weight_kg;
-  }
+  const s = (CT.meta?.skus || []).find(x => x.sku === skuCode);
+  if (!s) return;
+  document.getElementById('inpCustomL').value = s.l_cm;
+  document.getElementById('inpCustomW').value = s.w_cm;
+  document.getElementById('inpCustomH').value = s.h_cm;
+  document.getElementById('inpCustomKg').value = s.weight_kg;
 }
 
 function addCustomBoxAndPack() {
   const sku = document.getElementById('selCustomSku').value;
   const qty = parseInt(document.getElementById('inpCustomQty').value || '1', 10);
   const stop_seq = parseInt(document.getElementById('inpCustomStop').value || '1', 10);
-  const l_cm = parseFloat(document.getElementById('inpCustomL').value || '34');
-  const w_cm = parseFloat(document.getElementById('inpCustomW').value || '34');
-  const h_cm = parseFloat(document.getElementById('inpCustomH').value || '38');
-  const weight_kg = parseFloat(document.getElementById('inpCustomKg').value || '20');
+  const l_cm = parseFloat(document.getElementById('inpCustomL').value || '30');
+  const w_cm = parseFloat(document.getElementById('inpCustomW').value || '30');
+  const h_cm = parseFloat(document.getElementById('inpCustomH').value || '30');
+  const weight_kg = parseFloat(document.getElementById('inpCustomKg').value || '15');
 
-  CUSTOM_BOXES.push({ sku, qty, stop_seq, l_cm, w_cm, h_cm, weight_kg });
-  document.getElementById('addedCustomBoxesList').innerHTML =
-    CUSTOM_BOXES.map(b => `<span class="ct-kpi-badge" style="margin:2px;display:inline-block">+${b.qty}× ${b.sku} (Stop #${b.stop_seq})</span>`).join('');
+  CT.customBoxes.push({ sku, qty, stop_seq, l_cm, w_cm, h_cm, weight_kg });
+  renderAddedCustomBoxes();
   runStudioRepack();
 }
 
 function clearCustomBoxes() {
-  CUSTOM_BOXES = [];
-  document.getElementById('addedCustomBoxesList').innerHTML = '';
+  CT.customBoxes = [];
+  renderAddedCustomBoxes();
   runStudioRepack();
 }
 
+function renderAddedCustomBoxes() {
+  const el = document.getElementById('addedCustomBoxesList');
+  if (!CT.customBoxes.length) {
+    el.innerHTML = '';
+    return;
+  }
+  el.innerHTML = CT.customBoxes.map((b, i) =>
+    `<div>+ <b>${b.qty}× ${b.sku}</b> (${b.l_cm}×${b.w_cm}×${b.h_cm}cm, ${b.weight_kg}kg) → Stop #${b.stop_seq}</div>`
+  ).join('');
+}
+
 async function runStudioRepack() {
-  const source_truck_id = document.getElementById('selStudioRoute').value;
-  const target_truck_code = document.getElementById('selStudioTruckType').value;
+  const sourceTruckId = document.getElementById('selStudioRoute').value || CT.focusTruckId;
+  const targetCode = document.getElementById('selStudioTruckType').value || 'T17';
 
   const res = await fetch('/api/repack-truck', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({
-      source_truck_id,
-      target_truck_code,
-      extra_boxes: CUSTOM_BOXES
+      source_truck_id: sourceTruckId,
+      target_truck_code: targetCode,
+      extra_boxes: CT.customBoxes
     })
   });
-  const out = await res.json();
-  const st = out.stats;
+  const data = await res.json();
+  const st = data.stats;
 
-  document.getElementById('stVolFill').textContent = st.volume_fill_pct + '%';
-  document.getElementById('stVolBar').style.width = Math.min(100, st.volume_fill_pct) + '%';
-  document.getElementById('stWtFill').textContent = st.weight_fill_pct + '%';
-  document.getElementById('stWtBar').style.width = Math.min(100, st.weight_fill_pct) + '%';
-  document.getElementById('stFrontAxle').textContent = st.front_axle_pct + '%';
-  document.getElementById('stRearAxle').textContent = st.rear_axle_pct + '%';
-  document.getElementById('stAxleBar').style.width = Math.min(100, st.front_axle_pct) + '%';
-  document.getElementById('stCmvrNote').textContent = (st.cmvr_compliant ? '✓ ' : '⚠️ ') + st.cmvr_status + ` · Est. ₹${st.estimated_day_cost_inr.toLocaleString('en-IN')}/day`;
-  document.getElementById('stLifoStatus').textContent = st.lifo_ok ? '100% LIFO OK' : `${st.unplaced_count} OVERFLOW`;
+  document.getElementById('stVolFill').textContent = `${st.volume_fill_pct}%`;
+  document.getElementById('stVolBar').style.width = `${Math.min(100, st.volume_fill_pct)}%`;
+  document.getElementById('stWtFill').textContent = `${st.weight_fill_pct}%`;
+  document.getElementById('stWtBar').style.width = `${Math.min(100, st.weight_fill_pct)}%`;
+
+  document.getElementById('stLifoStatus').textContent = st.lifo_ok ? '100% LIFO OK' : 'LIFO WARN';
 
   const warnEl = document.getElementById('stOverflowWarn');
   if (st.unplaced_count > 0) {
     warnEl.style.display = 'block';
-    warnEl.textContent = `⚠️ ${st.unplaced_count} cartons did not fit inside ${st.truck_name} (${st.inner_cm}). Select a larger truck class from the dropdown!`;
+    warnEl.innerHTML = `⚠️ <b>${st.unplaced_count} cartons did not fit</b> in ${st.truck_code} (${st.truck_name}). Select a larger vehicle class from the dropdown!`;
   } else {
     warnEl.style.display = 'none';
   }
 
-  // Update the 3D engine canvas with this repacked truck first in list
-  if (CURRENT_BUNDLE && CURRENT_BUNDLE.anim_data) {
-    const otherTrucks = (CURRENT_BUNDLE.anim_data.trucks || []).filter(t => t.id !== source_truck_id && t.id !== out.truck_anim.id);
-    const updatedAnim = Object.assign({}, CURRENT_BUNDLE.anim_data, {
-      trucks: [out.truck_anim, ...otherTrucks]
-    });
-    window.mountFleetFlowEngine('ct-load-mount', updatedAnim, 'load');
+  if (CT.bundle && CT.bundle.anim_data) {
+    const customAnim = JSON.parse(JSON.stringify(CT.bundle.anim_data));
+    const idx = customAnim.trucks.findIndex(t => t.id === sourceTruckId);
+    if (idx >= 0) {
+      customAnim.trucks[idx] = data.truck_anim;
+    } else {
+      customAnim.trucks.unshift(data.truck_anim);
+    }
+    customAnim.focus = data.truck_anim.id;
+    customAnim.start = 'load';
+    mountLoadCanvas(customAnim);
   }
-  if (out.audit_log) renderAuditLog(out.audit_log);
+  if (data.audit_log) renderAuditLog(data.audit_log);
 }
 
-/* ── Fleet & Cost Simulator ── */
+function renderFleetControls() {
+  const c = document.getElementById('fleetControlsContainer');
+  if (!CT.meta || !c) return;
+  c.innerHTML = CT.meta.truck_types.map(t => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--bg-card);border:1px solid var(--border-subtle);border-left:4px solid ${t.color};border-radius:10px">
+      <div>
+        <div style="font-weight:800;font-size:12.5px">${t.code} · ${t.name}</div>
+        <div style="font-size:11px;color:var(--text-muted)">${t.volume_m3} m³ · ${t.payload_kg} kg · ₹${t.fixed_daily_cost_inr}/day + ₹${t.cost_per_km_inr}/km</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <button class="ct-btn-secondary" style="padding:3px 9px" onclick="stepFleetCount('${t.code}', -1)">-</button>
+        <span id="fleetCnt-${t.code}" style="font-family:var(--font-mono);font-weight:800;width:22px;text-align:center">${CT.fleetCounts[t.code] ?? 2}</span>
+        <button class="ct-btn-secondary" style="padding:3px 9px" onclick="stepFleetCount('${t.code}', 1)">+</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function stepFleetCount(code, delta) {
+  const cur = CT.fleetCounts[code] ?? 2;
+  CT.fleetCounts[code] = Math.max(0, Math.min(12, cur + delta));
+  const el = document.getElementById(`fleetCnt-${code}`);
+  if (el) el.textContent = CT.fleetCounts[code];
+  const lpEl = document.getElementById(`lpFleetCnt-${code}`);
+  if (lpEl) lpEl.textContent = CT.fleetCounts[code];
+  const total = Object.values(CT.fleetCounts).reduce((a, b) => a + b, 0);
+  const lbl = document.getElementById('lpTotalFleetPoolLbl');
+  if (lbl) lbl.textContent = `${total} Trucks Available`;
+  if (!CT.bundle) updateStagedKpiStrip();
+}
+
 async function runSimulatorOptimization() {
-  const fuel_price = parseFloat(document.getElementById('inpSimFuel').value || '92');
-  const driver_day_cost = parseFloat(document.getElementById('inpSimDriverCost').value || '1100');
-  const res = await fetch('/api/plan', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      hub_id: document.getElementById('selHub').value,
-      objective: document.getElementById('selObjective').value,
-      truck_counts: FLEET_COUNTS,
-      fuel_price,
-      driver_day_cost
-    })
+  const fuel = parseFloat(document.getElementById('inpSimFuel').value || '92');
+  const drvCost = parseFloat(document.getElementById('inpSimDriverCost').value || '1100');
+  await triggerPlanUpdate({
+    truck_counts: CT.fleetCounts,
+    fuel_price: fuel,
+    driver_day_cost: drvCost,
+    scope: 'all'
   });
-  const bundle = await res.json();
-  applyBundle(bundle);
-  showToast(`⚡ Fleet simulation complete: <b>${bundle.kpi.optimized_trucks} trucks</b> dispatched at <b>₹${bundle.kpi.optimized_cost_inr.toLocaleString('en-IN')}/day</b>.`);
+  showToast(`⚡ Re-solved fleet matrix with custom vehicle availability &amp; ₹${fuel}/L diesel.`);
+}
+
+function renderSimulatorTable(routes) {
+  const tbody = document.getElementById('simScheduleBody');
+  if (!tbody) return;
+  tbody.innerHTML = routes.map(r => `
+    <tr>
+      <td style="font-family:var(--font-mono);font-weight:800;color:${r.color}">${r.truck_id}</td>
+      <td>${r.truck_name}</td>
+      <td style="font-weight:700;color:var(--text-main)">${r.driver}</td>
+      <td>${r.corridor_name} <span style="font-size:11px;color:var(--text-muted)">(${r.branch})</span></td>
+      <td>${r.stops_count}</td>
+      <td>${r.cartons_count}</td>
+      <td><span style="font-weight:700;color:var(--accent-primary)">${r.volume_fill_pct}%</span></td>
+      <td>${r.weight_fill_pct}%</td>
+      <td>${r.km} km</td>
+      <td>${r.leave}–${r.back}</td>
+      <td style="font-family:var(--font-mono);font-weight:800;color:var(--text-main)">₹${r.cost_total.toLocaleString('en-IN')}</td>
+      <td>
+        <div style="display:flex;gap:5px">
+          <button class="ct-chip-btn" onclick="openRouteIn3D('${r.truck_id}')">3D Load</button>
+          <button class="ct-chip-btn" onclick="openRouteInPortal('${r.truck_id}')">Portal</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openRouteIn3D(truckId) {
+  CT.focusTruckId = truckId;
+  document.getElementById('selStudioRoute').value = truckId;
+  switchWorkspace('studio3d');
+}
+
+function openRouteInPortal(truckId) {
+  CT.focusTruckId = truckId;
+  document.getElementById('selPortalTruck').value = truckId;
+  switchWorkspace('gcp');
 }
 
 function copyScheduleTable() {
-  if (!CURRENT_BUNDLE) return;
-  const header = ['Truck ID', 'Vehicle Class', 'Driver', 'Corridor', 'Branch', 'Stops', 'Cartons', 'Vol Fill %', 'Wt Fill %', 'Distance km', 'Shift', 'Cost INR'].join('\t');
-  const rows = CURRENT_BUNDLE.routes.map(r =>
-    [r.truck_id, r.truck_name, r.driver, r.corridor, r.branch, r.stops_count, r.cartons_count, r.volume_fill_pct, r.weight_fill_pct, r.km, `${r.leave}-${r.back}`, r.cost_total].join('\t')
-  );
-  navigator.clipboard.writeText([header, ...rows].join('\n'));
-  showToast('📋 Schedule table copied to clipboard (ready to paste into Google Sheets)!');
+  if (!CT.bundle) return;
+  const headers = ['Truck ID', 'Vehicle Class', 'Driver', 'Corridor', 'Branch', 'Stops', 'Cartons', 'Vol Fill %', 'Wt Fill %', 'Distance km', 'Shift', 'Cost INR'];
+  const lines = [headers.join('\t')];
+  CT.bundle.routes.forEach(r => {
+    lines.push([
+      r.truck_id, r.truck_name, r.driver, r.corridor_name, r.branch,
+      r.stops_count, r.cartons_count, r.volume_fill_pct, r.weight_fill_pct,
+      r.km, `${r.leave}-${r.back}`, r.cost_total
+    ].join('\t'));
+  });
+  navigator.clipboard.writeText(lines.join('\n'));
+  showToast('📋 Copied TSV schedule to clipboard — paste directly into Google Sheets!');
 }
 
 function exportScheduleCsv() {
-  if (!CURRENT_BUNDLE) return;
-  const header = ['Truck ID', 'Vehicle Class', 'Driver', 'Corridor', 'Branch', 'Stops', 'Cartons', 'Vol Fill %', 'Wt Fill %', 'Distance km', 'Shift', 'Cost INR'].join(',');
-  const rows = CURRENT_BUNDLE.routes.map(r =>
-    [r.truck_id, `"${r.truck_name}"`, r.driver, r.corridor, `"${r.branch}"`, r.stops_count, r.cartons_count, r.volume_fill_pct, r.weight_fill_pct, r.km, `${r.leave}-${r.back}`, r.cost_total].join(',')
-  );
-  const blob = new Blob([[header, ...rows].join('\n')], { type: 'text/csv' });
+  if (!CT.bundle) return;
+  const headers = ['Truck_ID', 'Vehicle_Class', 'Driver', 'Corridor', 'Branch', 'Stops', 'Cartons', 'Vol_Fill_Pct', 'Wt_Fill_Pct', 'Distance_Km', 'Shift', 'Cost_INR'];
+  const lines = [headers.join(',')];
+  CT.bundle.routes.forEach(r => {
+    lines.push([
+      r.truck_id, `"${r.truck_name}"`, r.driver, `"${r.corridor_name}"`, r.branch,
+      r.stops_count, r.cartons_count, r.volume_fill_pct, r.weight_fill_pct,
+      r.km, `${r.leave}-${r.back}`, r.cost_total
+    ].join(','));
+  });
+  const blob = new Blob([lines.join('\n')], {type: 'text/csv'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `fleetflow_schedule_${CURRENT_BUNDLE.plan_id}.csv`;
+  a.download = `fleetflow_schedule_${CT.bundle.plan_id}.csv`;
   a.click();
 }
 
-/* ── Dock QR Scanner & Order Intake ── */
 async function scanSamplePhoto(filename, cardEl) {
   document.querySelectorAll('.ct-photo-card').forEach(c => c.classList.remove('active'));
   if (cardEl) cardEl.classList.add('active');
-  document.getElementById('scanStatusText').textContent = `⏳ Scanning ${filename}...`;
+  document.getElementById('scanStatusText').textContent = `⏳ Scanning ${filename} via OpenCV QR + Vision...`;
+
   const res = await fetch('/api/scan-photo', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ sample_name: filename, auto_replan: true })
   });
   const data = await res.json();
-  const s = data.scan;
-  document.getElementById('scanStatusText').textContent = `✓ Decoded ${s.cartons_read || 0} cartons`;
-  document.getElementById('scanResultContent').innerHTML = `
-    <div style="color:#34d399;font-weight:700;margin-bottom:6px">✓ QR &amp; Label Scan Complete: ${s.cartons_read || 0} cartons across ${Object.keys(s.by_stop || {}).length} stores (${s.fragile || 0} fragile)</div>
-    <div>${(s.sample || []).map(x => `<div>• ${x}</div>`).join('')}</div>
-  `;
-  if (data.bundle) applyBundle(data.bundle);
-  showToast(`📷 Scanned <b>${s.cartons_read || 0} cartons</b> from dock photo and refreshed 3D load plan!`);
+  renderScanResult(data);
 }
 
 function uploadCustomPhoto(inputEl) {
-  const file = inputEl.files && inputEl.files[0];
+  const file = inputEl.files?.[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = async function(ev) {
+  reader.onload = async () => {
     document.getElementById('scanStatusText').textContent = `⏳ Scanning ${file.name}...`;
     const res = await fetch('/api/scan-photo', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image_base64: ev.target.result, mime_type: file.type, auto_replan: true })
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        image_base64: reader.result,
+        mime_type: file.type || 'image/jpeg',
+        auto_replan: true
+      })
     });
     const data = await res.json();
-    const s = data.scan;
-    document.getElementById('scanStatusText').textContent = `✓ Decoded ${s.cartons_read || 0} cartons`;
-    document.getElementById('scanResultContent').innerHTML = `
-      <div style="color:#34d399;font-weight:700;margin-bottom:6px">✓ Custom Photo Decoded: ${s.cartons_read || 0} cartons</div>
-      <div>${(s.sample || []).map(x => `<div>• ${x}</div>`).join('')}</div>
-    `;
-    if (data.bundle) applyBundle(data.bundle);
+    renderScanResult(data);
   };
   reader.readAsDataURL(file);
 }
 
+function renderScanResult(data) {
+  const s = data.scan || {};
+  document.getElementById('scanStatusText').textContent = `✓ Decoded ${s.cartons_read || 0} cartons`;
+  document.getElementById('scanResultContent').innerHTML = `<pre style="white-space:pre-wrap">${JSON.stringify(s, null, 2)}</pre>`;
+  if (data.bundle) {
+    applyBundle(data.bundle);
+    showToast(`📸 Decoded <b>${s.cartons_read || 0} cartons</b> from dock photo and updated the 3D load plan!`);
+  }
+}
+
 function loadSampleOrder(idx) {
-  if (!META || !META.sample_orders[idx]) return;
-  const o = META.sample_orders[idx];
+  const o = CT.meta?.sample_orders?.[idx];
+  if (!o) return;
   document.getElementById('inpOrderText').value = o.preview;
+  document.getElementById('inpOrderText').dataset.sampleFile = o.filename;
 }
 
 async function submitOrderText() {
-  const text = document.getElementById('inpOrderText').value;
-  if (!text.trim()) return;
+  const ta = document.getElementById('inpOrderText');
   const res = await fetch('/api/ingest-orders', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text, auto_replan: true })
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      text: ta.value,
+      sample_file: ta.dataset.sampleFile || '',
+      auto_replan: true
+    })
   });
   const data = await res.json();
-  const ing = data.ingest;
-  if (ing.status === 'ok') {
-    document.getElementById('ingestResultContent').innerHTML = `
-      <div style="color:#34d399;font-weight:700">✓ Geocoded ${ing.stops} dealer outlets · ${ing.cartons} cartons (${ing.volume_m3} m³ · ${ing.weight_kg} kg)</div>
-      <div style="margin-top:4px;font-size:11.5px">${(ing.outlets || []).join(' · ')}</div>
-    `;
-    if (data.bundle) applyBundle(data.bundle);
-    showToast(`📝 Parsed <b>${ing.stops} stops (${ing.cartons} cartons)</b> and re-optimized routes &amp; 3D loads!`);
-  } else {
-    document.getElementById('ingestResultContent').textContent = ing.message || 'Could not parse orders.';
+  const ing = data.ingest || {};
+  document.getElementById('ingestResultContent').innerHTML = `
+    <div>✓ Ingested <b>${ing.stops || 0} outlets</b> and <b>${ing.cartons || 0} cartons</b> (${ing.total_weight_kg || 0} kg).</div>
+  `;
+  if (data.bundle) {
+    applyBundle(data.bundle);
+    showToast(`📝 Parsed <b>${ing.stops || 0} dealer orders</b> and rebuilt the dispatch plan.`);
   }
 }
 
 async function resetToDefaultDemo() {
-  await quickPrompt('Reset to default demo order book');
-}
-
-/* ── Driver Hub & BigQuery Studio ── */
-function openDriverHubFor(truckId) {
-  switchWorkspace('gcp');
-  document.getElementById('selPortalTruck').value = truckId;
-  updateDriverHubPreview(truckId);
+  await quickPrompt('Reset to default demo data');
 }
 
 function updateDriverHubPreview(truckId) {
-  if (!CURRENT_BUNDLE) return;
-  const r = CURRENT_BUNDLE.routes.find(x => x.truck_id === truckId) || CURRENT_BUNDLE.routes[0];
+  const r = (CT.bundle?.routes || []).find(x => x.truck_id === truckId) || CT.bundle?.routes?.[0];
   if (!r) return;
+  document.getElementById('driverPortalIframe').src = r.driver_portal_url;
   document.getElementById('btnOpenMapsNav').href = r.gmaps_nav_url;
   document.getElementById('btnOpenWhatsApp').href = r.whatsapp_url;
   document.getElementById('btnOpenPortalTab').href = r.driver_portal_url;
-  document.getElementById('driverPortalIframe').src = r.driver_portal_url;
 }
 
 function loadBqPreset(idx) {
-  document.getElementById('inpBqSql').value = BQ_PRESETS[idx] || BQ_PRESETS[0];
+  const presets = getBqPresets();
+  document.getElementById('inpBqSql').value = presets[idx] || presets[0];
+  executeBqQuery();
 }
 
 async function executeBqQuery() {
   const sql = document.getElementById('inpBqSql').value;
+  if (!sql.trim()) return;
   document.getElementById('bqEngineStatus').textContent = '⏳ Running BigQuery job...';
-  const res = await fetch('/api/bigquery/query', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ sql, use_live_bq: true })
-  });
-  const data = await res.json();
-  if (!res.ok) {
-    document.getElementById('bqEngineStatus').textContent = '⚠️ ' + (data.detail || 'SQL error');
-    return;
+  try {
+    const res = await fetch('/api/bigquery/query', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ sql, use_live_bq: true })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      document.getElementById('bqEngineStatus').textContent = `❌ ${data.detail || 'Query error'}`;
+      return;
+    }
+    document.getElementById('bqEngineStatus').textContent = `✓ ${data.engine} · ${data.row_count} rows (${data.latency_ms} ms)`;
+    const cols = data.columns || [];
+    document.getElementById('bqResultHead').innerHTML = `<tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr>`;
+    document.getElementById('bqResultBody').innerHTML = (data.rows || []).map(row =>
+      `<tr>${cols.map(c => `<td>${row[c] ?? ''}</td>`).join('')}</tr>`
+    ).join('');
+  } catch (e) {
+    document.getElementById('bqEngineStatus').textContent = `❌ ${e.message}`;
   }
-  document.getElementById('bqEngineStatus').textContent = `✓ ${data.engine} · ${data.row_count} rows (${data.latency_ms} ms)`;
-  const cols = data.columns || [];
-  document.getElementById('bqResultHead').innerHTML = `<tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr>`;
-  document.getElementById('bqResultBody').innerHTML = (data.rows || []).map(row =>
-    `<tr>${cols.map(c => `<td>${row[c] ?? ''}</td>`).join('')}</tr>`
-  ).join('');
 }
 
-/* ── Bottom AI Copilot Command Bar ── */
-async function quickPrompt(text) {
-  document.getElementById('inpAgentPrompt').value = text;
+function renderAuditLog(logs) {
+  const el = document.getElementById('securityAuditList');
+  if (!el) return;
+  el.innerHTML = logs.map(l => `
+    <div style="padding:4px 0;border-bottom:1px solid var(--border-subtle)">
+      <span style="color:var(--accent-primary)">[${l.ts}]</span>
+      <b>${l.action}</b> (${l.tool} · ${l.latency_ms}ms) —
+      <span style="color:var(--accent-emerald)">🛡️ ${l.model_armor} · ${l.cloud_dlp}</span>
+    </div>
+  `).join('');
+}
+
+async function quickPrompt(txt) {
+  document.getElementById('inpAgentPrompt').value = txt;
   await sendAgentPrompt();
 }
 
 async function sendAgentPrompt() {
   const inp = document.getElementById('inpAgentPrompt');
-  const prompt = inp.value.trim();
-  if (!prompt) return;
-  showToast(`🤖 <b>FleetFlow Agent executing:</b> "${prompt}"...`, 10000);
+  const q = inp.value.trim();
+  if (!q) return;
+  inp.value = '';
+  showToast(`✨ <b>FleetFlow AI Agent</b> processing: <i>"${q}"</i>...`, 10000);
+
   const res = await fetch('/api/agent-chat', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt })
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ prompt: q })
   });
   const data = await res.json();
   if (data.bundle) {
     applyBundle(data.bundle);
+    if (CT.currentView === 'launchpad') {
+      await switchWorkspace('tower');
+    }
   }
-  const formatted = (data.reply || '').replace(/\*\*(.*?)\*\*/g, '<b style="color:var(--accent-cyan)">$1</b>');
+  const formatted = (data.reply || '').replace(/\*\*(.*?)\*\*/g, '<b style="color:var(--accent-primary)">$1</b>');
   showToast(`
-    <div style="font-family:var(--font-mono);font-size:10.5px;color:#34d399;margin-bottom:4px">
+    <div style="font-family:var(--font-mono);font-size:10.5px;color:var(--accent-emerald);margin-bottom:4px">
       ▸ ${data.tool_called} (${data.latency_ms}ms) · 🛡️ Model Armor &amp; DLP Verified
     </div>
     <div>${formatted}</div>
-  `, 7000);
+  `, 7500);
 }
 
 document.addEventListener('DOMContentLoaded', initControlTower);

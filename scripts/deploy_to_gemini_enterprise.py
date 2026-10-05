@@ -16,9 +16,9 @@ Usage:
   uv run python scripts/deploy_to_gemini_enterprise.py --project my-proj [--region us-central1]
       [--gemini-app-id my-ge-app] [--viewer-domain example.com] [--skip-ge] [--skip-iam]
 
-Auth (first that works): --token / $GCP_ACCESS_TOKEN, service-account key
-($GOOGLE_APPLICATION_CREDENTIALS), ~/.config/gcloud/argolis_admin_adc.json, default ADC,
-`gcloud auth print-access-token`.
+# Auth (first that works): --token / $GCP_ACCESS_TOKEN, service-account key
+# ($GOOGLE_APPLICATION_CREDENTIALS), $FLEETFLOW_ADC_FILE, default ADC,
+# `gcloud auth print-access-token`.
 """
 
 from __future__ import annotations
@@ -37,6 +37,7 @@ os.environ["GOOGLE_API_USE_CLIENT_CERTIFICATE"] = "false"
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
+from app.config import get_adc_file  # noqa: E402
 import google.auth  # noqa: E402
 import google.oauth2.credentials  # noqa: E402
 from google.auth.transport.requests import Request  # noqa: E402
@@ -63,15 +64,14 @@ def get_credentials():
         c = service_account.Credentials.from_service_account_file(sa, scopes=SCOPES)
         c.refresh(Request())
         return c
-    for p in (Path.home() / ".config/gcloud/argolis_admin_adc.json",
-              Path.home() / ".config/gcloud/application_default_credentials.json"):
-        if p.exists():
-            try:
-                c = google.oauth2.credentials.Credentials.from_authorized_user_file(str(p), scopes=SCOPES)
-                c.refresh(Request())
-                return c
-            except Exception:
-                continue
+    adc_path = get_adc_file()
+    if adc_path and Path(adc_path).exists():
+        try:
+            c = google.oauth2.credentials.Credentials.from_authorized_user_file(str(adc_path), scopes=SCOPES)
+            c.refresh(Request())
+            return c
+        except Exception:
+            pass
     tok = subprocess.check_output(["gcloud", "auth", "print-access-token"], text=True,
                                   stderr=subprocess.DEVNULL).strip()
     return google.oauth2.credentials.Credentials(tok)

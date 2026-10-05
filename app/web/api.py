@@ -288,17 +288,37 @@ def serialize_plan_bundle(
 # ==============================================================================
 # Request Models
 # ==============================================================================
+class DriverAssignmentItem(BaseModel):
+    driver: str
+    corridor: str
+    truck_type: str = ""  # Optional: ACE, PKP, T14, T17, T20 (empty = solver auto-fit)
+
+
 class PlanRequest(BaseModel):
     hub_id: str = ""
     city: str = ""
+    dispatch_date: str = ""
     objective: str = ""
     order_source: str = ""
     truck_counts: dict[str, int] | None = None
     corridor_claims: dict[str, str] | None = None
+    driver_assignments: list[DriverAssignmentItem] | None = None
+    selected_corridors: list[str] | None = None
+    prompt: str = ""
     fuel_price: float = 0.0
     driver_day_cost: float = 0.0
     scope: str = "all"  # "all", "1", "3", or comma-separated truck IDs / driver names
     focus_truck_id: str = ""
+
+
+class UploadManifestRequest(BaseModel):
+    filename: str = ""
+    mime_type: str = ""
+    file_base64: str = ""
+    text: str = ""
+    raw_text: str = ""
+    sample_file: str = ""
+    hub_id: str = ""
 
 
 class CustomBoxInput(BaseModel):
@@ -342,14 +362,193 @@ class BigQueryRequest(BaseModel):
     use_live_bq: bool = True
 
 
+def _build_hub_context_payload(hub_id: str = "BHW-DC", order_source: str = "demo") -> dict[str, Any]:
+    """Build dynamic Hub-specific metadata: driver roster, fleet pool, 8-corridor demand, and store manifest."""
+    from app.optim.corridors import corridor_of
+
+    ctx = _get_ctx()
+    sess = T.session(ctx.state)
+    city_cfg, hub = resolve_city_and_hub(query_hub=hub_id or "BHW-DC")
+    src_norm = "demo" if (not order_source or order_source.startswith("sample_")) else order_source
+    stops = T.current_stops(sess, src_norm, hub_id=hub.hub_id)
+
+    # Hub-specific driver profiles with default home corridor & preferred vehicle
+    corridor_keys = ["W", "S", "NE", "N", "E", "NW", "SE", "SW"]
+    pref_trucks = ["T17", "T17", "T14", "T14", "T20", "PKP", "ACE", "T14"]
+    driver_profiles = []
+    for idx, drv_name in enumerate(city_cfg.default_drivers):
+        hc = corridor_keys[idx % len(corridor_keys)]
+        pt = pref_trucks[idx % len(pref_trucks)]
+        driver_profiles.append({
+            "name": drv_name,
+            "home_corridor": hc,
+            "home_corridor_name": CORRIDOR_NAMES.get(hc, hc),
+            "preferred_truck": pt,
+            "shift": "08:00–18:00",
+        })
+
+    # Compute live demand per compass corridor for this hub's stops
+    corr_buckets: dict[str, list[Stop]] = {c: [] for c in ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]}
+    stores_out = []
+    for s in stops:
+        c = corridor_of(hub, s)
+        corr_buckets.setdefault(c, []).append(s)
+        stores_out.append({
+            "stop_id": s.stop_id,
+            "name": s.name,
+            "area": s.area or s.address.split(",")[-1].strip(),
+            "address": s.address,
+            "corridor": c,
+            "corridor_name": CORRIDOR_NAMES.get(c, c),
+            "cartons": len(s.boxes),
+            "volume_m3": round(s.volume_m3, 2),
+            "weight_kg": round(s.weight_kg, 1),
+        })
+
+    corridor_summary = []
+    for c_code in ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]:
+        c_stops = corr_buckets.get(c_code, [])
+        vol = round(sum(x.volume_m3 for x in c_stops), 2)
+        wt = round(sum(x.weight_kg for x in c_stops), 1)
+        ctns = sum(len(x.boxes) for x in c_stops)
+        # Recommend smallest single truck or multi-truck split
+        rec_truck = "ACE"
+        for tc in ["ACE", "PKP", "T14", "T17", "T20"]:
+            spec = TRUCK_CATALOGUE[tc]
+            if spec.volume_m3 * 0.82 >= vol and spec.payload_kg * 0.95 >= wt:
+                rec_truck = tc
+                break
+        else:
+            rec_truck = "T20 + Branch"
+        corridor_summary.append({
+            "code": c_code,
+            "name": CORRIDOR_NAMES.get(c_code, c_code),
+            "stops": len(c_stops),
+            "cartons": ctns,
+            "volume_m3": vol,
+            "weight_kg": wt,
+            "recommended_truck": rec_truck,
+            "sample_areas": ", ".join(sorted({x.area for x in c_stops if x.area})[:3]) or "Hub Sector",
+        })
+
+    # Hub-specific default fleet counts
+    hub_fleet = dict(DEFAULT_FLEET_AVAILABLE)
+    if city_cfg.city_id == "bangalore":
+        hub_fleet = {"ACE": 2, "PKP": 2, "T14": 3, "T17": 3, "T20": 1}
+
+    return {
+        "city_id": city_cfg.city_id,
+        "city_name": city_cfg.display_name,
+        "hub": {
+            "id": hub.hub_id,
+            "hub_id": hub.hub_id,
+            "name": hub.name,
+            "address": hub.address,
+            "lat": hub.lat,
+            "lon": hub.lon,
+        },
+        "order_source": order_source or "demo",
+        "total_stops": len(stops),
+        "total_cartons": sum(len(s.boxes) for s in stops),
+        "total_volume_m3": round(sum(s.volume_m3 for s in stops), 1),
+        "total_weight_tonnes": round(sum(s.weight_kg for s in stops) / 1000.0, 2),
+        "drivers": driver_profiles,
+        "driver_names": list(city_cfg.default_drivers),
+        "truck_counts": hub_fleet,
+        "corridor_summary": corridor_summary,
+        "stores": stores_out,
+        "connectors": [
+            {"id": "bigquery", "name": "Google BigQuery Order Book", "status": "CONNECTED", "icon": "📊", "desc": f"{DEFAULT_PROJECT}.{DEFAULT_DATASET} (live stores & cartons)"},
+            {"id": "excel_csv", "name": "Excel / CSV / TSV Spreadsheet", "status": "READY", "icon": "📗", "desc": "Upload .xlsx, .csv, .tsv delivery sheets"},
+            {"id": "gsheets", "name": "Google Sheets Live Sync", "status": "READY", "icon": "📄", "desc": "Paste or link tabular dispatch rows"},
+            {"id": "sap_erp", "name": "SAP S/4HANA / Oracle TMS", "status": "PLUGIN READY", "icon": "🔌", "desc": "Pluggable IDoc / webhook connector slot"},
+        ],
+    }
+
+
 # ==============================================================================
 # Endpoints
 # ==============================================================================
-@router.get("/api/meta")
-def get_meta() -> dict[str, Any]:
-    """Return master catalogue, hubs, SKUs, sample files, and GCP infrastructure status."""
+@router.get("/api/hub-context")
+def api_get_hub_context(hub_id: str = "BHW-DC", order_source: str = "demo") -> dict[str, Any]:
+    """Return dynamic Hub-aware drivers, fleet counts, corridor breakdown, and store manifest for the Launchpad."""
+    return _build_hub_context_payload(hub_id=hub_id, order_source=order_source)
+
+
+@router.post("/api/upload-manifest")
+def api_upload_manifest(req: UploadManifestRequest) -> dict[str, Any]:
+    """Parse an uploaded Excel (.xlsx), CSV (.csv), TSV, or text delivery manifest and stage it for the agent."""
+    from app.ingest.orders import from_file_bytes, from_text
+
+    t0 = time.perf_counter()
     ctx = _get_ctx()
-    plan = _ensure_plan(ctx)
+    st = ctx.state
+    sess = T.session(st)
+    p = T.params_from_state(st)
+
+    stops: list[Stop] = []
+    issues: list[str] = []
+    fname = req.filename or req.sample_file or "uploaded_manifest.csv"
+    txt_body = (req.text or req.raw_text or "").strip()
+
+    if req.sample_file:
+        sp = SAMPLES_DIR / Path(req.sample_file).name
+        if not sp.is_file():
+            raise HTTPException(status_code=404, detail=f"Sample file not found: {req.sample_file}")
+        raw_bytes = sp.read_bytes()
+        stops, issues = from_file_bytes(raw_bytes, req.mime_type or "text/plain", sp.name)
+    elif req.file_base64:
+        b64_clean = req.file_base64.split(",")[-1]
+        raw_bytes = base64.b64decode(b64_clean)
+        stops, issues = from_file_bytes(raw_bytes, req.mime_type or "", fname)
+    elif txt_body:
+        if fname.lower().endswith((".csv", ".tsv")) or "," in txt_body.splitlines()[0]:
+            stops, issues = from_file_bytes(txt_body.encode("utf-8"), "text/csv", fname)
+        if not stops:
+            stops, issues = from_text(txt_body, use_llm=False)
+    else:
+        raise HTTPException(status_code=400, detail="Provide an Excel/CSV file, sample_file, or text rows.")
+
+    if not stops:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Could not geocode any stops from '{fname}'. Include known Mumbai or Bangalore locality names (e.g. Andheri, Borivali, Thane, Whitefield, Electronic City, Koramangala).",
+        )
+
+    sess["stops"] = stops
+    sess["source"] = "chat"
+    p.order_source = "chat"
+    if req.hub_id and req.hub_id.upper() in ALL_HUBS:
+        p.hub_id = req.hub_id.upper()
+    else:
+        _, auto_hub = resolve_city_and_hub(stops=stops)
+        p.hub_id = auto_hub.hub_id
+    T.save_params(st, p)
+
+    ms = (time.perf_counter() - t0) * 1000.0
+    total_cartons = sum(len(s.boxes) for s in stops)
+    _record_audit(
+        action="Spreadsheet / Manifest Loaded",
+        detail=f"File={fname} · {len(stops)} stops · {total_cartons} cartons staged for Hub {p.hub_id}",
+        tool_name="ingest_delivery_orders",
+        latency_ms=ms,
+    )
+    return {
+        "status": "ok",
+        "filename": fname,
+        "stops_parsed": len(stops),
+        "cartons_parsed": total_cartons,
+        "OrderCount": len(stops),
+        "TotalCartons": total_cartons,
+        "issues": issues[:8],
+        "hub_context": _build_hub_context_payload(hub_id=p.hub_id, order_source="chat"),
+    }
+
+
+@router.get("/api/meta")
+def get_meta(include_plan: bool = True) -> dict[str, Any]:
+    """Return master catalogue, hubs, SKUs, sample files, and initial hub context for the Launchpad."""
+    ctx = _get_ctx()
 
     sample_photos = []
     if SAMPLES_DIR.is_dir():
@@ -367,6 +566,11 @@ def get_meta() -> dict[str, Any]:
                     "label": p.stem.replace("_", " ").title(),
                     "preview": p.read_text(encoding="utf-8", errors="ignore")[:600],
                 })
+
+    initial_plan_bundle = None
+    if include_plan:
+        plan = _ensure_plan(ctx)
+        initial_plan_bundle = serialize_plan_bundle(plan)
 
     return {
         "cities": [
@@ -446,7 +650,7 @@ def get_meta() -> dict[str, Any]:
                 "name": "Vertex AI Agent Engine",
                 "role": "Gemini 2.5 Flash + Google ADK",
                 "status": "ACTIVE",
-                "detail": "Reasoning Engine 2805926736049471488 · Dual-surface (GE + Web UI)",
+                "detail": "Managed Reasoning Engine · Dual-surface (Gemini Enterprise + Web UI)",
                 "icon": "🧠",
             },
             {
@@ -470,21 +674,30 @@ def get_meta() -> dict[str, Any]:
                 "name": "Cloud Storage (GCS)",
                 "role": "3D Videos, Driver Portals & Dock Media",
                 "status": "ACTIVE",
-                "detail": f"gs://{DEFAULT_PROJECT}-loadpilot-media (V4 signed URLs & mobile portals)",
+                "detail": f"gs://{DEFAULT_PROJECT}-fleetflow-media (V4 signed URLs & mobile portals)",
                 "icon": "☁️",
             },
         ],
-        "initial_plan": serialize_plan_bundle(plan),
+        "gcp_config": {
+            "project_id": DEFAULT_PROJECT,
+            "dataset": DEFAULT_DATASET,
+            "region": DEFAULT_LOCATION,
+        },
+        "hub_context": _build_hub_context_payload(hub_id="BHW-DC", order_source="demo"),
+        "initial_plan": initial_plan_bundle,
     }
 
 
 @router.post("/api/plan")
 def api_run_plan(req: PlanRequest) -> dict[str, Any]:
-    """Run or filter the dispatch plan using the shared backend engine."""
+    """Synthesize and run the dispatch plan from the Launchpad or Control Tower using the shared backend engine."""
+    from app.optim.corridors import corridor_of
+
     t0 = time.perf_counter()
     ctx = _get_ctx()
     st = ctx.state
     p = T.params_from_state(st)
+    sess = T.session(st)
 
     replan_needed = False
     if req.city:
@@ -496,6 +709,8 @@ def api_run_plan(req: PlanRequest) -> dict[str, Any]:
         if p.hub_id != req.hub_id.upper():
             p.hub_id = req.hub_id.upper()
             replan_needed = True
+    if req.dispatch_date:
+        p.dispatch_date = req.dispatch_date[:10]
     if req.objective:
         try:
             obj = Objective(req.objective)
@@ -513,16 +728,79 @@ def api_run_plan(req: PlanRequest) -> dict[str, Any]:
         if clean_counts and sum(clean_counts.values()) > 0 and clean_counts != p.truck_counts:
             p.truck_counts = clean_counts
             replan_needed = True
+
+    # Merge corridor_claims + structured driver_assignments (with optional truck_type!)
+    merged_claims: dict[str, str] = {}
     if req.corridor_claims is not None:
-        clean_claims = {}
-        for drv, corr in req.corridor_claims.items():
-            if drv and corr:
-                nc = normalize_corridor(corr)
+        for drv, corr_val in req.corridor_claims.items():
+            if drv and corr_val:
+                raw_corr = str(corr_val).strip()
+                tc = ""
+                if "|" in raw_corr:
+                    raw_corr, tc = [x.strip() for x in raw_corr.split("|", 1)]
+                nc = normalize_corridor(raw_corr)
                 if nc:
-                    clean_claims[drv.strip().title()] = nc
-        if clean_claims != p.corridor_claims:
-            p.corridor_claims = clean_claims
+                    tc_up = tc.upper()
+                    merged_claims[drv.strip().title()] = f"{nc}|{tc_up}" if tc_up in TRUCK_CATALOGUE else nc
+
+    if req.driver_assignments is not None:
+        for item in req.driver_assignments:
+            drv = (item.driver or "").strip().title()
+            nc = normalize_corridor(item.corridor or "")
+            tc_up = (item.truck_type or "").strip().upper()
+            if drv and nc:
+                merged_claims[drv] = f"{nc}|{tc_up}" if tc_up in TRUCK_CATALOGUE else nc
+
+    # Also parse natural-language prompt overrides if entered on the Launchpad
+    prompt_str = (req.prompt or "").strip()
+    if prompt_str:
+        ql = prompt_str.lower()
+        if any(w in ql for w in ("bangalore", "bengaluru", "nelamangala", "electronic city", "blr")):
+            p.hub_id = "BLR-EC" if "electronic" in ql else "BLR-NLG"
             replan_needed = True
+        elif "taloja" in ql:
+            p.hub_id = "TLJ-DC"
+            replan_needed = True
+        elif "bhiwandi" in ql or "mumbai" in ql:
+            p.hub_id = "BHW-DC"
+            replan_needed = True
+        if "fewest" in ql:
+            p.objective = Objective.FEWEST_TRUCKS
+            replan_needed = True
+        elif "fast" in ql:
+            p.objective = Objective.FASTEST_COMPLETION
+            replan_needed = True
+        elif "balanc" in ql:
+            p.objective = Objective.BALANCED
+            replan_needed = True
+
+        # Parse natural-language driver + corridor + optional truck size e.g. "Ravi to West in T14"
+        all_drv_names = "|".join(
+            sorted({d.lower() for cfg in CITIES.values() for d in cfg.default_drivers}, key=len, reverse=True)
+        )
+        for m_c in re.finditer(
+            rf"\b({all_drv_names})\b[^.;,\n]*?\b(north[\s-]*east|north[\s-]*west|south[\s-]*east|south[\s-]*west|north|south|east|west|ne|nw|se|sw)\b",
+            ql,
+        ):
+            d_name = m_c.group(1).title()
+            c_norm = normalize_corridor(m_c.group(2))
+            # Check if a truck code or size is mentioned in the same clause
+            clause = ql[max(0, m_c.start() - 15):min(len(ql), m_c.end() + 45)]
+            tc_match = re.search(r"\b(ace|pkp|t14|t17|t20|14\s*ft|17\s*ft|20\s*ft|22\s*ft|small\s*truck)\b", clause)
+            tc_code = ""
+            if tc_match:
+                tok = tc_match.group(1).upper().replace(" ", "")
+                tc_map = {"14FT": "T14", "17FT": "T17", "20FT": "T20", "22FT": "T20", "SMALLTRUCK": "T14"}
+                tc_code = tc_map.get(tok, tok)
+            if c_norm:
+                merged_claims[d_name] = f"{c_norm}|{tc_code}" if tc_code in TRUCK_CATALOGUE else c_norm
+                replan_needed = True
+
+    if req.corridor_claims is not None or req.driver_assignments is not None or merged_claims:
+        if merged_claims != p.corridor_claims:
+            p.corridor_claims = merged_claims
+            replan_needed = True
+
     if req.fuel_price > 0 and req.fuel_price != p.fuel_price_per_litre:
         p.fuel_price_per_litre = float(req.fuel_price)
         replan_needed = True
@@ -530,14 +808,32 @@ def api_run_plan(req: PlanRequest) -> dict[str, Any]:
         p.driver_day_cost = float(req.driver_day_cost)
         replan_needed = True
 
+    # Optional corridor filtering from Launchpad (e.g., dispatch only selected compass sectors)
+    saved_stops_backup = None
+    if req.selected_corridors and len(req.selected_corridors) < 8:
+        valid_corrs = {normalize_corridor(c) for c in req.selected_corridors if normalize_corridor(c)}
+        if valid_corrs:
+            _, hub_obj = resolve_city_and_hub(query_hub=p.hub_id)
+            base_stops = T.current_stops(sess, p.order_source, hub_id=p.hub_id)
+            filtered_stops = [s for s in base_stops if corridor_of(hub_obj, s) in valid_corrs]
+            if filtered_stops:
+                saved_stops_backup = (sess.get("stops"), p.order_source)
+                sess["stops"] = filtered_stops
+                p.order_source = "chat"
+                replan_needed = True
+
     T.save_params(st, p)
-    sess = T.session(st)
-    if replan_needed or sess.get("plan") is None:
-        T.run_plan(st, focus_truck_id=req.focus_truck_id or None)
+    try:
+        if replan_needed or sess.get("plan") is None:
+            T.run_plan(st, focus_truck_id=req.focus_truck_id or None)
+    finally:
+        if saved_stops_backup is not None:
+            sess["stops"], p.order_source = saved_stops_backup
+            T.save_params(st, p)
 
     plan = sess["plan"]
 
-    # Determine active_trucks from req.scope
+    # Determine active_trucks from req.scope or prompt
     active_trucks: list[str] | None = None
     scope_str = (req.scope or "all").strip()
     if scope_str.lower() not in ("all", "", "fleet", "all trucks"):
@@ -548,6 +844,10 @@ def api_run_plan(req: PlanRequest) -> dict[str, Any]:
             active_trucks = [r.truck_id for r in plan.routes[:3]]
         else:
             active_trucks = T.parse_target_trucks(scope_str, plan)
+    elif prompt_str:
+        targets = T.parse_target_trucks(prompt_str, plan)
+        if targets is not None and len(targets) < len(plan.routes):
+            active_trucks = targets
 
     focus_id = req.focus_truck_id
     if not focus_id:
@@ -555,12 +855,14 @@ def api_run_plan(req: PlanRequest) -> dict[str, Any]:
 
     ms = (time.perf_counter() - t0) * 1000.0
     _record_audit(
-        action="Dispatch Optimization",
-        detail=f"Hub={p.hub_id} · Obj={p.objective.value} · Scope={scope_str} · {len(plan.routes)} trucks",
+        action="Dispatch Synthesis & Optimization",
+        detail=f"Hub={p.hub_id} · Obj={p.objective.value} · Claims={len(p.corridor_claims)} · {len(plan.routes)} trucks",
         tool_name="plan_dispatch",
         latency_ms=ms,
     )
-    return serialize_plan_bundle(plan, active_trucks=active_trucks, focus_truck_id=focus_id)
+    out_bundle = serialize_plan_bundle(plan, active_trucks=active_trucks, focus_truck_id=focus_id)
+    out_bundle["hub_context"] = _build_hub_context_payload(hub_id=p.hub_id, order_source=p.order_source)
+    return out_bundle
 
 
 @router.post("/api/repack-truck")
@@ -802,8 +1104,20 @@ def api_agent_chat(req: ChatRequest) -> dict[str, Any]:
     active_trucks: list[str] | None = None
     reply = ""
 
+    # 0. Check for how-to / architecture / deployment questions
+    if any(w in ql for w in ("how to use", "how do i use", "architecture", "how to deploy", "deployment option", "why bigquery", "why cloud storage")):
+        tool_used = "get_architecture_and_howto"
+        info = T.get_architecture_and_howto(ctx)
+        plan = _ensure_plan(ctx)
+        reply = (
+            "**FleetFlow Architecture & How-To:** "
+            "1) **Dual Deployment:** Run `./scripts/deploy.sh --target gemini-enterprise` or `--target ui` (zero hardcoded credentials). "
+            "2) **BigQuery & GCS:** BigQuery stores the 13-table enterprise order book (`stores`, `orders`, `cartons`), while Cloud Storage serves V4-signed 3D MP4 videos & zero-login mobile driver portals. "
+            "3) **How to Use:** Select a hub & goal in the left rail, scope to 1/3/All trucks, test truck sizes in **3D Load Studio**, or open the **📘 Architecture & How-To** tab."
+        )
+
     # 1. Check for reset
-    if "reset" in ql or "default demo" in ql:
+    elif "reset" in ql or "default demo" in ql:
         tool_used = "reset_to_demo_data"
         T.reset_to_demo_data(ctx)
         T.run_plan(st)
@@ -895,7 +1209,7 @@ def api_agent_chat(req: ChatRequest) -> dict[str, Any]:
 
 @router.post("/api/bigquery/query")
 def api_bigquery_query(req: BigQueryRequest) -> dict[str, Any]:
-    """Execute SQL against BigQuery (`zuhaibp-ai.loadpilot_demo`) or local in-memory analytical mirror."""
+    """Execute SQL against BigQuery (`<project>.<dataset>`) or local in-memory analytical mirror."""
     t0 = time.perf_counter()
     sql = (req.sql or "").strip()
     if not sql:

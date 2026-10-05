@@ -68,20 +68,43 @@ def _build_vehicles(hub: Hub, stops: list[Stop], params: PlanningParams,
     drivers: dict[str, str] = {}
     notes: list[str] = []
     taken: set[str] = set()
-    for label, corr_text in (params.corridor_claims or {}).items():
-        corr = normalize_corridor(corr_text)
+    for raw_label, raw_corr in (params.corridor_claims or {}).items():
+        label = str(raw_label).strip()
+        corr_str = str(raw_corr).strip()
+        wanted_truck_code = ""
+        if "|" in label:
+            label, wanted_truck_code = [x.strip() for x in label.split("|", 1)]
+        if "|" in corr_str:
+            corr_str, tc = [x.strip() for x in corr_str.split("|", 1)]
+            if tc:
+                wanted_truck_code = tc
+        wanted_truck_code = wanted_truck_code.upper()
+        if wanted_truck_code not in catalogue:
+            wanted_truck_code = ""
+
+        corr = normalize_corridor(corr_str)
         if corr is None:
-            notes.append(f"Could not understand corridor '{corr_text}' for {label}; ignored.")
+            notes.append(f"Could not understand corridor '{corr_str}' for {label}; ignored.")
             continue
         corr_stops = [s for s in stops if corridor_of(hub, s) == corr]
         demand = sum(s.volume_m3 for s in corr_stops)
         # a truck id claim (e.g. "T17-2") or a driver name claim
-        veh = next((v for v in vehicles if v.truck_id.lower() == label.lower()), None)
+        veh = next((v for v in vehicles if v.truck_id.lower() == label.lower() and v.truck_id not in taken), None)
         if veh is None:
             free = [v for v in vehicles if v.truck_id not in taken]
-            fitting = [v for v in free if v.truck.volume_m3 * v.fill_factor >= demand]
-            veh = min(fitting, key=lambda v: v.truck.volume_m3) if fitting else (
-                max(free, key=lambda v: v.truck.volume_m3) if free else None)
+            if wanted_truck_code:
+                typed_free = [v for v in free if v.truck.code == wanted_truck_code]
+                if typed_free:
+                    veh = typed_free[0]
+                else:
+                    # Ensure requested truck type is available for this manager assignment
+                    existing_idx = sum(1 for v in vehicles if v.truck.code == wanted_truck_code)
+                    veh = Vehicle(f"{wanted_truck_code}-{existing_idx + 1}", catalogue[wanted_truck_code])
+                    vehicles.append(veh)
+            else:
+                fitting = [v for v in free if v.truck.volume_m3 * v.fill_factor >= demand]
+                veh = min(fitting, key=lambda v: v.truck.volume_m3) if fitting else (
+                    max(free, key=lambda v: v.truck.volume_m3) if free else None)
             if veh is None:
                 notes.append(f"No free truck for {label}'s claim on {corr}.")
                 continue
@@ -90,8 +113,17 @@ def _build_vehicles(hub: Hub, stops: list[Stop], params: PlanningParams,
         veh.pinned_stop_ids = tuple(claim_stops(
             hub, stops, corr, veh.truck.volume_m3 * veh.fill_factor, veh.truck.payload_kg * 0.97,
             max_stops=12))
-        notes.append(f"{drivers.get(veh.truck_id, veh.truck_id)} claimed {corr}: "
-                     f"{len(veh.pinned_stop_ids)} of {len(corr_stops)} corridor stops pinned to {veh.truck_id}.")
+        overflow_cnt = max(0, len(corr_stops) - len(veh.pinned_stop_ids))
+        if overflow_cnt > 0:
+            notes.append(
+                f"{drivers.get(veh.truck_id, veh.truck_id)} assigned {corr} in {veh.truck_id} ({veh.truck.code}): "
+                f"{len(veh.pinned_stop_ids)} of {len(corr_stops)} stops pinned; {overflow_cnt} overflow stops distributed to branch truck(s)."
+            )
+        else:
+            notes.append(
+                f"{drivers.get(veh.truck_id, veh.truck_id)} claimed {corr}: "
+                f"{len(veh.pinned_stop_ids)} of {len(corr_stops)} corridor stops pinned to {veh.truck_id}."
+            )
     return vehicles, drivers, notes
 
 

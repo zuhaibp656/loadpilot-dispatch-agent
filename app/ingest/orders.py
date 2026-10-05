@@ -20,16 +20,20 @@ import urllib.request
 
 try:
     from app.contracts import Stop
+    from app.data.demo_blr import GAZETTEER_BLR, geocode_blr_locality
     from app.data.demo_mmr import GAZETTEER, geocode_locality, make_boxes_for_stop
     from app.data.master_data import SKU_MASTER
 except ImportError:  # pragma: no cover
     from contracts import Stop
+    from data.demo_blr import GAZETTEER_BLR, geocode_blr_locality
     from data.demo_mmr import GAZETTEER, geocode_locality, make_boxes_for_stop
     from data.master_data import SKU_MASTER
 
 logger = logging.getLogger(__name__)
 
 EXTRACT_MODEL = os.environ.get("LOADPILOT_EXTRACT_MODEL", "gemini-2.5-flash")
+
+_ALL_GAZETTEER = {**GAZETTEER, **GAZETTEER_BLR}
 
 _COLS = {
     "name": ["customer", "outlet", "store", "retailer", "dealer", "name", "consignee", "party"],
@@ -43,7 +47,7 @@ _COLS = {
 
 
 def _geocode(text: str) -> tuple[float, float, str] | None:
-    hit = geocode_locality(text)
+    hit = geocode_locality(text) or geocode_blr_locality(text)
     if hit:
         return hit
     key = os.environ.get("GOOGLE_MAPS_API_KEY")
@@ -182,10 +186,10 @@ def _line_parse(text: str) -> list[dict]:
         line = line.strip(" -*•\t")
         if not line:
             continue
-        geo = geocode_locality(line)
+        geo = _geocode(line)
         if not geo:
             continue
-        loc = next(n for n in sorted(GAZETTEER, key=len, reverse=True) if n.lower() in line.lower())
+        loc = next((n for n in sorted(_ALL_GAZETTEER, key=len, reverse=True) if n.lower() in line.lower()), geo[2] or "Area")
         num = re.search(r"(\d+)\s*(?:cartons|boxes|cases|ctn|pkgs|packages)", line, re.I)
         name = re.split(r"[,\-–|:]", line)[0].strip()
         rows.append({"customer": name if loc.lower() not in name.lower() else f"Outlet {loc}",

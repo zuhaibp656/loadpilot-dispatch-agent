@@ -199,3 +199,15 @@ def baseline_blr_assignment(stops: list[Stop]) -> dict[str, list[Stop]]:
         else:
             plan[f"{area}|{code}"] = members
     return plan
+
+
+def geocode_blr_locality(text: str) -> tuple[float, float, str] | None:
+    """Case-insensitive substring match against Bangalore localities."""
+    low = (text or "").lower()
+    for name in sorted(GAZETTEER_BLR, key=len, reverse=True):
+        if name.lower() in low:
+            lat, lon, area = GAZETTEER_BLR[name]
+            dlat, dlon = _jitter_blr(text, 0)
+            return (round(lat + dlat, 5), round(lon + dlon, 5), area)
+    return None
+

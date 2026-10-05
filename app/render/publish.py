@@ -13,12 +13,13 @@ import datetime as dt
 import logging
 import os
 
+from app.config import get_media_bucket
+
 logger = logging.getLogger(__name__)
 
 
 def media_bucket() -> str:
-    project = os.environ.get("GOOGLE_CLOUD_PROJECT") or "zuhaibp-ai"
-    return os.environ.get("LOADPILOT_MEDIA_BUCKET") or f"{project}-loadpilot-media"
+    return get_media_bucket()
 
 
 def publish_bytes(data: bytes, object_name: str, content_type: str) -> dict[str, str]:
@@ -28,7 +29,13 @@ def publish_bytes(data: bytes, object_name: str, content_type: str) -> dict[str,
     return links_for(object_name)
 
 
+_gcs_auth_unavailable = False
+
+
 def upload_bytes(data: bytes, object_name: str, content_type: str) -> bool:
+    global _gcs_auth_unavailable
+    if _gcs_auth_unavailable:
+        return False
     try:
         from google.cloud import storage
 
@@ -38,6 +45,9 @@ def upload_bytes(data: bytes, object_name: str, content_type: str) -> bool:
         blob.upload_from_string(data, content_type=content_type)
         return True
     except Exception as exc:
+        msg = str(exc)
+        if "Reauthentication is needed" in msg or "DefaultCredentialsError" in msg:
+            _gcs_auth_unavailable = True
         logger.warning("GCS upload failed for %s: %s", object_name, exc)
         return False
 

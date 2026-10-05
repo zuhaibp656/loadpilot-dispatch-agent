@@ -1039,20 +1039,20 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <!-- ═════════════ 07 ENTERPRISE PLATFORM & ROADMAP ═════════════ -->
 <section class="slide-section" data-title="07 Enterprise">
  <div class="wrap-max">
-  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Enterprise Architecture &amp; Security</span><span class="kicker-sep">/</span><span class="kicker-sub">Built on Google Cloud · Deployable in one script</span></div>
-  <h2 class="monumental-headline">Enterprise-grade, <span class="gradient-span">industry-agnostic.</span></h2>
+  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Enterprise Architecture &amp; Dual Deployment</span><span class="kicker-sep">/</span><span class="kicker-sub">One Shared Backend · Two Deployment Surfaces · Zero Hardcoded Credentials</span></div>
+  <h2 class="monumental-headline">Deploy to <span class="gradient-span">Gemini Enterprise or Cloud Run UI.</span></h2>
   <div class="arch">
-    <div class="arch-node hl"><div class="ic">💬</div><h4>Gemini Enterprise</h4><p>The chat surface on web and mobile, with A2UI planning forms, dropdowns, and interactive route and load canvases.</p></div>
-    <div class="arch-node hl"><div class="ic">🧠</div><h4>ADK agent · Gemini</h4><p>8 tools: plan, claim a corridor, load plan, ingest orders, scan cartons, fleet &amp; costs. Callbacks guard against fabricated numbers.</p></div>
-    <div class="arch-node"><div class="ic">⚙️</div><h4>Vertex AI Agent Engine</h4><p>Managed runtime with a dedicated service account, min-instance warm start, and the same engine updated in place.</p></div>
-    <div class="arch-node"><div class="ic">🧮</div><h4>Optimisation core</h4><p>An OR-Tools VRP with time windows, a height-map LIFO 3D packer, a corridor clusterer and a cost model.</p></div>
-    <div class="arch-node hl"><div class="ic">🗺️</div><h4>Google Maps &amp; Driver Portal</h4><p>Routes API road geometry, Google Maps Navigation with live traffic, 1-click WhatsApp dispatch &amp; mobile POD challans.</p></div>
-    <div class="arch-node"><div class="ic">🎬</div><h4>Media &amp; storage</h4><p>A poster PNG, a full-screen HTML animation and an MP4 loading video, delivered from Cloud Storage through signed links.</p></div>
+    <div class="arch-node hl"><div class="ic">💬</div><h4>Surface 1 · Gemini Enterprise</h4><p><b>Why:</b> Zero-friction conversational dispatch for managers.<br><b>How:</b> Deployed via <code>./scripts/deploy.sh --target gemini-enterprise</code> with A2UI forms, dropdowns &amp; interactive canvases.</p></div>
+    <div class="arch-node hl"><div class="ic">🖥️</div><h4>Surface 2 · Cloud Run Web UI</h4><p><b>Why:</b> Standalone Supply Chain Control Tower &amp; 3D Load Studio.<br><b>How:</b> Deployed via <code>./scripts/deploy.sh --target ui</code> using the same FastAPI + ADK backend container.</p></div>
+    <div class="arch-node hl"><div class="ic">📊</div><h4>BigQuery Warehouse</h4><p><b>Why:</b> Enterprise order book, SKU dimensions &amp; KPI history.<br><b>How:</b> Parameterized REST SQL (<code>jobs.query</code>) reads <code>stores</code>, <code>orders</code> &amp; <code>cartons</code> tables into the VRP solver.</p></div>
+    <div class="arch-node"><div class="ic">☁️</div><h4>Cloud Storage (GCS)</h4><p><b>Why:</b> Zero-login edge delivery for drivers &amp; dock crews.<br><b>How:</b> Publishes 3D MP4 videos, mobile driver portals (<code>driver_id.html</code>) &amp; dock photos via IAM V4 signed URLs.</p></div>
+    <div class="arch-node"><div class="ic">🧠</div><h4>Vertex AI + Math Enclave</h4><p><b>Why:</b> Zero-hallucination reasoning &amp; 3D physics.<br><b>How:</b> Gemini 2.5 Flash + ADK orchestrates tools while OR-Tools VRPTW &amp; 1cm Height-Map compute exact routes &amp; loads.</p></div>
+    <div class="arch-node hl"><div class="ic">🛡️</div><h4>Model Armor, DLP &amp; Maps</h4><p><b>Why:</b> Enterprise security &amp; road-true navigation.<br><b>How:</b> Model Armor blocks prompt injection, Cloud DLP masks PII/GSTIN, and Routes API drives 1-tap Google Maps navigation.</p></div>
   </div>
   <div class="roadmap">
-    <div class="rm"><b>Now · POC</b><p>Demo data for any geography. Photos, QR codes and labels for carton capture. Orders from a list, sheet, PDF or email. 5 truck types.</p></div>
-    <div class="rm"><b>Next · Enterprise Integration</b><p>Live orders from ERP/DMS (SAP, Salesforce). Google Maps Route Optimization API for road-true ETAs. BigQuery KPI history.</p></div>
-    <div class="rm"><b>Later · Network Scale</b><p>Gemini Live on the dock phone: point the camera at the pallet and have it confirm each carton. Re-planning on the road. Driver app hand-off.</p></div>
+    <div class="rm"><b>Option A · Gemini Enterprise Deploy</b><p><code>./scripts/deploy.sh --target gemini-enterprise --project YOUR_PROJECT</code> — provisions IAM, updates Vertex AI Agent Engine in-place, and registers in Gemini Enterprise.</p></div>
+    <div class="rm"><b>Option B · Cloud Run Control Tower UI</b><p><code>./scripts/deploy.sh --target ui --project YOUR_PROJECT</code> — builds and deploys the standalone Web Control Tower &amp; 3D Load Studio container to Google Cloud Run.</p></div>
+    <div class="rm"><b>Option C · Full Stack + BigQuery Seed</b><p><code>./scripts/deploy.sh --target all --publish-data --project YOUR_PROJECT</code> — seeds BigQuery &amp; Cloud Storage and deploys both surfaces simultaneously.</p></div>
   </div>
   <div class="blueprint-card">
     <div class="card-title">Sources</div>

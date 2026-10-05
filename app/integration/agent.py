@@ -17,10 +17,12 @@ import subprocess
 import uuid
 from typing import Any
 
+from app.config import get_adc_file, get_project_id, get_region
+
 if not os.environ.get("GEMINI_API_KEY") and not os.environ.get("GOOGLE_API_KEY"):
     os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "TRUE"
-    os.environ.setdefault("GOOGLE_CLOUD_PROJECT", "zuhaibp-ai")
-    os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "us-central1")
+    os.environ.setdefault("GOOGLE_CLOUD_PROJECT", get_project_id())
+    os.environ.setdefault("GOOGLE_CLOUD_LOCATION", get_region())
 
 import google.auth
 import google.oauth2.credentials
@@ -32,21 +34,21 @@ from google.adk.models.llm_request import LlmRequest
 from google.adk.models.llm_response import LlmResponse
 from google.genai import types
 
-_ARGOLIS_ADC = os.path.expanduser("~/.config/gcloud/argolis_admin_adc.json")
+_CUSTOM_ADC = get_adc_file()
 
 
 class _GcloudCliCredentials(google.oauth2.credentials.Credentials):
-    """Self-refreshing OAuth2 credentials backed by Argolis ADC or `gcloud auth print-access-token`."""
+    """Self-refreshing OAuth2 credentials backed by configured ADC or `gcloud auth print-access-token`."""
 
     def __init__(self) -> None:
         super().__init__(token=self._fetch())
 
     @staticmethod
     def _fetch() -> str:
-        if os.path.exists(_ARGOLIS_ADC):
+        if _CUSTOM_ADC and os.path.exists(_CUSTOM_ADC):
             from google.auth.transport.requests import Request
             c = google.oauth2.credentials.Credentials.from_authorized_user_file(
-                _ARGOLIS_ADC, scopes=["https://www.googleapis.com/auth/cloud-platform"])
+                _CUSTOM_ADC, scopes=["https://www.googleapis.com/auth/cloud-platform"])
             c.refresh(Request())
             return c.token
         return subprocess.check_output(["gcloud", "auth", "print-access-token"], text=True).strip()
@@ -59,12 +61,12 @@ _ORIG_GOOGLE_AUTH_DEFAULT = google.auth.default
 
 
 def _patched_google_auth_default(*args: Any, **kwargs: Any) -> tuple[Any, str | None]:
-    project = os.environ.get("GOOGLE_CLOUD_PROJECT") or "zuhaibp-ai"
-    if os.path.exists(_ARGOLIS_ADC):
+    project = os.environ.get("GOOGLE_CLOUD_PROJECT") or get_project_id()
+    if _CUSTOM_ADC and os.path.exists(_CUSTOM_ADC):
         try:
             from google.auth.transport.requests import Request
             c = google.oauth2.credentials.Credentials.from_authorized_user_file(
-                _ARGOLIS_ADC, scopes=["https://www.googleapis.com/auth/cloud-platform"])
+                _CUSTOM_ADC, scopes=["https://www.googleapis.com/auth/cloud-platform"])
             c.refresh(Request())
             return c, project
         except Exception:
@@ -72,7 +74,7 @@ def _patched_google_auth_default(*args: Any, **kwargs: Any) -> tuple[Any, str | 
     return _ORIG_GOOGLE_AUTH_DEFAULT(*args, **kwargs)
 
 
-if os.environ.get("GOOGLE_GENAI_USE_VERTEXAI", "FALSE").upper() == "TRUE" and os.path.exists(_ARGOLIS_ADC):
+if os.environ.get("GOOGLE_GENAI_USE_VERTEXAI", "FALSE").upper() == "TRUE" and _CUSTOM_ADC and os.path.exists(_CUSTOM_ADC):
     google.auth.default = _patched_google_auth_default
 
 try:
@@ -422,6 +424,7 @@ TOOLS
   Then call plan_dispatch(order_source="chat") (or plan_my_route if it is one driver's list).
 - scan_box_manifest: carton / label photos for the whole fleet. Then plan_dispatch(order_source="photos").
 - list_fleet_and_costs, reset_to_demo_data: as named.
+- get_architecture_and_howto: when the user asks how to use FleetFlow, its architecture, how BigQuery or Cloud Storage are used, or how to deploy to Gemini Enterprise / Cloud Run UI.
 If the user says "plan today's dispatch" (or similar) with no details, call plan_dispatch() directly.
 
 CONVERSATIONAL CONTINUITY & FOLLOW-UP RULES (STRICT):
@@ -481,8 +484,8 @@ try:
         @staticmethod
         def _env() -> None:
             os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "TRUE"
-            os.environ.setdefault("GOOGLE_CLOUD_PROJECT", "zuhaibp-ai")
-            os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "us-central1")
+            os.environ.setdefault("GOOGLE_CLOUD_PROJECT", get_project_id())
+            os.environ.setdefault("GOOGLE_CLOUD_LOCATION", get_region())
 
         def query(self, *args: Any, **kwargs: Any) -> Any:
             self._env()

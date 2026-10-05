@@ -129,14 +129,24 @@ def parse_truck_counts(text: str) -> dict[str, int]:
 
 
 def parse_claims(text: str) -> dict[str, str]:
-    """'Ravi=West; Imran: North-East' -> {'Ravi': 'W', 'Imran': 'NE'}."""
+    """'Ravi=West; Imran: North-East; Suresh=South|T14' -> {'Ravi': 'W', 'Imran': 'NE', 'Suresh': 'S|T14'}."""
     out: dict[str, str] = {}
     for chunk in re.split(r"[;,\n]+", text or ""):
         m = re.match(r"\s*([^=:]+?)\s*[=:]\s*(.+?)\s*$", chunk)
         if m:
-            corr = normalize_corridor(m.group(2))
+            raw_drv = m.group(1).strip()
+            raw_val = m.group(2).strip()
+            tc = ""
+            if "|" in raw_drv:
+                raw_drv, tc = [x.strip() for x in raw_drv.split("|", 1)]
+            if "|" in raw_val:
+                raw_val, tc2 = [x.strip() for x in raw_val.split("|", 1)]
+                if tc2:
+                    tc = tc2
+            corr = normalize_corridor(raw_val)
             if corr:
-                out[m.group(1).strip().title()] = corr
+                tc_up = tc.upper()
+                out[raw_drv.title()] = f"{corr}|{tc_up}" if tc_up in TRUCK_CATALOGUE else corr
     return out
 
 
@@ -393,24 +403,27 @@ def plan_dispatch(tool_context: ToolContext, truck_counts: str = "", objective: 
     return out
 
 
-def claim_corridor(tool_context: ToolContext, driver: str, corridor: str) -> dict[str, Any]:
-    """A driver (or truck id) claims a corridor, e.g. "Ravi has the West route". The best stops in
-    that corridor are pinned to his truck, other trucks branch around him, and the plan is
-    re-optimised.
+def claim_corridor(tool_context: ToolContext, driver: str, corridor: str, truck_type: str = "") -> dict[str, Any]:
+    """A driver (or truck id) claims a corridor, e.g. "Ravi has the West route" or "Ravi has West in a T14 truck".
+    The best stops in that corridor that fit inside his truck are pinned to his truck, any remaining
+    overflow stops branch onto another truck on the shared highway trunk, and the plan is re-optimised.
 
     Args:
         driver: Driver name or truck id (e.g. "Ravi" or "T17-2").
         corridor: Direction from the hub: N, NE, E, SE, S, SW, W, NW or words like "West".
+        truck_type: Optional explicit truck code (ACE, PKP, T14, T17, T20) if the driver has a specific truck size.
     """
     corr = normalize_corridor(corridor)
     if not corr:
         return {"status": "error", "message": f"Unknown corridor '{corridor}'. Use N/NE/E/SE/S/SW/W/NW."}
     st = tool_context.state
     p = params_from_state(st)
-    p.corridor_claims = {**p.corridor_claims, driver.strip().title(): corr}
+    tc_up = (truck_type or "").strip().upper()
+    claim_val = f"{corr}|{tc_up}" if tc_up in TRUCK_CATALOGUE else corr
+    p.corridor_claims = {**p.corridor_claims, driver.strip().title(): claim_val}
     save_params(st, p)
     out = run_plan(st)
-    out["claim"] = f"{driver.strip().title()} → {CORRIDOR_NAMES.get(corr, corr)}"
+    out["claim"] = f"{driver.strip().title()} → {CORRIDOR_NAMES.get(corr, corr)}" + (f" ({tc_up})" if tc_up in TRUCK_CATALOGUE else "")
     return out
 
 
@@ -787,8 +800,47 @@ def driver_briefings(tool_context: ToolContext, driver: str = "") -> dict[str, A
         "ui": "One instruction block and personal link per driver is attached automatically for all drivers."}
 
 
+def get_architecture_and_howto(tool_context: ToolContext) -> dict[str, Any]:
+    """Return FleetFlow's How-To User Guide, Dual-Surface Architecture (Gemini Enterprise + Cloud Run UI),
+    Google Cloud Services breakdown (why & how BigQuery, Cloud Storage, Vertex AI, Cloud Run, Routes API,
+    and Model Armor/DLP are used), and portable deployment commands.
+    """
+    return {
+        "how_to_use": {
+            "fleet_manager": (
+                "1) Plan full dispatch ('Plan today's dispatch for Bhiwandi DC' or 'Nelamangala DC'). "
+                "2) Scope view to 1 truck, 3 trucks, or all trucks ('Only show Ravi', 'Show 3 trucks'). "
+                "3) Pin drivers to compass corridors ('Pin Suresh to South corridor') with automatic trunk-and-branch splitting. "
+                "4) Dispatch driver briefings with 1-tap Google Maps navigation & WhatsApp links ('Send each driver his instructions')."
+            ),
+            "warehouse_loader": (
+                "1) Inspect 3D LIFO loading ('Show load plan for T17-1') — last delivery loaded first at cab wall (X=0), Stop 1 at rear door. "
+                "2) Test alternative vehicle sizes in the 3D Load Studio Calculator or attach dock QR carton photos ('Read this dock photo')."
+            ),
+            "driver": (
+                "1) Open your standalone Mobile Driver Portal link (or ask 'I'm Ravi, plan my day'). "
+                "2) Tap 'Start Google Maps (Live Traffic)' for turn-by-turn navigation, check off Digital POD per store, or print the LR Challan."
+            ),
+        },
+        "gcp_services": {
+            "bigquery": "Stores enterprise order books (<project>.<dataset>.stores, orders, cartons, skus, fleet, drivers, kpi_runs); queried via parameterized REST SQL (app/data/bq_source.py) and live BigQuery SQL Studio.",
+            "cloud_storage": "Stores 3D MP4 loading animations, standalone zero-login Mobile Driver Portals (driver_<id>.html), and dock QR photos in gs://<project>-fleetflow-media; served via IAM V4 signed URLs (app/render/publish.py).",
+            "vertex_ai_agent_engine": "Hosts Gemini 2.5 Flash + Google ADK (FleetFlowAdkApp) with deterministic before_model / after_model guard callbacks so the LLM never fabricates numbers.",
+            "cloud_run": "Hosts the containerized FastAPI + Uvicorn Supply Chain Control Tower & 3D Load Studio Web UI (Dockerfile, auto-scaling 1–20 instances) sharing the exact same backend.",
+            "google_maps_routes_api": "Computes real highway polylines and travel durations (computeRoutes in app/geo/roads.py) and builds 1-tap Universal Google Maps navigation URLs.",
+            "model_armor_and_dlp": "Pre-turn prompt injection/jailbreak defense, Cloud DLP masking for PII/GSTIN on unstructured text, and isolated OR-Tools + 3D Height-Map math enclave.",
+        },
+        "deployment_options": {
+            "option_1_gemini_enterprise": "./scripts/deploy.sh --target gemini-enterprise --project YOUR_GCP_PROJECT_ID",
+            "option_2_cloud_run_web_ui": "./scripts/deploy.sh --target ui --project YOUR_GCP_PROJECT_ID",
+            "option_3_both_plus_data": "./scripts/deploy.sh --target all --publish-data --project YOUR_GCP_PROJECT_ID",
+        },
+    }
+
+
 ALL_TOOLS = [show_planning_wizard, plan_dispatch, claim_corridor, get_truck_load_plan,
              plan_my_route, driver_briefings,
-             ingest_delivery_orders, scan_box_manifest, list_fleet_and_costs, reset_to_demo_data]
+             ingest_delivery_orders, scan_box_manifest, list_fleet_and_costs, reset_to_demo_data,
+             get_architecture_and_howto]
 
 _ = threading  # media publishing threads are tracked in the session entry

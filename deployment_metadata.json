@@ -1,9 +1,12 @@
 {
-  "project_id": "zuhaibp-ai",
+  "project_id": "${GOOGLE_CLOUD_PROJECT}",
   "region": "us-central1",
-  "reasoning_engine_resource_name": "projects/632239123109/locations/us-central1/reasoningEngines/2805926736049471488",
-  "service_account": "loadpilot-agent@zuhaibp-ai.iam.gserviceaccount.com",
-  "media_bucket": "zuhaibp-ai-loadpilot-media",
+  "reasoning_engine_resource_name": "projects/${PROJECT_NUMBER}/locations/us-central1/reasoningEngines/${REASONING_ENGINE_ID}",
+  "service_account": "loadpilot-agent@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com",
+  "media_bucket": "${GOOGLE_CLOUD_PROJECT}-fleetflow-media",
   "agent_framework": "google-adk",
-  "deployed_at": "2026-10-05T06:44:36Z"
+  "surfaces": [
+    "gemini-enterprise-a2ui",
+    "cloud-run-control-tower-ui"
+  ]
 }

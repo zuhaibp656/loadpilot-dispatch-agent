@@ -12,15 +12,17 @@ import logging
 import os
 
 try:
+    from app.config import get_bq_dataset, get_project_id, get_region
     from app.contracts import Box, Stop
 except ImportError:  # pragma: no cover
+    from config import get_bq_dataset, get_project_id, get_region
     from contracts import Box, Stop
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_PROJECT = os.environ.get("LOADPILOT_BQ_PROJECT", "zuhaibp-ai")
-DEFAULT_DATASET = os.environ.get("LOADPILOT_BQ_DATASET", "loadpilot_demo")
-DEFAULT_LOCATION = os.environ.get("LOADPILOT_BQ_LOCATION", "us-central1")
+DEFAULT_PROJECT = get_project_id()
+DEFAULT_DATASET = get_bq_dataset()
+DEFAULT_LOCATION = get_region()
 _SCOPES = ["https://www.googleapis.com/auth/cloud-platform"]
 
 

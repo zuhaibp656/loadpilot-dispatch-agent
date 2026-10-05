@@ -8,7 +8,7 @@
    loads every table from its GCS CSV with an explicit schema (WRITE_TRUNCATE -> idempotent).
 4. Verifies row counts with a query and prints console / GCS links.
 
-Auth: authorized-user ADC file (LOADPILOT_ADC_FILE, default ~/.config/gcloud/argolis_admin_adc.json)
+Auth: authorized-user ADC file ($FLEETFLOW_ADC_FILE / $GOOGLE_APPLICATION_CREDENTIALS)
 if present, else google.auth.default().
 
 Run:  .venv/bin/python scripts/publish_demo_data.py [--skip-bq] [--skip-gcs] [--date YYYY-MM-DD]
@@ -28,18 +28,19 @@ os.environ.setdefault("GOOGLE_API_USE_CLIENT_CERTIFICATE", "false")
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
+from app.config import get_adc_file, get_bq_dataset, get_media_bucket, get_project_id, get_region  # noqa: E402
 from app.data.bq_source import run_query  # noqa: E402
 from app.data.demo_extended import SCHEMAS, build_tables  # noqa: E402
 
-PROJECT = os.environ.get("LOADPILOT_BQ_PROJECT", "zuhaibp-ai")
-DATASET = os.environ.get("LOADPILOT_BQ_DATASET", "loadpilot_demo")
-LOCATION = os.environ.get("LOADPILOT_BQ_LOCATION", "us-central1")
-BUCKET = os.environ.get("LOADPILOT_MEDIA_BUCKET", "zuhaibp-ai-loadpilot-media")
+PROJECT = get_project_id()
+DATASET = get_bq_dataset()
+LOCATION = get_region()
+BUCKET = get_media_bucket()
 PREFIX = "demo-data"
 OUT_DIR = os.path.join(ROOT, "demo_data")
 SAMPLES_DIR = os.path.join(ROOT, "app", "data", "samples")
-ADC_FILE = os.path.expanduser(os.environ.get("LOADPILOT_ADC_FILE", "~/.config/gcloud/argolis_admin_adc.json"))
-LABELS = {"app": "loadpilot", "purpose": "demo", "datacloud": "ai-agent"}
+ADC_FILE = get_adc_file()
+LABELS = {"app": "fleetflow", "purpose": "demo", "datacloud": "ai-agent"}
 _SCOPES = ["https://www.googleapis.com/auth/cloud-platform"]
 
 BQ_CONSOLE = (f"https://console.cloud.google.com/bigquery?project={PROJECT}"
@@ -56,7 +57,7 @@ def gcs_link(path: str) -> str:
 
 
 def get_credentials():
-    if os.path.exists(ADC_FILE):
+    if ADC_FILE and os.path.exists(ADC_FILE):
         from google.oauth2.credentials import Credentials
         return Credentials.from_authorized_user_file(ADC_FILE, scopes=_SCOPES)
     import google.auth
