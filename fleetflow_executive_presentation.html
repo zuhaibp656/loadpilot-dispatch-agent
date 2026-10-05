@@ -78,10 +78,10 @@
 
   /* ── Slides ─────────────────────────────────────────────────────── */
   .deck-container{padding-top:60px;min-height:100vh;position:relative;z-index:1}
-  .slide-section{display:none;min-height:calc(100vh - 60px);padding:clamp(16px,2.5vh,36px) max(20px,2.5vw) 28px;position:relative}
+  .slide-section{display:none;min-height:calc(100vh - 60px);padding:clamp(14px,2vh,32px) max(24px,2vw) 24px;position:relative}
   .slide-section.active{display:flex;flex-direction:column;justify-content:center;animation:fadeIn .3s cubic-bezier(.16,1,.3,1)}
   @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  .wrap-max{max-width:1400px;margin:0 auto;width:100%;transform-origin:top center}
+  .wrap-max{max-width:1680px;margin:0 auto;width:100%;transform-origin:top center}
   .title-kicker{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
   .kicker-bar{width:24px;height:3px;border-radius:2px;background:var(--grad-route)}
   .kicker-primary{font-family:var(--font-display);font-size:13.5px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--amber-ink)}
@@ -89,13 +89,13 @@
   .kicker-sub{font-family:var(--font-mono);font-size:13px;color:var(--text-dim);letter-spacing:.5px}
   .monumental-headline{font-family:var(--font-display);font-size:clamp(32px,3.8vw,54px);font-weight:800;line-height:1.12;letter-spacing:-1.3px;margin-bottom:16px}
   .gradient-span{background:var(--grad-route);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-  .tagline-lead{font-size:clamp(16px,1.25vw,19.5px);line-height:1.55;color:var(--text-muted);max-width:1240px;margin-bottom:28px}
+  .tagline-lead{font-size:clamp(16px,1.25vw,19.5px);line-height:1.55;color:var(--text-muted);max-width:1540px;margin-bottom:28px}
   .tagline-lead b{color:var(--text)}
 
   .monumental-headline,.tagline-lead,.title-kicker,.hero-stats{text-shadow:0 0 10px var(--canvas),0 0 4px var(--canvas)}
   .gradient-span,.gradient-span *{text-shadow:none}
   /* ── Gemini cockpit ─────────────────────────────────────────────── */
-  .gemini-cockpit{background:var(--surface);border:1px solid var(--border-subtle);border-radius:24px;padding:14px 20px;display:flex;align-items:center;gap:16px;box-shadow:var(--cockpit-shadow);max-width:1400px;margin-bottom:16px}
+  .gemini-cockpit{background:var(--surface);border:1px solid var(--border-subtle);border-radius:24px;padding:14px 20px;display:flex;align-items:center;gap:16px;box-shadow:var(--cockpit-shadow);max-width:100%;margin-bottom:16px}
   .gemini-brand-badge{display:flex;align-items:center;gap:8px;flex-shrink:0}
   .gemini-spark-svg{width:26px;height:26px;filter:drop-shadow(0 0 8px rgba(26,115,232,.45))}
   .gemini-brand-text{font-family:var(--font-display);font-size:17px;font-weight:700}
@@ -107,7 +107,7 @@
   .cockpit-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
   .query-chip{font-family:var(--font-mono);font-size:11.5px;font-weight:700;padding:7px 13px;border-radius:999px;border:1px solid var(--border-subtle);background:var(--surface-card);color:var(--text-muted);cursor:pointer;transition:all .18s}
   .query-chip.active,.query-chip:hover{border-color:var(--amber-deep);color:var(--amber-ink);background:color-mix(in srgb,var(--amber) 10%,var(--surface))}
-  .agent-response-drawer{max-width:1400px;background:var(--surface-card);border:1px solid var(--border-hairline);border-left:3px solid var(--teal);border-radius:14px;padding:14px 18px;box-shadow:var(--card-shadow);font-size:14.5px;line-height:1.6;color:var(--text-muted);min-height:92px}
+  .agent-response-drawer{max-width:100%;background:var(--surface-card);border:1px solid var(--border-hairline);border-left:3px solid var(--teal);border-radius:14px;padding:14px 18px;box-shadow:var(--card-shadow);font-size:14.5px;line-height:1.6;color:var(--text-muted);min-height:92px}
   .agent-response-drawer b{color:var(--text)}
   .tool-trace{font-family:var(--font-mono);font-size:11.5px;color:var(--teal-ink);margin-bottom:6px}
 
@@ -779,7 +779,7 @@ function fitSlide(){
   const cs=getComputedStyle(sec);
   const availW=sec.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
   const availH=window.innerHeight-60-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
-  const z=Math.max(.7,Math.min(availW/w.offsetWidth,availH/w.scrollHeight,1.15));
+  const z=Math.max(.75,Math.min(availW/w.offsetWidth,availH/w.scrollHeight,1.20));
   w.style.zoom=z.toFixed(3);
 }
 window.addEventListener('resize',fitSlide);
