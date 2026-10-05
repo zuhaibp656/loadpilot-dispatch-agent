@@ -50,12 +50,8 @@ _DEMO_STOPS: dict[str, list[Stop]] = {}
 # Session helpers
 # ==============================================================================
 def demo_stops(hub_id: str = "") -> list[Stop]:
-    global _DEMO_STOPS
     city_cfg, _ = resolve_city_and_hub(query_hub=hub_id)
-    cid = city_cfg.city_id
-    if cid not in _DEMO_STOPS:
-        _DEMO_STOPS[cid] = city_cfg.build_stops_fn(seed=42)
-    return _DEMO_STOPS[cid]
+    return city_cfg.build_stops_fn(seed=42)
 
 
 def session(state: Any) -> dict[str, Any]:
