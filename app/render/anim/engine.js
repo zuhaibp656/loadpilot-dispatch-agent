@@ -62,7 +62,102 @@
     }
 
   /* ============================== 3D LOADING VIEW ============================== */
+  function ensureDrawerStyles() {
+    if (document.getElementById('lp-drawer-engine-styles')) return;
+    var st = document.createElement('style');
+    st.id = 'lp-drawer-engine-styles';
+    st.textContent = [
+      '.lp-card.lp-drawer {',
+      '  position: absolute; left: 14px; top: 14px; z-index: 20;',
+      '  width: 340px; max-width: calc(100% - 28px);',
+      '  display: flex; flex-direction: column;',
+      '  border-radius: 14px; background: rgba(15, 23, 42, 0.94);',
+      '  backdrop-filter: blur(16px); border: 1.5px solid rgba(56, 189, 248, 0.35);',
+      '  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.05);',
+      '  overflow: hidden; transition: box-shadow 0.25s ease, border-color 0.25s ease;',
+      '}',
+      '.theme-light .lp-card.lp-drawer, html.theme-light .lp-card.lp-drawer {',
+      '  background: rgba(255, 255, 255, 0.97) !important; border-color: rgba(66, 133, 244, 0.35) !important;',
+      '  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(66, 133, 244, 0.1) !important;',
+      '}',
+      '.lp-drawer-bar {',
+      '  display: flex; align-items: center; justify-content: space-between;',
+      '  gap: 10px; padding: 9px 12px; cursor: pointer; user-select: none;',
+      '  background: rgba(30, 41, 59, 0.65); border-bottom: 1px solid rgba(255, 255, 255, 0.08);',
+      '  transition: background 0.18s ease;',
+      '}',
+      '.theme-light .lp-drawer-bar, html.theme-light .lp-drawer-bar {',
+      '  background: #f8fafc !important; border-bottom-color: rgba(0,0,0,0.08) !important;',
+      '}',
+      '.lp-drawer-bar:hover { background: rgba(51, 65, 85, 0.85); }',
+      '.theme-light .lp-drawer-bar:hover, html.theme-light .lp-drawer-bar:hover { background: #f1f5f9 !important; }',
+      '.lp-card.lp-drawer.collapsed .lp-drawer-bar { border-bottom: none; }',
+      '.lp-drawer-bar-name {',
+      '  font-weight: 800; font-size: 13px; color: #f8fafc;',
+      '  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.01em;',
+      '}',
+      '.theme-light .lp-drawer-bar-name, html.theme-light .lp-drawer-bar-name { color: #0f172a !important; }',
+      '.lp-drawer-bar-sub {',
+      '  font-size: 11px; color: #94a3b8;',
+      '  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px;',
+      '}',
+      '.theme-light .lp-drawer-bar-sub, html.theme-light .lp-drawer-bar-sub { color: #64748b !important; }',
+      '.lp-drawer-bar-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }',
+      '.lp-drawer-btn-toggle {',
+      '  display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px;',
+      '  border-radius: 999px; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35);',
+      '  color: #38bdf8; font-size: 11px; font-weight: 700; cursor: pointer;',
+      '  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);',
+      '}',
+      '.theme-light .lp-drawer-btn-toggle, html.theme-light .lp-drawer-btn-toggle {',
+      '  background: rgba(66, 133, 244, 0.12) !important; border-color: rgba(66, 133, 244, 0.35) !important;',
+      '  color: #1a73e8 !important;',
+      '}',
+      '.lp-drawer-btn-toggle:hover { transform: scale(1.05); background: rgba(56, 189, 248, 0.25); }',
+      '.lp-drawer-toggle-chevron { display: inline-block; font-size: 8px; transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1); }',
+      '.lp-drawer-toggle-chevron.open { transform: rotate(180deg); }',
+      '.lp-drawer-btn-x {',
+      '  background: none; border: none; font-size: 19px; color: #94a3b8;',
+      '  cursor: pointer; line-height: 1; padding: 0 4px; transition: color 0.15s ease, transform 0.15s ease;',
+      '}',
+      '.lp-drawer-btn-x:hover { color: #ef4444; transform: scale(1.15); }',
+      '.lp-drawer-body {',
+      '  max-height: 0; opacity: 0; overflow: hidden; transform: translateY(-8px); pointer-events: none;',
+      '  transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.26s ease, transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);',
+      '  display: flex; flex-direction: column;',
+      '}',
+      '.lp-drawer-body.open {',
+      '  max-height: 520px; opacity: 1; transform: translateY(0); pointer-events: auto; overflow-y: auto;',
+      '}',
+      '.lp-drawer-bottom-bar {',
+      '  padding: 7px 12px; background: rgba(15, 23, 42, 0.5); border-top: 1px solid rgba(255, 255, 255, 0.06);',
+      '  display: flex; justify-content: center;',
+      '}',
+      '.theme-light .lp-drawer-bottom-bar, html.theme-light .lp-drawer-bottom-bar {',
+      '  background: #f1f5f9 !important; border-top-color: rgba(0,0,0,0.06) !important;',
+      '}',
+      '.lp-drawer-collapse-btn {',
+      '  width: 100%; padding: 5px 10px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.12);',
+      '  background: rgba(30, 41, 59, 0.8); color: #94a3b8; font-size: 11px; font-weight: 700;',
+      '  cursor: pointer; transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);',
+      '  display: flex; align-items: center; justify-content: center; gap: 5px;',
+      '}',
+      '.theme-light .lp-drawer-collapse-btn, html.theme-light .lp-drawer-collapse-btn {',
+      '  background: #ffffff !important; border-color: rgba(0,0,0,0.12) !important; color: #64748b !important;',
+      '}',
+      '.lp-drawer-collapse-btn:hover {',
+      '  background: rgba(56, 189, 248, 0.15); color: #38bdf8; border-color: rgba(56, 189, 248, 0.35);',
+      '  transform: translateY(-1px);',
+      '}',
+      '.theme-light .lp-drawer-collapse-btn:hover {',
+      '  background: rgba(66, 133, 244, 0.1) !important; color: #1a73e8 !important; border-color: rgba(66, 133, 244, 0.35) !important;',
+      '}'
+    ].join('\n');
+    document.head.appendChild(st);
+  }
+
   function LoadView(host) {
+    ensureDrawerStyles();
     var el = $('div', 'lp-pane', host), self = this; this.el = el;
     var top = $('div', 'lp-top', el);
     var title = $('div', 'lp-title', top), stats = $('div', 'lp-stats', top);
@@ -92,7 +187,8 @@
     var viewMode = 'step';  // 'step' (foundation + current stop), 'isolated', 'all'
     var animStop = null, animStopT = 0, animStopDur = 0.75;
     var pauseAtStep = true, stepPauseTimer = 0, stepPauseDur = 1.6, lastKStop = null;
-    var card = $('div', 'lp-card', cwrap); card.style.display = 'none';
+    var card = $('div', 'lp-card lp-drawer expanded', cwrap); card.style.display = 'none';
+    var drawerOpen = true;
     var tip = $('div', 'lp-tip', cwrap); tip.style.display = 'none';
     var hint = $('div', 'lp-hint', cwrap, '👆 Click a store on the right (or any carton) to see exactly where its boxes go');
 
@@ -124,8 +220,30 @@
       var layer = b[2] < 1 ? 'on the floor' : 'stacked at ' + Math.round(b[2]) + ' cm';
       return fromDoor + ' cm from the door · ' + side + ' · ' + layer;
     }
-    function showCard(seq) {
-      var s = T.stops.filter(function (x) { return x.seq === seq; })[0]; if (!s) { card.style.display = 'none'; fitScale(); return; }
+
+    function updateDrawerVisual() {
+      if (drawerOpen) {
+        card.classList.add('expanded');
+        card.classList.remove('collapsed');
+      } else {
+        card.classList.remove('expanded');
+        card.classList.add('collapsed');
+      }
+      var bEl = card.querySelector('.lp-drawer-body');
+      if (bEl) bEl.classList.toggle('open', drawerOpen);
+      var lbl = card.querySelector('.lp-drawer-toggle-lbl');
+      if (lbl) lbl.textContent = drawerOpen ? '⏶ Slide Up' : '⏷ Expand Details';
+      var ch = card.querySelector('.lp-drawer-toggle-chevron');
+      if (ch) ch.classList.toggle('open', drawerOpen);
+      fitScale();
+    }
+
+    function showCard(seq, expand) {
+      if (expand !== undefined) {
+        drawerOpen = !!expand;
+      }
+      var s = T.stops.filter(function (x) { return x.seq === seq; })[0];
+      if (!s) { card.style.display = 'none'; fitScale(); return; }
       var o = stopInfo(seq), nS = T.stops.length, before = T.stops.filter(function (x) { return x.seq < seq; });
       var inFront = before.reduce(function (a, x) { return a + x.n; }, 0);
       var skus = Object.keys(o.skus).sort(function (a, b) { return o.skus[b] - o.skus[a]; }).map(function (k) { return o.skus[k] + '× ' + esc(k); }).join('<br>');
@@ -138,50 +256,89 @@
         ('Rests against / on top of Stop ' + (seq + 1) + ' foundation (' + priorCartons + ' earlier cartons in place)');
 
       var isDark = getIsDark();
-      card.innerHTML = '<div class="lp-pop-h" style="border-color:' + stopColor(seq) + '"><span class="lp-num" style="background:' + stopColor(seq) + '">' + seq + '</span>' +
-        '<div><b>' + esc(s.name) + '</b><br><span class="lp-muted">' + esc(s.addr || '') + '</span></div>' +
-        '<div style="margin-left:auto;display:flex;align-items:center;gap:4px">' +
-          '<button class="lp-x" title="Close details card (keeps stop highlighted)" style="background:none;border:none;font-size:20px;cursor:pointer;line-height:1;padding:0 6px">&times;</button>' +
-        '</div></div>' +
-        '<div class="lp-vmodes">' +
-          '<button class="lp-vbtn' + (viewMode === 'step' ? ' on' : '') + '" data-vm="step">Foundation + Stop</button>' +
-          '<button class="lp-vbtn' + (viewMode === 'isolated' ? ' on' : '') + '" data-vm="isolated">Isolated</button>' +
-          '<button class="lp-vbtn' + (viewMode === 'all' ? ' on' : '') + '" data-vm="all">Full Truck</button>' +
-          '<button class="lp-vbtn lp-rep" title="Replay loading animation for this stop">↺ Replay</button>' +
+      var col = stopColor(seq);
+
+      card.innerHTML =
+        '<div class="lp-drawer-bar" style="border-left:4px solid ' + col + '" title="Click to toggle stowage details drawer">' +
+          '<div style="display:flex;align-items:center;gap:9px;min-width:0;flex:1">' +
+            '<span class="lp-num" style="background:' + col + ';flex-shrink:0">' + seq + '</span>' +
+            '<div style="min-width:0;overflow:hidden">' +
+              '<div class="lp-drawer-bar-name">' + esc(s.name) + '</div>' +
+              '<div class="lp-drawer-bar-sub">' + (s.addr ? esc(s.addr) + ' · ' : '') + 'Step ' + stepNum + ' of ' + nS + ' (' + o.n + ' ctn · ' + Math.round(o.kg) + ' kg)</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="lp-drawer-bar-controls">' +
+            '<button class="lp-drawer-btn-toggle" title="' + (drawerOpen ? 'Slide up / minimize to compact bar' : 'Expand stop stowage details') + '">' +
+              '<span class="lp-drawer-toggle-lbl">' + (drawerOpen ? '⏶ Slide Up' : '⏷ Expand Details') + '</span>' +
+              '<span class="lp-drawer-toggle-chevron' + (drawerOpen ? ' open' : '') + '">▼</span>' +
+            '</button>' +
+            '<button class="lp-drawer-btn-x" title="Collapse details into compact bar">&times;</button>' +
+          '</div>' +
         '</div>' +
-        '<div class="lp-pop-g">' +
-        '<span>Loading</span><b>Step ' + stepNum + ' of ' + nS + ' · ' + (seq === nS ? 'Cab bulkhead (1st)' : seq === 1 ? 'Rear door (last in)' : 'After Stop ' + (seq + 1)) + '</b>' +
-        '<span>Foundation</span><b style="color:' + (isDark ? '#8ab4f8' : '#1a73e8') + '">' + foundationText + '</b>' +
-        '<span>Delivery</span><b>' + seq + ' of ' + nS + ' · ETA ' + esc(s.eta) + (seq === 1 ? ' · first off' : seq === nS ? ' · last stop' : '') + '</b>' +
-        '<span>Cartons</span><b>' + o.n + ' · ' + Math.round(o.kg) + ' kg' + (o.frag ? ' · <span class="bad">' + o.frag + ' fragile (on top)</span>' : '') + '</b>' +
-        '<span>Position</span><b>' + fromDoor0 + '–' + fromDoor1 + ' cm from rear door' + (o.y1 - o.y0 > T.W * 0.8 ? ', full width' : '') + ', up to ' + Math.round(o.z1) + ' cm high</b>' +
-        '<span>Unload</span><b>' + (inFront ? inFront + ' cartons of stops 1–' + (seq - 1) + ' are gone before you reach it' : 'nothing in front — straight out') + '</b>' +
-        '<span>Goods</span><b>' + skus + '</b></div>';
-      card.style.display = 'block';
-      fitScale();
-      var xBtn = card.querySelector('.lp-x');
-      if (xBtn) {
-        xBtn.onclick = function (e) {
-          if (e) e.stopPropagation();
-          card.style.display = 'none';
-          fitScale();
-        };
+        '<div class="lp-drawer-body' + (drawerOpen ? ' open' : '') + '">' +
+          '<div class="lp-vmodes">' +
+            '<button class="lp-vbtn' + (viewMode === 'step' ? ' on' : '') + '" data-vm="step">Foundation + Stop</button>' +
+            '<button class="lp-vbtn' + (viewMode === 'isolated' ? ' on' : '') + '" data-vm="isolated">Isolated</button>' +
+            '<button class="lp-vbtn' + (viewMode === 'all' ? ' on' : '') + '" data-vm="all">Full Truck</button>' +
+            '<button class="lp-vbtn lp-rep" title="Replay loading animation for this stop">↺ Replay</button>' +
+          '</div>' +
+          '<div class="lp-pop-g">' +
+            '<span>Loading</span><b>Step ' + stepNum + ' of ' + nS + ' · ' + (seq === nS ? 'Cab bulkhead (1st)' : seq === 1 ? 'Rear door (last in)' : 'After Stop ' + (seq + 1)) + '</b>' +
+            '<span>Foundation</span><b style="color:' + (isDark ? '#8ab4f8' : '#1a73e8') + '">' + foundationText + '</b>' +
+            '<span>Delivery</span><b>' + seq + ' of ' + nS + ' · ETA ' + esc(s.eta) + (seq === 1 ? ' · first off' : seq === nS ? ' · last stop' : '') + '</b>' +
+            '<span>Cartons</span><b>' + o.n + ' · ' + Math.round(o.kg) + ' kg' + (o.frag ? ' · <span class="bad">' + o.frag + ' fragile (on top)</span>' : '') + '</b>' +
+            '<span>Position</span><b>' + fromDoor0 + '–' + fromDoor1 + ' cm from rear door' + (o.y1 - o.y0 > T.W * 0.8 ? ', full width' : '') + ', up to ' + Math.round(o.z1) + ' cm high</b>' +
+            '<span>Unload</span><b>' + (inFront ? inFront + ' cartons of stops 1–' + (seq - 1) + ' are gone before you reach it' : 'nothing in front — straight out') + '</b>' +
+            '<span>Goods</span><b>' + skus + '</b>' +
+          '</div>' +
+          '<div class="lp-drawer-bottom-bar">' +
+            '<button class="lp-drawer-collapse-btn"><span>▲ Slide Up to Compact Bar</span></button>' +
+          '</div>' +
+        '</div>';
+
+      card.style.display = 'flex';
+      updateDrawerVisual();
+
+      var bar = card.querySelector('.lp-drawer-bar');
+      var toggleBtn = card.querySelector('.lp-drawer-btn-toggle');
+      var xBtn = card.querySelector('.lp-drawer-btn-x');
+      var collapseBtn = card.querySelector('.lp-drawer-collapse-btn');
+
+      function toggleAction(e) {
+        if (e) e.stopPropagation();
+        drawerOpen = !drawerOpen;
+        updateDrawerVisual();
       }
+
+      function collapseAction(e) {
+        if (e) e.stopPropagation();
+        drawerOpen = false;
+        updateDrawerVisual();
+      }
+
+      if (bar) bar.onclick = toggleAction;
+      if (toggleBtn) toggleBtn.onclick = toggleAction;
+      if (xBtn) xBtn.onclick = collapseAction;
+      if (collapseBtn) collapseBtn.onclick = collapseAction;
+
       Array.prototype.forEach.call(card.querySelectorAll('.lp-vbtn[data-vm]'), function (btn) {
-        btn.onclick = function () {
+        btn.onclick = function (e) {
+          if (e) e.stopPropagation();
           viewMode = btn.dataset.vm;
           Array.prototype.forEach.call(card.querySelectorAll('.lp-vbtn[data-vm]'), function (b) { b.classList.toggle('on', b === btn); });
         };
       });
       var repBtn = card.querySelector('.lp-rep');
       if (repBtn) {
-        repBtn.onclick = function () { setFocus(seq, true); };
+        repBtn.onclick = function (e) {
+          if (e) e.stopPropagation();
+          setFocus(seq, true);
+        };
       }
     }
     function setFocus(seq, animate) {
-      if (seq != null && focusSeq === seq && card.style.display === 'none') {
-        showCard(seq);
-        fitScale();
+      if (seq != null && focusSeq === seq && card.style.display !== 'none' && !drawerOpen) {
+        showCard(seq, true);
         return;
       }
       focusSeq = seq; pinIdx = -1; tip.style.display = 'none';
@@ -351,10 +508,10 @@
     function depth(x, y, z) { return (x - T.L / 2) * B.v[0] + (y - T.W / 2) * B.v[1] + (z - T.H / 2) * B.v[2]; }
     function fitScale() {
       var diag = Math.sqrt(T.L * T.L + T.W * T.W + T.H * T.H);
-      var cardVisible = card && card.style.display !== 'none';
-      var cardW = cardVisible ? 330 : 0;
-      scale = Math.min(S.W - cardW * 0.42, S.H * 1.55) / diag * 0.75 * zoom;
-      ox = cardVisible ? Math.min(S.W * 0.65, (S.W + cardW) / 2) : (S.W / 2);
+      var isExpanded = card && card.classList.contains('expanded') && card.style.display !== 'none';
+      var cardW = isExpanded ? 340 : 0;
+      scale = Math.min(S.W - cardW * 0.45, S.H * 1.55) / diag * 0.75 * zoom;
+      ox = isExpanded ? Math.min(S.W * 0.65, (S.W + cardW) / 2) : (S.W / 2);
       oy = S.H / 2 + 10;
     }
     function quad(pts, fill, stroke, alpha) {
@@ -488,8 +645,8 @@
       var items = [];
       if (mode === 'load') {
         if (focusSeq != null) {
-          var detailsBtnHtml = (card.style.display === 'none') ?
-            ' <button class="lp-btn lp-btn-sm lp-reopen-card-btn" style="margin-left:8px;padding:2px 8px;font-size:11px;vertical-align:middle;cursor:pointer">📋 Details</button>' : '';
+          var detailsBtnHtml = (card.style.display === 'none' || card.classList.contains('collapsed')) ?
+            ' <button class="lp-btn lp-btn-sm lp-reopen-card-btn" style="margin-left:8px;padding:2px 8px;font-size:11px;vertical-align:middle;cursor:pointer">📋 Details ⏷</button>' : '';
           hudTxt = 'Stop <b>' + focusSeq + '</b> of ' + T.stops.length + ' &middot; ' +
                    (animStop ? 'Loading into position...' : (viewMode === 'step' ? 'Resting on foundation' : viewMode)) + detailsBtnHtml;
           for (var j = 0; j < N; j++) {
@@ -609,7 +766,7 @@
       if (reopenBtn) {
         reopenBtn.onclick = function (e) {
           if (e) e.stopPropagation();
-          showCard(focusSeq);
+          showCard(focusSeq, true);
           fitScale();
         };
       }

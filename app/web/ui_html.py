@@ -694,32 +694,20 @@ _UI_HTML = r"""<!DOCTYPE html>
     }
 
     .ct-brand-title {
-      font-size: 18.5px;
+      font-size: 19px;
       font-weight: 800;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.025em;
       color: var(--text-main);
       display: flex;
       align-items: center;
-      gap: 6px;
-    }
-
-    .ct-brand-badge {
-      font-family: var(--font-mono);
-      font-size: 9.5px;
-      font-weight: 800;
-      padding: 2px 7px;
-      border-radius: 999px;
-      background: var(--accent-primary-soft);
-      color: var(--accent-primary);
-      border: 1px solid rgba(66, 133, 244, 0.35);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+      line-height: 1.15;
     }
 
     .ct-brand-sub {
       font-size: 11px;
       color: var(--text-muted);
       font-weight: 600;
+      margin-top: 2px;
     }
 
     /* Navigation Menu Items */
@@ -743,35 +731,45 @@ _UI_HTML = r"""<!DOCTYPE html>
       align-items: center;
       gap: 11px;
       width: 100%;
-      padding: 10.5px 13px;
-      border-radius: 13px;
+      padding: 9px 12px;
+      border-radius: 12px;
       border: 1.5px solid transparent;
       background: transparent;
       color: var(--text-secondary);
       font-family: var(--font-sans);
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 700;
       cursor: pointer;
       text-align: left;
-      transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .ct-nav-btn .nav-ico {
-      font-size: 17px;
-      width: 24px;
-      text-align: center;
-      transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      flex-shrink: 0;
     }
 
     .ct-nav-btn:hover {
       background: var(--bg-card-hover);
       color: var(--text-main);
-      border-color: rgba(66, 133, 244, 0.35);
-      transform: translateX(4px);
+      border-color: rgba(66, 133, 244, 0.25);
+      transform: translateX(3px);
     }
 
     .ct-nav-btn:hover .nav-ico {
-      transform: scale(1.18);
+      transform: scale(1.08);
+      border-color: rgba(66, 133, 244, 0.45);
+      color: var(--accent-primary);
+      box-shadow: 0 2px 8px rgba(66, 133, 244, 0.25);
     }
 
     .ct-nav-btn.active {
@@ -779,7 +777,14 @@ _UI_HTML = r"""<!DOCTYPE html>
       color: var(--accent-primary);
       border-color: #4285F4;
       font-weight: 800;
-      box-shadow: 0 4px 14px rgba(66, 133, 244, 0.20);
+      box-shadow: 0 3px 12px rgba(66, 133, 244, 0.18);
+    }
+
+    .ct-nav-btn.active .nav-ico {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      border-color: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      box-shadow: 0 3px 10px rgba(37, 99, 235, 0.35);
     }
 
     /* Left Sidebar Quick Dispatch Config */
@@ -2467,11 +2472,8 @@ _UI_HTML = r"""<!DOCTYPE html>
           </svg>
         </div>
         <div>
-          <div class="ct-brand-title">
-            FleetFlow
-            <span class="ct-brand-badge">FLEET ENGINE</span>
-          </div>
-          <div class="ct-brand-sub">Commercial Fleet &amp; 3D Load</div>
+          <div class="ct-brand-title">FleetFlow</div>
+          <div class="ct-brand-sub">Commercial Fleet &amp; 3D Load Engine</div>
         </div>
       </div>
 

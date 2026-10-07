@@ -168,4 +168,4 @@ def test_canvas_html_stays_small():
     ctx = Ctx()
     T.plan_dispatch(ctx)
     plan = T.session(ctx.state)["plan"]
-    assert len(build_anim_html(plan, mode="both").encode()) < 240_000
+    assert len(build_anim_html(plan, mode="both").encode()) < 260_000
