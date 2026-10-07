@@ -561,6 +561,22 @@ def scan_box_manifest(tool_context: ToolContext) -> dict[str, Any]:
         by_stop[b.stop_id] = by_stop.get(b.stop_id, 0) + 1
     return {"status": "ok", "photos": len(images), "cartons_read": len(boxes),
             "by_stop": by_stop, "fragile": sum(b.fragile for b in boxes),
+            "cartons": [
+                {
+                    "box_id": b.box_id,
+                    "sku": b.sku,
+                    "stop_id": b.stop_id,
+                    "description": b.description,
+                    "weight_kg": b.weight_kg,
+                    "l_cm": b.l_cm,
+                    "w_cm": b.w_cm,
+                    "h_cm": b.h_cm,
+                    "fragile": b.fragile,
+                    "this_side_up": b.this_side_up,
+                    "source": b.source,
+                }
+                for b in boxes
+            ],
             "sample": [f"{b.box_id} {b.sku} {b.l_cm:g}x{b.w_cm:g}x{b.h_cm:g}cm {b.weight_kg:g}kg"
                        for b in boxes[:6]],
             "issues": issues[:4], "next": "Call plan_dispatch to re-plan with the scanned cartons."}

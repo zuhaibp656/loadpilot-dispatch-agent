@@ -1365,8 +1365,15 @@ def serve_executive_deck() -> HTMLResponse:
 @router.get("/control-tower", response_class=HTMLResponse)
 def serve_control_tower_ui() -> HTMLResponse:
     """Serve the FleetFlow Supply Chain Control Tower & 3D Load Studio SPA."""
-    from app.web.ui_html import build_control_tower_html
-    return HTMLResponse(content=build_control_tower_html())
+    import importlib
+    import app.web.ui_html
+    importlib.reload(app.web.ui_html)
+    return HTMLResponse(content=app.web.ui_html.build_control_tower_html())
+
+
+@router.get("/favicon.ico", include_in_schema=False)
+def favicon() -> Response:
+    return Response(status_code=204)
 
 
 @router.get("/healthz")
