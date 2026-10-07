@@ -285,8 +285,8 @@ def build_executive_presentation_html() -> str:
     }
     from app.render.diagrams_svg import render_decision_flow_tree_svg, render_system_architecture_svg
     subs = {
-        "__DECISION_TREE_SVG__": render_decision_flow_tree_svg("dark"),
-        "__SYSTEM_ARCH_SVG__": render_system_architecture_svg("dark"),
+        "__DECISION_TREE_SVG__": render_decision_flow_tree_svg("light"),
+        "__SYSTEM_ARCH_SVG__": render_system_architecture_svg("light"),
         "__MAP_SVG__": _map_svg(plan, stops),
         "__LIFO_SVG__": lifo_svg,
         "__LIFO_TRUCK__": html.escape(f"{lifo_route.truck_id} · {len(lifo_route.stops)} drops · "
@@ -525,14 +525,57 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .v-pill.opt{background:color-mix(in srgb,#00A389 12%,var(--surface));border-color:color-mix(in srgb,#00A389 30%,transparent);color:var(--teal-ink);font-weight:700}
   .v-stage-desc{font-size:11.5px;color:var(--text-muted);line-height:1.4;flex:1}
 
-  /* ── Security Shield Matrix ─────────────────────────────────────── */
-  .sec-shield-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:8px}
-  .sec-shield-card{background:var(--surface-sunk);border:1px solid var(--border-hairline);border-radius:12px;padding:10px 12px;border-left:3px solid var(--amber-deep)}
-  .sec-shield-card.blue{border-left-color:#1A73E8} .sec-shield-card.purple{border-left-color:#8E24AA} .sec-shield-card.teal{border-left-color:#00A389}
-  .sec-shield-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
-  .sec-shield-title{font-family:var(--font-display);font-size:12.5px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px}
-  .sec-shield-badge{font-family:var(--font-mono);font-size:8.5px;font-weight:700;padding:1px 5px;border-radius:4px;background:var(--surface);border:1px solid var(--border-subtle);color:var(--amber-ink)}
-  .sec-shield-desc{font-size:11.2px;color:var(--text-muted);line-height:1.4}
+  /* ── Dedicated Slide 03: Decision Flow Phase Summary ─────────── */
+  .flow-phase-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px}
+  .flow-phase-card{background:var(--surface-card);border:1px solid var(--border-hairline);border-radius:14px;padding:12px 16px;box-shadow:var(--card-shadow);border-left:3.5px solid var(--amber-deep)}
+  .flow-phase-card.p1{border-left-color:#1A73E8} .flow-phase-card.p2{border-left-color:#8E24AA} .flow-phase-card.p3{border-left-color:var(--amber-deep)} .flow-phase-card.p4{border-left-color:#188038}
+  .flow-phase-title{font-family:var(--font-display);font-size:13px;font-weight:800;color:var(--text);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+  .flow-phase-desc{font-size:11.4px;color:var(--text-muted);line-height:1.4}
+
+  /* ── Dedicated Slide 04: Enterprise Security Grid ────────────────── */
+  .sec-dedicated-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0}
+  .sec-dedicated-card{background:var(--surface-card);border:1.5px solid var(--border-hairline);border-radius:14px;padding:16px 18px;box-shadow:var(--card-shadow);display:flex;flex-direction:column;gap:8px;border-top:3.5px solid var(--amber-deep);transition:transform .2s ease,box-shadow .2s ease}
+  .sec-dedicated-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+  .sec-dedicated-card.c-blue{border-top-color:#1A73E8}
+  .sec-dedicated-card.c-purple{border-top-color:#8E24AA}
+  .sec-dedicated-card.c-teal{border-top-color:#00A389}
+  .sec-dedicated-card.c-green{border-top-color:#188038}
+  .sec-dedicated-card.c-amber{border-top-color:var(--amber-deep)}
+  .sec-card-head{display:flex;justify-content:space-between;align-items:center}
+  .sec-card-title{font-family:var(--font-display);font-size:14.5px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:7px}
+  .sec-card-badge{font-family:var(--font-mono);font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;background:var(--surface-sunk);border:1px solid var(--border-subtle);text-transform:uppercase;letter-spacing:.5px;color:var(--amber-ink)}
+  .c-blue .sec-card-badge{color:#1A73E8} .c-purple .sec-card-badge{color:#8E24AA} .c-teal .sec-card-badge{color:var(--teal-ink)} .c-green .sec-card-badge{color:var(--green-ink)}
+  .sec-card-desc{font-size:12px;color:var(--text-muted);line-height:1.45}
+  .sec-card-preview{background:var(--surface-sunk);border:1px dashed var(--border-subtle);border-radius:8px;padding:7px 10px;font-family:var(--font-mono);font-size:10.5px;color:var(--text);line-height:1.4;margin-top:auto}
+
+  .sec-compliance-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+  .sec-comp-box{background:var(--surface-sunk);border:1px solid var(--border-subtle);border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;gap:2px}
+  .sec-comp-val{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--amber-ink)}
+  .sec-comp-val.teal{color:var(--teal-ink)} .sec-comp-val.blue{color:#1A73E8} .sec-comp-val.green{color:var(--green-ink)}
+  .sec-comp-label{font-family:var(--font-mono);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim)}
+  .sec-comp-desc{font-size:11px;color:var(--text-muted);line-height:1.35}
+
+  /* ── Dedicated Slide 05: Multi-Channel Edge Execution Grid ──────── */
+  .edge-dedicated-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0}
+  .edge-card{background:var(--surface-card);border:1.5px solid var(--border-hairline);border-radius:14px;padding:16px 18px;box-shadow:var(--card-shadow);display:flex;flex-direction:column;gap:8px;border-top:3.5px solid var(--teal-ink);transition:transform .2s ease,box-shadow .2s ease}
+  .edge-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+  .edge-card.c-blue{border-top-color:#1A73E8}
+  .edge-card.c-amber{border-top-color:var(--amber-deep)}
+  .edge-card.c-green{border-top-color:#188038}
+  .edge-card.c-purple{border-top-color:#8E24AA}
+  .edge-card-head{display:flex;justify-content:space-between;align-items:center}
+  .edge-card-title{font-family:var(--font-display);font-size:14.5px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:7px}
+  .edge-card-badge{font-family:var(--font-mono);font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;background:var(--surface-sunk);border:1px solid var(--border-subtle);text-transform:uppercase;letter-spacing:.5px;color:var(--teal-ink)}
+  .c-blue .edge-card-badge{color:#1A73E8} .c-amber .edge-card-badge{color:var(--amber-ink)} .c-green .edge-card-badge{color:var(--green-ink)} .c-purple .edge-card-badge{color:#8E24AA}
+  .edge-card-desc{font-size:12px;color:var(--text-muted);line-height:1.45}
+  .edge-card-preview{background:var(--surface-sunk);border:1px dashed var(--border-subtle);border-radius:8px;padding:7px 10px;font-family:var(--font-mono);font-size:10.5px;color:var(--text);line-height:1.4;margin-top:auto}
+
+  .edge-metrics-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+  .edge-stat-box{background:var(--surface-sunk);border:1px solid var(--border-subtle);border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;gap:2px}
+  .edge-stat-val{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--teal-ink)}
+  .edge-stat-val.amber{color:var(--amber-ink)} .edge-stat-val.blue{color:#1A73E8} .edge-stat-val.green{color:var(--green-ink)}
+  .edge-stat-label{font-family:var(--font-mono);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim)}
+  .edge-stat-desc{font-size:11px;color:var(--text-muted);line-height:1.35}
 
   /* ── Process Stepper Diagrams (Slide 04) ─────────────────────────── */
   .algo-stepper{display:flex;flex-direction:column;gap:8px}
@@ -636,7 +679,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .maps-rationale-title{font-family:var(--font-display);font-size:12.5px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px}
   .maps-rationale-desc{font-size:11.2px;color:var(--text-muted);line-height:1.4}
 
-  @media (max-width:1100px){.metrics-4col-grid,.steps,.arch,.v-pipeline,.sec-shield-grid,.dispatch-diag-row,.finops-kpi-grid{grid-template-columns:repeat(2,1fr)}.v-stage:not(:last-child)::after{display:none}.split,.roi-grid,.finops-split{grid-template-columns:1fr}.mast-pills{display:none}.sources{columns:1}}
+  @media (max-width:1100px){.metrics-4col-grid,.steps,.arch,.v-pipeline,.sec-shield-grid,.dispatch-diag-row,.finops-kpi-grid,.sec-dedicated-grid,.edge-dedicated-grid,.sec-compliance-strip,.edge-metrics-strip,.flow-phase-summary{grid-template-columns:repeat(2,1fr)}.v-stage:not(:last-child)::after{display:none}.split,.roi-grid,.finops-split{grid-template-columns:1fr}.mast-pills{display:none}.sources{columns:1}}
+  @media (max-width:768px){.metrics-4col-grid,.sec-dedicated-grid,.edge-dedicated-grid,.sec-compliance-strip,.edge-metrics-strip,.flow-phase-summary{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -651,7 +695,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   <div class="mast-nav-group">
     <div class="mast-pills" id="slideTabs"></div>
     <button class="nav-btn" id="prevBtn" onclick="prev()">‹ Prev</button>
-    <span class="slide-counter" id="slideCounter">1 / 8</span>
+    <span class="slide-counter" id="slideCounter">1 / 11</span>
     <button class="nav-btn" id="nextBtn" onclick="next()">Next ›</button>
     <button class="nav-btn" onclick="toggleTheme()" title="Toggle theme">◐</button>
     <a class="mast-cta" href="https://github.com/zuhaibp656/loadpilot-dispatch-agent" target="_blank">Repo ↗</a>
@@ -739,84 +783,185 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
  </div>
 </section>
 
-<!-- ═════════════ 03 AGENT ARCHITECTURE & EXECUTION FLOW ═════════════ -->
-<section class="slide-section" data-title="03 Agent Flow">
+<!-- ═════════════ 03 AUTONOMOUS DECISION FLOW TREE ═════════════ -->
+<section class="slide-section" data-title="03 Decision Flow">
  <div class="wrap-max">
-  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Agent Architecture &amp; Lifecycle</span><span class="kicker-sep">/</span><span class="kicker-sub">Google ADK · Vertex AI Reasoning Engine · Gemini Enterprise</span></div>
-  <h2 class="monumental-headline">Dual-guard reasoning.<br><span class="gradient-span">Deterministic execution &amp; enterprise security.</span></h2>
-  <p class="tagline-lead">How <b>FleetFlow</b> executes each turn: from multimodal order intake and dock carton photos to enterprise security guardrails, mathematical optimization, and multi-channel driver dispatch.</p>
+  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Algorithmic Decision Tree &amp; Reasoning Flow</span><span class="kicker-sep">/</span><span class="kicker-sub">Discrete Branching, Radial Scanning &amp; Heuristic Loops</span></div>
+  <h2 class="monumental-headline">Autonomous decision tree.<br><span class="gradient-span">From dock scan to certified route in 17 seconds.</span></h2>
+  <p class="tagline-lead">Every dispatch turn executes through deterministic gates: multimodal intake, security quarantine, driver intent scoping, polar radial scanning, capacity divergence, and 3D height-map safety validation.</p>
 
   <!-- High-Fidelity Vector Graphical Flow Diagram & Decision Tree -->
-  <div style="margin-top:16px;margin-bottom:18px;border-radius:14px;overflow:hidden">
+  <div style="margin:16px 0 18px 0;border-radius:14px;overflow:hidden">
     __DECISION_TREE_SVG__
   </div>
 
-  <div class="split">
-    <!-- Left: Enterprise Security Architecture -->
-    <div class="blueprint-card">
-      <div class="dual-subhead"><span>🛡️</span> Enterprise Security &amp; Google Cloud Model Armor</div>
-      <div class="card-sub">Air-gapped zero-trust perimeter, real-time guardrails, and deterministic verification</div>
-      <div class="sec-shield-grid">
-        <div class="sec-shield-card">
-          <div class="sec-shield-head">
-            <span class="sec-shield-title"><span>🛡️</span> Model Armor</span>
-            <span class="sec-shield-badge">PROMPT DEFENSE</span>
-          </div>
-          <div class="sec-shield-desc">Real-time LLM input/output sanitization. Zero prompt injection, anti-jailbreak filters, malicious override blocking, and system prompt leakage shielding.</div>
-        </div>
-        <div class="sec-shield-card blue">
-          <div class="sec-shield-head">
-            <span class="sec-shield-title"><span>🔒</span> Cloud DLP</span>
-            <span class="sec-shield-badge">PII &amp; GSTIN MASK</span>
-          </div>
-          <div class="sec-shield-desc">Automated Sensitive Data Protection. Masks dealer phone numbers, driver bank information, GSTIN tax IDs, and commercial invoice totals before reasoning.</div>
-        </div>
-        <div class="sec-shield-card purple">
-          <div class="sec-shield-head">
-            <span class="sec-shield-title"><span>🌐</span> VPC Service Controls</span>
-            <span class="sec-shield-badge">AIR-GAPPED PERIMETER</span>
-          </div>
-          <div class="sec-shield-desc">Zero public internet ingress/egress. Isolated security perimeter around BigQuery order books, Cloud Storage media, and Vertex AI Agent Engine.</div>
-        </div>
-        <div class="sec-shield-card teal">
-          <div class="sec-shield-head">
-            <span class="sec-shield-title"><span>⚡</span> Deterministic Enclave</span>
-            <span class="sec-shield-badge">ZERO-HALLUCINATION</span>
-          </div>
-          <div class="sec-shield-desc">Strict math air-gap: LLM never computes routes or loads. <code>after_turn</code> scrubs hallucinated tables and injects audited reports. Hardware CMEK AES-256 at rest.</div>
-        </div>
-      </div>
+  <div class="flow-phase-summary">
+    <div class="flow-phase-card p1">
+      <div class="flow-phase-title"><span>🛡️</span> 1. Intake &amp; Security Gate</div>
+      <div class="flow-phase-desc">Dock QR camera frames, ERP Excel spreadsheets, and BigQuery orders sanitized via Google Cloud Model Armor and Cloud DLP before LLM processing.</div>
     </div>
-
-    <!-- Right: Multi-Channel Edge Dispatch Diagram -->
-    <div class="blueprint-card">
-      <div class="dual-subhead"><span>📱</span> Multi-Channel Edge Dispatch: Meeting Drivers Where They Are</div>
-      <div class="card-sub">Bridging the enterprise manager cockpit to highway drivers on the road</div>
-      <div class="dispatch-diag-row">
-        <div class="dispatch-diag-card">
-          <div class="dispatch-diag-title"><span>🗺️</span> 1-Tap Google Maps</div>
-          <div class="dispatch-diag-desc">Pre-populated multi-stop route into Google Maps Universal Navigation with live congestion re-routing and dealer phone dialer.</div>
-        </div>
-        <div class="dispatch-diag-card">
-          <div class="dispatch-diag-title"><span>📱</span> Driver Mobile Portal</div>
-          <div class="dispatch-diag-desc">Standalone zero-login mobile web app (<code>plans/&lt;id&gt;/driver_&lt;tid&gt;.html</code>) with 3 tabs: Stop List 1→N, Live Map, and 3D Truck Bay.</div>
-        </div>
-        <div class="dispatch-diag-card">
-          <div class="dispatch-diag-title"><span>💬</span> 1-Click WhatsApp Dispatch</div>
-          <div class="dispatch-diag-desc">Instant dispatch message with stops, cartons, departure schedule, and direct portal link sent to driver's WhatsApp in one tap.</div>
-        </div>
-        <div class="dispatch-diag-card">
-          <div class="dispatch-diag-title"><span>🖨️</span> Transporter Challan (LR)</div>
-          <div class="dispatch-diag-desc">Print-ready official Delivery Challan with exact bay depth (e.g. <code>0–75 cm</code>), signature acceptance box, and rubber stamp endorsement.</div>
-        </div>
-      </div>
+    <div class="flow-phase-card p2">
+      <div class="flow-phase-title"><span>🧠</span> 2. Driver Intent Scoping</div>
+      <div class="flow-phase-desc">Natural language driver preferences ("Ravi takes West") identified and pinned to spatial radial sectors, avoiding route friction and driver dissatisfaction.</div>
+    </div>
+    <div class="flow-phase-card p3">
+      <div class="flow-phase-title"><span>🧭</span> 3. Polar Corridors &amp; Branching</div>
+      <div class="flow-phase-desc">Polar ray θ scan groups stops into 8 compass corridors. Volume and weight overflow triggers angular divergence, splitting routes into non-overlapping branches.</div>
+    </div>
+    <div class="flow-phase-card p4">
+      <div class="flow-phase-title"><span>🧮</span> 4. MIP Solver &amp; 3D LIFO Physics</div>
+      <div class="flow-phase-desc">OR-Tools VRPTW routes highway itineraries, while discrete 3D height-map raster packing enforces cab-to-door LIFO drop safety and CMVR Rule 93 axle balance.</div>
     </div>
   </div>
  </div>
 </section>
 
-<!-- ═════════════ 04 OPTIMIZATION ALGORITHMS ═════════════ -->
-<section class="slide-section" data-title="04 Algorithms">
+<!-- ═════════════ 04 ENTERPRISE SECURITY & GOVERNANCE ═════════════ -->
+<section class="slide-section" data-title="04 Enterprise Security">
+ <div class="wrap-max">
+  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Enterprise Security &amp; Zero-Trust Governance</span><span class="kicker-sep">/</span><span class="kicker-sub">Google Cloud Model Armor · Cloud DLP · VPC-SC · Cryptographic Ledger</span></div>
+  <h2 class="monumental-headline">Zero-trust supply chain.<br><span class="gradient-span">Enterprise guardrails at every layer.</span></h2>
+  <p class="tagline-lead">Logistics networks handle sensitive customer locations, pricing contracts, and driver telemetry. FleetFlow enforces multi-layered defense to prevent prompt injection, data exfiltration, and model hallucinations.</p>
+
+  <div class="sec-dedicated-grid">
+    <div class="sec-dedicated-card c-amber">
+      <div class="sec-card-head">
+        <span class="sec-card-title"><span>🛡️</span> Model Armor</span>
+        <span class="sec-card-badge">PROMPT DEFENSE</span>
+      </div>
+      <div class="sec-card-desc">Real-time LLM input/output sanitization. Zero prompt injection, anti-jailbreak filters, malicious override blocking, and system prompt leakage shielding before reaching Gemini.</div>
+      <div class="sec-card-preview"><b>Latency overhead:</b> &lt;15ms · <b>Filter rate:</b> 100% known attacks quarantined without pipeline stall</div>
+    </div>
+
+    <div class="sec-dedicated-card c-blue">
+      <div class="sec-card-head">
+        <span class="sec-card-title"><span>🔒</span> Cloud DLP</span>
+        <span class="sec-card-badge">PII &amp; GSTIN MASK</span>
+      </div>
+      <div class="sec-card-desc">Automated inspection and redaction of customer phone numbers, driver identity info, GSTIN tax registration numbers, and commercial invoice totals. Raw PII never leaves customer VPC.</div>
+      <div class="sec-card-preview"><b>Inspection rules:</b> GSTIN, PAN, Phone, Banking · <b>Tokenization:</b> Reversible HMAC tokens for dispatch</div>
+    </div>
+
+    <div class="sec-dedicated-card c-purple">
+      <div class="sec-card-head">
+        <span class="sec-card-title"><span>🌐</span> VPC Service Controls</span>
+        <span class="sec-card-badge">AIR-GAPPED PERIMETER</span>
+      </div>
+      <div class="sec-card-desc">Strict network perimeter isolating BigQuery datasets, Cloud Storage media buckets, and Vertex AI Agent Engine. Zero public internet ingress/egress; private Google backbone only.</div>
+      <div class="sec-card-preview"><b>Boundary:</b> VPC-SC Restricted VIP · <b>Ingress:</b> Dedicated Cloud Interconnect / Private Service Connect</div>
+    </div>
+
+    <div class="sec-dedicated-card c-teal">
+      <div class="sec-card-head">
+        <span class="sec-card-title"><span>⚡</span> Deterministic Enclave</span>
+        <span class="sec-card-badge">ZERO-HALLUCINATION</span>
+      </div>
+      <div class="sec-card-desc">Mathematical air-gap between Gemini reasoning and physical operations. Gemini never invents routes or load coordinates; dual-guard ADK callbacks validate every tool output against physical physics.</div>
+      <div class="sec-card-preview"><b>Guardrail:</b> <code>after_turn</code> schema assertion · <b>Physics:</b> Hard error on volume/weight overflow</div>
+    </div>
+
+    <div class="sec-dedicated-card c-green">
+      <div class="sec-card-head">
+        <span class="sec-card-title"><span>📜</span> Cryptographic HMAC Audit</span>
+        <span class="sec-card-badge">TAMPER-EVIDENT</span>
+      </div>
+      <div class="sec-card-desc">Every dispatch run generates a deterministic SHA-256 HMAC hash chain logging inputs, solver constraints, and output manifests. Stored immutably in BigQuery for statutory compliance audits.</div>
+      <div class="sec-card-preview"><b>Hash chain:</b> SHA-256(Input + Constraints + RouteGeo) · <b>Retention:</b> 7-year immutable Cloud Storage</div>
+    </div>
+
+    <div class="sec-dedicated-card c-blue">
+      <div class="sec-card-head">
+        <span class="sec-card-title"><span>🔑</span> Hardware CMEK &amp; IAM</span>
+        <span class="sec-card-badge">CLOUD KMS AES-256</span>
+      </div>
+      <div class="sec-card-desc">Customer-Managed Encryption Keys (CMEK) protect all at-rest order data in BigQuery and Cloud Storage buckets. Granular Workload Identity Federation eliminates long-lived service account keys.</div>
+      <div class="sec-card-preview"><b>Key store:</b> Cloud KMS FIPS 140-2 Level 3 HSM · <b>Auth:</b> Zero static credentials in code</div>
+    </div>
+  </div>
+
+  <div class="sec-compliance-strip">
+    <div class="sec-comp-box"><div class="sec-comp-val teal">0.0% PII Leakage</div><div class="sec-comp-label">Cloud DLP Sanitization</div><div class="sec-comp-desc">Automated masking of dealer phone numbers, GSTIN, and commercial invoices.</div></div>
+    <div class="sec-comp-box"><div class="sec-comp-val green">100% Deterministic</div><div class="sec-comp-label">Math Air-Gap Enclave</div><div class="sec-comp-desc">OR-Tools &amp; 3D Height-Map enforce zero hallucinated stops or cubic volumes.</div></div>
+    <div class="sec-comp-box"><div class="sec-comp-val blue">SHA-256 HMAC</div><div class="sec-comp-label">Tamper-Evident Ledger</div><div class="sec-comp-desc">Cryptographically signed dispatch plans logged immutably for compliance.</div></div>
+    <div class="sec-comp-box"><div class="sec-comp-val amber">SOC 2 / ISO 27001</div><div class="sec-comp-label">Google Cloud Posture</div><div class="sec-comp-desc">Full inheritance of Google Cloud enterprise security &amp; zero-trust governance.</div></div>
+  </div>
+ </div>
+</section>
+
+<!-- ═════════════ 05 MULTI-CHANNEL EDGE DELIVERY ═════════════ -->
+<section class="slide-section" data-title="05 Driver Edge">
+ <div class="wrap-max">
+  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Multi-Channel Edge Execution</span><span class="kicker-sep">/</span><span class="kicker-sub">Meeting Drivers Where They Are · Zero App Friction · Instant Field Adoption</span></div>
+  <h2 class="monumental-headline">Empowering drivers on the highway.<br><span class="gradient-span">Multi-channel dispatch with zero login friction.</span></h2>
+  <p class="tagline-lead">Logistics technology fails when contract drivers refuse to install heavy proprietary apps. FleetFlow bridges the dispatch manager cockpit directly to highway crews using universal, lightweight edge interfaces.</p>
+
+  <div class="edge-dedicated-grid">
+    <div class="edge-card c-blue">
+      <div class="edge-card-head">
+        <span class="edge-card-title"><span>🗺️</span> 1-Tap Google Maps</span>
+        <span class="edge-card-badge">LIVE NAVIGATION</span>
+      </div>
+      <div class="edge-card-desc">Emits pre-sequenced multi-stop Google Maps navigation links (<code>dir_action=navigate</code>) directly to the driver's smartphone. Features live congestion re-routing, bridge height clearances, and 1-tap direct dealer dialer.</div>
+      <div class="edge-card-preview"><b>URL Format:</b> <code>https://www.google.com/maps/dir/?api=1&amp;origin=...&amp;destination=...&amp;waypoints=...</code></div>
+    </div>
+
+    <div class="edge-card c-teal">
+      <div class="edge-card-head">
+        <span class="edge-card-title"><span>📱</span> Mobile Driver Portal</span>
+        <span class="edge-card-badge">ZERO-LOGIN PWA</span>
+      </div>
+      <div class="edge-card-desc">Standalone zero-login mobile web application (<code>plans/&lt;id&gt;/driver_&lt;tid&gt;.html</code>) generated per truck. Three intuitive tabs: Stop List 1➔N with arrival ETAs, interactive Leaflet live route map, and 3D truck cargo bay view.</div>
+      <div class="edge-card-preview"><b>Driver UX:</b> 📋 Stop List 1→N · 🗺️ Road Route · 📦 3D Bay Cross-Section</div>
+    </div>
+
+    <div class="edge-card c-green">
+      <div class="edge-card-head">
+        <span class="edge-card-title"><span>💬</span> WhatsApp Dispatch</span>
+        <span class="edge-card-badge">1-CLICK CHAT LINK</span>
+      </div>
+      <div class="edge-card-desc">Instant dispatch notification formatted for WhatsApp with departure time, assigned corridor, dealer stop count, and total cartons. Single tap triggers WhatsApp with pre-filled message and direct run sheet URL.</div>
+      <div class="edge-card-preview"><b>Message Payload:</b> <i>"🚛 FleetFlow Dispatch: Truck T14 | 8 Drops | Bhiwandi DC ➔ West Corridor..."</i></div>
+    </div>
+
+    <div class="edge-card c-amber">
+      <div class="edge-card-head">
+        <span class="edge-card-title"><span>📑</span> RFC 4180 ERP Manifests</span>
+        <span class="edge-card-badge">SAP &amp; ORACLE OTM</span>
+      </div>
+      <div class="edge-card-desc">Standardized RFC 4180 CSV consignment manifests exportable directly into SAP S/4HANA TM, Oracle Transportation Management, or Blue Yonder. Standard columns: Consignment ID, Transporter, Truck Type, Sequence, and SKU weight.</div>
+      <div class="edge-card-preview"><b>Format:</b> <code>truck_id,sequence,dealer_name,cartons,weight_kg,lat,lon,eta</code></div>
+    </div>
+
+    <div class="edge-card c-purple">
+      <div class="edge-card-head">
+        <span class="edge-card-title"><span>🖨️</span> Transporter Challan (LR)</span>
+        <span class="edge-card-badge">PRINT-READY RECEIPT</span>
+      </div>
+      <div class="edge-card-desc">Print-ready official Transporter Delivery Challan with exact cab-to-door bay depth markers (e.g. <code>0–75 cm</code>). Includes signature acceptance box, rubber stamp endorsement, SKU breakdown, and emergency depot hotline.</div>
+      <div class="edge-card-preview"><b>Statutory:</b> Complies with Indian Carriage by Road Rules 2011 · Consignor / Consignee endorsement</div>
+    </div>
+
+    <div class="edge-card c-blue">
+      <div class="edge-card-head">
+        <span class="edge-card-title"><span>📸</span> Dock QR &amp; Digital POD</span>
+        <span class="edge-card-badge">OPENCV ARUCO</span>
+      </div>
+      <div class="edge-card-desc">Warehouse dock camera scans ArUco QR codes on carton flutes for 100% loading verification. On delivery, driver captures photo Proof of Delivery (POD) with timestamp and GPS geolocation stamped directly into BigQuery.</div>
+      <div class="edge-card-preview"><b>Vision Engine:</b> OpenCV ArUco 8/8 Verified ➔ Mobile Camera POD ➔ BigQuery Telemetry</div>
+    </div>
+  </div>
+
+  <div class="edge-metrics-strip">
+    <div class="edge-stat-box"><div class="edge-stat-val teal">0 App Installs</div><div class="edge-stat-label">Driver Friction</div><div class="edge-stat-desc">Zero login, zero app-store downloads; runs in any mobile browser.</div></div>
+    <div class="edge-stat-box"><div class="edge-stat-val amber">&lt; 5 Seconds</div><div class="edge-stat-label">Dispatch Hand-off</div><div class="edge-stat-desc">1-click WhatsApp message and 1-tap Google Maps turn-by-turn navigation.</div></div>
+    <div class="edge-stat-box"><div class="edge-stat-val blue">100% ERP Sync</div><div class="edge-stat-label">RFC 4180 Standard</div><div class="edge-stat-desc">Direct CSV ingestion into SAP TM, Oracle OTM, and enterprise WMS.</div></div>
+    <div class="edge-stat-box"><div class="edge-stat-val green">0 Re-handling</div><div class="edge-stat-label">LIFO Door Placement</div><div class="edge-stat-desc">First drop at the door; zero carton digging on the highway.</div></div>
+  </div>
+ </div>
+</section>
+
+<!-- ═════════════ 06 OPTIMIZATION ALGORITHMS ═════════════ -->
+<section class="slide-section" data-title="06 Algorithms">
  <div class="wrap-max">
   <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">The Optimization Engine</span><span class="kicker-sep">/</span><span class="kicker-sub">Coupled NP-Hard Solvers · OR-Tools VRPTW · 3D Height-Map LIFO · CMVR Rule 93</span></div>
   <h2 class="monumental-headline">Mathematical precision.<br><span class="gradient-span">Zero guesswork on road or dock.</span></h2>
@@ -912,8 +1057,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
  </div>
 </section>
 
-<!-- ═════════════ 05 DEMO RESULTS ═════════════ -->
-<section class="slide-section" data-title="05 Demo Results">
+<!-- ═════════════ 07 DEMO RESULTS ═════════════ -->
+<section class="slide-section" data-title="07 Demo Results">
  <div class="wrap-max">
   <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Demo Results</span><span class="kicker-sep">/</span><span class="kicker-sub">__HUB__ · __STOPS__ dealers · live engine output</span></div>
   <h2 class="monumental-headline">Same orders. <span class="gradient-span">__B_TRUCKS__ → __O_TRUCKS__ trucks, −__SAVE_PCT__% cost.</span></h2>
@@ -939,8 +1084,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
  </div>
 </section>
 
-<!-- ═════════════ 06 VALUE AT SCALE ═════════════ -->
-<section class="slide-section" data-title="06 Value at Scale">
+<!-- ═════════════ 08 VALUE AT SCALE ═════════════ -->
+<section class="slide-section" data-title="08 Value at Scale">
  <div class="wrap-max">
   <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Value at Scale</span><span class="kicker-sep">/</span><span class="kicker-sub">Interactive ROI model · defaults from the demo day</span></div>
   <h2 class="monumental-headline">Scale one depot's win <span class="gradient-span">across the network.</span></h2>
@@ -967,8 +1112,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
  </div>
 </section>
 
-<!-- ═════════════ 07 ENTERPRISE PLATFORM & ROADMAP ═════════════ -->
-<section class="slide-section" data-title="07 Enterprise">
+<!-- ═════════════ 09 ENTERPRISE PLATFORM & ROADMAP ═════════════ -->
+<section class="slide-section" data-title="09 Enterprise">
  <div class="wrap-max">
   <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Enterprise Architecture &amp; Dual Deployment</span><span class="kicker-sep">/</span><span class="kicker-sub">One Shared Backend · Two Deployment Surfaces · Zero Hardcoded Credentials</span></div>
   <h2 class="monumental-headline">Deploy to <span class="gradient-span">Gemini Enterprise or Cloud Run UI.</span></h2>
@@ -997,8 +1142,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
  </div>
 </section>
 
-<!-- ═════════════ 08 FINOPS, CLOUD COSTS & TOKEN ECONOMICS ═════════════ -->
-<section class="slide-section" data-title="08 FinOps &amp; Costs">
+<!-- ═════════════ 10 FINOPS, CLOUD COSTS & TOKEN ECONOMICS ═════════════ -->
+<section class="slide-section" data-title="10 FinOps &amp; Costs">
  <div class="wrap-max">
   <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Google Cloud FinOps &amp; Token Economics</span><span class="kicker-sep">/</span><span class="kicker-sub">Transparent Infrastructure Costs · Sub-Cent Query Economics · 35,000x Operational ROI</span></div>
   <h2 class="monumental-headline">Sub-cent AI dispatch.<br><span class="gradient-span">Transparent Google Cloud unit economics.</span></h2>

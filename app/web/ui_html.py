@@ -4417,6 +4417,6 @@ def build_control_tower_html() -> str:
         _UI_HTML
         .replace("__ANIM_CSS__", ANIM_CSS)
         .replace("__ENGINE_JS__", engine_js)
-        .replace("__SYSTEM_ARCH_SVG__", render_system_architecture_svg("dark"))
-        .replace("__DECISION_TREE_SVG__", render_decision_flow_tree_svg("dark"))
+        .replace("__SYSTEM_ARCH_SVG__", render_system_architecture_svg("light"))
+        .replace("__DECISION_TREE_SVG__", render_decision_flow_tree_svg("light"))
     )
