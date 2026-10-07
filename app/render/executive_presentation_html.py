@@ -1145,30 +1145,30 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <!-- ═════════════ 10 FINOPS, CLOUD COSTS & TOKEN ECONOMICS ═════════════ -->
 <section class="slide-section" data-title="10 FinOps &amp; Costs">
  <div class="wrap-max">
-  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Google Cloud FinOps &amp; Token Economics</span><span class="kicker-sep">/</span><span class="kicker-sub">Transparent Infrastructure Costs · Sub-Cent Query Economics · 35,000x Operational ROI</span></div>
+  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Google Cloud FinOps &amp; Token Economics</span><span class="kicker-sep">/</span><span class="kicker-sub">Transparent Infrastructure Costs · Sub-Cent Query Economics · 21,000x Operational ROI</span></div>
   <h2 class="monumental-headline">Sub-cent AI dispatch.<br><span class="gradient-span">Transparent Google Cloud unit economics.</span></h2>
 
   <!-- 4-Col Monumental Cost Metric Strip -->
   <div class="finops-kpi-grid">
     <div class="finops-card hl-teal">
       <div class="finops-card-label">Cost per Dispatch Run</div>
-      <div class="finops-card-val">₹0.52 <span style="font-size:14px;color:var(--teal-ink);font-weight:700">($0.0062)</span></div>
-      <div class="finops-card-sub">End-to-end total cost: Gemini Flash + Compute + Maps + BigQuery.</div>
+      <div class="finops-card-val">₹0.92 <span style="font-size:14px;color:var(--teal-ink);font-weight:700">($0.0155)</span></div>
+      <div class="finops-card-sub">End-to-end total cost: Gemini 3.7 Flash + Compute + Maps + BigQuery.</div>
     </div>
     <div class="finops-card hl-amber">
       <div class="finops-card-label">Token Consumption / Query</div>
       <div class="finops-card-val">~7,100 <span style="font-size:14px;color:var(--amber-ink);font-weight:700">Tokens</span></div>
-      <div class="finops-card-sub">5,500 input + 1,600 output on Gemini 3.7 / 3.8 Flash ($0.0012).</div>
+      <div class="finops-card-sub">5,500 in ($0.75/1M) + 1,600 out ($3.75/1M) on Gemini 3.7 Flash ($0.0101).</div>
     </div>
     <div class="finops-card hl-blue">
       <div class="finops-card-label">Monthly DC Infrastructure</div>
-      <div class="finops-card-val">₹2,950 <span style="font-size:14px;color:#1A73E8;font-weight:700">($35 / mo)</span></div>
+      <div class="finops-card-val">₹3,150 <span style="font-size:14px;color:#1A73E8;font-weight:700">($37.50 / mo)</span></div>
       <div class="finops-card-sub">50 trucks · 150 daily runs · serverless Cloud Run scales to zero.</div>
     </div>
     <div class="finops-card hl-green">
       <div class="finops-card-label">Operational ROI Multiple</div>
-      <div class="finops-card-val">&gt; 35,000x <span style="font-size:14px;color:var(--green-ink);font-weight:700">Net Gain</span></div>
-      <div class="finops-card-sub">Every ₹1 spent on GCP saves ₹35,800 in fleet diesel, trucks &amp; labor.</div>
+      <div class="finops-card-val">&gt; 21,000x <span style="font-size:14px;color:var(--green-ink);font-weight:700">Net Gain</span></div>
+      <div class="finops-card-sub">Every ₹1 spent on GCP saves ₹21,250 in fleet diesel, trucks &amp; labor.</div>
     </div>
   </div>
 
@@ -1191,7 +1191,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
             <td><b>🧠 Gemini 3.7 / 3.8 Flash &amp; 3.1 Pro</b><br><span style="font-size:10.5px;color:var(--text-muted)">Multimodal Intent, Complex Logistics Reasoning &amp; Tool Orchestration</span></td>
             <td>5,500 input tokens<br>1,600 output tokens</td>
             <td>$0.75 / 1M in (Flash)<br>$3.75 / 1M out</td>
-            <td><b>$0.0012</b><br><span class="finops-badge green">₹0.10</span></td>
+            <td><b>$0.01013</b><br><span class="finops-badge green">₹0.85</span></td>
           </tr>
           <tr>
             <td><b>⚙️ Serverless Compute</b><br><span style="font-size:10.5px;color:var(--text-muted)">Vertex AI Agent Engine / Cloud Run</span></td>
@@ -1215,7 +1215,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
             <td><b>TOTAL COST PER DISPATCH</b></td>
             <td><b>Complete Autonomous Run</b></td>
             <td><b>Sub-Cent Economics</b></td>
-            <td><b style="color:var(--teal-ink);font-size:14px">$0.00624 (₹0.52)</b></td>
+            <td><b style="color:var(--teal-ink);font-size:14px">$0.01548 (₹0.92)</b></td>
           </tr>
         </tbody>
       </table>

@@ -92,12 +92,12 @@ FleetFlow is engineered for **sub-cent per-query economics** and serverless exec
 ### 1. Itemized Cost Breakdown per Autonomous Dispatch Run
 | Component | Service & Metric | Resource Consumption | Unit Rate | Cost per Run (USD) | Cost per Run (INR) |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **LLM Orchestration** | Gemini 3.7 / 3.8 Flash & 3.1 Pro | 5,500 prompt tokens<br>1,600 completion tokens | $0.75 / 1M input<br>$3.75 / 1M output | **$0.0012** | **₹0.10** |
+| **LLM Orchestration** | Gemini 3.7 / 3.8 Flash & 3.1 Pro | 5,500 prompt tokens<br>1,600 completion tokens | $0.75 / 1M input<br>$3.75 / 1M output | **$0.01013** | **₹0.85** |
 | **Serverless Compute** | Vertex AI Agent Engine / Cloud Run | 2 vCPU · 4 GB RAM<br>0.2s CPU execution | $0.000024 / vCPU-sec<br>(scales to 0 idle) | **$0.00030** | **₹0.025** |
 | **Highway Routing** | Google Maps Routes API v2 | 1 traffic matrix query<br>(8–10 stops / corridor) | $5.00 / 1,000 calls<br>($200/mo free tier) | **$0.00500** | **₹0.042** |
 | **Warehouse Master** | BigQuery REST SQL | &lt;10 MB scanned per run | $6.25 / TB SQL<br>(1 TB/mo free tier) | **$0.00005** | **₹0.004** |
 | **Media Distribution** | Cloud Storage (GCS) | Signed 3D MP4 / Portal | $0.020 / GB storage | **&lt;$0.00001** | **&lt;₹0.001** |
-| **TOTAL PER DISPATCH** | **End-to-End Execution** | **Full Fleet Plan + 3D LIFO** | **Sub-Cent Cost** | **$0.00624** | **₹0.52** |
+| **TOTAL PER DISPATCH** | **End-to-End Execution** | **Full Fleet Plan + 3D LIFO** | **Sub-Cent Cost** | **$0.01548** | **₹0.92** |
 
 ### 2. Token Consumption Breakdown per Query
 * **Multimodal Intake & Manifest Parsing**: ~2,500 – 3,500 input tokens (dealer name geocoding, carton dimensions, order weights).
@@ -106,11 +106,11 @@ FleetFlow is engineered for **sub-cent per-query economics** and serverless exec
 * **Total Tokens Consumed**: **~7,100 tokens per dispatch turn**.
 
 ### 3. Monthly Regional DC Operational Projection (50 Trucks · 150 Runs/Month)
-* **Monthly Google Cloud Run Cost**: **~$35.00 USD (~₹2,950 INR / month)**.
+* **Monthly Google Cloud Run Cost**: **~$37.50 USD (~₹3,150 INR / month)**.
 * **Cost of Manual Planning**: ₹1,200/day dispatcher wage × 30 days = **₹36,000 / month**.
-* **Daily Operational Savings Delivered**: **₹18,645 / day** (fewer truck leases, reduced diesel burn, elimination of 14 min/stop carton digging).
-* **Annual Net Savings**: **₹55.9 Lakh / year per distribution center**.
-* **Return on Investment (ROI)**: **> 35,000x** (every ₹1 invested in Google Cloud produces >₹35,000 in physical supply chain cost reduction).
+* **Daily Operational Savings Delivered**: **₹19,552 / day** (fewer truck leases, reduced diesel burn, elimination of 14 min/stop carton digging).
+* **Annual Net Savings**: **₹58.6 Lakh / year per distribution center**.
+* **Return on Investment (ROI)**: **> 21,000x** (every ₹1 invested in Google Cloud produces >₹21,000 in physical supply chain cost reduction).
 
 ---
 
