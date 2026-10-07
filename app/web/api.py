@@ -405,6 +405,16 @@ def _build_hub_context_payload(hub_id: str = "BHW-DC", order_source: str = "demo
             "weight_kg": round(s.weight_kg, 1),
         })
 
+    compass_labels = {
+        "N": "North",
+        "NE": "North-East",
+        "E": "East",
+        "SE": "South-East",
+        "S": "South",
+        "SW": "South-West",
+        "W": "West",
+        "NW": "North-West",
+    }
     corridor_summary = []
     for c_code in ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]:
         c_stops = corr_buckets.get(c_code, [])
@@ -420,15 +430,20 @@ def _build_hub_context_payload(hub_id: str = "BHW-DC", order_source: str = "demo
                 break
         else:
             rec_truck = "T20 + Branch"
+        sample_areas = ", ".join(sorted({x.area for x in c_stops if x.area})[:3]) or "Hub Sector"
+        if city_cfg.city_id == "mumbai":
+            c_name = CORRIDOR_NAMES.get(c_code, c_code)
+        else:
+            c_name = f"{compass_labels.get(c_code, c_code)} ({sample_areas})"
         corridor_summary.append({
             "code": c_code,
-            "name": CORRIDOR_NAMES.get(c_code, c_code),
+            "name": c_name,
             "stops": len(c_stops),
             "cartons": ctns,
             "volume_m3": vol,
             "weight_kg": wt,
             "recommended_truck": rec_truck,
-            "sample_areas": ", ".join(sorted({x.area for x in c_stops if x.area})[:3]) or "Hub Sector",
+            "sample_areas": sample_areas,
         })
 
     # Hub-specific default fleet counts

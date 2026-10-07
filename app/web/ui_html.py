@@ -587,16 +587,22 @@ _UI_HTML = r"""<!DOCTYPE html>
 
     .ct-select, .ct-input {
       width: 100%;
+      height: 40px;
       background: var(--bg-card);
       color: var(--text-main);
       border: 1.5px solid var(--border-subtle);
       border-radius: 10px;
-      padding: 8px 11px;
+      padding: 0 12px;
       font-family: var(--font-sans);
       font-size: 13px;
       font-weight: 700;
       outline: none;
       transition: border-color 0.18s, box-shadow 0.18s;
+    }
+
+    textarea.ct-input {
+      height: auto;
+      padding: 12px 14px;
     }
 
     .ct-select:focus, .ct-input:focus {
@@ -609,22 +615,24 @@ _UI_HTML = r"""<!DOCTYPE html>
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 10px 16px;
-      border-radius: 12px;
+      height: 40px;
+      padding: 0 16px;
+      border-radius: 10px;
       border: 1.5px solid rgba(255, 255, 255, 0.28);
       background: linear-gradient(135deg, #4285F4 0%, #1a73e8 50%, #0284c7 100%);
       color: #ffffff;
       font-family: var(--font-sans);
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 800;
+      white-space: nowrap;
       cursor: pointer;
       box-shadow: 0 6px 18px rgba(66, 133, 244, 0.34);
       transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s;
     }
 
     .ct-btn-primary:hover {
-      transform: translateY(-2px) scale(1.015);
-      box-shadow: 0 10px 26px rgba(66, 133, 244, 0.48);
+      transform: translateY(-1.5px);
+      box-shadow: 0 10px 24px rgba(66, 133, 244, 0.46);
     }
 
     .ct-btn-secondary {
@@ -632,14 +640,16 @@ _UI_HTML = r"""<!DOCTYPE html>
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 8px 14px;
-      border-radius: 11px;
+      height: 40px;
+      padding: 0 14px;
+      border-radius: 10px;
       border: 1.5px solid var(--border-subtle);
       background: var(--bg-card);
       color: var(--text-main);
       font-family: var(--font-sans);
       font-size: 12.5px;
       font-weight: 700;
+      white-space: nowrap;
       cursor: pointer;
       text-decoration: none;
       transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
@@ -656,7 +666,8 @@ _UI_HTML = r"""<!DOCTYPE html>
     .ct-rail-footer {
       padding-top: 12px;
       border-top: 1px solid var(--border-subtle);
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 8px;
     }
 
@@ -674,36 +685,60 @@ _UI_HTML = r"""<!DOCTYPE html>
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 14px 20px;
-      gap: 14px;
+      padding: 16px 20px;
+      gap: 16px;
       overflow: hidden;
       min-height: 0;
     }
 
-    /* ── Clean, Neon-Outlined 4-Metric Operational Strip ── */
+    /* ── Clean, Strictly Symmetrical 4-Metric Operational Strip ── */
     .ct-kpi-ribbon {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
       flex-shrink: 0;
     }
 
     .ct-kpi-card {
+      position: relative;
       background: var(--bg-card);
       border: 1.5px solid var(--border-subtle);
       border-radius: 16px;
-      padding: 13px 16px;
+      height: 104px;
+      min-height: 104px;
+      max-height: 104px;
+      padding: 14px 18px;
       display: flex;
-      align-items: center;
+      align-items: stretch;
       justify-content: space-between;
-      gap: 10px;
       box-shadow: var(--shadow-soft);
       animation: genieCardPop 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
       transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s;
+      overflow: hidden;
     }
 
     .ct-kpi-card:hover {
-      transform: translateY(-2.5px);
+      transform: translateY(-2px);
+    }
+
+    .ct-kpi-left {
+      width: 100%;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .ct-kpi-right {
+      position: absolute;
+      top: 13px;
+      right: 16px;
+      bottom: 13px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-end;
+      pointer-events: none;
     }
 
     .ct-kpi-label {
@@ -712,33 +747,49 @@ _UI_HTML = r"""<!DOCTYPE html>
       text-transform: uppercase;
       letter-spacing: 0.06em;
       color: var(--text-muted);
+      padding-right: 40px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .ct-kpi-val {
-      font-size: 22px;
+      font-size: 18px;
       font-weight: 800;
       letter-spacing: -0.025em;
       color: var(--text-main);
-      margin-top: 2px;
+      line-height: 1.2;
+      padding-right: 38px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .ct-kpi-sub {
       font-size: 11.5px;
       font-weight: 600;
       color: var(--text-secondary);
-      margin-top: 2px;
+      padding-right: 116px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .ct-kpi-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 24px;
       font-family: var(--font-mono);
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 800;
-      padding: 5px 10px;
+      padding: 0 10px;
       border-radius: 999px;
       background: var(--accent-emerald-soft);
       color: var(--accent-emerald);
       border: 1px solid rgba(52, 168, 83, 0.35);
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     /* ── Workspace Views with Genie Spring Animation ── */
@@ -746,7 +797,7 @@ _UI_HTML = r"""<!DOCTYPE html>
       display: none;
       flex: 1;
       min-height: 0;
-      gap: 14px;
+      gap: 16px;
       transform-origin: left center;
     }
 
@@ -760,7 +811,7 @@ _UI_HTML = r"""<!DOCTYPE html>
       flex: 1;
       background: var(--bg-card);
       border: 1.5px solid var(--border-subtle);
-      border-radius: 18px;
+      border-radius: 16px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -772,29 +823,34 @@ _UI_HTML = r"""<!DOCTYPE html>
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 16px;
+      height: 56px;
+      min-height: 56px;
+      padding: 0 18px;
       background: var(--bg-elevated);
       border-bottom: 1px solid var(--border-subtle);
-      gap: 10px;
-      flex-wrap: wrap;
+      gap: 12px;
+      flex-wrap: nowrap;
     }
 
     .ct-scope-group {
       display: flex;
       align-items: center;
       gap: 8px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      min-width: 0;
     }
 
     .ct-scope-btn {
-      padding: 6px 14px;
-      border-radius: 999px;
+      height: 36px;
+      padding: 0 14px;
+      border-radius: 10px;
       border: 1.5px solid var(--border-subtle);
       background: var(--bg-card);
       color: var(--text-secondary);
       font-family: var(--font-sans);
       font-size: 12.5px;
       font-weight: 700;
+      white-space: nowrap;
       cursor: pointer;
       transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
     }
@@ -802,7 +858,6 @@ _UI_HTML = r"""<!DOCTYPE html>
     .ct-scope-btn:hover {
       border-color: #4285F4;
       color: var(--accent-primary);
-      transform: scale(1.03);
     }
 
     .ct-scope-btn.active {
@@ -858,55 +913,59 @@ _UI_HTML = r"""<!DOCTYPE html>
       overflow: hidden;
     }
 
-    /* Right Inspector Panel */
+    /* Right Inspector Panel — Fixed Symmetric 380px Width Across Workspaces */
     .ct-sidebar {
-      width: 360px;
+      width: 380px;
+      min-width: 380px;
+      max-width: 380px;
       background: var(--bg-card);
       border: 1.5px solid var(--border-subtle);
-      border-radius: 18px;
-      padding: 14px;
+      border-radius: 16px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
       overflow-y: auto;
       box-shadow: var(--shadow-soft);
       flex-shrink: 0;
     }
 
     .ct-panel-title {
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 800;
       color: var(--text-main);
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
+      min-height: 24px;
     }
 
     .ct-panel-sub {
       font-size: 12px;
       color: var(--text-muted);
       margin-top: 2px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .ct-box {
       background: var(--bg-elevated);
       border: 1.5px solid var(--border-subtle);
       border-radius: 14px;
-      padding: 14px;
+      padding: 16px;
     }
 
     .ct-form-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
     }
 
     .ct-field {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 5px;
+      min-width: 0;
     }
 
     .ct-field label {
@@ -915,6 +974,9 @@ _UI_HTML = r"""<!DOCTYPE html>
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.04em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .ct-gauge-track {
@@ -923,7 +985,7 @@ _UI_HTML = r"""<!DOCTYPE html>
       background: var(--border-subtle);
       border-radius: 999px;
       overflow: hidden;
-      margin-top: 4px;
+      margin-top: 6px;
     }
 
     .ct-gauge-fill {
@@ -936,16 +998,16 @@ _UI_HTML = r"""<!DOCTYPE html>
       background: var(--bg-card);
       border: 1.5px solid var(--border-subtle);
       border-left: 5px solid var(--route-c, #4285F4);
-      border-radius: 13px;
-      padding: 11px 13px;
+      border-radius: 12px;
+      padding: 12px 14px;
       cursor: pointer;
       transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s, border-color 0.2s;
-      margin-bottom: 9px;
+      margin-bottom: 10px;
     }
 
     .ct-route-item:hover {
       border-color: #4285F4;
-      transform: translateX(3px) scale(1.01);
+      transform: translateX(2px);
       box-shadow: 0 6px 18px rgba(66, 133, 244, 0.16);
     }
 
@@ -1001,8 +1063,9 @@ _UI_HTML = r"""<!DOCTYPE html>
     .ct-copilot-dock {
       display: none;
       align-items: center;
+      height: 58px;
       gap: 12px;
-      padding: 10px 20px;
+      padding: 0 20px;
       background: var(--bg-glass);
       backdrop-filter: blur(18px);
       border-top: 2px solid #4285F4;
@@ -1023,13 +1086,14 @@ _UI_HTML = r"""<!DOCTYPE html>
 
     .ct-copilot-input {
       flex: 1;
+      height: 38px;
       background: var(--bg-input);
       color: var(--text-main);
       border: 1.5px solid var(--border-subtle);
-      border-radius: 999px;
-      padding: 9px 18px;
+      border-radius: 10px;
+      padding: 0 14px;
       font-family: var(--font-sans);
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 600;
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
@@ -1042,21 +1106,28 @@ _UI_HTML = r"""<!DOCTYPE html>
 
     .ct-quick-chips {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       overflow-x: auto;
-      max-width: 44vw;
+      flex-shrink: 0;
     }
 
     .ct-chip-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 36px;
       background: var(--bg-card);
       color: var(--text-main);
       border: 1.5px solid var(--border-subtle);
-      border-radius: 999px;
-      padding: 6px 13px;
+      border-radius: 10px;
+      padding: 0 13px;
+      font-family: var(--font-sans);
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
@@ -1070,7 +1141,7 @@ _UI_HTML = r"""<!DOCTYPE html>
     /* Toast / AI Reply Banner with Genie Effect */
     .ct-toast {
       position: fixed;
-      bottom: 64px;
+      bottom: 68px;
       right: 24px;
       max-width: 520px;
       background: var(--bg-card);
@@ -1087,11 +1158,11 @@ _UI_HTML = r"""<!DOCTYPE html>
       animation: genieToastPop 0.34s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
-    /* Photo Gallery Grid */
+    /* Photo Gallery Grid — Equal-Height Rectangular Cards */
     .ct-photo-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
     }
 
     .ct-photo-card {
@@ -1105,36 +1176,44 @@ _UI_HTML = r"""<!DOCTYPE html>
 
     .ct-photo-card:hover, .ct-photo-card.active {
       border-color: #4285F4;
-      transform: translateY(-2px) scale(1.01);
+      transform: translateY(-2px);
       box-shadow: var(--shadow-float);
     }
 
     .ct-photo-card img {
       width: 100%;
-      height: 115px;
+      height: 120px;
       object-fit: cover;
       display: block;
     }
 
     .ct-photo-card div {
-      padding: 7px 10px;
-      font-size: 11.5px;
+      padding: 8px 12px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    /* Architecture & How-To Blueprint Cards */
+    /* Architecture & How-To Blueprint Cards — Symmetrical 3-Column Equal-Height Grid */
     .arch-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      align-items: stretch;
     }
 
     .arch-card {
       background: var(--bg-elevated);
       border: 1.5px solid var(--border-subtle);
       border-radius: 14px;
-      padding: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
       transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s, border-color 0.22s;
     }
 
@@ -1153,50 +1232,169 @@ _UI_HTML = r"""<!DOCTYPE html>
       border-radius: 10px;
       color: var(--text-main);
       overflow-x: auto;
-      margin-top: 6px;
+      margin-top: 8px;
     }
 
-    /* ── Launchpad Front Page Clean Cards & Controls ── */
+    /* ── Launchpad Front Page: Strictly Symmetrical Rectangular Grid System ── */
+    .lp-shell {
+      width: 100%;
+      max-width: 100%;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .lp-hero-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 20px;
+      background: var(--bg-elevated);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 16px;
+      min-height: 82px;
+    }
+
+    .lp-setup-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .lp-setup-card {
+      background: var(--bg-elevated);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 16px;
+      height: 164px;
+      min-height: 164px;
+      max-height: 164px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    .lp-setup-row-2col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      height: 38px;
+      align-items: stretch;
+    }
+
     .lp-hub-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 8px;
-      margin-top: 10px;
+      height: 38px;
+      align-items: stretch;
     }
 
     .lp-hub-card {
-      background: var(--bg-elevated);
+      background: var(--bg-card);
       border: 1.5px solid var(--border-subtle);
-      border-radius: 11px;
-      padding: 8px 10px;
+      border-radius: 10px;
+      height: 38px;
+      padding: 0 6px;
       cursor: pointer;
-      text-align: center;
-      transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .lp-hub-card:hover {
       border-color: #4285F4;
-      transform: translateY(-1.5px);
+      color: var(--text-main);
     }
 
     .lp-hub-card.active {
       background: var(--accent-primary-soft);
       border-color: #4285F4;
-      box-shadow: 0 4px 14px rgba(66, 133, 244, 0.22);
+      color: var(--accent-primary);
+      box-shadow: 0 4px 12px rgba(66, 133, 244, 0.20);
+    }
+
+    .lp-preset-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .lp-preset-btn {
+      height: 40px;
+      width: 100%;
+      padding: 0 12px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border-subtle);
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      cursor: pointer;
+      transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .lp-preset-btn:hover {
+      border-color: #4285F4;
+      color: var(--accent-primary);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(66, 133, 244, 0.16);
+    }
+
+    .lp-acc-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .lp-acc-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
     }
 
     .lp-corr-chip {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 5px 11px;
-      border-radius: 999px;
+      justify-content: space-between;
+      height: 36px;
+      padding: 0 12px;
+      border-radius: 10px;
       border: 1.5px solid var(--border-subtle);
       background: var(--bg-card);
       color: var(--text-secondary);
       font-size: 11.5px;
       font-weight: 700;
       cursor: pointer;
+      white-space: nowrap;
       transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
@@ -1208,50 +1406,62 @@ _UI_HTML = r"""<!DOCTYPE html>
     }
 
     .lp-rule-row {
-      background: var(--bg-card);
+      background: var(--bg-elevated);
       border: 1.5px solid var(--border-subtle);
       border-left: 5px solid #4285F4;
       border-radius: 12px;
-      padding: 12px 14px;
-      margin-bottom: 8px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
       animation: genieCardPop 0.28s cubic-bezier(0.22, 1, 0.36, 1) backwards;
     }
 
     .lp-synth-cta {
+      height: 46px;
       background: linear-gradient(135deg, #4285F4 0%, #1a73e8 45%, #34A853 100%);
       color: #ffffff;
       border: 2px solid rgba(255, 255, 255, 0.32);
-      border-radius: 14px;
-      padding: 14px 28px;
+      border-radius: 12px;
+      padding: 0 26px;
       font-family: var(--font-sans);
-      font-size: 15.5px;
+      font-size: 14.5px;
       font-weight: 800;
       letter-spacing: -0.01em;
+      white-space: nowrap;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      box-shadow: 0 10px 28px rgba(66, 133, 244, 0.38), 0 0 18px rgba(52, 168, 83, 0.24);
+      box-shadow: 0 8px 24px rgba(66, 133, 244, 0.36), 0 0 16px rgba(52, 168, 83, 0.22);
       transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s;
     }
 
     .lp-synth-cta:hover {
-      transform: translateY(-2.5px) scale(1.02);
-      box-shadow: 0 14px 36px rgba(66, 133, 244, 0.50), 0 0 24px rgba(52, 168, 83, 0.35);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(66, 133, 244, 0.48), 0 0 22px rgba(52, 168, 83, 0.32);
+    }
+
+    .lp-step-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
     }
 
     .lp-step-pill {
       display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 12px;
+      justify-content: center;
+      height: 34px;
+      padding: 0 10px;
+      border-radius: 10px;
+      font-size: 11.5px;
       font-weight: 700;
       background: var(--bg-card);
       border: 1.5px solid var(--border-subtle);
       color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       transition: all 0.22s;
     }
 
@@ -1270,9 +1480,11 @@ _UI_HTML = r"""<!DOCTYPE html>
 
     @media (max-width: 1280px) {
       .ct-left-rail { width: 230px; }
-      .ct-kpi-ribbon { grid-template-columns: repeat(2, 1fr); }
-      .ct-sidebar { width: 320px; }
-      .arch-grid { grid-template-columns: repeat(2, 1fr); }
+      .ct-kpi-ribbon { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .lp-setup-grid { grid-template-columns: 1fr; }
+      .lp-preset-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .ct-sidebar { width: 340px; min-width: 340px; }
+      .arch-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
   </style>
 </head>
@@ -1360,15 +1572,15 @@ _UI_HTML = r"""<!DOCTYPE html>
           </select>
         </div>
 
-        <button class="ct-btn-primary" id="btnOptimize" style="width:100%;margin-top:2px" onclick="synthesizeFromLaunchpad(true)">
+        <button class="ct-btn-primary" id="btnOptimize" style="width:100%;margin-top:4px" onclick="synthesizeFromLaunchpad(true)">
           <span>🚀</span> Synthesize &amp; Run Agent
         </button>
       </div>
     </div>
 
-    <!-- Bottom Left Theme & Deck Controls -->
+    <!-- Bottom Left Theme & Deck Controls (Symmetric 2-Column Grid) -->
     <div class="ct-rail-footer">
-      <button class="ct-btn-secondary neon-amber" id="btnThemeToggle" style="flex:1" onclick="toggleCtTheme()" title="Switch between Gemini Light and Midnight Dark theme">
+      <button class="ct-btn-secondary neon-amber" id="btnThemeToggle" onclick="toggleCtTheme()" title="Switch between Gemini Light and Midnight Dark theme">
         🌙 Dark Mode
       </button>
       <a href="/deck" target="_blank" class="ct-btn-secondary" title="Open Executive Presentation Deck">
@@ -1381,259 +1593,245 @@ _UI_HTML = r"""<!DOCTYPE html>
   <div class="ct-workspace-col">
     <main class="ct-main">
 
-      <!-- ── Clean, Neon-Outlined 4-Metric Operational Strip (With Moving Orbital Rings) ── -->
+      <!-- ── Strictly Symmetrical 4-Metric Operational Strip (Identical 104px Rectangular Boxes) ── -->
       <section class="ct-kpi-ribbon">
         <div class="ct-kpi-card neon-blue">
-          <div>
+          <div class="ct-kpi-left">
             <div class="ct-kpi-label" id="kpiLbl1">Selected Hub</div>
-            <div class="ct-kpi-val" id="kpiTrucks">Mumbai · Bhiwandi DC</div>
-            <div class="ct-kpi-sub" id="kpiTrucksSub">Select hub, drivers &amp; trucks below</div>
+            <div class="ct-kpi-val" id="kpiTrucks">Bhiwandi Regional DC</div>
+            <div class="ct-kpi-sub" id="kpiTrucksSub">Mumbai Metropolitan · BHW-DC</div>
           </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <div class="ct-kpi-right">
             <div class="orbital-ring-wrap" style="width:32px;height:32px"><span class="orbital-ring-core" style="font-size:14px">📍</span></div>
-            <div class="ct-kpi-badge" id="kpiTrucksBadge">READY</div>
+            <div class="ct-kpi-badge" id="kpiTrucksBadge">STAGED</div>
           </div>
         </div>
 
         <div class="ct-kpi-card neon-green">
-          <div>
+          <div class="ct-kpi-left">
             <div class="ct-kpi-label" id="kpiLbl2">Staged Order Manifest</div>
             <div class="ct-kpi-val" id="kpiSavings">70 Retail Outlets</div>
-            <div class="ct-kpi-sub" id="kpiCostCompare">1,260 cartons · 8 corridors</div>
+            <div class="ct-kpi-sub" id="kpiCostCompare">1,260 cartons · 43.6 m³ (8/8)</div>
           </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <div class="ct-kpi-right">
             <div class="orbital-ring-wrap" style="width:32px;height:32px"><span class="orbital-ring-core" style="font-size:14px">📦</span></div>
-            <div class="ct-kpi-badge" id="kpiSavingsPct">BigQuery / CSV</div>
+            <div class="ct-kpi-badge" id="kpiSavingsPct">BigQuery Book</div>
           </div>
         </div>
 
         <div class="ct-kpi-card neon-amber">
-          <div>
+          <div class="ct-kpi-left">
             <div class="ct-kpi-label" id="kpiLbl3">Hub Fleet &amp; Roster</div>
-            <div class="ct-kpi-val" id="kpiStopsVal">10 Trucks · 12 Drivers</div>
-            <div class="ct-kpi-sub" id="kpiStopsSub">Dynamic roster for BHW-DC</div>
+            <div class="ct-kpi-val" id="kpiStopsVal">12 Trucks · 12 Drivers</div>
+            <div class="ct-kpi-sub" id="kpiStopsSub">Roster: Ravi, Sanjay, Imran...</div>
           </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <div class="ct-kpi-right">
             <div class="orbital-ring-wrap" style="width:32px;height:32px"><span class="orbital-ring-core" style="font-size:14px">🚛</span></div>
             <div class="ct-kpi-badge" id="kpiCargoBadge">5 Vehicle Classes</div>
           </div>
         </div>
 
         <div class="ct-kpi-card neon-red">
-          <div>
+          <div class="ct-kpi-left">
             <div class="ct-kpi-label" id="kpiLbl4">Manager Rules &amp; Status</div>
-            <div class="ct-kpi-val" id="kpiDistanceVal">Ready to Synthesize</div>
+            <div class="ct-kpi-val" id="kpiDistanceVal">1 Driver Rule Active</div>
             <div class="ct-kpi-sub" id="kpiDistanceSub">Click 'Synthesize &amp; Run Agent'</div>
           </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <div class="ct-kpi-right">
             <div class="orbital-ring-wrap" style="width:32px;height:32px"><span class="orbital-ring-core" style="font-size:14px">⚡</span></div>
-            <div class="ct-kpi-badge" id="kpiDistanceBadge">Step 1 · Setup</div>
+            <div class="ct-kpi-badge" id="kpiDistanceBadge">Awaiting Run</div>
           </div>
         </div>
       </section>
 
-      <!-- ═══════════════ VIEW 0 (FRONT PAGE): CLEAN, UNCLUTTERED DISPATCH LAUNCHPAD ═══════════════ -->
+      <!-- ═══════════════ VIEW 0 (FRONT PAGE): SYMMETRICAL DISPATCH LAUNCHPAD ═══════════════ -->
       <section class="ct-view active" id="view-launchpad">
-        <div class="ct-stage" style="padding:22px 28px;overflow-y:auto;gap:18px">
-          <div style="max-width:1100px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:18px">
+        <div class="ct-stage" style="overflow-y:auto">
+          <div class="lp-shell">
 
-            <!-- Clean Top Hero Header with Moving Orbital Ring & Bold Big Heading -->
-            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px">
-              <div style="display:flex;align-items:center;gap:16px">
-                <div class="orbital-ring-wrap" style="width:56px;height:56px">
-                  <span class="orbital-ring-core" style="font-size:26px">🚀</span>
+            <!-- Symmetrical Full-Width Hero Header Banner -->
+            <div class="lp-hero-bar">
+              <div style="display:flex;align-items:center;gap:16px;min-width:0">
+                <div class="orbital-ring-wrap" style="width:52px;height:52px">
+                  <span class="orbital-ring-core" style="font-size:24px">🚀</span>
                 </div>
-                <div>
-                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+                <div style="min-width:0">
+                  <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
                     <span class="ct-kpi-badge" style="background:var(--accent-primary-soft);color:var(--accent-primary);border-color:rgba(66,133,244,0.4)">LOGISTICS MANAGER LAUNCHPAD</span>
                     <span id="lpActiveHubBadge" style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted);font-weight:800">HUB: BHW-DC (MUMBAI)</span>
                   </div>
-                  <h1 class="ct-big-heading">
+                  <h1 class="ct-big-heading" style="font-size:25px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
                     FleetFlow <span class="google-gradient-text">AI Dispatch &amp; 3D Load</span> Command Center
                   </h1>
                 </div>
               </div>
-              <div style="display:flex;gap:10px;align-items:center">
+              <div style="display:flex;gap:10px;align-items:center;flex-shrink:0">
                 <button class="ct-btn-secondary neon-amber" id="btnHeroThemeToggle" onclick="toggleCtTheme()">
-                  🌙 Switch Dark / Light Mode
+                  🌙 Switch to Dark Mode
                 </button>
               </div>
             </div>
 
-            <!-- 5-Stage Synthesis Progress Bar (Shown Only While Agent Synthesizes) -->
-            <div id="lpSynthesisBar" class="neon-blue" style="display:none;background:var(--bg-elevated);border-radius:14px;padding:14px 18px">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <!-- 5-Stage Synthesis Progress Bar (Symmetric 5-Column Grid When Active) -->
+            <div id="lpSynthesisBar" class="neon-blue" style="display:none;background:var(--bg-elevated);border-radius:16px;padding:14px 18px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
                 <span style="font-size:13.5px;font-weight:800;color:var(--accent-primary)" id="lpSynthStatusTitle">⚡ FleetFlow Agent Synthesizing Dispatch Plan...</span>
                 <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">OR-Tools CVRPTW + 3D Height-Map Enclave</span>
               </div>
-              <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <div class="lp-step-grid">
                 <div class="lp-step-pill" id="lpStep1">1. Hub &amp; Manifest Intake</div>
-                <div class="lp-step-pill" id="lpStep2">2. 8-Way Corridors &amp; Manager Rules</div>
-                <div class="lp-step-pill" id="lpStep3">3. OR-Tools Fleet &amp; Route Solver</div>
+                <div class="lp-step-pill" id="lpStep2">2. 8-Way Corridors &amp; Rules</div>
+                <div class="lp-step-pill" id="lpStep3">3. OR-Tools Fleet Solver</div>
                 <div class="lp-step-pill" id="lpStep4">4. 3D LIFO Cargo Packing</div>
                 <div class="lp-step-pill" id="lpStep5">5. Cost vs. Manual Audit</div>
               </div>
             </div>
 
-            <!-- STEP 1: 3 CLEAN, NEON-OUTLINED CORE OPTION BOXES -->
-            <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:14px">
+            <!-- STEP 1: 3 IDENTICAL-SIZE RECTANGULAR SETUP BOXES (164px Height, 3 Equal Rows Each) -->
+            <div class="lp-setup-grid">
 
-              <!-- Box 1: Distribution Hub -->
-              <div class="ct-box neon-blue">
+              <!-- Box 1: Distribution Hub (Row 1 Header, Row 2 Select, Row 3 4-Hub Equal Grid) -->
+              <div class="lp-setup-card neon-blue">
                 <div class="ct-panel-title">
                   <span>📍 1. Distribution Hub</span>
-                  <span style="font-size:11px;color:var(--accent-primary);font-family:var(--font-mono)" id="lpHubDriverCountLbl">12 Drivers · 70 Outlets</span>
+                  <span class="ct-kpi-badge" style="background:var(--accent-primary-soft);color:var(--accent-primary);border-color:rgba(66,133,244,0.35)" id="lpHubDriverCountLbl">12 Drivers · 70 Outlets</span>
                 </div>
-                <div style="margin-top:8px">
-                  <select id="lpSelHubQuick" class="ct-select" onchange="onLaunchpadHubChange(this.value)">
-                    <option value="BHW-DC">🏙️ Mumbai · Bhiwandi Regional DC (BHW-DC)</option>
-                    <option value="BLR-NLG">🌳 Bengaluru · Nelamangala Hub (BLR-NLG)</option>
-                    <option value="TLJ-DC">⚓ Navi Mumbai · Taloja Hub (TLJ-DC)</option>
-                    <option value="BLR-EC">💻 Bengaluru · Electronic City Hub (BLR-EC)</option>
-                  </select>
-                </div>
+                <select id="lpSelHubQuick" class="ct-select" onchange="onLaunchpadHubChange(this.value)">
+                  <option value="BHW-DC">🏙️ Mumbai · Bhiwandi Regional DC (BHW-DC)</option>
+                  <option value="BLR-NLG">🌳 Bengaluru · Nelamangala Hub (BLR-NLG)</option>
+                  <option value="TLJ-DC">⚓ Navi Mumbai · Taloja Hub (TLJ-DC)</option>
+                  <option value="BLR-EC">💻 Bengaluru · Electronic City Hub (BLR-EC)</option>
+                </select>
                 <div class="lp-hub-grid" id="lpHubCardsGrid">
-                  <div class="lp-hub-card active" data-hub="BHW-DC" onclick="onLaunchpadHubChange('BHW-DC')">
-                    <div style="font-weight:800;font-size:11.5px">Mumbai BHW</div>
-                  </div>
-                  <div class="lp-hub-card" data-hub="BLR-NLG" onclick="onLaunchpadHubChange('BLR-NLG')">
-                    <div style="font-weight:800;font-size:11.5px">BLR Nelamangala</div>
-                  </div>
-                  <div class="lp-hub-card" data-hub="TLJ-DC" onclick="onLaunchpadHubChange('TLJ-DC')">
-                    <div style="font-weight:800;font-size:11.5px">Navi Mumbai</div>
-                  </div>
-                  <div class="lp-hub-card" data-hub="BLR-EC" onclick="onLaunchpadHubChange('BLR-EC')">
-                    <div style="font-weight:800;font-size:11.5px">BLR Elec. City</div>
-                  </div>
+                  <div class="lp-hub-card active" data-hub="BHW-DC" onclick="onLaunchpadHubChange('BHW-DC')" title="Mumbai · Bhiwandi Regional DC">BHW-DC</div>
+                  <div class="lp-hub-card" data-hub="BLR-NLG" onclick="onLaunchpadHubChange('BLR-NLG')" title="Bengaluru · Nelamangala Hub">BLR-NLG</div>
+                  <div class="lp-hub-card" data-hub="TLJ-DC" onclick="onLaunchpadHubChange('TLJ-DC')" title="Navi Mumbai · Taloja Hub">TLJ-DC</div>
+                  <div class="lp-hub-card" data-hub="BLR-EC" onclick="onLaunchpadHubChange('BLR-EC')" title="Bengaluru · Electronic City Hub">BLR-EC</div>
                 </div>
               </div>
 
-              <!-- Box 2: Order Manifest & Spreadsheet Upload -->
-              <div class="ct-box neon-green">
+              <!-- Box 2: Delivery Manifest (Row 1 Header, Row 2 Full-Width Upload Button, Row 3 2-Col Sample/Reset) -->
+              <div class="lp-setup-card neon-green">
                 <div class="ct-panel-title">
                   <span>📂 2. Delivery Manifest</span>
-                  <span id="lpManifestStatusBadge" style="font-size:11px;font-weight:800;color:var(--accent-emerald)">✓ Live Hub Book</span>
+                  <span id="lpManifestStatusBadge" class="ct-kpi-badge">✓ Live Hub Book</span>
                 </div>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-                  <label class="ct-btn-secondary" style="flex:1;cursor:pointer;border-color:#34A853;color:var(--accent-emerald)">
-                    📗 Upload Excel / CSV
-                    <input type="file" accept=".xlsx,.xls,.csv,.tsv,.txt" style="display:none" onchange="uploadLaunchpadSpreadsheet(this)">
-                  </label>
-                  <button class="ct-btn-secondary" onclick="loadLaunchpadSampleSheet('orders_morning.csv')">
-                    📄 Sample CSV
+                <label class="ct-btn-secondary" style="width:100%;height:40px;cursor:pointer;border-color:#34A853;color:var(--accent-emerald)">
+                  📗 Upload Excel / CSV Spreadsheet (.xlsx, .csv)
+                  <input type="file" accept=".xlsx,.xls,.csv,.tsv,.txt" style="display:none" onchange="uploadLaunchpadSpreadsheet(this)">
+                </label>
+                <div class="lp-setup-row-2col">
+                  <button class="ct-btn-secondary" style="height:38px;width:100%" onclick="loadLaunchpadSampleSheet('orders_morning.csv')">
+                    📄 Load Sample CSV
+                  </button>
+                  <button class="ct-btn-secondary" style="height:38px;width:100%" onclick="resetLaunchpadToHubBook()">
+                    🔄 Live BigQuery Book
                   </button>
                 </div>
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
-                  <span style="font-size:11.5px;color:var(--text-secondary)">Supports `.xlsx`, `.csv`, BigQuery</span>
-                  <button class="ct-chip-btn" style="padding:3px 9px;font-size:11px" onclick="resetLaunchpadToHubBook()">Reset Full Book</button>
-                </div>
               </div>
 
-              <!-- Box 3: Optimization Goal & Fleet Scope -->
-              <div class="ct-box neon-amber">
+              <!-- Box 3: Goal & View Scope (Row 1 Header, Row 2 Goal Select, Row 3 2-Col Scope + Fleet Pool) -->
+              <div class="lp-setup-card neon-amber">
                 <div class="ct-panel-title">
                   <span>🎯 3. Goal &amp; View Scope</span>
-                  <span style="font-size:11px;color:var(--accent-amber);font-family:var(--font-mono)" id="lpTotalFleetPoolLbl">12 Trucks Available</span>
+                  <span class="ct-kpi-badge" style="background:rgba(251,188,4,0.14);color:var(--accent-amber);border-color:rgba(251,188,4,0.4)" id="lpTotalFleetPoolLbl">12 Trucks Available</span>
                 </div>
-                <div class="ct-form-grid" style="margin-top:8px">
-                  <div class="ct-field">
-                    <label>Optimization Goal</label>
-                    <select id="lpSelObjective" class="ct-select" onchange="document.getElementById('selObjective').value=this.value">
-                      <option value="lowest_cost">Lowest Cost (₹)</option>
-                      <option value="fewest_trucks">Fewest Trucks</option>
-                      <option value="balanced">Balanced Fleet</option>
-                      <option value="fastest_finish">Fastest Finish</option>
-                    </select>
-                  </div>
-                  <div class="ct-field">
-                    <label>Initial View Scope</label>
-                    <select id="lpSelScope" class="ct-select">
-                      <option value="all">All Fleet</option>
-                      <option value="3">Top 3 Trucks</option>
-                      <option value="1">1 Truck Only</option>
-                    </select>
-                  </div>
+                <select id="lpSelObjective" class="ct-select" onchange="document.getElementById('selObjective').value=this.value">
+                  <option value="lowest_cost">🎯 Optimization Goal: Lowest Total Cost (₹)</option>
+                  <option value="fewest_trucks">🚛 Optimization Goal: Fewest Trucks Dispatched</option>
+                  <option value="balanced">⚖️ Optimization Goal: Balanced Corridor Utilization</option>
+                  <option value="fastest_finish">⚡ Optimization Goal: Fastest Route Completion</option>
+                </select>
+                <div class="lp-setup-row-2col">
+                  <select id="lpSelScope" class="ct-select" style="height:38px">
+                    <option value="all">👁️ View: All Fleet</option>
+                    <option value="3">👁️ View: Top 3 Trucks</option>
+                    <option value="1">👁️ View: 1 Truck Only</option>
+                  </select>
+                  <button class="ct-btn-secondary" style="height:38px;width:100%" onclick="document.getElementById('accFleetPool').open = !document.getElementById('accFleetPool').open">
+                    ⚙️ Configure Fleet Pool
+                  </button>
                 </div>
               </div>
 
             </div>
 
-            <!-- STEP 2 (CENTERPIECE): BIG CENTERED AI COMMAND BOX WITH GOOGLE REVOLVING 4-COLOR NEON RING -->
-            <div style="max-width:980px;width:100%;margin:4px auto">
-              <div class="google-revolving-box">
-                <div class="google-revolving-inner">
-                  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
-                    <div style="display:flex;align-items:center;gap:12px">
-                      <div class="orbital-ring-wrap" style="width:42px;height:42px">
-                        <span class="orbital-ring-core" style="font-size:19px">✨</span>
-                      </div>
-                      <div>
-                        <h2 style="font-size:21px;font-weight:800;letter-spacing:-0.02em;color:var(--text-main)">
-                          Enter Dispatch Details, Driver Assignments &amp; Natural-Language Instructions
-                        </h2>
-                        <div style="font-size:12.5px;color:var(--text-secondary)">
-                          Type instructions below or click a quick preset — e.g. assign a driver to a smaller truck on West and automatically split overflow stops.
-                        </div>
+            <!-- STEP 2 (CENTERPIECE): FULL-WIDTH SYMMETRICAL AI COMMAND BOX WITH GOOGLE REVOLVING 4-COLOR NEON BORDER -->
+            <div class="google-revolving-box" style="width:100%">
+              <div class="google-revolving-inner" style="padding:20px 22px;display:flex;flex-direction:column;gap:14px">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+                  <div style="display:flex;align-items:center;gap:14px;min-width:0">
+                    <div class="orbital-ring-wrap" style="width:44px;height:44px">
+                      <span class="orbital-ring-core" style="font-size:19px">✨</span>
+                    </div>
+                    <div style="min-width:0">
+                      <h2 style="font-size:19.5px;font-weight:800;letter-spacing:-0.02em;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+                        Enter Dispatch Details, Driver Assignments &amp; Natural-Language Instructions
+                      </h2>
+                      <div style="font-size:12.5px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+                        Type instructions below or click any of the 4 symmetrical scenario presets — e.g. assign a driver to a smaller truck on West and split overflow stops.
                       </div>
                     </div>
-                    <span class="ct-kpi-badge" style="background:var(--accent-primary-soft);color:var(--accent-primary);border-color:#4285F4">
-                      Gemini 2.5 Flash + OR-Tools
-                    </span>
                   </div>
+                  <span class="ct-kpi-badge" style="background:var(--accent-primary-soft);color:var(--accent-primary);border-color:#4285F4">
+                    Gemini 2.5 Flash + OR-Tools
+                  </span>
+                </div>
 
-                  <textarea
-                    id="inpLaunchpadPrompt"
-                    class="ct-input"
-                    style="width:100%;height:118px;font-size:15.5px;line-height:1.5;padding:14px 16px;border-radius:14px;border:2px solid rgba(66,133,244,0.45);resize:vertical"
-                    placeholder="Type dispatch instructions here... Example: 'Plan today's dispatch for this hub. Give Ravi the West route in a smaller T14 truck and distribute the remaining West stops to a backup truck.'"
-                  ></textarea>
+                <textarea
+                  id="inpLaunchpadPrompt"
+                  class="ct-input"
+                  style="width:100%;height:106px;font-size:15px;line-height:1.5;padding:13px 16px;border-radius:12px;border:2px solid rgba(66,133,244,0.45);resize:vertical"
+                  placeholder="Type dispatch instructions here... Example: 'Plan today's dispatch for this hub. Give Ravi the West route in a smaller T14 truck and distribute the remaining West stops to a backup truck.'"
+                ></textarea>
 
-                  <!-- Highlighted Quick Scenario Chips -->
-                  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;margin-bottom:16px">
-                    <button class="ct-chip-btn neon-blue" onclick="applyLaunchpadPreset('smaller_west'); setLaunchpadPrompt('Give our lead driver the West route in a smaller T14 (14ft) truck and automatically distribute overflow West stops to a secondary truck')">
-                      ⚡ Driver 1 → West in Smaller Truck (T14) + Split Overflow
-                    </button>
-                    <button class="ct-chip-btn neon-green" onclick="applyLaunchpadPreset('two_leads'); setLaunchpadPrompt('Pin two corridor lead drivers (West in T14 and South in T17) and optimize the rest of the fleet for lowest cost')">
-                      📌 Pin 2 Corridor Leads (West + South)
-                    </button>
-                    <button class="ct-chip-btn neon-amber" onclick="onLaunchpadHubChange('BLR-NLG'); setLaunchpadPrompt('Plan dispatch for Bengaluru Nelamangala hub and highlight the top 3 trucks')">
-                      🌳 Switch to Bengaluru Hub (Karthik, Ramesh...)
-                    </button>
-                    <button class="ct-chip-btn" onclick="applyLaunchpadPreset('clear'); setLaunchpadPrompt('Plan today\'s full fleet dispatch for lowest total cost in ₹ across all corridors')">
-                      🧹 100% Auto-Optimize Lowest Cost
-                    </button>
+                <!-- 4 Equal-Size Rectangular Scenario Buttons in a Strict 4-Column Symmetrical Grid -->
+                <div class="lp-preset-grid">
+                  <button class="lp-preset-btn neon-blue" onclick="applyLaunchpadPreset('smaller_west'); setLaunchpadPrompt('Give our lead driver the West route in a smaller T14 (14ft) truck and automatically distribute overflow West stops to a secondary truck')">
+                    ⚡ Driver 1 → West (T14) + Overflow
+                  </button>
+                  <button class="lp-preset-btn neon-green" onclick="applyLaunchpadPreset('two_leads'); setLaunchpadPrompt('Pin two corridor lead drivers (West in T14 and South in T17) and optimize the rest of the fleet for lowest cost')">
+                    📌 Pin 2 Leads (West + South)
+                  </button>
+                  <button class="lp-preset-btn neon-amber" onclick="onLaunchpadHubChange('BLR-NLG'); setLaunchpadPrompt('Plan dispatch for Bengaluru Nelamangala hub and highlight the top 3 trucks')">
+                    🌳 Switch to Bengaluru Hub
+                  </button>
+                  <button class="lp-preset-btn neon-red" onclick="applyLaunchpadPreset('clear'); setLaunchpadPrompt('Plan today\'s full fleet dispatch for lowest total cost in ₹ across all corridors')">
+                    🧹 100% Auto-Optimize Lowest Cost
+                  </button>
+                </div>
+
+                <!-- Symmetrical Action Footer Inside Revolving Box -->
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:14px;padding-top:12px;border-top:1px solid var(--border-subtle)">
+                  <div style="display:flex;align-items:center;gap:10px;height:46px;padding:0 16px;background:var(--bg-elevated);border:1.5px solid var(--border-subtle);border-radius:12px;font-size:12.5px;font-weight:700;color:var(--text-secondary)">
+                    <span>🛡️ Zero-Hallucination Math Enclave</span>
+                    <span>·</span>
+                    <span id="lpQuickRuleSummary" style="color:var(--accent-primary);font-weight:800">1 Driver Rule Staged</span>
                   </div>
-
-                  <!-- Prominent Action Footer Inside Revolving Box -->
-                  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding-top:12px;border-top:1px solid var(--border-subtle)">
-                    <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--text-secondary)">
-                      <span>🛡️ Zero-Hallucination Math Enclave</span>
-                      <span>·</span>
-                      <span id="lpQuickRuleSummary" style="color:var(--accent-primary)">1 Driver Rule Staged</span>
-                    </div>
-                    <button class="lp-synth-cta" id="btnHeroSynthesize" onclick="synthesizeFromLaunchpad(true)">
-                      <span>🚀</span> Synthesize &amp; Run FleetFlow Agent →
-                    </button>
-                  </div>
+                  <button class="lp-synth-cta" id="btnHeroSynthesize" onclick="synthesizeFromLaunchpad(true)">
+                    <span>🚀</span> Synthesize &amp; Run FleetFlow Agent →
+                  </button>
                 </div>
               </div>
             </div>
 
-            <!-- STEP 3: PROGRESSIVE DISCLOSURE — ALL DETAILED CONTROLS HIDDEN BEHIND CLEAN DROPDOWN ACCORDIONS -->
-            <div style="display:flex;flex-direction:column;gap:12px;max-width:980px;width:100%;margin:0 auto">
+            <!-- STEP 3: PROGRESSIVE DISCLOSURE — 3 FULL-WIDTH SYMMETRICAL ACCORDION BARS -->
+            <div class="lp-acc-stack">
 
               <!-- Accordion 1: Driver, Truck Size & Corridor Rules Builder -->
-              <details class="ct-accordion">
+              <details class="ct-accordion" id="accDriverRules">
                 <summary>
-                  <div style="display:flex;align-items:center;gap:10px">
-                    <span style="font-size:18px">👨‍✈️</span>
+                  <div style="display:flex;align-items:center;gap:12px">
+                    <span class="lp-acc-icon">👨‍✈️</span>
                     <span>Driver, Truck Size &amp; Corridor Rules Builder</span>
-                    <span class="ct-kpi-badge" style="font-size:10.5px;background:var(--accent-primary-soft);color:var(--accent-primary)">Dropdown Controls + Overflow Diagnosis</span>
                   </div>
-                  <span class="ct-acc-chevron">▼</span>
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <span class="ct-kpi-badge" style="background:var(--accent-primary-soft);color:var(--accent-primary);border-color:rgba(66,133,244,0.35)">Dropdown Controls + Overflow Diagnosis</span>
+                    <span class="ct-acc-chevron">▼</span>
+                  </div>
                 </summary>
                 <div class="ct-acc-body">
-                  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px">
                     <div style="font-size:12.5px;color:var(--text-secondary)">
                       Assign specific regional drivers to a compass corridor and vehicle class (`ACE`, `PKP`, `T14`, `T17`, `T20`). Assigning a smaller truck automatically triggers trunk-and-branch overflow distribution.
                     </div>
@@ -1646,18 +1844,20 @@ _UI_HTML = r"""<!DOCTYPE html>
               </details>
 
               <!-- Accordion 2: Available Fleet Pool Steppers & Fuel / Driver Cost Rates -->
-              <details class="ct-accordion">
+              <details class="ct-accordion" id="accFleetPool">
                 <summary>
-                  <div style="display:flex;align-items:center;gap:10px">
-                    <span style="font-size:18px">🚛</span>
+                  <div style="display:flex;align-items:center;gap:12px">
+                    <span class="lp-acc-icon">🚛</span>
                     <span>Available Hub Fleet Pool &amp; Diesel / Driver Cost Rates</span>
-                    <span class="ct-kpi-badge" style="font-size:10.5px">5 Vehicle Classes · ₹/km Rates</span>
                   </div>
-                  <span class="ct-acc-chevron">▼</span>
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <span class="ct-kpi-badge">5 Vehicle Classes · ₹/km Rates</span>
+                    <span class="ct-acc-chevron">▼</span>
+                  </div>
                 </summary>
                 <div class="ct-acc-body">
-                  <div id="lpFleetPoolGrid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:12px"></div>
-                  <div class="ct-form-grid" style="max-width:420px">
+                  <div id="lpFleetPoolGrid" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:14px"></div>
+                  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
                     <div class="ct-field">
                       <label>Diesel Price (₹ / Litre)</label>
                       <input type="number" id="lpInpFuel" class="ct-input" value="92" step="1">
@@ -1671,21 +1871,23 @@ _UI_HTML = r"""<!DOCTYPE html>
               </details>
 
               <!-- Accordion 3: 8-Corridor Filter Chips, Regional Store Demand Table & Enterprise Connectors -->
-              <details class="ct-accordion">
+              <details class="ct-accordion" id="accCorridorDemand">
                 <summary>
-                  <div style="display:flex;align-items:center;gap:10px">
-                    <span style="font-size:18px">🧭</span>
+                  <div style="display:flex;align-items:center;gap:12px">
+                    <span class="lp-acc-icon">🧭</span>
                     <span>8-Corridor Sector Filter, Regional Demand Table &amp; Data Connectors</span>
-                    <span id="lpPreviewSummaryBadge" class="ct-kpi-badge" style="font-size:10.5px">8 Sectors Active</span>
                   </div>
-                  <span class="ct-acc-chevron">▼</span>
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <span id="lpPreviewSummaryBadge" class="ct-kpi-badge">8 Sectors Active</span>
+                    <span class="ct-acc-chevron">▼</span>
+                  </div>
                 </summary>
                 <div class="ct-acc-body">
-                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-                    <span style="font-size:11.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase">Toggle Active Delivery Corridors:</span>
-                    <button class="ct-chip-btn" style="padding:3px 10px;font-size:11px" onclick="selectAllLaunchpadCorridors()">Select All 8 Sectors</button>
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                    <span style="font-size:11.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase">Toggle Active Delivery Corridors (4×2 Symmetrical Grid):</span>
+                    <button class="ct-chip-btn" style="height:30px;padding:0 12px;font-size:11px" onclick="selectAllLaunchpadCorridors()">Select All 8 Sectors</button>
                   </div>
-                  <div id="lpCorridorFilterChips" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px"></div>
+                  <div id="lpCorridorFilterChips" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:14px"></div>
 
                   <div class="ct-table-wrap" style="max-height:220px;border:1px solid var(--border-subtle);border-radius:12px;margin-bottom:14px">
                     <table class="ct-table" style="font-size:12px">
@@ -1704,8 +1906,8 @@ _UI_HTML = r"""<!DOCTYPE html>
                     </table>
                   </div>
 
-                  <div style="font-size:11.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px">Pluggable Enterprise Data Connectors:</div>
-                  <div id="lpConnectorsRow" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px"></div>
+                  <div style="font-size:11.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px">Pluggable Enterprise Data Connectors:</div>
+                  <div id="lpConnectorsRow" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px"></div>
                 </div>
               </details>
 
@@ -1720,17 +1922,17 @@ _UI_HTML = r"""<!DOCTYPE html>
         <div class="ct-stage neon-blue">
           <div class="ct-scope-bar">
             <div class="ct-scope-group">
-              <span style="font-size:15px;font-weight:800;color:var(--text-main);margin-right:6px">🗺️ Live Highway Route Network</span>
+              <span style="font-size:15px;font-weight:800;color:var(--text-main);white-space:nowrap;margin-right:4px">🗺️ Live Highway Route Network</span>
               <button class="ct-scope-btn active" id="scopeAllBtn" onclick="applyTruckScope('all')">All Fleet</button>
               <button class="ct-scope-btn" id="scope1Btn" onclick="applyTruckScope('1')">1 Truck Only</button>
               <button class="ct-scope-btn" id="scope3Btn" onclick="applyTruckScope('3')">Top 3 Trucks</button>
-              <select id="selFocusTruckMap" class="ct-select" style="width:auto;padding:5px 12px;font-size:12.5px" onchange="applySingleTruckDropdown(this.value)">
+              <select id="selFocusTruckMap" class="ct-select" style="width:230px;height:36px;font-size:12.5px" onchange="applySingleTruckDropdown(this.value)">
                 <option value="all">Select specific truck / driver...</option>
               </select>
             </div>
             <div class="ct-scope-group">
-              <button class="ct-btn-secondary neon-blue" style="padding:6px 13px;font-size:12.5px" onclick="switchWorkspace('studio3d')">
-                📦 Inspect Focused Truck in 3D Studio →
+              <button class="ct-btn-secondary neon-blue" style="height:36px;padding:0 14px;font-size:12.5px" onclick="switchWorkspace('studio3d')">
+                📦 Inspect in 3D Studio →
               </button>
             </div>
           </div>
@@ -1743,8 +1945,8 @@ _UI_HTML = r"""<!DOCTYPE html>
         </div>
 
         <aside class="ct-sidebar neon-green">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <span class="ct-section-heading" style="font-size:17px">🚚 Dispatched Fleet</span>
+          <div style="display:flex;align-items:center;justify-content:space-between;min-height:28px">
+            <span class="ct-section-heading" style="font-size:16.5px">🚚 Dispatched Fleet</span>
             <span id="routeCountLbl" class="ct-kpi-badge"></span>
           </div>
 
@@ -1752,7 +1954,7 @@ _UI_HTML = r"""<!DOCTYPE html>
 
           <!-- Progressive Disclosure: Corridor Pinning tucked in a clean expandable drawer -->
           <details class="ct-accordion">
-            <summary style="padding:11px 14px;font-size:13px">
+            <summary style="padding:12px 14px;font-size:13px">
               <span>📌 Pin Driver to Highway Corridor</span>
               <span class="ct-acc-chevron">▼</span>
             </summary>
@@ -1767,11 +1969,11 @@ _UI_HTML = r"""<!DOCTYPE html>
                   <select id="selClaimCorridor" class="ct-select"></select>
                 </div>
               </div>
-              <div style="display:flex;gap:8px;margin-top:10px">
-                <button class="ct-btn-primary" style="flex:1;padding:8px" onclick="submitCorridorClaim()">
+              <div class="lp-setup-row-2col" style="margin-top:10px">
+                <button class="ct-btn-primary" style="width:100%;height:38px" onclick="submitCorridorClaim()">
                   📌 Pin &amp; Re-Plan
                 </button>
-                <button class="ct-btn-secondary" onclick="clearCorridorClaims()">Reset</button>
+                <button class="ct-btn-secondary" style="width:100%;height:38px" onclick="clearCorridorClaims()">Reset Rules</button>
               </div>
               <div id="activeClaimsPills" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>
             </div>
@@ -1784,8 +1986,8 @@ _UI_HTML = r"""<!DOCTYPE html>
         <div class="ct-stage neon-blue">
           <div class="ct-scope-bar">
             <div class="ct-scope-group">
-              <span style="font-size:16px;font-weight:800;color:var(--text-main)">📦 3D LIFO Cargo Bay Studio</span>
-              <span style="font-size:12.5px;color:var(--text-secondary)">Last stop loaded first at cab wall (X=0) · Stop 1 at rear door</span>
+              <span style="font-size:15.5px;font-weight:800;color:var(--text-main);white-space:nowrap">📦 3D LIFO Cargo Bay Studio</span>
+              <span style="font-size:12.5px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Last stop loaded first at cab wall (X=0) · Stop 1 at rear door</span>
             </div>
             <div class="ct-scope-group">
               <span id="studioBannerBadge" class="ct-kpi-badge">100% Unobstructed LIFO</span>
@@ -1798,14 +2000,14 @@ _UI_HTML = r"""<!DOCTYPE html>
           <div class="ct-box neon-blue">
             <div class="ct-panel-title">
               <span>🧮 Truck Type Calculator</span>
-              <span style="font-size:11px;color:var(--accent-primary);font-family:var(--font-mono)">What-If Fit</span>
+              <span class="ct-kpi-badge" style="background:var(--accent-primary-soft);color:var(--accent-primary);border-color:rgba(66,133,244,0.35)">What-If Fit</span>
             </div>
             <div class="ct-panel-sub">Select any driver route and test-pack its cartons into any vehicle class.</div>
-            <div class="ct-field" style="margin-bottom:8px">
+            <div class="ct-field" style="margin-bottom:10px">
               <label>1. Route / Driver Consignment</label>
               <select id="selStudioRoute" class="ct-select" onchange="onStudioRouteSelect(this.value)"></select>
             </div>
-            <div class="ct-field" style="margin-bottom:10px">
+            <div class="ct-field" style="margin-bottom:12px">
               <label>2. Test Vehicle Class (Dimensions)</label>
               <select id="selStudioTruckType" class="ct-select" onchange="runStudioRepack()"></select>
             </div>
@@ -1817,17 +2019,17 @@ _UI_HTML = r"""<!DOCTYPE html>
           <div class="ct-box neon-green" id="studioStatsCard">
             <div class="ct-panel-title">
               <span>📐 Cargo Fit Summary</span>
-              <span id="stLifoStatus" class="ct-kpi-badge" style="font-size:10.5px">LIFO OK</span>
+              <span id="stLifoStatus" class="ct-kpi-badge">LIFO OK</span>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
-              <div>
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:10px">
+              <div style="padding:10px 12px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:10px">
                 <div style="font-size:11px;color:var(--text-muted);font-weight:700">Volume Fill</div>
-                <div style="font-size:20px;font-weight:800" id="stVolFill">78.5%</div>
+                <div style="font-size:20px;font-weight:800;margin-top:2px" id="stVolFill">78.5%</div>
                 <div class="ct-gauge-track"><div id="stVolBar" class="ct-gauge-fill" style="width:78%;background:#4285F4"></div></div>
               </div>
-              <div>
+              <div style="padding:10px 12px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:10px">
                 <div style="font-size:11px;color:var(--text-muted);font-weight:700">Payload Fill</div>
-                <div style="font-size:20px;font-weight:800" id="stWtFill">82.1%</div>
+                <div style="font-size:20px;font-weight:800;margin-top:2px" id="stWtFill">82.1%</div>
                 <div class="ct-gauge-track"><div id="stWtBar" class="ct-gauge-fill" style="width:82%;background:#FBBC04"></div></div>
               </div>
             </div>
@@ -1835,12 +2037,12 @@ _UI_HTML = r"""<!DOCTYPE html>
               <span id="stFrontAxle">38%</span><span id="stRearAxle">62%</span>
               <div id="stAxleBar"></div><div id="stCmvrNote"></div>
             </div>
-            <div id="stOverflowWarn" style="display:none;margin-top:8px;padding:8px;border-radius:8px;background:rgba(225,29,72,0.10);border:1px solid rgba(225,29,72,0.3);color:var(--accent-rose);font-size:11.5px;font-weight:700"></div>
+            <div id="stOverflowWarn" style="display:none;margin-top:10px;padding:10px;border-radius:10px;background:rgba(225,29,72,0.10);border:1px solid rgba(225,29,72,0.3);color:var(--accent-rose);font-size:11.5px;font-weight:700"></div>
           </div>
 
           <!-- Custom Cartons tucked neatly inside an accordion -->
           <details class="ct-accordion">
-            <summary style="padding:11px 14px;font-size:13px">
+            <summary style="padding:12px 14px;font-size:13px">
               <span>➕ Inject Custom Cartons into Bay</span>
               <span class="ct-acc-chevron">▼</span>
             </summary>
@@ -1859,15 +2061,15 @@ _UI_HTML = r"""<!DOCTYPE html>
                   <input type="number" id="inpCustomStop" class="ct-input" value="1" min="1" max="20">
                 </div>
               </div>
-              <div class="ct-form-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:10px">
-                <div class="ct-field"><label>L</label><input type="number" id="inpCustomL" class="ct-input" value="34"></div>
-                <div class="ct-field"><label>W</label><input type="number" id="inpCustomW" class="ct-input" value="34"></div>
-                <div class="ct-field"><label>H</label><input type="number" id="inpCustomH" class="ct-input" value="38"></div>
+              <div class="ct-form-grid" style="grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:10px">
+                <div class="ct-field"><label>L (cm)</label><input type="number" id="inpCustomL" class="ct-input" value="34"></div>
+                <div class="ct-field"><label>W (cm)</label><input type="number" id="inpCustomW" class="ct-input" value="34"></div>
+                <div class="ct-field"><label>H (cm)</label><input type="number" id="inpCustomH" class="ct-input" value="38"></div>
                 <div class="ct-field"><label>Kg</label><input type="number" id="inpCustomKg" class="ct-input" value="24"></div>
               </div>
-              <div style="display:flex;gap:6px">
-                <button class="ct-btn-primary" style="flex:1;padding:8px" onclick="addCustomBoxAndPack()">+ Pack Cartons</button>
-                <button class="ct-btn-secondary" style="padding:8px" onclick="clearCustomBoxes()">Clear</button>
+              <div class="lp-setup-row-2col">
+                <button class="ct-btn-primary" style="width:100%;height:38px" onclick="addCustomBoxAndPack()">+ Pack Cartons</button>
+                <button class="ct-btn-secondary" style="width:100%;height:38px" onclick="clearCustomBoxes()">Clear All</button>
               </div>
               <div id="addedCustomBoxesList" style="margin-top:8px;font-size:11.5px;color:var(--text-muted)"></div>
             </div>
@@ -1877,11 +2079,11 @@ _UI_HTML = r"""<!DOCTYPE html>
 
       <!-- ═══════════════ VIEW 3: FLEET & COST SIMULATOR ═══════════════ -->
       <section class="ct-view" id="view-simulator">
-        <aside class="ct-sidebar neon-blue" style="width:370px">
+        <aside class="ct-sidebar neon-blue">
           <div class="ct-box">
             <div class="ct-panel-title">
               <span>🚛 Available Fleet Mix</span>
-              <span style="font-size:11px;color:var(--accent-primary)">OR-Tools VRPTW</span>
+              <span class="ct-kpi-badge" style="background:var(--accent-primary-soft);color:var(--accent-primary)">OR-Tools VRPTW</span>
             </div>
             <div class="ct-panel-sub">Adjust available trucks at the hub and re-solve the cost matrix.</div>
             <div id="fleetControlsContainer" style="display:flex;flex-direction:column;gap:8px"></div>
@@ -1889,7 +2091,7 @@ _UI_HTML = r"""<!DOCTYPE html>
 
           <div class="ct-box neon-amber">
             <div class="ct-panel-title"><span>⛽ Operating Cost Rates</span></div>
-            <div class="ct-form-grid" style="margin-top:6px">
+            <div class="ct-form-grid" style="margin-top:8px">
               <div class="ct-field">
                 <label>Diesel (₹ / Litre)</label>
                 <input type="number" id="inpSimFuel" class="ct-input" value="92" step="1">
@@ -1905,18 +2107,18 @@ _UI_HTML = r"""<!DOCTYPE html>
           </div>
         </aside>
 
-        <div class="ct-stage neon-green" style="padding:18px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-            <div>
-              <h2 class="ct-section-heading">📊 Dispatch Schedule &amp; Route Cost Ledger</h2>
-              <div style="font-size:12.5px;color:var(--text-muted)">Atomic copy-ready table for Google Sheets or CSV export</div>
+        <div class="ct-stage neon-green">
+          <div class="ct-scope-bar">
+            <div class="ct-scope-group">
+              <span style="font-size:15.5px;font-weight:800;color:var(--text-main)">📊 Dispatch Schedule &amp; Route Cost Ledger</span>
+              <span style="font-size:12px;color:var(--text-muted)">Atomic copy-ready table for Google Sheets or CSV export</span>
             </div>
-            <div style="display:flex;gap:8px">
-              <button class="ct-btn-secondary neon-blue" onclick="copyScheduleTable()">📋 Copy for Google Sheets</button>
-              <button class="ct-btn-secondary neon-green" onclick="exportScheduleCsv()">⬇ Export CSV</button>
+            <div class="ct-scope-group">
+              <button class="ct-btn-secondary neon-blue" style="height:36px" onclick="copyScheduleTable()">📋 Copy for Google Sheets</button>
+              <button class="ct-btn-secondary neon-green" style="height:36px" onclick="exportScheduleCsv()">⬇ Export CSV</button>
             </div>
           </div>
-          <div class="ct-table-wrap">
+          <div class="ct-table-wrap" style="padding:14px 18px">
             <table class="ct-table" id="simScheduleTable">
               <thead>
                 <tr>
@@ -1940,16 +2142,16 @@ _UI_HTML = r"""<!DOCTYPE html>
         </div>
       </section>
 
-      <!-- ═══════════════ VIEW 4: DOCK QR SCANNER & SMART ORDER INTAKE ═══════════════ -->
+      <!-- ═══════════════ VIEW 4: DOCK QR SCANNER & SMART ORDER INTAKE (EXACT 50% / 50% SYMMETRICAL SPLIT) ═══════════════ -->
       <section class="ct-view" id="view-intake">
-        <div class="ct-stage neon-blue" style="padding:18px;overflow-y:auto">
-          <div class="ct-panel-title" style="font-size:18px">
+        <div class="ct-stage neon-blue" style="flex:1;padding:18px;overflow-y:auto;gap:14px">
+          <div class="ct-panel-title" style="font-size:17px">
             <span>📸 Warehouse Dock QR &amp; Carton Vision Scanner</span>
             <span class="ct-kpi-badge">OpenCV + Gemini Vision</span>
           </div>
-          <div class="ct-panel-sub">Click a staging floor photo or upload a carton image to decode QR labels and pack cartons into today's 3D load plan.</div>
+          <div class="ct-panel-sub" style="margin-bottom:0">Click a staging floor photo or upload a carton image to decode QR labels and pack cartons into today's 3D load plan.</div>
 
-          <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center">
+          <div style="display:flex;gap:10px;align-items:center">
             <label class="ct-btn-secondary neon-blue" style="cursor:pointer">
               📤 Upload Custom Carton Photo
               <input type="file" accept="image/*" style="display:none" onchange="uploadCustomPhoto(this)">
@@ -1959,7 +2161,7 @@ _UI_HTML = r"""<!DOCTYPE html>
 
           <div class="ct-photo-grid" id="samplePhotosGrid"></div>
 
-          <div class="ct-box neon-green" style="margin-top:14px" id="scanResultBox">
+          <div class="ct-box neon-green" style="margin-top:auto" id="scanResultBox">
             <div class="ct-panel-title"><span>🔍 Decoded Carton Manifest</span></div>
             <div id="scanResultContent" style="font-family:var(--font-mono);font-size:12px;color:var(--text-secondary);margin-top:6px">
               Select a staging floor photo above to run live QR &amp; label recognition.
@@ -1967,27 +2169,27 @@ _UI_HTML = r"""<!DOCTYPE html>
           </div>
         </div>
 
-        <div class="ct-stage neon-amber" style="padding:18px;overflow-y:auto">
-          <div class="ct-panel-title" style="font-size:18px">
+        <div class="ct-stage neon-amber" style="flex:1;padding:18px;overflow-y:auto;gap:14px">
+          <div class="ct-panel-title" style="font-size:17px">
             <span>📝 Unstructured ERP, Email &amp; WhatsApp Order Intake</span>
             <span class="ct-kpi-badge">Auto-Geocode + SKU Match</span>
           </div>
-          <div class="ct-panel-sub">Load a preset dealer manifest or paste raw text/CSV from an email or WhatsApp message.</div>
+          <div class="ct-panel-sub" style="margin-bottom:0">Load a preset dealer manifest or paste raw text/CSV from an email or WhatsApp message.</div>
 
-          <div id="sampleOrdersBtns" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>
+          <div id="sampleOrdersBtns" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px"></div>
 
-          <textarea id="inpOrderText" class="ct-input" style="width:100%;height:220px;font-family:var(--font-mono);font-size:12px;line-height:1.5;resize:vertical" placeholder="Paste dealer orders here (e.g. Store name, locality, SKU codes and carton quantities)..."></textarea>
+          <textarea id="inpOrderText" class="ct-input" style="width:100%;flex:1;min-height:190px;font-family:var(--font-mono);font-size:12px;line-height:1.5;resize:vertical" placeholder="Paste dealer orders here (e.g. Store name, locality, SKU codes and carton quantities)..."></textarea>
 
-          <div style="display:flex;gap:10px;margin-top:10px">
-            <button class="ct-btn-primary" onclick="submitOrderText()">
-              ⚡ Parse Orders &amp; Build Dispatch Plan
+          <div class="lp-setup-row-2col">
+            <button class="ct-btn-primary" style="width:100%" onclick="submitOrderText()">
+              ⚡ Parse Orders &amp; Build Plan
             </button>
-            <button class="ct-btn-secondary" onclick="resetToDefaultDemo()">
+            <button class="ct-btn-secondary" style="width:100%" onclick="resetToDefaultDemo()">
               🔄 Reset to Full Hub Book
             </button>
           </div>
 
-          <div class="ct-box" style="margin-top:14px">
+          <div class="ct-box" style="margin-top:auto">
             <div class="ct-panel-title"><span>📋 Intake &amp; Geocoding Summary</span></div>
             <div id="ingestResultContent" style="font-size:12.5px;color:var(--text-secondary);margin-top:6px">
               Ready to ingest unstructured dealer orders.
@@ -1996,25 +2198,25 @@ _UI_HTML = r"""<!DOCTYPE html>
         </div>
       </section>
 
-      <!-- ═══════════════ VIEW 5: DRIVER DISPATCH HUB & GCP BIGQUERY STUDIO ═══════════════ -->
+      <!-- ═══════════════ VIEW 5: DRIVER DISPATCH HUB & GCP BIGQUERY STUDIO (EXACT 50% / 50% SYMMETRICAL SPLIT) ═══════════════ -->
       <section class="ct-view" id="view-gcp">
-        <div class="ct-stage neon-green" style="padding:18px;overflow-y:auto;flex:0.95">
-          <div class="ct-panel-title" style="font-size:18px">
+        <div class="ct-stage neon-green" style="flex:1;padding:18px;overflow-y:auto;gap:12px">
+          <div class="ct-panel-title" style="font-size:17px">
             <span>📱 Driver Mobile Portal, Google Maps &amp; WhatsApp Hub</span>
             <span class="ct-kpi-badge">Zero-Login Edge</span>
           </div>
-          <div class="ct-panel-sub">Launch 1-tap Google Maps turn-by-turn navigation, WhatsApp dispatch, or printable LR Challan.</div>
+          <div class="ct-panel-sub" style="margin-bottom:0">Launch 1-tap Google Maps turn-by-turn navigation, WhatsApp dispatch, or printable LR Challan.</div>
 
-          <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
-            <select id="selPortalTruck" class="ct-select" style="flex:1" onchange="updateDriverHubPreview(this.value)"></select>
+          <div style="display:grid;grid-template-columns:1.35fr 1fr 1fr 1fr;gap:8px;align-items:center">
+            <select id="selPortalTruck" class="ct-select" onchange="updateDriverHubPreview(this.value)"></select>
             <a id="btnOpenMapsNav" href="#" target="_blank" class="ct-btn-primary" style="text-decoration:none;background:linear-gradient(135deg,#16a34a,#059669)">
-              🗺️ 1-Tap Google Maps Nav
+              🗺️ Maps Nav
             </a>
             <a id="btnOpenWhatsApp" href="#" target="_blank" class="ct-btn-secondary neon-green">
-              💬 WhatsApp Driver
+              💬 WhatsApp
             </a>
             <a id="btnOpenPortalTab" href="#" target="_blank" class="ct-btn-secondary">
-              ↗ Full Screen / Print LR
+              ↗ Print LR
             </a>
           </div>
 
@@ -2023,27 +2225,27 @@ _UI_HTML = r"""<!DOCTYPE html>
           </div>
         </div>
 
-        <div class="ct-stage neon-blue" style="padding:18px;overflow-y:auto;flex:1.05;gap:12px">
-          <div class="ct-panel-title" style="font-size:18px">
+        <div class="ct-stage neon-blue" style="flex:1;padding:18px;overflow-y:auto;gap:12px">
+          <div class="ct-panel-title" style="font-size:17px">
             <span>☁️ Google Cloud Infrastructure &amp; BigQuery Studio</span>
             <span class="ct-kpi-badge">Cloud Run · BigQuery · Model Armor</span>
           </div>
 
-          <div class="ct-box neon-blue" style="display:flex;flex-direction:column;gap:8px;flex:1">
-            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
-              <span style="font-size:14px;font-weight:800;color:var(--accent-primary)" id="bqStudioTitle">📊 BigQuery SQL Studio</span>
-              <div style="display:flex;gap:6px;flex-wrap:wrap">
-                <button class="ct-chip-btn" onclick="loadBqPreset(0)">Corridor Cost &amp; Fill</button>
-                <button class="ct-chip-btn" onclick="loadBqPreset(1)">SKU Volume Breakdown</button>
-                <button class="ct-chip-btn" onclick="loadBqPreset(2)">Fragile Cargo Audit</button>
+          <div class="ct-box neon-blue" style="display:flex;flex-direction:column;gap:10px;flex:1">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+              <span style="font-size:14px;font-weight:800;color:var(--accent-primary);white-space:nowrap" id="bqStudioTitle">📊 BigQuery SQL Studio</span>
+              <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px">
+                <button class="ct-chip-btn" style="height:32px;padding:0 10px" onclick="loadBqPreset(0)">Corridor Cost</button>
+                <button class="ct-chip-btn" style="height:32px;padding:0 10px" onclick="loadBqPreset(1)">SKU Volume</button>
+                <button class="ct-chip-btn" style="height:32px;padding:0 10px" onclick="loadBqPreset(2)">Fragile Audit</button>
               </div>
             </div>
-            <textarea id="inpBqSql" class="ct-input" style="width:100%;height:86px;font-family:var(--font-mono);font-size:11.5px"></textarea>
+            <textarea id="inpBqSql" class="ct-input" style="width:100%;height:92px;font-family:var(--font-mono);font-size:11.5px"></textarea>
             <div style="display:flex;justify-content:space-between;align-items:center">
               <span id="bqEngineStatus" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">Ready</span>
-              <button class="ct-btn-primary" style="padding:6px 14px;font-size:12px" onclick="executeBqQuery()">▶ Run BigQuery SQL</button>
+              <button class="ct-btn-primary" style="height:36px;padding:0 16px;font-size:12px" onclick="executeBqQuery()">▶ Run BigQuery SQL</button>
             </div>
-            <div class="ct-table-wrap" style="max-height:210px;border:1px solid var(--border-subtle);border-radius:10px">
+            <div class="ct-table-wrap" style="max-height:220px;border:1px solid var(--border-subtle);border-radius:10px">
               <table class="ct-table" id="bqResultTable">
                 <thead id="bqResultHead"></thead>
                 <tbody id="bqResultBody"></tbody>
@@ -2052,12 +2254,12 @@ _UI_HTML = r"""<!DOCTYPE html>
           </div>
 
           <details class="ct-accordion">
-            <summary style="padding:11px 14px;font-size:13px">
+            <summary style="padding:12px 14px;font-size:13px">
               <span>☁️ Active GCP Services &amp; Model Armor Security Log</span>
               <span class="ct-acc-chevron">▼</span>
             </summary>
             <div class="ct-acc-body" style="padding:12px">
-              <div id="gcpServiceGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px"></div>
+              <div id="gcpServiceGrid" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px"></div>
               <div id="securityAuditList" style="font-family:var(--font-mono);font-size:11px;color:var(--text-secondary);max-height:90px;overflow-y:auto"></div>
             </div>
           </details>
@@ -2066,10 +2268,10 @@ _UI_HTML = r"""<!DOCTYPE html>
 
       <!-- ═══════════════ VIEW 6: ARCHITECTURE, HOW-TO & DUAL DEPLOYMENT GUIDE ═══════════════ -->
       <section class="ct-view" id="view-howto">
-        <div class="ct-stage neon-blue" style="padding:22px;overflow-y:auto;gap:18px">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
+        <div class="ct-stage neon-blue" style="padding:22px 24px;overflow-y:auto;gap:18px">
+          <div class="lp-hero-bar">
             <div>
-              <h2 class="ct-big-heading" style="font-size:24px">📘 FleetFlow Architecture, How-To Guide &amp; Dual-Deployment</h2>
+              <h2 class="ct-big-heading" style="font-size:23px">📘 FleetFlow Architecture, How-To Guide &amp; Dual-Deployment</h2>
               <div style="font-size:13px;color:var(--text-secondary);margin-top:2px">
                 One shared Python optimization &amp; ADK backend powering both <b>Gemini Enterprise (Conversational A2UI)</b> and <b>Google Cloud Run (Standalone Web Control Tower)</b>.
               </div>
@@ -2080,77 +2282,95 @@ _UI_HTML = r"""<!DOCTYPE html>
           </div>
 
           <div>
-            <div style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--accent-primary);margin-bottom:8px">
+            <div style="font-size:12.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--accent-primary);margin-bottom:10px">
               1. How to Use FleetFlow (Step-by-Step Operator Workflow)
             </div>
             <div class="arch-grid">
               <div class="arch-card neon-blue">
-                <div style="font-weight:800;font-size:14.5px;margin-bottom:4px">🚀 Step 1 · Launchpad Setup</div>
-                <div style="font-size:12.5px;color:var(--text-secondary)">
-                  Pick your <b>Distribution Hub</b> (Mumbai or Bengaluru), upload an Excel/CSV sheet or use BigQuery, enter natural-language instructions in the centered Google-colored prompt box, and click <b>Synthesize &amp; Run FleetFlow Agent</b>.
+                <div>
+                  <div style="font-weight:800;font-size:14.5px;margin-bottom:6px">🚀 Step 1 · Launchpad Setup</div>
+                  <div style="font-size:12.5px;color:var(--text-secondary)">
+                    Pick your <b>Distribution Hub</b> (Mumbai or Bengaluru), upload an Excel/CSV sheet or use BigQuery, enter natural-language instructions in the centered Google-colored prompt box, and click <b>Synthesize &amp; Run FleetFlow Agent</b>.
+                  </div>
                 </div>
               </div>
               <div class="arch-card neon-green">
-                <div style="font-weight:800;font-size:14.5px;margin-bottom:4px">📦 Step 2 · 3D Load Studio Calculator</div>
-                <div style="font-size:12.5px;color:var(--text-secondary)">
-                  Open <b>3D Load Studio</b> to inspect step-by-step LIFO bay loading (last delivery at the cab wall `X=0`, Stop 1 right at the rear door). Test-pack any route into `ACE`, `PKP`, `T14`, `T17`, or `T20`.
+                <div>
+                  <div style="font-weight:800;font-size:14.5px;margin-bottom:6px">📦 Step 2 · 3D Load Studio Calculator</div>
+                  <div style="font-size:12.5px;color:var(--text-secondary)">
+                    Open <b>3D Load Studio</b> to inspect step-by-step LIFO bay loading (last delivery at the cab wall `X=0`, Stop 1 right at the rear door). Test-pack any route into `ACE`, `PKP`, `T14`, `T17`, or `T20`.
+                  </div>
                 </div>
               </div>
               <div class="arch-card neon-amber">
-                <div style="font-weight:800;font-size:14.5px;margin-bottom:4px">📱 Step 3 · Dock Scan &amp; Driver Dispatch</div>
-                <div style="font-size:12.5px;color:var(--text-secondary)">
-                  In <b>Dock QR &amp; Intake</b>, scan staging photos or paste email/WhatsApp orders. In <b>Driver Hub &amp; BigQuery</b>, share the zero-login <b>Mobile Driver Portal</b> or launch <b>1-Tap Google Maps Navigation</b>.
+                <div>
+                  <div style="font-weight:800;font-size:14.5px;margin-bottom:6px">📱 Step 3 · Dock Scan &amp; Driver Dispatch</div>
+                  <div style="font-size:12.5px;color:var(--text-secondary)">
+                    In <b>Dock QR &amp; Intake</b>, scan staging photos or paste email/WhatsApp orders. In <b>Driver Hub &amp; BigQuery</b>, share the zero-login <b>Mobile Driver Portal</b> or launch <b>1-Tap Google Maps Navigation</b>.
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
           <div>
-            <div style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--accent-primary);margin-bottom:8px">
-              2. Google Cloud Services Architecture
+            <div style="font-size:12.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--accent-primary);margin-bottom:10px">
+              2. Google Cloud Services Architecture (3×2 Symmetrical Matrix)
             </div>
             <div class="arch-grid">
               <div class="arch-card">
-                <div style="font-weight:800;font-size:13.5px;color:var(--accent-primary)">📊 Google BigQuery (`app/data/bq_source.py`)</div>
-                <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">
-                  Enterprise storage for retail outlets, daily SKU order books, fleet catalogues, and live SQL analytics.
+                <div>
+                  <div style="font-weight:800;font-size:13.5px;color:var(--accent-primary)">📊 Google BigQuery (`app/data/bq_source.py`)</div>
+                  <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">
+                    Enterprise storage for retail outlets, daily SKU order books, fleet catalogues, and live SQL analytics.
+                  </div>
                 </div>
               </div>
               <div class="arch-card">
-                <div style="font-weight:800;font-size:13.5px;color:var(--accent-primary)">☁️ Google Cloud Storage (`app/render/publish.py`)</div>
-                <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">
-                  Zero-login distribution of 3D MP4 loading animations and standalone mobile driver portals via V4 signed URLs.
+                <div>
+                  <div style="font-weight:800;font-size:13.5px;color:var(--accent-primary)">☁️ Google Cloud Storage (`app/render/publish.py`)</div>
+                  <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">
+                    Zero-login distribution of 3D MP4 loading animations and standalone mobile driver portals via V4 signed URLs.
+                  </div>
                 </div>
               </div>
               <div class="arch-card">
-                <div style="font-weight:800;font-size:13.5px;color:var(--accent-primary)">🧠 Vertex AI Agent Engine (`app/integration/agent.py`)</div>
-                <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">
-                  Managed orchestration for Gemini 2.5 Flash + Google ADK tool calling and multimodal vision.
+                <div>
+                  <div style="font-weight:800;font-size:13.5px;color:var(--accent-primary)">🧠 Vertex AI Agent Engine (`app/integration/agent.py`)</div>
+                  <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">
+                    Managed orchestration for Gemini 2.5 Flash + Google ADK tool calling and multimodal vision.
+                  </div>
                 </div>
               </div>
               <div class="arch-card">
-                <div style="font-weight:800;font-size:13.5px;color:var(--accent-primary)">🚀 Google Cloud Run (`app/fast_api_app.py`)</div>
-                <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">
-                  Serverless container hosting for this Web Control Tower &amp; 3D Load Studio (`Dockerfile`, auto-scaling).
+                <div>
+                  <div style="font-weight:800;font-size:13.5px;color:var(--accent-primary)">🚀 Google Cloud Run (`app/fast_api_app.py`)</div>
+                  <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">
+                    Serverless container hosting for this Web Control Tower &amp; 3D Load Studio (`Dockerfile`, auto-scaling).
+                  </div>
                 </div>
               </div>
               <div class="arch-card">
-                <div style="font-weight:800;font-size:13.5px;color:var(--accent-primary)">🗺️ Google Maps Routes API (`app/geo/roads.py`)</div>
-                <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">
-                  Real highway geometry, accurate travel times, and 1-tap turn-by-turn driver navigation links.
+                <div>
+                  <div style="font-weight:800;font-size:13.5px;color:var(--accent-primary)">🗺️ Google Maps Routes API (`app/geo/roads.py`)</div>
+                  <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">
+                    Real highway geometry, accurate travel times, and 1-tap turn-by-turn driver navigation links.
+                  </div>
                 </div>
               </div>
               <div class="arch-card">
-                <div style="font-weight:800;font-size:13.5px;color:var(--accent-primary)">🛡️ Model Armor &amp; Cloud DLP (`app/integration/`)</div>
-                <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">
-                  Pre-turn prompt injection filtering, Cloud DLP PII masking, and an isolated OR-Tools + 3D math enclave.
+                <div>
+                  <div style="font-weight:800;font-size:13.5px;color:var(--accent-primary)">🛡️ Model Armor &amp; Cloud DLP (`app/integration/`)</div>
+                  <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">
+                    Pre-turn prompt injection filtering, Cloud DLP PII masking, and an isolated OR-Tools + 3D math enclave.
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
           <div>
-            <div style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--accent-primary);margin-bottom:8px">
+            <div style="font-size:12.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--accent-primary);margin-bottom:10px">
               3. Portable Deployment Options (Zero Hardcoded Accounts or API Keys)
             </div>
             <div class="arch-grid">
@@ -2185,7 +2405,7 @@ _UI_HTML = r"""<!DOCTYPE html>
         placeholder="Ask the shared backend agent: 'Show only Ravi's truck', 'Highlight 3 trucks', 'Pin Suresh to South corridor', 'Switch to Bengaluru'..."
         onkeydown="if(event.key==='Enter') sendAgentPrompt()"
       >
-      <button class="ct-btn-primary" style="padding:7px 15px;border-radius:999px" onclick="sendAgentPrompt()">
+      <button class="ct-btn-primary" style="height:38px;padding:0 16px" onclick="sendAgentPrompt()">
         Send ↵
       </button>
       <div class="ct-quick-chips">
@@ -2464,11 +2684,15 @@ function applyHubContextToLaunchpad(hc, resetRulesOnCityChange = false) {
   renderLaunchpadCorridorChips();
   renderLaunchpadCorridorTable();
 
-  // Initialize or remap driver rules so driver names belong to the selected Hub's roster
+  // Initialize or remap driver rules so driver names and corridors belong to the selected Hub
   if (resetRulesOnCityChange && (!CT.driverRules.length || prevCity !== hc.city_id)) {
     const d0 = hc.drivers[0]?.name || 'Ravi';
+    const wCorr = hc.corridor_summary.find(c => c.code === 'W');
+    const bestCorr = (wCorr && wCorr.stops > 0)
+      ? 'W'
+      : (hc.corridor_summary.slice().sort((a, b) => b.stops - a.stops)[0]?.code || 'SE');
     CT.driverRules = [
-      { driver: d0, truck_type: 'T14', corridor: 'W' }
+      { driver: d0, truck_type: 'T14', corridor: bestCorr }
     ];
   }
   renderLaunchpadDriverRules();
@@ -2492,16 +2716,18 @@ function updateStagedKpiStrip() {
 
   document.getElementById('kpiLbl2').textContent = 'Staged Order Manifest';
   document.getElementById('kpiSavings').textContent = `${hc.total_stops} Retail Outlets`;
-  document.getElementById('kpiCostCompare').textContent = `${hc.total_cartons.toLocaleString('en-IN')} cartons · ${hc.total_volume_m3} m³ (${activeCorrCount}/8 sectors)`;
+  document.getElementById('kpiCostCompare').textContent = `${hc.total_cartons.toLocaleString('en-IN')} cartons · ${hc.total_volume_m3} m³ (${activeCorrCount}/8)`;
   document.getElementById('kpiSavingsPct').textContent = CT.activeOrderSource === 'chat' ? 'Excel / CSV' : 'BigQuery Book';
 
   document.getElementById('kpiLbl3').textContent = 'Hub Fleet & Roster';
   document.getElementById('kpiStopsVal').textContent = `${totalTrucks} Trucks · ${hc.drivers.length} Drivers`;
-  document.getElementById('kpiStopsSub').textContent = `Roster: ${hc.drivers.slice(0, 4).map(d => d.name).join(', ')}...`;
+  document.getElementById('kpiStopsSub').textContent = `Roster: ${hc.drivers.slice(0, 3).map(d => d.name).join(', ')}...`;
 
   document.getElementById('kpiLbl4').textContent = 'Manager Rules & Status';
-  document.getElementById('kpiDistanceVal').textContent = CT.driverRules.length ? `${CT.driverRules.length} Driver Rule(s) Active` : 'Auto Solver Mode';
-  document.getElementById('kpiDistanceSub').textContent = `Click 'Synthesize & Run Agent' to solve`;
+  document.getElementById('kpiDistanceVal').textContent = CT.driverRules.length
+    ? `${CT.driverRules.length} Driver Rule${CT.driverRules.length > 1 ? 's' : ''} Active`
+    : 'Auto Solver Mode';
+  document.getElementById('kpiDistanceSub').textContent = `Click 'Synthesize & Run Agent'`;
   document.getElementById('kpiDistanceBadge').textContent = 'Awaiting Run';
 }
 
@@ -2611,7 +2837,7 @@ function renderLaunchpadDriverRules() {
 
     return `
       <div class="lp-rule-row">
-        <div style="display:grid;grid-template-columns:1.1fr 1.35fr 1.25fr auto;gap:8px;align-items:end">
+        <div style="display:grid;grid-template-columns:repeat(3, minmax(0, 1fr)) 40px;gap:10px;align-items:end">
           <div class="ct-field">
             <label>Hub Driver (${hc.hub.hub_id})</label>
             <select class="ct-select" onchange="updateLaunchpadRule(${idx}, 'driver', this.value)">
@@ -2631,7 +2857,7 @@ function renderLaunchpadDriverRules() {
               ${hc.corridor_summary.map(c => `<option value="${c.code}" ${c.code === rule.corridor ? 'selected' : ''}>${c.code} · ${c.name} (${c.stops} stops · ${c.volume_m3}m³)</option>`).join('')}
             </select>
           </div>
-          <button class="ct-btn-secondary" style="padding:7px 10px;color:var(--accent-rose)" onclick="removeLaunchpadRule(${idx})" title="Remove rule">✕</button>
+          <button class="ct-btn-secondary" style="height:40px;width:40px;padding:0;color:var(--accent-rose)" onclick="removeLaunchpadRule(${idx})" title="Remove rule">✕</button>
         </div>
         ${diagHtml}
       </div>
@@ -2700,13 +2926,13 @@ function renderLaunchpadFleetPool() {
   if (lbl) lbl.textContent = `${total} Trucks Available`;
 
   grid.innerHTML = CT.meta.truck_types.map(t => `
-    <div style="padding:8px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-top:3px solid ${t.color};border-radius:10px;text-align:center">
+    <div style="padding:10px 8px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-top:3px solid ${t.color};border-radius:10px;text-align:center">
       <div style="font-weight:800;font-size:12px">${t.code}</div>
       <div style="font-size:10px;color:var(--text-muted)">${t.volume_m3}m³ · ${(t.payload_kg/1000).toFixed(1)}t</div>
       <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:6px">
-        <button class="ct-btn-secondary" style="padding:2px 7px;font-size:11px" onclick="stepFleetCount('${t.code}', -1)">-</button>
-        <span id="lpFleetCnt-${t.code}" style="font-family:var(--font-mono);font-weight:800;font-size:12.5px">${CT.fleetCounts[t.code] ?? 2}</span>
-        <button class="ct-btn-secondary" style="padding:2px 7px;font-size:11px" onclick="stepFleetCount('${t.code}', 1)">+</button>
+        <button class="ct-btn-secondary" style="height:26px;width:26px;padding:0;font-size:12px" onclick="stepFleetCount('${t.code}', -1)">-</button>
+        <span id="lpFleetCnt-${t.code}" style="font-family:var(--font-mono);font-weight:800;font-size:12.5px;min-width:18px">${CT.fleetCounts[t.code] ?? 2}</span>
+        <button class="ct-btn-secondary" style="height:26px;width:26px;padding:0;font-size:12px" onclick="stepFleetCount('${t.code}', 1)">+</button>
       </div>
     </div>
   `).join('');
@@ -2717,7 +2943,7 @@ function uploadLaunchpadSpreadsheet(inputEl) {
   if (!file) return;
   const reader = new FileReader();
   const badge = document.getElementById('lpManifestStatusBadge');
-  if (badge) badge.textContent = `⏳ Parsing ${file.name}...`;
+  if (badge) badge.textContent = `⏳ Parsing CSV...`;
 
   reader.onload = async () => {
     try {
@@ -2738,7 +2964,7 @@ function uploadLaunchpadSpreadsheet(inputEl) {
       }
       CT.activeOrderSource = 'chat';
       document.getElementById('selSource').value = 'chat';
-      if (badge) badge.textContent = `✓ Loaded Spreadsheet: ${data.filename} (${data.stops_parsed} stops · ${data.cartons_parsed} cartons)`;
+      if (badge) badge.textContent = `✓ ${data.stops_parsed} Stops · CSV`;
       if (data.hub_context) {
         applyHubContextToLaunchpad(data.hub_context, false);
       }
@@ -2752,7 +2978,7 @@ function uploadLaunchpadSpreadsheet(inputEl) {
 
 async function loadLaunchpadSampleSheet(sampleFilename) {
   const badge = document.getElementById('lpManifestStatusBadge');
-  if (badge) badge.textContent = `⏳ Loading ${sampleFilename}...`;
+  if (badge) badge.textContent = `⏳ Loading CSV...`;
   const res = await fetch('/api/upload-manifest', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -2765,7 +2991,7 @@ async function loadLaunchpadSampleSheet(sampleFilename) {
   if (res.ok && data.hub_context) {
     CT.activeOrderSource = 'chat';
     document.getElementById('selSource').value = 'chat';
-    if (badge) badge.textContent = `✓ Loaded Sample CSV: ${data.filename} (${data.stops_parsed} stops · ${data.cartons_parsed} cartons)`;
+    if (badge) badge.textContent = `✓ ${data.stops_parsed} Stops · CSV`;
     applyHubContextToLaunchpad(data.hub_context, false);
     showToast(`📄 Staged sample sheet <b>${data.filename}</b> (${data.stops_parsed} outlets, ${data.cartons_parsed} cartons). Click <b>Synthesize &amp; Run Agent</b>!`);
   }
@@ -2775,7 +3001,7 @@ async function resetLaunchpadToHubBook() {
   CT.activeOrderSource = 'demo';
   document.getElementById('selSource').value = 'demo';
   const badge = document.getElementById('lpManifestStatusBadge');
-  if (badge) badge.textContent = `✓ Connected: Live Hub Order Book`;
+  if (badge) badge.textContent = `✓ Live Order Book`;
   await onLaunchpadHubChange(CT.activeHubId);
 }
 
