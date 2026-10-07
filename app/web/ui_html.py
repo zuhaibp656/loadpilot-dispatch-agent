@@ -792,18 +792,148 @@ _UI_HTML = r"""<!DOCTYPE html>
       flex-shrink: 0;
     }
 
-    /* ── Workspace Views with Genie Spring Animation ── */
+    /* ── Workspace Views with Fluid Slide & Spring Animation ── */
     .ct-view {
       display: none;
       flex: 1;
       min-height: 0;
       gap: 16px;
-      transform-origin: left center;
+      transform-origin: center top;
     }
 
     .ct-view.active {
       display: flex;
-      animation: genieWorkspaceOpen 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation: workspaceSlideIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes workspaceSlideIn {
+      0% {
+        opacity: 0;
+        transform: translateY(16px) scale(0.99);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* ── High-Tech Google 4-Color Synthesis HUD Overlay ── */
+    .lp-synthesis-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: rgba(4, 9, 22, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: modalFadeIn 0.24s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes modalFadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .lp-modal-card {
+      position: relative;
+      width: 100%;
+      max-width: 620px;
+      border-radius: 24px;
+      box-shadow:
+        0 24px 70px rgba(0, 0, 0, 0.65),
+        0 0 45px rgba(66, 133, 244, 0.28);
+      animation: modalCardPop 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+      overflow: visible;
+    }
+
+    @keyframes modalCardPop {
+      0% { opacity: 0; transform: perspective(1000px) translateY(24px) scale(0.94); }
+      100% { opacity: 1; transform: perspective(1000px) translateY(0) scale(1); }
+    }
+
+    .lp-progress-bar-wrap {
+      width: 100%;
+      height: 8px;
+      background: var(--bg-elevated);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 18px 0 20px;
+      border: 1px solid var(--border-subtle);
+      position: relative;
+    }
+
+    .lp-progress-bar-fill {
+      height: 100%;
+      width: 25%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #4285F4, #34A853, #FBBC05, #EA4335, #4285F4);
+      background-size: 200% 100%;
+      animation: lpShimmer 1.8s linear infinite;
+      transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes lpShimmer {
+      0% { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
+    }
+
+    .lp-modal-step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .lp-modal-step {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: var(--bg-elevated);
+      border: 1.5px solid var(--border-subtle);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      transition: all 0.25s ease;
+    }
+
+    .lp-modal-step.active {
+      border-color: #4285F4;
+      background: var(--accent-primary-soft);
+      color: var(--accent-primary);
+      box-shadow: 0 0 16px rgba(66, 133, 244, 0.22);
+    }
+
+    .lp-modal-step.done {
+      border-color: rgba(52, 168, 83, 0.5);
+      background: var(--accent-emerald-soft);
+      color: var(--accent-emerald);
+    }
+
+    .lp-mstep-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .lp-modal-step.active .lp-mstep-badge {
+      background: #4285F4;
+      color: #ffffff;
+      border-color: transparent;
+    }
+
+    .lp-modal-step.done .lp-mstep-badge {
+      background: #34A853;
+      color: #ffffff;
+      border-color: transparent;
     }
 
     /* Left/Center Canvas Stage */
@@ -1531,49 +1661,16 @@ _UI_HTML = r"""<!DOCTYPE html>
         </button>
         <button class="ct-nav-btn" data-view="gcp" onclick="switchWorkspace('gcp')">
           <span class="nav-ico">📱</span>
-          <span>Driver Hub &amp; BigQuery</span>
-        </button>
-        <button class="ct-nav-btn" data-view="howto" onclick="switchWorkspace('howto')">
-          <span class="nav-ico">📘</span>
-          <span>Architecture &amp; How-To</span>
+          <span>Driver Hub</span>
         </button>
       </nav>
 
-      <!-- Global Dispatch Configuration in Left Sidebar -->
-      <div class="ct-nav-section-lbl">Quick Hub &amp; Run</div>
-      <div class="ct-rail-config neon-blue">
-        <div class="ct-select-group">
-          <span class="ct-select-lbl">Distribution Hub</span>
-          <select id="selHub" class="ct-select" onchange="onSidebarHubChange(this.value)">
-            <option value="BHW-DC">Mumbai · Bhiwandi DC</option>
-            <option value="TLJ-DC">Mumbai · Taloja DC</option>
-            <option value="BLR-NLG">Bengaluru · Nelamangala</option>
-            <option value="BLR-EC">Bengaluru · Electronic City</option>
-          </select>
-        </div>
-
-        <div class="ct-select-group">
-          <span class="ct-select-lbl">Optimization Goal</span>
-          <select id="selObjective" class="ct-select" onchange="syncLaunchpadObjective(this.value)">
-            <option value="lowest_cost">Lowest Cost (₹)</option>
-            <option value="fewest_trucks">Fewest Trucks</option>
-            <option value="balanced">Balanced Fleet</option>
-            <option value="fastest_finish">Fastest Completion</option>
-          </select>
-        </div>
-
-        <div class="ct-select-group">
-          <span class="ct-select-lbl">Order Source</span>
-          <select id="selSource" class="ct-select" onchange="onSidebarSourceChange(this.value)">
-            <option value="demo">Hub Order Book</option>
-            <option value="bigquery">BigQuery Warehouse</option>
-            <option value="chat">Uploaded Spreadsheet / CSV</option>
-            <option value="photos">Scanned Dock QR</option>
-          </select>
-        </div>
-
-        <button class="ct-btn-primary" id="btnOptimize" style="width:100%;margin-top:4px" onclick="synthesizeFromLaunchpad(true)">
-          <span>🚀</span> Synthesize &amp; Run Agent
+      <!-- Bottom Navigation Reference Section: Separated from operational dispatch tabs -->
+      <div style="margin-top:auto;padding-top:14px;border-top:1px solid var(--border-subtle)">
+        <div class="ct-nav-section-lbl" style="padding-top:0">System Reference</div>
+        <button class="ct-nav-btn" data-view="howto" onclick="switchWorkspace('howto')">
+          <span class="nav-ico">📘</span>
+          <span>Architecture &amp; How-To</span>
         </button>
       </div>
     </div>
@@ -1736,7 +1833,7 @@ _UI_HTML = r"""<!DOCTYPE html>
                   <span>🎯 3. Goal &amp; View Scope</span>
                   <span class="ct-kpi-badge" style="background:rgba(251,188,4,0.14);color:var(--accent-amber);border-color:rgba(251,188,4,0.4)" id="lpTotalFleetPoolLbl">12 Trucks Available</span>
                 </div>
-                <select id="lpSelObjective" class="ct-select" onchange="document.getElementById('selObjective').value=this.value">
+                <select id="lpSelObjective" class="ct-select" onchange="const so = document.getElementById('selObjective'); if (so) so.value=this.value;">
                   <option value="lowest_cost">🎯 Optimization Goal: Lowest Total Cost (₹)</option>
                   <option value="fewest_trucks">🚛 Optimization Goal: Fewest Trucks Dispatched</option>
                   <option value="balanced">⚖️ Optimization Goal: Balanced Corridor Utilization</option>
@@ -2198,14 +2295,14 @@ _UI_HTML = r"""<!DOCTYPE html>
         </div>
       </section>
 
-      <!-- ═══════════════ VIEW 5: DRIVER DISPATCH HUB & GCP BIGQUERY STUDIO (EXACT 50% / 50% SYMMETRICAL SPLIT) ═══════════════ -->
+      <!-- ═══════════════ VIEW 5: DRIVER DISPATCH HUB & MOBILE PORTAL ═══════════════ -->
       <section class="ct-view" id="view-gcp">
-        <div class="ct-stage neon-green" style="flex:1;padding:18px;overflow-y:auto;gap:12px">
+        <div class="ct-stage neon-green" style="flex:1.25;padding:18px;overflow-y:auto;gap:12px">
           <div class="ct-panel-title" style="font-size:17px">
-            <span>📱 Driver Mobile Portal, Google Maps &amp; WhatsApp Hub</span>
+            <span>📱 Driver Mobile Portal &amp; Google Maps Turn-by-Turn Hub</span>
             <span class="ct-kpi-badge">Zero-Login Edge</span>
           </div>
-          <div class="ct-panel-sub" style="margin-bottom:0">Launch 1-tap Google Maps turn-by-turn navigation, WhatsApp dispatch, or printable LR Challan.</div>
+          <div class="ct-panel-sub" style="margin-bottom:0">Zero-login mobile portal with door-to-cab cargo depths, turn-by-turn traffic navigation, WhatsApp dispatch &amp; printable LR Challan.</div>
 
           <div style="display:grid;grid-template-columns:1.35fr 1fr 1fr 1fr;gap:8px;align-items:center">
             <select id="selPortalTruck" class="ct-select" onchange="updateDriverHubPreview(this.value)"></select>
@@ -2220,49 +2317,57 @@ _UI_HTML = r"""<!DOCTYPE html>
             </a>
           </div>
 
-          <div style="flex:1;min-height:380px;border:1.5px solid var(--border-subtle);border-radius:14px;overflow:hidden;background:#0a0f1d">
+          <div style="flex:1;min-height:420px;border:1.5px solid var(--border-subtle);border-radius:14px;overflow:hidden;background:#0a0f1d">
             <iframe id="driverPortalIframe" style="width:100%;height:100%;border:none" title="Driver Mobile Portal Preview"></iframe>
           </div>
         </div>
 
-        <div class="ct-stage neon-blue" style="flex:1;padding:18px;overflow-y:auto;gap:12px">
+        <div class="ct-stage neon-blue" style="flex:0.95;padding:18px;overflow-y:auto;gap:12px">
           <div class="ct-panel-title" style="font-size:17px">
-            <span>☁️ Google Cloud Infrastructure &amp; BigQuery Studio</span>
-            <span class="ct-kpi-badge">Cloud Run · BigQuery · Model Armor</span>
+            <span>📋 Driver Consignment &amp; Security Shield</span>
+            <span class="ct-kpi-badge">Model Armor · DLP Active</span>
           </div>
 
-          <div class="ct-box neon-blue" style="display:flex;flex-direction:column;gap:10px;flex:1">
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-              <span style="font-size:14px;font-weight:800;color:var(--accent-primary);white-space:nowrap" id="bqStudioTitle">📊 BigQuery SQL Studio</span>
-              <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px">
-                <button class="ct-chip-btn" style="height:32px;padding:0 10px" onclick="loadBqPreset(0)">Corridor Cost</button>
-                <button class="ct-chip-btn" style="height:32px;padding:0 10px" onclick="loadBqPreset(1)">SKU Volume</button>
-                <button class="ct-chip-btn" style="height:32px;padding:0 10px" onclick="loadBqPreset(2)">Fragile Audit</button>
+          <!-- Active Driver Profile Card -->
+          <div class="ct-box neon-green" id="hubDriverProfileBox">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <span style="font-size:15px;font-weight:800;color:var(--text-main)" id="hubDriverName">Driver Consignment</span>
+                <div style="font-size:11.5px;color:var(--text-secondary);margin-top:2px" id="hubDriverSub">Select a vehicle class above</div>
+              </div>
+              <span class="ct-kpi-badge" id="hubDriverClassBadge">T14 LCV</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px">
+              <div style="padding:8px;background:var(--bg-elevated);border-radius:10px;text-align:center">
+                <div style="font-size:10px;color:var(--text-muted);font-weight:800;text-transform:uppercase">Stops</div>
+                <div style="font-size:16px;font-weight:800;color:var(--text-main)" id="hubDriverStops">0</div>
+              </div>
+              <div style="padding:8px;background:var(--bg-elevated);border-radius:10px;text-align:center">
+                <div style="font-size:10px;color:var(--text-muted);font-weight:800;text-transform:uppercase">Cartons</div>
+                <div style="font-size:16px;font-weight:800;color:var(--text-main)" id="hubDriverCartons">0</div>
+              </div>
+              <div style="padding:8px;background:var(--bg-elevated);border-radius:10px;text-align:center">
+                <div style="font-size:10px;color:var(--text-muted);font-weight:800;text-transform:uppercase">Route Cost</div>
+                <div style="font-size:16px;font-weight:800;color:var(--text-main)" id="hubDriverCost">₹0</div>
               </div>
             </div>
-            <textarea id="inpBqSql" class="ct-input" style="width:100%;height:92px;font-family:var(--font-mono);font-size:11.5px"></textarea>
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <span id="bqEngineStatus" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">Ready</span>
-              <button class="ct-btn-primary" style="height:36px;padding:0 16px;font-size:12px" onclick="executeBqQuery()">▶ Run BigQuery SQL</button>
-            </div>
-            <div class="ct-table-wrap" style="max-height:220px;border:1px solid var(--border-subtle);border-radius:10px">
-              <table class="ct-table" id="bqResultTable">
-                <thead id="bqResultHead"></thead>
-                <tbody id="bqResultBody"></tbody>
-              </table>
-            </div>
           </div>
 
-          <details class="ct-accordion">
-            <summary style="padding:12px 14px;font-size:13px">
-              <span>☁️ Active GCP Services &amp; Model Armor Security Log</span>
-              <span class="ct-acc-chevron">▼</span>
-            </summary>
-            <div class="ct-acc-body" style="padding:12px">
-              <div id="gcpServiceGrid" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px"></div>
-              <div id="securityAuditList" style="font-family:var(--font-mono);font-size:11px;color:var(--text-secondary);max-height:90px;overflow-y:auto"></div>
+          <!-- Stop-by-Stop Door-to-Cab Cargo Sequence -->
+          <div class="ct-box" style="flex:1;display:flex;flex-direction:column;min-height:180px">
+            <div class="ct-panel-title"><span>📦 Delivery Stops &amp; Door-to-Cab Depth</span></div>
+            <div id="hubDriverStopsList" style="flex:1;overflow-y:auto;max-height:220px;display:flex;flex-direction:column;gap:6px;margin-top:8px"></div>
+          </div>
+
+          <!-- Enterprise Security & Cloud Shield -->
+          <div class="ct-box neon-blue">
+            <div class="ct-panel-title"><span>🛡️ Enterprise Security &amp; Privacy Shield</span></div>
+            <div style="font-size:11.5px;color:var(--text-secondary);margin-top:6px;line-height:1.5">
+              <div>🛡️ <b>Google Cloud Model Armor:</b> Pre-turn prompt injection and driver token leakage filter active.</div>
+              <div style="margin-top:4px">🔒 <b>Google Cloud DLP:</b> Driver contact details and retail store invoices masked with zero unencrypted data on wire.</div>
+              <div style="margin-top:4px">🚀 <b>Serverless Cloud Run:</b> Auto-scaled isolated microservice hosting with zero hardcoded API credentials.</div>
             </div>
-          </details>
+          </div>
         </div>
       </section>
 
@@ -2418,6 +2523,67 @@ _UI_HTML = r"""<!DOCTYPE html>
     </footer>
   </div>
 
+  <!-- High-Tech Animated Google 4-Color Synthesis Modal Overlay -->
+  <div id="lpSynthesisModal" class="lp-synthesis-modal">
+    <div class="lp-modal-card google-revolving-box">
+      <div class="google-revolving-inner" style="padding:28px 30px">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:8px">
+          <div class="orbital-ring-wrap" style="width:58px;height:58px">
+            <span class="orbital-ring-core" style="font-size:26px">🚀</span>
+          </div>
+          <div style="min-width:0;flex:1">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+              <span class="ct-kpi-badge" style="font-size:10px;padding:2px 8px;background:var(--accent-primary-soft);color:var(--accent-primary);border-color:rgba(66,133,244,0.4)">AI AGENT RUNNING</span>
+              <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">OR-Tools + 3D Enclave</span>
+            </div>
+            <h3 id="lpModalTitle" class="ct-big-heading" style="font-size:20px;margin:0">
+              FleetFlow AI Agent Optimizing Dispatch...
+            </h3>
+          </div>
+        </div>
+
+        <div id="lpModalSubtitle" style="font-size:12.5px;color:var(--text-secondary);margin-top:6px">
+          Staging retail store manifest, loading 8-corridor bounds &amp; solving fleet route matrix...
+        </div>
+
+        <div class="lp-progress-bar-wrap">
+          <div id="lpModalProgressBar" class="lp-progress-bar-fill"></div>
+        </div>
+
+        <div class="lp-modal-step-list">
+          <div class="lp-modal-step" id="lpMStep1">
+            <span id="lpMStep1Txt">1. Hub &amp; Retail Order Manifest Intake</span>
+            <span class="lp-mstep-badge" id="lpMStep1Badge">⏳ Active</span>
+          </div>
+          <div class="lp-modal-step" id="lpMStep2">
+            <span id="lpMStep2Txt">2. Compass Ray-Clustering &amp; Trunk-Branch Splitting</span>
+            <span class="lp-mstep-badge" id="lpMStep2Badge">Queued</span>
+          </div>
+          <div class="lp-modal-step" id="lpMStep3">
+            <span id="lpMStep3Txt">3. Google OR-Tools Multi-Capacity MIP Solver</span>
+            <span class="lp-mstep-badge" id="lpMStep3Badge">Queued</span>
+          </div>
+          <div class="lp-modal-step" id="lpMStep4">
+            <span id="lpMStep4Txt">4. 3D LIFO Reverse-Drop Spatial Packing &amp; Axle Balance</span>
+            <span class="lp-mstep-badge" id="lpMStep4Badge">Queued</span>
+          </div>
+          <div class="lp-modal-step" id="lpMStep5">
+            <span id="lpMStep5Txt">5. Google Maps Routes Highway Geometry &amp; Turn-by-Turn</span>
+            <span class="lp-mstep-badge" id="lpMStep5Badge">Queued</span>
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:14px;border-top:1px solid var(--border-subtle);font-size:11px;color:var(--text-muted)">
+          <span style="display:flex;align-items:center;gap:6px">
+            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#34A853;box-shadow:0 0 8px #34A853"></span>
+            Zero-Hallucination Math Enclave Active
+          </span>
+          <span id="lpModalTimer">Elapsed: 0.0s</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification with Genie Spring Effect -->
   <div id="ctToast" class="ct-toast"></div>
 
@@ -2510,7 +2676,6 @@ async function switchWorkspace(viewId) {
   } else if (viewId === 'gcp' && CT.bundle) {
     const sel = document.getElementById('selPortalTruck');
     if (sel && sel.value) updateDriverHubPreview(sel.value);
-    loadBqPreset(0);
   }
 }
 
@@ -2583,11 +2748,6 @@ async function initControlTower() {
       </div>
     `).join('');
 
-    if (meta.gcp_config) {
-      const titleEl = document.getElementById('bqStudioTitle');
-      if (titleEl) titleEl.textContent = `📊 BigQuery SQL Studio (${meta.gcp_config.project_id}.${meta.gcp_config.dataset})`;
-    }
-
     // Populate the Front Page Launchpad with the initial Hub context (Mumbai BHW-DC)
     if (meta.hub_context) {
       applyHubContextToLaunchpad(meta.hub_context, true);
@@ -2602,7 +2762,8 @@ async function initControlTower() {
 /* ═══════════════ LAUNCHPAD FRONT PAGE LOGIC ═══════════════ */
 async function onLaunchpadHubChange(hubId) {
   CT.activeHubId = hubId;
-  document.getElementById('selHub').value = hubId;
+  const sh = document.getElementById('selHub');
+  if (sh) sh.value = hubId;
   const quickHub = document.getElementById('lpSelHubQuick');
   if (quickHub) quickHub.value = hubId;
   document.querySelectorAll('#lpHubCardsGrid .lp-hub-card').forEach(card => {
@@ -2642,7 +2803,8 @@ function applyHubContextToLaunchpad(hc, resetRulesOnCityChange = false) {
   const prevCity = CT.hubContext?.city_id;
   CT.hubContext = hc;
   CT.activeHubId = hc.hub.hub_id;
-  document.getElementById('selHub').value = hc.hub.hub_id;
+  const sh = document.getElementById('selHub');
+  if (sh) sh.value = hc.hub.hub_id;
   const quickHub = document.getElementById('lpSelHubQuick');
   if (quickHub) quickHub.value = hc.hub.hub_id;
 
@@ -2963,7 +3125,8 @@ function uploadLaunchpadSpreadsheet(inputEl) {
         return;
       }
       CT.activeOrderSource = 'chat';
-      document.getElementById('selSource').value = 'chat';
+      const ss1 = document.getElementById('selSource');
+      if (ss1) ss1.value = 'chat';
       if (badge) badge.textContent = `✓ ${data.stops_parsed} Stops · CSV`;
       if (data.hub_context) {
         applyHubContextToLaunchpad(data.hub_context, false);
@@ -2990,7 +3153,8 @@ async function loadLaunchpadSampleSheet(sampleFilename) {
   const data = await res.json();
   if (res.ok && data.hub_context) {
     CT.activeOrderSource = 'chat';
-    document.getElementById('selSource').value = 'chat';
+    const ss2 = document.getElementById('selSource');
+    if (ss2) ss2.value = 'chat';
     if (badge) badge.textContent = `✓ ${data.stops_parsed} Stops · CSV`;
     applyHubContextToLaunchpad(data.hub_context, false);
     showToast(`📄 Staged sample sheet <b>${data.filename}</b> (${data.stops_parsed} outlets, ${data.cartons_parsed} cartons). Click <b>Synthesize &amp; Run Agent</b>!`);
@@ -2999,7 +3163,8 @@ async function loadLaunchpadSampleSheet(sampleFilename) {
 
 async function resetLaunchpadToHubBook() {
   CT.activeOrderSource = 'demo';
-  document.getElementById('selSource').value = 'demo';
+  const ss3 = document.getElementById('selSource');
+  if (ss3) ss3.value = 'demo';
   const badge = document.getElementById('lpManifestStatusBadge');
   if (badge) badge.textContent = `✓ Live Order Book`;
   await onLaunchpadHubChange(CT.activeHubId);
@@ -3011,39 +3176,79 @@ function setLaunchpadPrompt(txt) {
 }
 
 async function synthesizeFromLaunchpad(switchAfter = true) {
-  const bar = document.getElementById('lpSynthesisBar');
+  const modal = document.getElementById('lpSynthesisModal');
+  const modalTitle = document.getElementById('lpModalTitle');
+  const modalSub = document.getElementById('lpModalSubtitle');
+  const barFill = document.getElementById('lpModalProgressBar');
+  const timerLbl = document.getElementById('lpModalTimer');
+
   const heroBtn = document.getElementById('btnHeroSynthesize');
   const botBtn = document.getElementById('btnBottomSynthesize');
-  const sideBtn = document.getElementById('btnOptimize');
+  if (heroBtn) heroBtn.innerHTML = '<span>⏳</span> FleetFlow Agent Running...';
+  if (botBtn) botBtn.innerHTML = '<span>⏳</span> FleetFlow Agent Running...';
 
-  if (bar) bar.style.display = 'block';
-  const steps = ['lpStep1', 'lpStep2', 'lpStep3', 'lpStep4', 'lpStep5'].map(id => document.getElementById(id));
-  steps.forEach(s => { if (s) { s.classList.remove('active', 'done'); } });
+  const tStart = Date.now();
+  let timerInterval = null;
 
-  const setStage = (idx) => {
-    steps.forEach((s, i) => {
-      if (!s) return;
-      s.classList.toggle('done', i < idx);
-      s.classList.toggle('active', i === idx);
-    });
-  };
+  if (modal) {
+    modal.style.display = 'flex';
+    modal.style.opacity = '1';
+    if (modalTitle) {
+      modalTitle.innerHTML = 'FleetFlow AI Agent Optimizing Dispatch...';
+      modalTitle.style.color = 'var(--text-main)';
+    }
+    const hc = CT.hubContext;
+    if (modalSub && hc) {
+      modalSub.textContent = `Staging ${hc.total_stops} retail outlets for ${hc.hub.name} across ${CT.selectedCorridors.length} sectors...`;
+    }
+    if (barFill) barFill.style.width = '18%';
 
-  if (heroBtn) heroBtn.innerHTML = '<span>⏳</span> Synthesizing Dispatch Plan...';
-  if (botBtn) botBtn.innerHTML = '<span>⏳</span> Synthesizing Dispatch Plan...';
-  if (sideBtn) sideBtn.innerHTML = '<span>⏳</span> Synthesizing...';
+    // Reset steps
+    for (let i = 1; i <= 5; i++) {
+      const el = document.getElementById(`lpMStep${i}`);
+      const b = document.getElementById(`lpMStep${i}Badge`);
+      if (el) el.className = 'lp-modal-step';
+      if (b) b.textContent = 'Queued';
+    }
+    const s1 = document.getElementById('lpMStep1');
+    const b1 = document.getElementById('lpMStep1Badge');
+    if (s1) s1.className = 'lp-modal-step active';
+    if (b1) b1.textContent = '⏳ Active';
 
-  setStage(0);
-  await new Promise(r => setTimeout(r, 140));
-  setStage(1);
+    timerInterval = setInterval(() => {
+      const sec = ((Date.now() - tStart) / 1000).toFixed(1);
+      if (timerLbl) timerLbl.textContent = `Elapsed: ${sec}s`;
+    }, 100);
+  }
 
-  const hubId = CT.activeHubId || document.getElementById('selHub').value;
-  const objective = document.getElementById('lpSelObjective')?.value || document.getElementById('selObjective').value;
+  // Animate stages smoothly while request is in flight
+  setTimeout(() => {
+    const s1 = document.getElementById('lpMStep1');
+    const b1 = document.getElementById('lpMStep1Badge');
+    const s2 = document.getElementById('lpMStep2');
+    const b2 = document.getElementById('lpMStep2Badge');
+    if (s1) { s1.className = 'lp-modal-step done'; if (b1) b1.textContent = '✓ Done'; }
+    if (s2) { s2.className = 'lp-modal-step active'; if (b2) b2.textContent = '⏳ Active'; }
+    if (barFill) barFill.style.width = '38%';
+  }, 220);
+
+  setTimeout(() => {
+    const s2 = document.getElementById('lpMStep2');
+    const b2 = document.getElementById('lpMStep2Badge');
+    const s3 = document.getElementById('lpMStep3');
+    const b3 = document.getElementById('lpMStep3Badge');
+    if (s2) { s2.className = 'lp-modal-step done'; if (b2) b2.textContent = '✓ Done'; }
+    if (s3) { s3.className = 'lp-modal-step active'; if (b3) b3.textContent = '⚡ Solving'; }
+    if (barFill) barFill.style.width = '64%';
+  }, 480);
+
+  const hubId = CT.activeHubId || 'BHW-DC';
+  const objective = document.getElementById('lpSelObjective')?.value || 'lowest_cost';
   const scopeVal = document.getElementById('lpSelScope')?.value || CT.scope || 'all';
-  const fuel = parseFloat(document.getElementById('lpInpFuel')?.value || document.getElementById('inpSimFuel').value || '92');
-  const drvCost = parseFloat(document.getElementById('lpInpDriverCost')?.value || document.getElementById('inpSimDriverCost').value || '950');
+  const fuel = parseFloat(document.getElementById('lpInpFuel')?.value || '92');
+  const drvCost = parseFloat(document.getElementById('lpInpDriverCost')?.value || '950');
   const promptTxt = (document.getElementById('inpLaunchpadPrompt')?.value || '').trim();
 
-  // Build corridor_claims map from CT.driverRules as well as driver_assignments list
   const claimsMap = {};
   CT.driverRules.forEach(r => {
     if (r.driver && r.corridor) {
@@ -3054,7 +3259,6 @@ async function synthesizeFromLaunchpad(switchAfter = true) {
   CT.scope = scopeVal;
 
   try {
-    setStage(2);
     const res = await fetch('/api/plan', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -3072,26 +3276,56 @@ async function synthesizeFromLaunchpad(switchAfter = true) {
         scope: scopeVal
       })
     });
-    setStage(3);
     const bundle = await res.json();
-    setStage(4);
-    await new Promise(r => setTimeout(r, 160));
-    steps.forEach(s => { if (s) { s.classList.remove('active'); s.classList.add('done'); } });
+
+    // Mark stages 3, 4, 5 as Done
+    for (let i = 1; i <= 5; i++) {
+      const el = document.getElementById(`lpMStep${i}`);
+      const b = document.getElementById(`lpMStep${i}Badge`);
+      if (el) el.className = 'lp-modal-step done';
+      if (b) b.textContent = '✓ Done';
+    }
+    if (barFill) barFill.style.width = '100%';
+
+    if (modalTitle) {
+      modalTitle.innerHTML = '✓ Dispatch Plan Optimized!';
+      modalTitle.style.color = 'var(--accent-emerald)';
+    }
+    if (modalSub) {
+      modalSub.innerHTML = `Dispatched <b>${bundle.kpi.optimized_trucks} trucks</b> for <b>${bundle.hub.name}</b> — saving <b>₹${bundle.kpi.savings_inr.toLocaleString('en-IN')}/day (-${bundle.kpi.savings_pct}%)</b>. Transitioning to live route map...`;
+    }
 
     applyBundle(bundle);
     if (bundle.hub_context) {
       CT.hubContext = bundle.hub_context;
     }
 
+    // Brief beat to display success confirmation before scrolling into the map page
+    await new Promise(r => setTimeout(r, 480));
+
+    if (modal) {
+      modal.style.transition = 'opacity 0.28s ease, transform 0.28s ease';
+      modal.style.opacity = '0';
+      await new Promise(r => setTimeout(r, 260));
+      modal.style.display = 'none';
+      modal.style.opacity = '1';
+    }
+
     if (switchAfter) {
       await switchWorkspace('tower');
-      const noteMsg = (bundle.notes && bundle.notes.length) ? `<br><span style="font-size:11.5px;color:var(--text-secondary)">📌 ${bundle.notes[0]}</span>` : '';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const noteMsg = (bundle.notes && bundle.notes.length)
+        ? `<br><span style="font-size:11.5px;color:var(--text-secondary)">📌 ${bundle.notes[0]}</span>`
+        : '';
       showToast(`🚀 <b>Agent Synthesis Complete (${bundle.plan_id}):</b> Dispatched <b>${bundle.kpi.optimized_trucks} trucks</b> for <b>${bundle.hub.name}</b> — saving <b>₹${bundle.kpi.savings_inr.toLocaleString('en-IN')}/day (-${bundle.kpi.savings_pct}%)</b>!${noteMsg}`, 6800);
     }
+  } catch (err) {
+    if (modal) modal.style.display = 'none';
+    showToast(`❌ Synthesis error: ${err.message}`);
   } finally {
+    if (timerInterval) clearInterval(timerInterval);
     if (heroBtn) heroBtn.innerHTML = '<span>🚀</span> Synthesize &amp; Run FleetFlow Agent →';
     if (botBtn) botBtn.innerHTML = '<span>🚀</span> Synthesize &amp; Run FleetFlow Agent →';
-    if (sideBtn) sideBtn.innerHTML = '<span>🚀</span> Synthesize &amp; Run Agent';
   }
 }
 
@@ -3103,10 +3337,12 @@ function applyBundle(bundle) {
 
   if (bundle.hub?.hub_id) {
     CT.activeHubId = bundle.hub.hub_id;
-    document.getElementById('selHub').value = bundle.hub.hub_id;
+    const sh = document.getElementById('selHub');
+    if (sh) sh.value = bundle.hub.hub_id;
   }
   if (bundle.objective) {
-    document.getElementById('selObjective').value = bundle.objective;
+    const so = document.getElementById('selObjective');
+    if (so) so.value = bundle.objective;
     const lpObj = document.getElementById('lpSelObjective');
     if (lpObj) lpObj.value = bundle.objective;
   }
@@ -3208,17 +3444,17 @@ function applyBundle(bundle) {
 
 async function triggerPlanUpdate(extra = {}) {
   const payload = {
-    hub_id: document.getElementById('selHub').value,
-    objective: document.getElementById('selObjective').value,
-    order_source: document.getElementById('selSource').value,
+    hub_id: document.getElementById('selHub')?.value || CT.activeHubId || 'BHW-DC',
+    objective: document.getElementById('selObjective')?.value || document.getElementById('lpSelObjective')?.value || 'lowest_cost',
+    order_source: document.getElementById('selSource')?.value || CT.activeOrderSource || 'demo',
     corridor_claims: CT.corridorClaims,
     scope: CT.scope,
     focus_truck_id: CT.focusTruckId,
     ...extra
   };
   const btn = document.getElementById('btnOptimize');
-  const origTxt = btn.innerHTML;
-  btn.innerHTML = '<span>⏳</span> Solving...';
+  const origTxt = btn ? btn.innerHTML : '';
+  if (btn) btn.innerHTML = '<span>⏳</span> Solving...';
   try {
     const res = await fetch('/api/plan', {
       method: 'POST',
@@ -3228,7 +3464,7 @@ async function triggerPlanUpdate(extra = {}) {
     const bundle = await res.json();
     applyBundle(bundle);
   } finally {
-    btn.innerHTML = origTxt;
+    if (btn) btn.innerHTML = origTxt;
   }
 }
 
@@ -3563,43 +3799,56 @@ async function resetToDefaultDemo() {
 function updateDriverHubPreview(truckId) {
   const r = (CT.bundle?.routes || []).find(x => x.truck_id === truckId) || CT.bundle?.routes?.[0];
   if (!r) return;
-  document.getElementById('driverPortalIframe').src = r.driver_portal_url;
-  document.getElementById('btnOpenMapsNav').href = r.gmaps_nav_url;
-  document.getElementById('btnOpenWhatsApp').href = r.whatsapp_url;
-  document.getElementById('btnOpenPortalTab').href = r.driver_portal_url;
-}
+  const pIframe = document.getElementById('driverPortalIframe');
+  if (pIframe) pIframe.src = r.driver_portal_url;
+  const mLink = document.getElementById('btnOpenMapsNav');
+  if (mLink) mLink.href = r.gmaps_nav_url;
+  const waLink = document.getElementById('btnOpenWhatsApp');
+  if (waLink) waLink.href = r.whatsapp_url;
+  const lrLink = document.getElementById('btnOpenPortalTab');
+  if (lrLink) lrLink.href = r.driver_portal_url;
 
-function loadBqPreset(idx) {
-  const presets = getBqPresets();
-  document.getElementById('inpBqSql').value = presets[idx] || presets[0];
-  executeBqQuery();
-}
+  // Update Right-Hand Driver Consignment Summary Card
+  const nameEl = document.getElementById('hubDriverName');
+  if (nameEl) nameEl.textContent = `${r.driver} · ${r.truck_id}`;
+  const subEl = document.getElementById('hubDriverSub');
+  if (subEl) subEl.textContent = `${r.corridor_name} (${r.branch}) · Shift: ${r.leave}–${r.back}`;
+  const classBadge = document.getElementById('hubDriverClassBadge');
+  if (classBadge) classBadge.textContent = r.truck_name;
 
-async function executeBqQuery() {
-  const sql = document.getElementById('inpBqSql').value;
-  if (!sql.trim()) return;
-  document.getElementById('bqEngineStatus').textContent = '⏳ Running BigQuery job...';
-  try {
-    const res = await fetch('/api/bigquery/query', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ sql, use_live_bq: true })
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      document.getElementById('bqEngineStatus').textContent = `❌ ${data.detail || 'Query error'}`;
-      return;
+  const stopsEl = document.getElementById('hubDriverStops');
+  if (stopsEl) stopsEl.textContent = `${r.stops_count} stops`;
+  const cartonsEl = document.getElementById('hubDriverCartons');
+  if (cartonsEl) cartonsEl.textContent = `${r.cartons_count} boxes`;
+  const costEl = document.getElementById('hubDriverCost');
+  if (costEl) costEl.textContent = `₹${r.cost_total.toLocaleString('en-IN')}`;
+
+  // Populate Stop-by-Stop Door-to-Cab Cargo Sequence List
+  const listEl = document.getElementById('hubDriverStopsList');
+  if (listEl) {
+    const stopsList = (r.stops && r.stops.length) ? r.stops : [];
+    if (!stopsList.length) {
+      listEl.innerHTML = `
+        <div style="padding:10px;background:var(--bg-elevated);border-radius:8px;font-size:12px;color:var(--text-muted)">
+          Stop 1 at rear door (${r.stops_count} scheduled deliveries). Open <b>Maps Nav</b> or <b>3D Load Studio</b> to inspect carton placement.
+        </div>
+      `;
+    } else {
+      listEl.innerHTML = stopsList.map((s, idx) => `
+        <div style="padding:8px 10px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:10px;display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:12.5px;font-weight:700">Drop #${idx + 1} · ${s.name}</div>
+            <div style="font-size:11px;color:var(--text-muted)">${s.area || s.address}</div>
+          </div>
+          <span class="ct-kpi-badge" style="font-size:10px;padding:2px 7px">${s.cartons || s.boxes_count || 1} boxes</span>
+        </div>
+      `).join('');
     }
-    document.getElementById('bqEngineStatus').textContent = `✓ ${data.engine} · ${data.row_count} rows (${data.latency_ms} ms)`;
-    const cols = data.columns || [];
-    document.getElementById('bqResultHead').innerHTML = `<tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr>`;
-    document.getElementById('bqResultBody').innerHTML = (data.rows || []).map(row =>
-      `<tr>${cols.map(c => `<td>${row[c] ?? ''}</td>`).join('')}</tr>`
-    ).join('');
-  } catch (e) {
-    document.getElementById('bqEngineStatus').textContent = `❌ ${e.message}`;
   }
 }
+
+function loadBqPreset(idx) {}
+async function executeBqQuery() {}
 
 function renderAuditLog(logs) {
   const el = document.getElementById('securityAuditList');
