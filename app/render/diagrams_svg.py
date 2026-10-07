@@ -154,13 +154,13 @@ def render_system_architecture_svg(theme: str = "light") -> str:
     <rect x="0" y="0" width="1312" height="136" rx="12" fill="{tier_bg}" stroke="{border}" stroke-dasharray="4,4"/>
     <text x="20" y="22" font-size="11" font-weight="800" fill="#A78BFA" letter-spacing="1.2">TIER 3 · VERTEX AI AGENT ENGINE &amp; DETERMINISTIC MATH ENCLAVE</text>
 
-    <!-- Node 3A: Gemini 2.5 Flash Orchestrator -->
+    <!-- Node 3A: Gemini 3.7 / 3.8 Flash & 3.1 Pro Orchestrator -->
     <g transform="translate(20, 32)">
       <rect x="0" y="0" width="265" height="92" rx="8" fill="{card}" stroke="rgba(167,139,250,0.5)" stroke-width="1.4" filter="url(#saShadow)"/>
       <rect x="0" y="0" width="265" height="20" rx="8" fill="url(#saGradPurple)" opacity="0.25"/>
       <text x="14" y="15" font-size="10.5" font-weight="800" fill="#C4B5FD">ORCHESTRATION BRAIN</text>
-      <text x="14" y="38" font-size="13.5" font-weight="800" fill="{txt1}">🧠 Gemini 2.5 Flash</text>
-      <text x="14" y="55" font-size="11" fill="{txt2}">Vertex AI Reasoning Engine</text>
+      <text x="14" y="38" font-size="13.5" font-weight="800" fill="{txt1}">🧠 Gemini 3.7 Flash</text>
+      <text x="14" y="55" font-size="11" fill="{txt2}">Gemini 3.1 Pro for Complex Logic</text>
       <text x="14" y="71" font-size="10" fill="#38BDF8">Dual-Guard ADK Callbacks</text>
       <text x="14" y="85" font-size="10" fill="{txt2}">Intent Scoping · Follow-Up Memory</text>
     </g>
@@ -354,16 +354,16 @@ def render_decision_flow_tree_svg(theme: str = "light") -> str:
     <text x="14" y="40" font-size="10" fill="{txt2}">Block prompt injection · Alert Dispatch</text>
   </g>
 
-  <!-- YES: Forward to Gemini 2.5 Flash Brain (Down) -->
+  <!-- YES: Forward to Gemini 3.7 Flash Brain (Down) -->
   <line x1="620" y1="256" x2="620" y2="295" stroke="{arr_green}" stroke-width="2.5" marker-end="url(#dtArrGreen)"/>
   <rect x="626" y="263" width="48" height="18" rx="4" fill="{yes_bg}"/>
   <text x="650" y="276" text-anchor="middle" font-size="10.5" font-weight="800" fill="{arr_green}">YES</text>
 
   <!-- ══════════════════ ROW 2: AGENT REASONING & CORRIDOR CLAIM ══════════════════ -->
-  <!-- Node 02: Gemini 2.5 Flash -->
+  <!-- Node 02: Gemini 3.7 Flash / 3.1 Pro -->
   <g transform="translate(480, 295)">
     <rect x="0" y="0" width="280" height="54" rx="10" fill="{card}" stroke="{arr_purple}" stroke-width="1.8" filter="url(#dtShadow)"/>
-    <text x="140" y="24" text-anchor="middle" font-size="13" font-weight="800" fill="{txt1}">🧠 2. Gemini 2.5 Flash Reasoning</text>
+    <text x="140" y="24" text-anchor="middle" font-size="13" font-weight="800" fill="{txt1}">🧠 2. Gemini 3.7 Flash / 3.1 Pro</text>
     <text x="140" y="42" text-anchor="middle" font-size="10.5" fill="{txt2}">Intent Scoping · Single Driver vs Fleet Scope</text>
   </g>
 

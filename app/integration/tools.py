@@ -841,7 +841,7 @@ def get_architecture_and_howto(tool_context: ToolContext) -> dict[str, Any]:
         "gcp_services": {
             "bigquery": "Stores enterprise order books (<project>.<dataset>.stores, orders, cartons, skus, fleet, drivers, kpi_runs); queried via parameterized REST SQL (app/data/bq_source.py) and live BigQuery SQL Studio.",
             "cloud_storage": "Stores 3D MP4 loading animations, standalone zero-login Mobile Driver Portals (driver_<id>.html), and dock QR photos in gs://<project>-fleetflow-media; served via IAM V4 signed URLs (app/render/publish.py).",
-            "vertex_ai_agent_engine": "Hosts Gemini 2.5 Flash + Google ADK (FleetFlowAdkApp) with deterministic before_model / after_model guard callbacks so the LLM never fabricates numbers.",
+            "vertex_ai_agent_engine": "Hosts Gemini 3.7 / 3.8 Flash & Gemini 3.1 Pro + Google ADK (FleetFlowAdkApp) with deterministic before_model / after_model guard callbacks so the LLM never fabricates numbers.",
             "cloud_run": "Hosts the containerized FastAPI + Uvicorn Supply Chain Control Tower & 3D Load Studio Web UI (Dockerfile, auto-scaling 1–20 instances) sharing the exact same backend.",
             "google_maps_routes_api": "Computes real highway polylines and travel durations (computeRoutes in app/geo/roads.py) and builds 1-tap Universal Google Maps navigation URLs.",
             "model_armor_and_dlp": "Pre-turn prompt injection/jailbreak defense, Cloud DLP masking for PII/GSTIN on unstructured text, and isolated OR-Tools + 3D Height-Map math enclave.",

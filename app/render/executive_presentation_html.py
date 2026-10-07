@@ -1158,7 +1158,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     <div class="finops-card hl-amber">
       <div class="finops-card-label">Token Consumption / Query</div>
       <div class="finops-card-val">~7,100 <span style="font-size:14px;color:var(--amber-ink);font-weight:700">Tokens</span></div>
-      <div class="finops-card-sub">5,500 input + 1,600 output on Gemini 2.5 Flash ($0.00089).</div>
+      <div class="finops-card-sub">5,500 input + 1,600 output on Gemini 3.7 / 3.8 Flash ($0.0012).</div>
     </div>
     <div class="finops-card hl-blue">
       <div class="finops-card-label">Monthly DC Infrastructure</div>
@@ -1176,7 +1176,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     <!-- Left: Detailed Infrastructure & Token Breakdown Table -->
     <div class="finops-table-card">
       <div class="dual-subhead"><span>⚡</span> Itemized Google Cloud Cost Breakdown per Dispatch Query</div>
-      <div class="card-sub">Based on live Gemini 2.5 Flash GA pricing, serverless Cloud Run, and Google Maps Routes API v2</div>
+      <div class="card-sub">Based on live Gemini 3.7 / 3.8 Flash &amp; 3.1 Pro pricing, serverless Cloud Run, and Google Maps Routes API v2</div>
       <table class="finops-table">
         <thead>
           <tr>
@@ -1188,10 +1188,10 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         </thead>
         <tbody>
           <tr>
-            <td><b>🧠 Gemini 2.5 Flash</b><br><span style="font-size:10.5px;color:var(--text-muted)">Multimodal Intent &amp; Tool Orchestration</span></td>
+            <td><b>🧠 Gemini 3.7 / 3.8 Flash &amp; 3.1 Pro</b><br><span style="font-size:10.5px;color:var(--text-muted)">Multimodal Intent, Complex Logistics Reasoning &amp; Tool Orchestration</span></td>
             <td>5,500 input tokens<br>1,600 output tokens</td>
-            <td>$0.075 / 1M in<br>$0.30 / 1M out</td>
-            <td><b>$0.00089</b><br><span class="finops-badge green">₹0.075</span></td>
+            <td>$0.75 / 1M in (Flash)<br>$3.75 / 1M out</td>
+            <td><b>$0.0012</b><br><span class="finops-badge green">₹0.10</span></td>
           </tr>
           <tr>
             <td><b>⚙️ Serverless Compute</b><br><span style="font-size:10.5px;color:var(--text-muted)">Vertex AI Agent Engine / Cloud Run</span></td>

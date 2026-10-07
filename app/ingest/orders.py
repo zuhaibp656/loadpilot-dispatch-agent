@@ -31,7 +31,7 @@ except ImportError:  # pragma: no cover
 
 logger = logging.getLogger(__name__)
 
-EXTRACT_MODEL = os.environ.get("LOADPILOT_EXTRACT_MODEL", "gemini-2.5-flash")
+EXTRACT_MODEL = os.environ.get("LOADPILOT_EXTRACT_MODEL", "gemini-3.7-flash")
 
 _ALL_GAZETTEER = {**GAZETTEER, **GAZETTEER_BLR}
 

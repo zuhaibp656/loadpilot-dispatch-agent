@@ -333,7 +333,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--project", default=os.environ.get("GOOGLE_CLOUD_PROJECT", "zuhaibp-ai"))
     ap.add_argument("--region", default="us-central1")
-    ap.add_argument("--model", default="gemini-2.5-flash")
+    ap.add_argument("--model", default="gemini-3.7-flash")
     ap.add_argument("--gemini-app-id", default="")
     ap.add_argument("--gemini-app-location", default="global")
     ap.add_argument("--viewer-domain", default="", help="Domain allowed to open media links (fallback)")

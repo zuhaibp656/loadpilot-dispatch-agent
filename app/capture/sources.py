@@ -23,7 +23,7 @@ except ImportError:  # pragma: no cover
 
 logger = logging.getLogger(__name__)
 
-VISION_MODEL = os.environ.get("LOADPILOT_VISION_MODEL", "gemini-2.5-flash")
+VISION_MODEL = os.environ.get("LOADPILOT_VISION_MODEL", "gemini-3.7-flash")
 
 
 class BoxCaptureSource(Protocol):

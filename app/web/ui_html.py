@@ -2805,7 +2805,7 @@ _UI_HTML = r"""<!DOCTYPE html>
                     </div>
                   </div>
                   <span class="ct-kpi-badge" style="background:var(--accent-primary-soft);color:var(--accent-primary);border-color:#4285F4">
-                    Gemini 2.5 Flash + OR-Tools
+                    Gemini 3.7 / 3.8 Flash &amp; 3.1 Pro + OR-Tools
                   </span>
                 </div>
 
@@ -3664,7 +3664,7 @@ _UI_HTML = r"""<!DOCTYPE html>
                 <div>
                   <div style="font-weight:800;font-size:13.5px;color:var(--accent-primary)">🧠 Vertex AI Agent Engine (`app/integration/agent.py`)</div>
                   <div style="font-size:12px;color:var(--text-secondary);margin-top:4px">
-                    Managed orchestration for Gemini 2.5 Flash + Google ADK tool calling and multimodal vision.
+                    Managed orchestration for Gemini 3.7 / 3.8 Flash + Google ADK tool calling and multimodal vision (with Gemini 3.1 Pro for deep complex logistics reasoning).
                   </div>
                 </div>
               </div>

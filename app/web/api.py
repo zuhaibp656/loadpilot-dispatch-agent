@@ -673,7 +673,7 @@ def get_meta(include_plan: bool = True) -> dict[str, Any]:
             {
                 "id": "vertex_ai",
                 "name": "Vertex AI Agent Engine",
-                "role": "Gemini 2.5 Flash + Google ADK",
+                "role": "Gemini 3.7 / 3.8 Flash & 3.1 Pro + Google ADK",
                 "status": "ACTIVE",
                 "detail": "Managed Reasoning Engine · Dual-surface (Gemini Enterprise + Web UI)",
                 "icon": "🧠",

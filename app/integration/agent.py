@@ -100,7 +100,8 @@ except ImportError:  # pragma: no cover
 
 logger = logging.getLogger(__name__)
 
-MODEL: str = os.environ.get("LOADPILOT_MODEL", "gemini-2.5-flash")
+MODEL: str = os.environ.get("LOADPILOT_MODEL", "gemini-3.7-flash")
+PRO_MODEL: str = os.environ.get("LOADPILOT_PRO_MODEL", "gemini-3.1-pro")
 IS_LOCAL = os.path.exists(os.path.expanduser("~/.config/gcloud")) and not os.environ.get("K_SERVICE") \
     and not os.environ.get("GOOGLE_CLOUD_AGENT_ENGINE_ID")
 WIZARD_NOTE = "[Planning form submitted: optimiseDispatch with the form values]"
