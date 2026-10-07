@@ -283,7 +283,10 @@ def build_executive_presentation_html() -> str:
         "trucks_freed_ratio": round((b.trucks - o.trucks) / b.trucks, 3),
         "search_h_per_truck": round(b.unload_search_hours / b.trucks, 2),
     }
+    from app.render.diagrams_svg import render_decision_flow_tree_svg, render_system_architecture_svg
     subs = {
+        "__DECISION_TREE_SVG__": render_decision_flow_tree_svg("dark"),
+        "__SYSTEM_ARCH_SVG__": render_system_architecture_svg("dark"),
         "__MAP_SVG__": _map_svg(plan, stops),
         "__LIFO_SVG__": lifo_svg,
         "__LIFO_TRUCK__": html.escape(f"{lifo_route.truck_id} · {len(lifo_route.stops)} drops · "
@@ -743,109 +746,9 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   <h2 class="monumental-headline">Dual-guard reasoning.<br><span class="gradient-span">Deterministic execution &amp; enterprise security.</span></h2>
   <p class="tagline-lead">How <b>FleetFlow</b> executes each turn: from multimodal order intake and dock carton photos to enterprise security guardrails, mathematical optimization, and multi-channel driver dispatch.</p>
 
-  <!-- Visual Flow Diagram Architecture with Decision Diamonds & Algorithmic Loops -->
-  <div class="flowchart-board">
-    <div class="flowchart-header">
-      <div class="flowchart-title"><span>🔀</span> Autonomous Decision-Making &amp; Algorithmic Flow Diagram</div>
-      <div class="flowchart-legend">
-        <div class="flow-leg-item"><span class="flow-leg-dot" style="background:#1A73E8"></span><span>Process Node</span></div>
-        <div class="flow-leg-item"><span class="flow-leg-dot" style="background:var(--amber-deep)"></span><span>Decision Diamond</span></div>
-        <div class="flow-leg-item"><span class="flow-leg-dot" style="background:#188038"></span><span>YES Branch</span></div>
-        <div class="flow-leg-item"><span class="flow-leg-dot" style="background:#D93025"></span><span>NO / Loop Branch</span></div>
-      </div>
-    </div>
-
-    <div class="flow-grid-row">
-      <!-- Col 1: Intake & Security Gate -->
-      <div class="flow-cell">
-        <div class="flow-step-card c-blue">
-          <div class="flow-step-meta"><span class="flow-step-num">01</span><span class="flow-step-pill">INPUT</span></div>
-          <div class="flow-step-name"><span>📥</span> Multimodal Intake</div>
-          <div class="flow-step-desc">ERP list, CSV, PDF, or warehouse dock carton photos with QR.</div>
-        </div>
-        <div class="flow-arrow-down">▼</div>
-        <div class="flow-diamond-card">
-          <span class="flow-diamond-badge">DECISION 1</span>
-          <span class="flow-diamond-q">Model Armor Clean?</span>
-          <div class="flow-diamond-routes">
-            <span class="flow-branch yes"><b>YES ➔</b><span>Sanitize DLP</span></span>
-            <span class="flow-branch no"><b>NO ➔</b><span>Block &amp; Log</span></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Col 2: Context Brain & Driver Claims -->
-      <div class="flow-cell">
-        <div class="flow-step-card c-purple">
-          <div class="flow-step-meta"><span class="flow-step-num">02</span><span class="flow-step-pill">AGENT</span></div>
-          <div class="flow-step-name"><span>🧠</span> Gemini 2.5 Flash</div>
-          <div class="flow-step-desc">Resolves driver continuity, intent scoping, and pronoun memory.</div>
-        </div>
-        <div class="flow-arrow-down">▼</div>
-        <div class="flow-diamond-card">
-          <span class="flow-diamond-badge">DECISION 2</span>
-          <span class="flow-diamond-q">Corridor Claimed?</span>
-          <div class="flow-diamond-routes">
-            <span class="flow-branch yes"><b>YES ➔</b><span>Pin Sector</span></span>
-            <span class="flow-branch no"><b>NO ➔</b><span>Polar θ atan2</span></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Col 3: Capacity & Highway Routing -->
-      <div class="flow-cell">
-        <div class="flow-step-card c-amber">
-          <div class="flow-step-meta"><span class="flow-step-num">03</span><span class="flow-step-pill">ROUTER</span></div>
-          <div class="flow-step-name"><span>🛣️</span> Corridor Cluster</div>
-          <div class="flow-step-desc">Partitions stops into 8 compass corridors relative to hub.</div>
-        </div>
-        <div class="flow-arrow-down">▼</div>
-        <div class="flow-diamond-card">
-          <span class="flow-diamond-badge">DECISION 3</span>
-          <span class="flow-diamond-q">Volume &gt; Truck Cap?</span>
-          <div class="flow-diamond-routes">
-            <span class="flow-branch yes"><b>YES ➔</b><span>Trunk &amp; Branch</span></span>
-            <span class="flow-branch no"><b>NO ➔</b><span>Solo Corridor</span></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Col 4: Mathematical Optimization & 3D Packing -->
-      <div class="flow-cell">
-        <div class="flow-step-card c-teal">
-          <div class="flow-step-meta"><span class="flow-step-num">04</span><span class="flow-step-pill">SOLVER</span></div>
-          <div class="flow-step-name"><span>🧮</span> OR-Tools VRPTW</div>
-          <div class="flow-step-desc">MIP route solver with Google Routes API road geodesics.</div>
-        </div>
-        <div class="flow-arrow-down">▼</div>
-        <div class="flow-diamond-card">
-          <span class="flow-diamond-badge">DECISION 4</span>
-          <span class="flow-diamond-q">LIFO Support ≥ 80%?</span>
-          <div class="flow-diamond-routes">
-            <span class="flow-branch yes"><b>YES ➔</b><span>Place Box</span></span>
-            <span class="flow-branch no"><b>NO ➔</b><span>Elevate Raster</span></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Col 5: Safety Physics & Multi-Channel Edge -->
-      <div class="flow-cell">
-        <div class="flow-diamond-card" style="margin-bottom:8px">
-          <span class="flow-diamond-badge">DECISION 5</span>
-          <span class="flow-diamond-q">CMVR Axle Balanced?</span>
-          <div class="flow-diamond-routes">
-            <span class="flow-branch yes"><b>YES ➔</b><span>Certify Load</span></span>
-            <span class="flow-branch no"><b>NO ➔</b><span>Shift C.G. (Δx)</span></span>
-          </div>
-        </div>
-        <div class="flow-arrow-down">▼</div>
-        <div class="flow-step-card c-green">
-          <div class="flow-step-meta"><span class="flow-step-num">05</span><span class="flow-step-pill">DISPATCH</span></div>
-          <div class="flow-step-name"><span>📱</span> Multi-Channel Edge</div>
-          <div class="flow-step-desc">Maps Live Nav, Mobile Driver Portal, WhatsApp, and Challan LR.</div>
-        </div>
-      </div>
-    </div>
+  <!-- High-Fidelity Vector Graphical Flow Diagram & Decision Tree -->
+  <div style="margin-top:16px;margin-bottom:18px;border-radius:14px;overflow:hidden">
+    __DECISION_TREE_SVG__
   </div>
 
   <div class="split">
@@ -1069,13 +972,9 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
  <div class="wrap-max">
   <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Enterprise Architecture &amp; Dual Deployment</span><span class="kicker-sep">/</span><span class="kicker-sub">One Shared Backend · Two Deployment Surfaces · Zero Hardcoded Credentials</span></div>
   <h2 class="monumental-headline">Deploy to <span class="gradient-span">Gemini Enterprise or Cloud Run UI.</span></h2>
-  <div class="arch">
-    <div class="arch-node hl"><div class="ic">💬</div><h4>Surface 1 · Gemini Enterprise</h4><p><b>Why:</b> Zero-friction conversational dispatch for managers.<br><b>How:</b> Deployed via <code>./scripts/deploy.sh --target gemini-enterprise</code> with A2UI forms, dropdowns &amp; interactive canvases.</p></div>
-    <div class="arch-node hl"><div class="ic">🖥️</div><h4>Surface 2 · Cloud Run Web UI</h4><p><b>Why:</b> Standalone Supply Chain Control Tower &amp; 3D Load Studio.<br><b>How:</b> Deployed via <code>./scripts/deploy.sh --target ui</code> using the same FastAPI + ADK backend container.</p></div>
-    <div class="arch-node hl"><div class="ic">📊</div><h4>BigQuery Warehouse</h4><p><b>Why:</b> Enterprise order book, SKU dimensions &amp; KPI history.<br><b>How:</b> Parameterized REST SQL (<code>jobs.query</code>) reads <code>stores</code>, <code>orders</code> &amp; <code>cartons</code> tables into the VRP solver.</p></div>
-    <div class="arch-node"><div class="ic">☁️</div><h4>Cloud Storage (GCS)</h4><p><b>Why:</b> Zero-login edge delivery for drivers &amp; dock crews.<br><b>How:</b> Publishes 3D MP4 videos, mobile driver portals (<code>driver_id.html</code>) &amp; dock photos via IAM V4 signed URLs.</p></div>
-    <div class="arch-node"><div class="ic">🧠</div><h4>Vertex AI + Math Enclave</h4><p><b>Why:</b> Zero-hallucination reasoning &amp; 3D physics.<br><b>How:</b> Gemini 2.5 Flash + ADK orchestrates tools while OR-Tools VRPTW &amp; 1cm Height-Map compute exact routes &amp; loads.</p></div>
-    <div class="arch-node hl"><div class="ic">🛡️</div><h4>Model Armor, DLP &amp; Maps</h4><p><b>Why:</b> Enterprise security &amp; road-true navigation.<br><b>How:</b> Model Armor blocks prompt injection, Cloud DLP masks PII/GSTIN, and Routes API drives 1-tap Google Maps navigation.</p></div>
+  <!-- High-Fidelity Multi-Tier Graphical Architecture Diagram -->
+  <div style="margin:16px 0 20px 0;border-radius:14px;overflow:hidden">
+    __SYSTEM_ARCH_SVG__
   </div>
   <div class="roadmap">
     <div class="rm"><b>Option A · Gemini Enterprise Deploy</b><p><code>./scripts/deploy.sh --target gemini-enterprise --project YOUR_PROJECT</code> — provisions IAM, updates Vertex AI Agent Engine in-place, and registers in Gemini Enterprise.</p></div>

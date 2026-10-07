@@ -824,6 +824,13 @@ _UI_HTML = r"""<!DOCTYPE html>
       transform: translateY(-1px);
     }
 
+    .ct-btn-secondary.active {
+      background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%) !important;
+      color: #ffffff !important;
+      border-color: #0d47a1 !important;
+      box-shadow: 0 4px 16px rgba(26, 115, 232, 0.45) !important;
+    }
+
     .ct-rail-footer {
       padding-top: 12px;
       border-top: 1px solid var(--border-subtle);
@@ -2712,6 +2719,38 @@ _UI_HTML = r"""<!DOCTYPE html>
             </a>
           </div>
 
+          <!-- ── GRAPHICAL ARCHITECTURE & DECISION-MAKING FLOW DIAGRAM STUDIO ── -->
+          <div class="ct-box neon-blue" style="padding:18px 20px">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:14px">
+              <div>
+                <div style="font-size:14px;font-weight:800;color:var(--text-primary);letter-spacing:0.02em">
+                  📐 Graphical Architecture &amp; Autonomous Decision Flow Studio
+                </div>
+                <div style="font-size:11.5px;color:var(--text-secondary);margin-top:2px">
+                  High-fidelity vector topology diagrams: inspect multi-tier GCP services or trace autonomous decision trees with true logic diamonds and branches.
+                </div>
+              </div>
+              <div style="display:flex;gap:8px;align-items:center">
+                <button class="ct-btn-secondary active" id="btnDiagArch" onclick="switchDiagramView('arch')" style="font-size:12px;height:34px;padding:0 14px">
+                  🏛️ System Architecture Topology
+                </button>
+                <button class="ct-btn-secondary" id="btnDiagTree" onclick="switchDiagramView('tree')" style="font-size:12px;height:34px;padding:0 14px">
+                  🔀 Autonomous Decision Tree
+                </button>
+              </div>
+            </div>
+
+            <!-- Architecture Diagram Container -->
+            <div id="diagArchWrap" style="display:block;width:100%;overflow-x:auto;border-radius:12px">
+              __SYSTEM_ARCH_SVG__
+            </div>
+
+            <!-- Decision Tree Diagram Container -->
+            <div id="diagTreeWrap" style="display:none;width:100%;overflow-x:auto;border-radius:12px">
+              __DECISION_TREE_SVG__
+            </div>
+          </div>
+
           <div>
             <div style="font-size:12.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--accent-primary);margin-bottom:10px">
               1. How to Use FleetFlow (Step-by-Step Operator Workflow)
@@ -4351,6 +4390,18 @@ async function restoreHistoricalPlan(planId) {
   }
 }
 
+function switchDiagramView(mode) {
+  const isArch = mode === 'arch';
+  const archWrap = document.getElementById('diagArchWrap');
+  const treeWrap = document.getElementById('diagTreeWrap');
+  const btnArch = document.getElementById('btnDiagArch');
+  const btnTree = document.getElementById('btnDiagTree');
+  if (archWrap) archWrap.style.display = isArch ? 'block' : 'none';
+  if (treeWrap) treeWrap.style.display = isArch ? 'none' : 'block';
+  if (btnArch) btnArch.classList.toggle('active', isArch);
+  if (btnTree) btnTree.classList.toggle('active', !isArch);
+}
+
 document.addEventListener('DOMContentLoaded', initControlTower);
 </script>
 </body>
@@ -4360,9 +4411,12 @@ document.addEventListener('DOMContentLoaded', initControlTower);
 
 def build_control_tower_html() -> str:
     """Return the complete, self-contained Control Tower & 3D Load Studio HTML application."""
+    from app.render.diagrams_svg import render_decision_flow_tree_svg, render_system_architecture_svg
     engine_js = (Path(__file__).resolve().parents[1] / "render" / "anim" / "engine.js").read_text(encoding="utf-8")
     return (
         _UI_HTML
         .replace("__ANIM_CSS__", ANIM_CSS)
         .replace("__ENGINE_JS__", engine_js)
+        .replace("__SYSTEM_ARCH_SVG__", render_system_architecture_svg("dark"))
+        .replace("__DECISION_TREE_SVG__", render_decision_flow_tree_svg("dark"))
     )
