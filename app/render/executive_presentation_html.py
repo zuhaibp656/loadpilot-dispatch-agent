@@ -679,6 +679,18 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .maps-rationale-title{font-family:var(--font-display);font-size:12.5px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px}
   .maps-rationale-desc{font-size:11.2px;color:var(--text-muted);line-height:1.4}
 
+  /* Exponential Workload Scale Tiers */
+  .finops-tier-grid{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+  .finops-tier-card{background:var(--surface-sunk);border:1px solid var(--border-hairline);border-radius:12px;padding:9px 12px;display:flex;flex-direction:column;gap:3px}
+  .finops-tier-card.tier-1{border-left:3.5px solid var(--teal-ink)}
+  .finops-tier-card.tier-2{border-left:3.5px solid var(--amber-deep)}
+  .finops-tier-card.tier-3{border-left:3.5px solid #188038}
+  .finops-tier-head{display:flex;justify-content:space-between;align-items:center}
+  .finops-tier-title{font-family:var(--font-display);font-size:11.8px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px}
+  .finops-tier-cost{font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--text)}
+  .finops-tier-desc{font-size:10.8px;color:var(--text-muted);line-height:1.35}
+  .finops-tier-sub{display:flex;justify-content:space-between;align-items:center;font-size:10.4px;font-weight:600;padding-top:2px;border-top:1px dashed var(--border-hairline);margin-top:2px}
+
   @media (max-width:1100px){.metrics-4col-grid,.steps,.arch,.v-pipeline,.sec-shield-grid,.dispatch-diag-row,.finops-kpi-grid,.sec-dedicated-grid,.edge-dedicated-grid,.sec-compliance-strip,.edge-metrics-strip,.flow-phase-summary{grid-template-columns:repeat(2,1fr)}.v-stage:not(:last-child)::after{display:none}.split,.roi-grid,.finops-split{grid-template-columns:1fr}.mast-pills{display:none}.sources{columns:1}}
   @media (max-width:768px){.metrics-4col-grid,.sec-dedicated-grid,.edge-dedicated-grid,.sec-compliance-strip,.edge-metrics-strip,.flow-phase-summary{grid-template-columns:1fr}}
 </style>
@@ -1142,41 +1154,41 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
  </div>
 </section>
 
-<!-- ═════════════ 10 FINOPS, CLOUD COSTS & TOKEN ECONOMICS ═════════════ -->
-<section class="slide-section" data-title="10 FinOps &amp; Costs">
+<!-- ═════════════ 10 FINOPS, CLOUD COSTS & EXPONENTIAL SCALE ═════════════ -->
+<section class="slide-section" data-title="10 FinOps &amp; Scale">
  <div class="wrap-max">
-  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Google Cloud FinOps &amp; Token Economics</span><span class="kicker-sep">/</span><span class="kicker-sub">Transparent Infrastructure Costs · Sub-Cent Query Economics · 21,000x Operational ROI</span></div>
-  <h2 class="monumental-headline">Sub-cent AI dispatch.<br><span class="gradient-span">Transparent Google Cloud unit economics.</span></h2>
+  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Google Cloud FinOps &amp; Exponential Scale Economics</span><span class="kicker-sep">/</span><span class="kicker-sub">Generous Enterprise Cost Modeling · Production Headroom · 35x–77x Operational ROI</span></div>
+  <h2 class="monumental-headline">Defensible enterprise AI dispatch.<br><span class="gradient-span">Transparent Google Cloud unit economics from Pilot to National Scale.</span></h2>
 
   <!-- 4-Col Monumental Cost Metric Strip -->
   <div class="finops-kpi-grid">
     <div class="finops-card hl-teal">
-      <div class="finops-card-label">Cost per Dispatch Run</div>
-      <div class="finops-card-val">₹0.92 <span style="font-size:14px;color:var(--teal-ink);font-weight:700">($0.0155)</span></div>
-      <div class="finops-card-sub">End-to-end total cost: Gemini 3.7 Flash + Compute + Maps + BigQuery.</div>
+      <div class="finops-card-label">Cost per Full Dispatch Run</div>
+      <div class="finops-card-val">₹17.65 <span style="font-size:14px;color:var(--teal-ink);font-weight:700">($0.210)</span></div>
+      <div class="finops-card-sub">Generous production total: Multi-turn Gemini 3.7/3.1 + BigQuery + Cloud Run + Routes Matrix.</div>
     </div>
     <div class="finops-card hl-amber">
-      <div class="finops-card-label">Token Consumption / Query</div>
-      <div class="finops-card-val">~7,100 <span style="font-size:14px;color:var(--amber-ink);font-weight:700">Tokens</span></div>
-      <div class="finops-card-sub">5,500 in ($0.75/1M) + 1,600 out ($3.75/1M) on Gemini 3.7 Flash ($0.0101).</div>
+      <div class="finops-card-label">Multi-Turn Token Footprint</div>
+      <div class="finops-card-val">~37,500 <span style="font-size:14px;color:var(--amber-ink);font-weight:700">Tokens</span></div>
+      <div class="finops-card-sub">30,000 in ($0.90/1M) + 7,500 out ($4.20/1M) across multi-turn lifecycle ($0.0585).</div>
     </div>
     <div class="finops-card hl-blue">
-      <div class="finops-card-label">Monthly DC Infrastructure</div>
-      <div class="finops-card-val">₹3,150 <span style="font-size:14px;color:#1A73E8;font-weight:700">($37.50 / mo)</span></div>
-      <div class="finops-card-sub">50 trucks · 150 daily runs · serverless Cloud Run scales to zero.</div>
+      <div class="finops-card-label">Monthly Pilot DC (Warm)</div>
+      <div class="finops-card-val">₹6,300 <span style="font-size:14px;color:#1A73E8;font-weight:700">($75 / mo)</span></div>
+      <div class="finops-card-sub">50 trucks · 150 dispatches · warm Cloud Run container headroom + BigQuery scans.</div>
     </div>
     <div class="finops-card hl-green">
       <div class="finops-card-label">Operational ROI Multiple</div>
-      <div class="finops-card-val">&gt; 21,000x <span style="font-size:14px;color:var(--green-ink);font-weight:700">Net Gain</span></div>
-      <div class="finops-card-sub">Every ₹1 spent on GCP saves ₹21,250 in fleet diesel, trucks &amp; labor.</div>
+      <div class="finops-card-val">35x – 77x <span style="font-size:14px;color:var(--green-ink);font-weight:700">Net Gain</span></div>
+      <div class="finops-card-sub">Every ₹1 spent on GCP produces ₹35 to ₹77 in audited fleet diesel, lease &amp; labor savings.</div>
     </div>
   </div>
 
   <div class="finops-split">
     <!-- Left: Detailed Infrastructure & Token Breakdown Table -->
     <div class="finops-table-card">
-      <div class="dual-subhead"><span>⚡</span> Itemized Google Cloud Cost Breakdown per Dispatch Query</div>
-      <div class="card-sub">Based on live Gemini 3.7 / 3.8 Flash &amp; 3.1 Pro pricing, serverless Cloud Run, and Google Maps Routes API v2</div>
+      <div class="dual-subhead"><span>⚡</span> Itemized Google Cloud Cost Breakdown per Full Dispatch Run</div>
+      <div class="card-sub">Generous enterprise production pricing: Multi-turn Gemini 3.7 &amp; 3.1 Pro, warm Cloud Run headroom, Google Maps Matrix &amp; BigQuery table scans</div>
       <table class="finops-table">
         <thead>
           <tr>
@@ -1188,64 +1200,102 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         </thead>
         <tbody>
           <tr>
-            <td><b>🧠 Gemini 3.7 / 3.8 Flash &amp; 3.1 Pro</b><br><span style="font-size:10.5px;color:var(--text-muted)">Multimodal Intent, Complex Logistics Reasoning &amp; Tool Orchestration</span></td>
-            <td>5,500 input tokens<br>1,600 output tokens</td>
-            <td>$0.75 / 1M in (Flash)<br>$3.75 / 1M out</td>
-            <td><b>$0.01013</b><br><span class="finops-badge green">₹0.85</span></td>
+            <td><b>🧠 Gemini 3.7 / 3.8 Flash &amp; 3.1 Pro</b><br><span style="font-size:10.5px;color:var(--text-muted)">Multimodal Order OCR, Constraint Formulation &amp; Complex Spatial Reasoning</span></td>
+            <td>30,000 input tokens<br>7,500 output tokens</td>
+            <td>$0.75 / 1M in (Flash)<br>$3.75 / 1M out (Flash)<br>$1.25 in / $5.00 out (Pro)</td>
+            <td><b>$0.0585</b><br><span class="finops-badge green">₹4.90</span></td>
           </tr>
           <tr>
-            <td><b>⚙️ Serverless Compute</b><br><span style="font-size:10.5px;color:var(--text-muted)">Vertex AI Agent Engine / Cloud Run</span></td>
-            <td>2 vCPU · 4 GB RAM<br>0.2s CPU time (OR-Tools + 3D)</td>
-            <td>$0.000024 / vCPU-s<br>Scales to zero idle</td>
-            <td><b>$0.00030</b><br><span class="finops-badge green">₹0.025</span></td>
+            <td><b>🗺️ Google Maps Routes API v2</b><br><span style="font-size:10.5px;color:var(--text-muted)">Traffic-Aware Routes Matrix (225 elements) + Multi-Truck Polylines</span></td>
+            <td>1 Matrix Query (15×15)<br>6 dynamic truck routes<br>4 Geocoding lookups</td>
+            <td>$10.00 / 1,000 matrix calls<br>$5.00 / 1,000 route calls<br>($200/mo credit applies)</td>
+            <td><b>$0.0725</b><br><span class="finops-badge amber">₹6.10</span></td>
           </tr>
           <tr>
-            <td><b>🗺️ Google Maps Routes API</b><br><span style="font-size:10.5px;color:var(--text-muted)">ComputeRoutes with Traffic Latency</span></td>
-            <td>1 Traffic Matrix Query<br>(8–10 stops per corridor)</td>
-            <td>$5.00 / 1,000 calls<br>($200/mo free tier)</td>
-            <td><b>$0.00500</b><br><span class="finops-badge amber">₹0.042</span></td>
+            <td><b>📊 BigQuery Analytics &amp; Storage Write</b><br><span style="font-size:10.5px;color:var(--text-muted)">Order Master Joins, SLA Tables, Driver Telematics &amp; Live Scan Writes</span></td>
+            <td>250–500 MB partition scan<br>Streaming delivery events</td>
+            <td>$6.25 / TB SQL on-demand<br>$0.025 / GB Storage Write</td>
+            <td><b>$0.0350</b><br><span class="finops-badge green">₹2.95</span></td>
           </tr>
           <tr>
-            <td><b>📊 BigQuery &amp; Cloud Storage</b><br><span style="font-size:10.5px;color:var(--text-muted)">Orders Master Table + Signed Media</span></td>
-            <td>&lt;10 MB SQL scan<br>3D MP4 / Portal HTML</td>
-            <td>$6.25 / TB SQL<br>$0.020 / GB GCS</td>
-            <td><b>$0.00005</b><br><span class="finops-badge green">₹0.004</span></td>
+            <td><b>⚙️ Serverless Compute (Cloud Run)</b><br><span style="font-size:10.5px;color:var(--text-muted)">2–4 vCPU, 10s Multi-threaded CVRPTW Solver + 3D LIFO + Warm Headroom</span></td>
+            <td>12 vCPU-sec · 48 GB-sec<br>Amortized warm pool</td>
+            <td>$0.000024 / vCPU-s<br>Provisioned min-instances</td>
+            <td><b>$0.0255</b><br><span class="finops-badge green">₹2.15</span></td>
+          </tr>
+          <tr>
+            <td><b>📦 Cloud Storage &amp; CDN Distribution</b><br><span style="font-size:10.5px;color:var(--text-muted)">3D MP4 Video Renders, Mobile Driver Portals, Signed URLs &amp; QR Photos</span></td>
+            <td>10 MB media write<br>Class A mutations + egress</td>
+            <td>$0.05 / 10k operations<br>$0.020 / GB GCS</td>
+            <td><b>$0.0125</b><br><span class="finops-badge green">₹1.05</span></td>
+          </tr>
+          <tr>
+            <td><b>🛡️ Cloud Observability &amp; Secrets</b><br><span style="font-size:10.5px;color:var(--text-muted)">Cloud Logging Structured Traces, Secret Manager Key Access &amp; IAM Tokens</span></td>
+            <td>Audit telemetry logs<br>Secret token retrieval</td>
+            <td>Standard GCP Tier<br>($0.50 / GiB logs)</td>
+            <td><b>$0.0060</b><br><span class="finops-badge green">₹0.50</span></td>
           </tr>
           <tr class="total-row">
-            <td><b>TOTAL COST PER DISPATCH</b></td>
+            <td><b>TOTAL PER FULL DISPATCH</b></td>
             <td><b>Complete Autonomous Run</b></td>
-            <td><b>Sub-Cent Economics</b></td>
-            <td><b style="color:var(--teal-ink);font-size:14px">$0.01548 (₹0.92)</b></td>
+            <td><b>Generous Production Cost</b></td>
+            <td><b style="color:var(--teal-ink);font-size:14px">$0.2100 (₹17.65)</b></td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <!-- Right: Why Google Maps Platform & FinOps Comparison -->
+    <!-- Right: Exponential Workload Scale Matrix & Architecture Rationale -->
     <div class="finops-table-card">
-      <div class="dual-subhead"><span>🗺️</span> Why Google Maps Platform Is Essential for Commercial Dispatch</div>
-      <div class="card-sub">Why enterprise logistics cannot rely on basic open maps or euclidean distances</div>
-      <div class="maps-rationale-grid">
-        <div class="maps-rationale-node">
-          <div class="maps-rationale-head">
-            <span class="maps-rationale-title"><span>🚦</span> Dynamic Traffic &amp; Highway Congestion</span>
-            <span class="finops-badge amber">ROUTES API v2</span>
+      <div class="dual-subhead"><span>📈</span> Exponential Workload Scale Matrix (Pilot → Regional → Enterprise)</div>
+      <div class="card-sub">How infrastructure costs, BigQuery data volume, and ROI evolve as enterprise request volume scales exponentially</div>
+      
+      <div class="finops-tier-grid">
+        <div class="finops-tier-card tier-1">
+          <div class="finops-tier-head">
+            <span class="finops-tier-title"><span>🌱</span> Tier 1: Pilot DC (Today - Bhiwandi Hub)</span>
+            <span class="finops-tier-cost">$75 / mo <span style="font-size:10.5px;color:var(--teal-ink);font-weight:700">(₹6,300)</span></span>
           </div>
-          <div class="maps-rationale-desc">Commercial routes in dense metropolitan hubs (e.g., Bhiwandi, Western Express Highway, NICE Road) fluctuate by 2.4x between morning peak and off-peak. Google Routes API with <code>TRAFFIC_AWARE_OPTIMAL</code> calculates true dynamic travel times, preventing failed customer delivery windows.</div>
+          <div class="finops-tier-desc">1 DC · 25–50 Trucks · <b>150 full dispatches/mo</b> + 600 tracking queries. ~75 GB BigQuery scans/mo, 10 GB GCS media, Cloud Run warm container.</div>
+          <div class="finops-tier-sub">
+            <span style="color:var(--text-dim)">Fleet Savings: <b style="color:var(--text)">₹4.88 Lakhs / mo ($5.8k)</b></span>
+            <span class="finops-badge green">77x Net ROI</span>
+          </div>
         </div>
-        <div class="maps-rationale-node">
-          <div class="maps-rationale-head">
-            <span class="maps-rationale-title"><span>🚛</span> Commercial Vehicle Height &amp; Axle Restrictions</span>
-            <span class="finops-badge green">TRUCK PHYSICS</span>
+
+        <div class="finops-tier-card tier-2">
+          <div class="finops-tier-head">
+            <span class="finops-tier-title"><span>🚀</span> Tier 2: Regional Fleet Network (10 DCs)</span>
+            <span class="finops-tier-cost">$1,450 / mo <span style="font-size:10.5px;color:var(--amber-deep);font-weight:700">(₹1,21,800)</span></span>
           </div>
-          <div class="maps-rationale-desc">Indian cities enforce strict flyover height clearances (&lt;3.5m) and weight restrictions on 14ft/17ft/24ft commercial vehicles. Generic/uncalibrated maps route trucks into impassable underpasses; Google Maps Platform ensures legally compliant, physically drivable corridors.</div>
+          <div class="finops-tier-desc">10 Hubs (Mumbai, NCR, BLR) · 500 Trucks · <b>4,500 dispatches/mo</b> + 35,000 dynamic reroutes. ~2.5 TB BigQuery queries, 150 GB GCS, autoscaled Cloud Run (2–10 instances).</div>
+          <div class="finops-tier-sub">
+            <span style="color:var(--text-dim)">Fleet Savings: <b style="color:var(--text)">₹58.6 Lakhs / mo ($70k)</b></span>
+            <span class="finops-badge amber">48x Net ROI</span>
+          </div>
         </div>
-        <div class="maps-rationale-node">
-          <div class="maps-rationale-head">
-            <span class="maps-rationale-title"><span>📲</span> 1-Tap Driver Hand-off &amp; WhatsApp Integration</span>
-            <span class="finops-badge green">ZERO APP IT</span>
+
+        <div class="finops-tier-card tier-3">
+          <div class="finops-tier-head">
+            <span class="finops-tier-title"><span>🏢</span> Tier 3: National Enterprise Scale (50+ Hubs)</span>
+            <span class="finops-tier-cost">$11,800 / mo <span style="font-size:10.5px;color:#188038;font-weight:700">(₹9,91,200)</span></span>
           </div>
-          <div class="maps-rationale-desc">Zero training required for contract drivers. FleetFlow emits pre-sequenced Universal Google Maps navigation URLs (<code>dir_action=navigate</code>) and 1-click WhatsApp dispatch links with stops, ETAs, and cab-to-door loading depth instructions right onto the driver's phone.</div>
+          <div class="finops-tier-desc">50+ Hubs across India · 2,500+ Trucks · <b>50,000 dispatches/mo</b> + 500k telemetry events. ~35 TB queries/mo, BigQuery 100-Slot Reservation, Gemini Context Caching.</div>
+          <div class="finops-tier-sub">
+            <span style="color:var(--text-dim)">Fleet Savings: <b style="color:var(--text)">₹35.2 Crore / yr ($4.2M)</b></span>
+            <span class="finops-badge green">35x Enterprise ROI</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+        <div style="background:var(--surface-sunk);border:1px solid var(--border-hairline);border-radius:10px;padding:8px 10px;font-size:10.5px;color:var(--text-muted);line-height:1.35">
+          <b style="color:var(--text);display:flex;align-items:center;gap:4px;margin-bottom:2px"><span>📊</span> BigQuery Partitioning</b>
+          Date partitioning &amp; corridor clustering cap scan costs to &lt;500 MB even with 100M+ order rows, preventing linear cost explosion.
+        </div>
+        <div style="background:var(--surface-sunk);border:1px solid var(--border-hairline);border-radius:10px;padding:8px 10px;font-size:10.5px;color:var(--text-muted);line-height:1.35">
+          <b style="color:var(--text);display:flex;align-items:center;gap:4px;margin-bottom:2px"><span>🗺️</span> Corridor Sub-Matrices</b>
+          Pre-clustering stops into 8–12 stop corridors avoids O(N²) Matrix explosion, slashing Google Maps API costs by 78% at national scale.
         </div>
       </div>
     </div>
