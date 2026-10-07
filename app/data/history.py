@@ -117,7 +117,7 @@ def generate_dispatch_report_html(bundle: dict[str, Any]) -> str:
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>FleetFlow Dispatch Audit Certificate · {plan_id}</title>
+  <title>FleetFlow Executive Dispatch Report & Audit Certificate · {plan_id}</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
     * {{ box-sizing: border-box; margin: 0; padding: 0; }}
@@ -169,12 +169,12 @@ def generate_dispatch_report_html(bundle: dict[str, Any]) -> str:
       <div class="brand">
         <div class="brand-logo">🚚</div>
         <div class="brand-title">
-          <h1>FleetFlow Dispatch Run &amp; Compliance Certificate</h1>
+          <h1>FleetFlow Executive Dispatch Report & Audit Certificate</h1>
           <p>Google Cloud Supply Chain Platform · Autonomous Dispatch &amp; 3D LIFO Packing Enclave</p>
         </div>
       </div>
       <div class="cert-meta">
-        <div class="cert-badge">✓ AUDIT CERTIFIED</div>
+        <div class="cert-badge">✓ FLEETFLOW CRYPTOGRAPHIC AUDIT CERTIFIED</div>
         <div><b>Plan ID:</b> {plan_id}</div>
         <div><b>Hub:</b> {hub.get('name', 'Bhiwandi DC')} ({hub.get('hub_id', 'BHW-DC')})</div>
         <div><b>Date:</b> {date_str}</div>
@@ -503,11 +503,14 @@ def record_dispatch_run(bundle: dict[str, Any], actor: str = "Operations Dispatc
     if not gcs_manifest_link:
         gcs_manifest_link = f"https://storage.cloud.google.com/{bucket}/manifests/manifest_{plan_id}.csv"
 
+    cert_hash = _gen_report_hash(plan_id, date_str, float(kpi.get("optimized_cost_inr", 0)), int(kpi.get("stops", 0)))
+
     # Build history record entry
     record = {
         "plan_id": plan_id,
         "dispatch_date": date_str,
         "created_at": dt.datetime.now().isoformat(),
+        "audit_hash": cert_hash,
         "hub_id": hub.get("hub_id", "BHW-DC"),
         "hub_name": hub.get("name", "Bhiwandi Regional DC"),
         "city": bundle.get("city", "mumbai"),
@@ -562,6 +565,15 @@ def get_history_list(hub_id: str | None = None, search: str = "", limit: int = 5
         entries = json.loads(INDEX_FILE.read_text(encoding="utf-8"))
     except Exception:
         return []
+
+    for e in entries:
+        if not e.get("audit_hash"):
+            e["audit_hash"] = _gen_report_hash(
+                e.get("plan_id", ""),
+                e.get("dispatch_date", ""),
+                float(e.get("optimized_cost_inr", 0)),
+                int(e.get("total_stops", 0)),
+            )
 
     if hub_id and hub_id != "all":
         entries = [e for e in entries if e.get("hub_id") == hub_id]
