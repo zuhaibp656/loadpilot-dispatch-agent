@@ -1888,6 +1888,10 @@ _UI_HTML = r"""<!DOCTYPE html>
           <span class="nav-ico">📱</span>
           <span>Driver Hub</span>
         </button>
+        <button class="ct-nav-btn" data-view="history" onclick="switchWorkspace('history')">
+          <span class="nav-ico">📜</span>
+          <span>History &amp; Audit</span>
+        </button>
       </nav>
 
       <!-- Bottom Navigation Reference Section: Separated from operational dispatch tabs -->
@@ -2596,6 +2600,103 @@ _UI_HTML = r"""<!DOCTYPE html>
         </div>
       </section>
 
+      <!-- ═══════════════ VIEW: DISPATCH HISTORY, GCS/BIGQUERY AUDIT & REPLAY ═══════════════ -->
+      <section class="ct-view" id="view-history">
+        <div class="ct-stage neon-blue" style="padding:22px 24px;overflow-y:auto;gap:18px">
+          <div class="lp-hero-bar">
+            <div>
+              <h2 class="ct-big-heading" style="font-size:23px">📜 Enterprise Dispatch History &amp; GCS / BigQuery Audit Trail</h2>
+              <div style="font-size:13px;color:var(--text-secondary);margin-top:2px">
+                Tamper-evident operational repository with <b>cryptographic HMAC verification</b>, <b>RFC 4180 ERP manifests</b>, and <b>1-click historical replay</b> into 2D Map &amp; 3D Load Studio.
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center">
+              <span class="ct-badge" style="background:rgba(26,115,232,0.15);color:var(--accent-blue);font-weight:700">
+                🔒 Immutable Audit Enabled
+              </span>
+            </div>
+          </div>
+
+          <!-- 30-Day Cumulative Historical Telemetry Strip -->
+          <div class="ct-kpi-ribbon" style="margin:0;grid-template-columns:repeat(4,1fr);gap:14px">
+            <div class="ct-kpi-card neon-blue" style="height:90px">
+              <div class="ct-kpi-lbl">Total Archived Dispatches</div>
+              <div class="ct-kpi-val" id="histKpiTotal" style="font-size:24px;color:var(--accent-blue)">--</div>
+              <div class="ct-kpi-sub">Across Mumbai &amp; Bengaluru Hubs</div>
+            </div>
+            <div class="ct-kpi-card neon-green" style="height:90px">
+              <div class="ct-kpi-lbl">Cumulative Logistics Savings</div>
+              <div class="ct-kpi-val" id="histKpiSavings" style="font-size:24px;color:var(--accent-green)">--</div>
+              <div class="ct-kpi-sub">Calculated vs unoptimized baseline</div>
+            </div>
+            <div class="ct-kpi-card neon-amber" style="height:90px">
+              <div class="ct-kpi-lbl">Commercial Trucks Avoided</div>
+              <div class="ct-kpi-val" id="histKpiTrucks" style="font-size:24px;color:var(--accent-amber)">--</div>
+              <div class="ct-kpi-sub">Through multi-drop 3D packing</div>
+            </div>
+            <div class="ct-kpi-card neon-blue" style="height:90px">
+              <div class="ct-kpi-lbl">CO₂ Emissions Avoided</div>
+              <div class="ct-kpi-val" id="histKpiCo2" style="font-size:24px;color:#38bdf8">--</div>
+              <div class="ct-kpi-sub">Green logistics ESG telemetry</div>
+            </div>
+          </div>
+
+          <!-- Search & Filter Controls -->
+          <div class="ct-box neon-blue" style="padding:14px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+            <div style="display:flex;gap:12px;align-items:center;flex:1;min-width:300px">
+              <div style="font-size:12px;font-weight:700;color:var(--text-secondary);white-space:nowrap">FILTER BY HUB:</div>
+              <select id="histFilterHub" class="ct-input" style="width:190px;height:36px;font-size:12px" onchange="loadHistoryView()">
+                <option value="all">All Hubs (Multi-City)</option>
+                <option value="BHW-DC">Mumbai (BHW-DC)</option>
+                <option value="BLR-NLG">Bengaluru (BLR-NLG)</option>
+                <option value="BLR-EC">Bengaluru (BLR-EC)</option>
+              </select>
+              <div style="position:relative;flex:1">
+                <input type="text" id="histSearchInput" class="ct-input" style="width:100%;height:36px;padding-left:32px;font-size:12px" placeholder="Search by Plan ID, Hub, Objective, Driver, or prompt..." oninput="debounceHistorySearch()">
+                <span style="position:absolute;left:10px;top:9px;font-size:14px;color:var(--text-muted)">🔍</span>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button class="ct-btn-secondary" style="height:36px;font-size:12px" onclick="loadHistoryView()">
+                🔄 Refresh Stream
+              </button>
+            </div>
+          </div>
+
+          <!-- Historical Runs Data Table -->
+          <div class="ct-box neon-blue" style="padding:0;overflow:hidden">
+            <div style="padding:14px 18px;border-bottom:1px solid var(--border-subtle);display:flex;justify-content:space-between;align-items:center">
+              <div style="font-weight:800;font-size:13.5px;color:var(--text-primary);letter-spacing:0.02em">
+                ARCHIVED DISPATCH RUNS &amp; AUDIT CERTIFICATES
+              </div>
+              <span id="histRecordCount" style="font-size:12px;color:var(--text-muted)">Loading historical records...</span>
+            </div>
+            <div class="ct-table-wrap" style="max-height:480px;overflow-y:auto">
+              <table class="ct-table" style="font-size:12px">
+                <thead>
+                  <tr>
+                    <th>Dispatch Plan ID</th>
+                    <th>Timestamp</th>
+                    <th>Regional Hub</th>
+                    <th>Fleet &amp; Scope</th>
+                    <th>Stops / Boxes</th>
+                    <th>Plan Cost</th>
+                    <th>Savings</th>
+                    <th>GCP Audit Status</th>
+                    <th style="text-align:right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="histTableBody">
+                  <tr>
+                    <td colspan="9" style="text-align:center;padding:30px;color:var(--text-muted)">Loading audit trail...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- ═══════════════ VIEW 6: ARCHITECTURE, HOW-TO & DUAL DEPLOYMENT GUIDE ═══════════════ -->
       <section class="ct-view" id="view-howto">
         <div class="ct-stage neon-blue" style="padding:22px 24px;overflow-y:auto;gap:18px">
@@ -2901,6 +3002,8 @@ async function switchWorkspace(viewId) {
   } else if (viewId === 'gcp' && CT.bundle) {
     const sel = document.getElementById('selPortalTruck');
     if (sel && sel.value) updateDriverHubPreview(sel.value);
+  } else if (viewId === 'history') {
+    setTimeout(() => loadHistoryView(), 35);
   }
 }
 
@@ -4129,6 +4232,121 @@ async function sendAgentPrompt() {
     </div>
     <div>${formatted}</div>
   `, 7500);
+let historySearchTimer = null;
+function debounceHistorySearch() {
+  clearTimeout(historySearchTimer);
+  historySearchTimer = setTimeout(loadHistoryView, 250);
+}
+
+async function loadHistoryView() {
+  const hub = document.getElementById('histFilterHub')?.value || 'all';
+  const q = document.getElementById('histSearchInput')?.value || '';
+  const countEl = document.getElementById('histRecordCount');
+  if (countEl) countEl.innerText = 'Querying BigQuery & GCS audit stream...';
+
+  try {
+    const [analyticsRes, listRes] = await Promise.all([
+      fetch('/api/history/analytics'),
+      fetch(`/api/history?hub_id=${encodeURIComponent(hub)}&search=${encodeURIComponent(q)}`)
+    ]);
+    const analytics = await analyticsRes.json();
+    const records = await listRes.json();
+
+    const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
+    setTxt('histKpiTotal', analytics.total_dispatches || '0');
+    setTxt('histKpiSavings', '₹' + Number(analytics.total_savings_inr || 0).toLocaleString('en-IN'));
+    setTxt('histKpiTrucks', (analytics.total_trucks_eliminated || 0) + ' Trucks');
+    setTxt('histKpiCo2', (analytics.total_co2_avoided_kg || 0).toLocaleString('en-IN') + ' kg');
+
+    if (countEl) countEl.innerText = `Showing ${records.length} archived runs across BigQuery & GCS`;
+    renderHistoryTable(records);
+  } catch (err) {
+    console.error('Failed to load history:', err);
+    if (countEl) countEl.innerText = 'Error fetching history';
+  }
+}
+
+function renderHistoryTable(records) {
+  const tbody = document.getElementById('histTableBody');
+  if (!tbody) return;
+  if (!records || !records.length) {
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:30px;color:var(--text-muted)">No archived dispatch records matched the filter criteria.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = records.map(r => {
+    const dateStr = (r.timestamp || r.dispatch_date || '').replace('T', ' ').slice(0, 16);
+    const savings = Number(r.savings_inr || 0);
+    const cost = Number(r.optimized_cost_inr || 0);
+    const trucksSaved = r.trucks_saved || 0;
+    const certHash = r.audit_hash || 'VERIFIED';
+    return `
+      <tr>
+        <td>
+          <div style="font-weight:700;font-family:var(--font-mono);color:var(--accent-primary)">${r.plan_id}</div>
+          <div style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono)">HMAC: ${certHash}</div>
+        </td>
+        <td>
+          <div style="font-weight:600">${r.dispatch_date}</div>
+          <div style="font-size:10.5px;color:var(--text-muted)">${dateStr}</div>
+        </td>
+        <td>
+          <span class="ct-badge" style="background:rgba(26,115,232,0.1);color:var(--accent-primary);font-weight:700">${r.hub_id}</span>
+          <div style="font-size:11px;color:var(--text-secondary);margin-top:2px">${r.hub_name || ''}</div>
+        </td>
+        <td>
+          <div style="font-weight:600">${r.trucks_count || 0} Trucks (${r.corridors_count || 0} Corridors)</div>
+          <div style="font-size:10.5px;color:var(--text-muted)">${(r.objective || '').replace('_', ' ').toUpperCase()}</div>
+        </td>
+        <td>
+          <div style="font-weight:700">${r.total_stops || 0} stops</div>
+          <div style="font-size:10.5px;color:var(--text-muted)">${r.total_cartons || 0} cartons</div>
+        </td>
+        <td>
+          <div style="font-weight:700;font-family:var(--font-mono)">₹${cost.toLocaleString('en-IN')}</div>
+          <div style="font-size:10.5px;color:var(--text-muted)">${r.diesel_litres || 0}L diesel</div>
+        </td>
+        <td>
+          <div style="font-weight:800;font-family:var(--font-mono);color:var(--accent-emerald)">+₹${savings.toLocaleString('en-IN')}</div>
+          <div style="font-size:10.5px;color:var(--accent-amber)">-${trucksSaved} truck${trucksSaved === 1 ? '' : 's'}</div>
+        </td>
+        <td>
+          <span class="ct-badge" style="background:rgba(15,157,88,0.12);color:var(--accent-emerald);font-size:10.5px;font-weight:700">
+            ✓ GCS &amp; BQ Synced
+          </span>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:2px">${r.gcs_uri ? 'gs://...' : 'Local Cache'}</div>
+        </td>
+        <td style="text-align:right;white-space:nowrap">
+          <div style="display:flex;gap:6px;justify-content:flex-end">
+            <button class="ct-btn-chip-action" onclick="restoreHistoricalPlan('${r.plan_id}')" title="Replay &amp; Restore full routes &amp; 3D loads into workspace">
+              🔄 Replay
+            </button>
+            <button class="ct-btn-chip-action portal" onclick="window.open('/api/history/${r.plan_id}/report', '_blank')" title="View Printable Audit Certificate Report">
+              📄 Report
+            </button>
+            <a href="/api/history/${r.plan_id}/manifest.csv" class="ct-btn-chip-action" title="Download RFC 4180 ERP Consignment Manifest (CSV)" download>
+              📥 CSV
+            </a>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+async function restoreHistoricalPlan(planId) {
+  showToast(`🔄 Restoring historical dispatch plan <b>${planId}</b> into active Control Tower session...`, 4000);
+  try {
+    const res = await fetch(`/api/history/${encodeURIComponent(planId)}/restore`, { method: 'POST' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const bundle = await res.json();
+    applyBundle(bundle);
+    await switchWorkspace('tower');
+    showToast(`✅ Successfully restored <b>${planId}</b>! Full 2D routes and 3D truck loads mounted.`, 5000);
+  } catch (err) {
+    console.error('Error restoring plan:', err);
+    showToast(`❌ Failed to restore plan ${planId}: ${err.message}`, 5000);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', initControlTower);

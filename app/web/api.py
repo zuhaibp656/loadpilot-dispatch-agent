@@ -19,12 +19,22 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
 from pydantic import BaseModel, Field
 
 from app.contracts import Box, Objective, PlanningParams, Stop
 from app.data.bq_source import DEFAULT_DATASET, DEFAULT_LOCATION, DEFAULT_PROJECT, run_query
 from app.data.cities import ALL_HUBS, CITIES, resolve_city_and_hub
+from app.data.history import (
+    MANIFESTS_DIR,
+    REPORTS_DIR,
+    generate_dispatch_manifest_csv,
+    generate_dispatch_report_html,
+    get_history_analytics,
+    get_history_detail,
+    get_history_list,
+    record_dispatch_run,
+)
 from app.data.master_data import (
     CORRIDOR_NAMES,
     DEFAULT_COST_PROFILE,
@@ -877,6 +887,15 @@ def api_run_plan(req: PlanRequest) -> dict[str, Any]:
     )
     out_bundle = serialize_plan_bundle(plan, active_trucks=active_trucks, focus_truck_id=focus_id)
     out_bundle["hub_context"] = _build_hub_context_payload(hub_id=p.hub_id, order_source=p.order_source)
+    try:
+        hist_rec = record_dispatch_run(
+            out_bundle,
+            actor="Fleet Dispatcher",
+            prompt=prompt_str or "Standard Dispatch Optimization",
+        )
+        out_bundle["history_record"] = hist_rec
+    except Exception as exc:
+        logger.warning("Could not record dispatch run: %s", exc)
     return out_bundle
 
 
@@ -1354,4 +1373,74 @@ def serve_control_tower_ui() -> HTMLResponse:
 def healthz() -> dict[str, str]:
     """Container health check endpoint for Cloud Run / GKE."""
     return {"status": "ok", "service": "fleetflow-control-tower"}
+
+
+@router.get("/api/history")
+def api_get_history(hub_id: str = "all", search: str = "", limit: int = 50) -> list[dict[str, Any]]:
+    """Retrieve historical dispatch runs filterable by hub and query."""
+    return get_history_list(hub_id=hub_id, search=search, limit=limit)
+
+
+@router.get("/api/history/analytics")
+def api_get_history_analytics() -> dict[str, Any]:
+    """Compute 30-day cumulative operational KPIs and telemetry."""
+    return get_history_analytics()
+
+
+@router.get("/api/history/{plan_id}")
+def api_get_history_detail(plan_id: str) -> dict[str, Any]:
+    """Retrieve complete plan bundle JSON for replay/restoration."""
+    detail = get_history_detail(plan_id)
+    if detail is None:
+        raise HTTPException(status_code=404, detail="Historical plan not found")
+    return detail
+
+
+@router.get("/api/history/{plan_id}/report", response_class=HTMLResponse)
+def api_get_history_report(plan_id: str) -> HTMLResponse:
+    """Serve standalone printable Executive Dispatch Report & Audit Certificate."""
+    report_file = REPORTS_DIR / f"report_{plan_id}.html"
+    if report_file.is_file():
+        return HTMLResponse(content=report_file.read_text(encoding="utf-8"))
+
+    bundle = get_history_detail(plan_id)
+    if bundle and "routes" in bundle:
+        html = generate_dispatch_report_html(bundle)
+        return HTMLResponse(content=html)
+    raise HTTPException(status_code=404, detail="Dispatch report not found")
+
+
+@router.get("/api/history/{plan_id}/manifest.csv")
+def api_get_history_manifest(plan_id: str) -> Response:
+    """Download RFC 4180 CSV consignment manifest for SAP TM / Oracle OTM / Excel."""
+    manifest_file = MANIFESTS_DIR / f"manifest_{plan_id}.csv"
+    if manifest_file.is_file():
+        csv_text = manifest_file.read_text(encoding="utf-8")
+    else:
+        bundle = get_history_detail(plan_id)
+        if not bundle or "routes" not in bundle:
+            raise HTTPException(status_code=404, detail="Consignment manifest not found")
+        csv_text = generate_dispatch_manifest_csv(bundle)
+
+    return Response(
+        content=csv_text,
+        media_type="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="consignment_manifest_{plan_id}.csv"'}
+    )
+
+
+@router.post("/api/history/{plan_id}/restore")
+def api_restore_history_plan(plan_id: str) -> dict[str, Any]:
+    """Restore a historical dispatch plan into the active Control Tower session."""
+    bundle = get_history_detail(plan_id)
+    if not bundle or "routes" not in bundle:
+        raise HTTPException(status_code=404, detail=f"Cannot restore plan {plan_id}: invalid bundle")
+
+    _record_audit(
+        action="Restore Historical Plan",
+        detail=f"Restored plan {plan_id} ({bundle.get('hub', {}).get('name')}) into active session",
+        tool_name="restore_plan",
+        latency_ms=12.0,
+    )
+    return bundle
 

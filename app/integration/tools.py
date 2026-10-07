@@ -838,9 +838,58 @@ def get_architecture_and_howto(tool_context: ToolContext) -> dict[str, Any]:
     }
 
 
+def get_dispatch_history(
+    tool_context: ToolContext,
+    hub_id: str = "all",
+    search: str = "",
+    limit: int = 10,
+) -> dict[str, Any]:
+    """Retrieve archived operational dispatch runs from BigQuery and Cloud Storage audit logs.
+    Filterable by hub_id ('BHW-DC', 'BLR-NLG', or 'all') and text query (driver, corridor, objective).
+    """
+    from app.data.history import get_history_analytics, get_history_list
+    analytics = get_history_analytics()
+    runs = get_history_list(hub_id=hub_id, search=search, limit=limit)
+    return {
+        "summary": {
+            "total_archived_runs": analytics.get("total_dispatches", 0),
+            "cumulative_savings_inr": analytics.get("total_savings_inr", 0),
+            "trucks_eliminated": analytics.get("total_trucks_eliminated", 0),
+            "co2_avoided_kg": analytics.get("total_co2_avoided_kg", 0),
+        },
+        "runs": runs,
+    }
+
+
+def get_dispatch_report(
+    tool_context: ToolContext,
+    plan_id: str,
+) -> dict[str, Any]:
+    """Retrieve detailed audit certificate, cryptographic HMAC hash, and GCS/BigQuery artifact links
+    for a specific historical dispatch plan.
+    """
+    from app.data.history import get_history_detail
+    detail = get_history_detail(plan_id)
+    if not detail:
+        return {"error": f"Dispatch plan {plan_id} not found in audit index"}
+    return {
+        "plan_id": plan_id,
+        "date": detail.get("dispatch_date"),
+        "hub": detail.get("hub_name"),
+        "audit_hash": detail.get("audit_hash"),
+        "total_stops": detail.get("total_stops"),
+        "trucks_count": detail.get("trucks_count"),
+        "optimized_cost_inr": detail.get("optimized_cost_inr"),
+        "savings_inr": detail.get("savings_inr"),
+        "report_html_url": f"/api/history/{plan_id}/report",
+        "manifest_csv_url": f"/api/history/{plan_id}/manifest.csv",
+        "gcs_uri": detail.get("gcs_uri"),
+    }
+
+
 ALL_TOOLS = [show_planning_wizard, plan_dispatch, claim_corridor, get_truck_load_plan,
              plan_my_route, driver_briefings,
              ingest_delivery_orders, scan_box_manifest, list_fleet_and_costs, reset_to_demo_data,
-             get_architecture_and_howto]
+             get_architecture_and_howto, get_dispatch_history, get_dispatch_report]
 
 _ = threading  # media publishing threads are tracked in the session entry
