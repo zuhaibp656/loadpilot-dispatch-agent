@@ -601,6 +601,7 @@ _UI_HTML = r"""<!DOCTYPE html>
 
     /* ── App Layout Shell (Commercial Freight Logistics Backdrop) ── */
     .ct-app-layout {
+      position: relative;
       display: flex;
       width: 100vw;
       height: 100vh;
@@ -620,6 +621,30 @@ _UI_HTML = r"""<!DOCTYPE html>
         linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
       background-size: 100% 100%, 100% 100%, 44px 44px, 44px 44px;
+    }
+
+    /* Ambient Commercial Route & Blueprint Backdrop */
+    .ct-ambient-fleet-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .ct-ambient-route {
+      fill: none;
+      animation: roadflow 26s linear infinite;
+    }
+
+    :root, html.theme-light {
+      --ambient-route-stroke: rgba(26, 115, 232, 0.06);
+      --ambient-blueprint-stroke: #475569;
+    }
+
+    html.theme-dark {
+      --ambient-route-stroke: rgba(56, 189, 248, 0.09);
+      --ambient-blueprint-stroke: #64748b;
     }
 
     /* ── Left Navigation Sidebar (Gemini / macOS Style with Neon Highlights) ── */
@@ -1142,265 +1167,226 @@ _UI_HTML = r"""<!DOCTYPE html>
       margin-top: -4px;
     }
 
-    /* ═══ HIGHWAY VIEWPORT & ROUTE SIMULATION ═══ */
-    .truck-highway-viewport {
+    /* ═══ MINIMALIST GEOSPATIAL MAP ROUTE SIMULATION ═══ */
+    .synth-map-viewport {
       position: relative;
       width: 100%;
-      height: 148px;
+      height: 204px;
       border-radius: 14px;
       overflow: hidden;
-      background: #0d111a;
+      background: #080d19;
       box-shadow: inset 0 2px 8px rgba(0,0,0,0.6), 0 4px 16px rgba(0,0,0,0.3);
-      border: 1.5px solid rgba(148, 163, 184, 0.25);
+      border: 1.5px solid rgba(56, 189, 248, 0.28);
     }
 
-    .highway-curb {
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 10px;
-      z-index: 5;
-      background: repeating-linear-gradient(
-        -45deg,
-        #fbbc05 0px,
-        #fbbc05 12px,
-        #1e293b 12px,
-        #1e293b 24px
-      );
-      box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-    }
-    .top-curb { top: 0; }
-    .bottom-curb { bottom: 0; }
-
-    .highway-surface {
-      position: absolute;
-      inset: 10px 0;
-      background: linear-gradient(180deg, #131722 0%, #1a202c 45%, #151a24 100%);
-      overflow: hidden;
+    html.theme-light .synth-map-viewport {
+      background: #f1f5f9;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.06), 0 2px 10px rgba(0,0,0,0.05);
+      border: 1.5px solid #cbd5e1;
     }
 
-    /* Moving Center Dashed White Highway Lane Divider */
-    .highway-center-divider {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 3px;
-      transform: translateY(-50%);
-      background: repeating-linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0.85) 0px,
-        rgba(255, 255, 255, 0.85) 28px,
-        transparent 28px,
-        transparent 56px
-      );
-      background-size: 56px 3px;
-      animation: highwayRoadRush 0.42s linear infinite;
-      z-index: 2;
-    }
-
-    .highway-lane-line-top {
-      position: absolute;
-      top: 24%;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: repeating-linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0.25) 0px,
-        rgba(255, 255, 255, 0.25) 14px,
-        transparent 14px,
-        transparent 36px
-      );
-      background-size: 36px 1px;
-      animation: highwayRoadRush 0.42s linear infinite;
-      z-index: 2;
-    }
-
-    .highway-lane-line-bottom {
-      position: absolute;
-      bottom: 24%;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: repeating-linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0.25) 0px,
-        rgba(255, 255, 255, 0.25) 14px,
-        transparent 14px,
-        transparent 36px
-      );
-      background-size: 36px 1px;
-      animation: highwayRoadRush 0.42s linear infinite;
-      z-index: 2;
-    }
-
-    @keyframes highwayRoadRush {
-      0% { background-position-x: 0px; }
-      100% { background-position-x: -56px; }
-    }
-
-    /* Embedded Highway Waypoint Milestones */
-    .highway-milestone-track {
-      position: absolute;
-      inset: 0;
-      z-index: 4;
-      pointer-events: none;
-    }
-
-    .highway-wp {
-      position: absolute;
-      top: 6px;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition: all 0.3s ease;
-      opacity: 0.65;
-    }
-
-    .highway-wp.active {
-      opacity: 1;
-      transform: translateX(-50%) scale(1.08);
-    }
-
-    .highway-wp.done {
-      opacity: 1;
-    }
-
-    .wp-sign {
-      font-size: 9.5px;
-      font-weight: 800;
-      font-family: var(--font-sans);
-      padding: 2px 7px;
-      border-radius: 5px;
-      background: #0f172a;
-      color: #94a3b8;
-      border: 1px solid #334155;
-      white-space: nowrap;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-      transition: all 0.25s ease;
-    }
-
-    .highway-wp.active .wp-sign {
-      background: #1e3a8a;
-      color: #38bdf8;
-      border-color: #38bdf8;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
-    }
-
-    .highway-wp.done .wp-sign {
-      background: #064e3b;
-      color: #34d399;
-      border-color: #10b981;
-      box-shadow: 0 0 8px rgba(16, 185, 129, 0.35);
-    }
-
-    .wp-beacon {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #475569;
-      margin-top: 2px;
-      transition: all 0.25s ease;
-    }
-
-    .highway-wp.active .wp-beacon {
-      background: #38bdf8;
-      box-shadow: 0 0 8px #38bdf8;
-      animation: beaconPulse 0.8s infinite alternate;
-    }
-
-    .highway-wp.done .wp-beacon {
-      background: #10b981;
-      box-shadow: 0 0 6px #10b981;
-    }
-
-    @keyframes beaconPulse {
-      0% { transform: scale(1); opacity: 0.8; }
-      100% { transform: scale(1.6); opacity: 1; }
-    }
-
-    /* ═══ THE ANIMATED COMMERCIAL FREIGHT TRUCK ═══ */
-    .anim-truck-wrapper {
-      position: absolute;
-      bottom: 14px;
-      left: 10%;
-      transform: translateX(-50%);
-      width: 175px;
-      height: 70px;
-      z-index: 10;
-      transition: left 0.75s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    /* Forward Projecting Volumetric LED Headlight Beam (Shooting Forward to the Right) */
-    .truck-headlight-cone {
-      position: absolute;
-      top: 36px;
-      right: -100px;
-      width: 110px;
-      height: 24px;
-      transform-origin: left center;
-      transform: perspective(100px) rotateY(18deg);
-      background: linear-gradient(90deg, rgba(254, 240, 138, 0.75) 0%, rgba(56, 189, 248, 0.35) 45%, transparent 100%);
-      clip-path: polygon(0% 40%, 100% 0%, 100% 100%, 0% 65%);
-      pointer-events: none;
-      animation: headlightFlicker 0.6s ease-in-out infinite alternate;
-      z-index: 1;
-    }
-
-    @keyframes headlightFlicker {
-      0% { opacity: 0.85; transform: perspective(100px) rotateY(18deg) scaleY(1); }
-      100% { opacity: 0.98; transform: perspective(100px) rotateY(18deg) scaleY(1.05); }
-    }
-
-    .commercial-truck-svg {
+    .synth-map-svg {
       width: 100%;
       height: 100%;
-      position: relative;
-      z-index: 3;
+      display: block;
     }
 
-    /* Heavy Truck Suspension Rumble Vibration */
-    .truck-body-suspension {
-      animation: truckRumble 0.16s ease-in-out infinite alternate;
-      transform-origin: 85px 54px;
+    /* Ambient Topological Map Geometry */
+    .synth-water {
+      fill: rgba(37, 99, 235, 0.08);
+      stroke: rgba(56, 189, 248, 0.25);
+      stroke-width: 1.2;
+    }
+    html.theme-light .synth-water {
+      fill: rgba(37, 99, 235, 0.05);
+      stroke: rgba(37, 99, 235, 0.20);
     }
 
-    @keyframes truckRumble {
-      0% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-1.2px) rotate(0.35deg); }
-      100% { transform: translateY(0.8px) rotate(-0.25deg); }
+    .synth-road-grid {
+      fill: none;
+      stroke: rgba(148, 163, 184, 0.15);
+      stroke-width: 0.8;
+      stroke-dasharray: 2 4;
+    }
+    html.theme-light .synth-road-grid {
+      stroke: rgba(100, 116, 139, 0.18);
     }
 
-    /* Dynamic Wheel Roll Rotation (Moving forward to the right, wheels rotate clockwise) */
-    .truck-wheel {
-      animation: wheelRoll 0.38s linear infinite;
-      transform-box: fill-box;
+    .synth-locality-label {
+      font-family: var(--font-mono);
+      font-size: 8.5px;
+      font-weight: 700;
+      fill: #64748b;
+      letter-spacing: 0.04em;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+    html.theme-light .synth-locality-label {
+      fill: #64748b;
+    }
+
+    /* Delivery Corridor Curved Trajectories */
+    .synth-route-casing {
+      fill: none;
+      stroke: #080d19;
+      stroke-width: 7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.85;
+    }
+    html.theme-light .synth-route-casing {
+      stroke: #f1f5f9;
+    }
+
+    .synth-route-base {
+      fill: none;
+      stroke: rgba(148, 163, 184, 0.35);
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 4 6;
+    }
+    html.theme-light .synth-route-base {
+      stroke: rgba(100, 116, 139, 0.30);
+    }
+
+    /* Moving Neon Laser Flow Tracer Lines (Presentation Style) */
+    .synth-route-tracer {
+      fill: none;
+      stroke: #38bdf8;
+      stroke-width: 2.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 14 10;
+      animation: synthFlow 3.5s linear infinite;
+    }
+    html.theme-light .synth-route-tracer {
+      stroke: #1a73e8;
+    }
+
+    .synth-branch-flow {
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 10 8;
+      animation: synthFlow 4.2s linear infinite;
+    }
+
+    @keyframes synthFlow {
+      to { stroke-dashoffset: -240px; }
+    }
+
+    /* Dynamic Solid Progress Line that fills up as solver advances */
+    .synth-route-progress {
+      fill: none;
+      stroke: #2563eb;
+      stroke-width: 3.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 680;
+      stroke-dashoffset: 680;
+      transition: stroke-dashoffset 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    html.theme-light .synth-route-progress {
+      stroke: #1a73e8;
+    }
+
+    /* Minimalist Top-Down Telematics Commercial Truck Beacon */
+    .synth-truck-beacon-group {
+      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+      transform-box: view-box;
+      filter: drop-shadow(0 2px 8px rgba(37, 99, 235, 0.5));
+    }
+
+    .beacon-pulse-ring {
+      fill: none;
+      stroke: #38bdf8;
+      stroke-width: 1.5;
+      animation: beaconPing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
       transform-origin: center;
     }
 
-    @keyframes wheelRoll {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    @keyframes beaconPing {
+      0% { r: 6px; opacity: 0.9; }
+      100% { r: 24px; opacity: 0; }
     }
 
-    .roof-strobe-beacon {
-      animation: amberStrobe 0.7s infinite;
+    /* Geospatial Waypoint Nodes along the route */
+    .synth-wp-node {
+      cursor: default;
+      transition: all 0.3s ease;
     }
 
-    @keyframes amberStrobe {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 1; filter: drop-shadow(0 0 6px #f59e0b); }
+    .synth-wp-circle-bg {
+      fill: #0f172a;
+      stroke: #475569;
+      stroke-width: 1.5;
+      transition: all 0.3s ease;
+    }
+    html.theme-light .synth-wp-circle-bg {
+      fill: #ffffff;
+      stroke: #94a3b8;
     }
 
-    .exhaust-smoke-puff {
-      animation: smokePuff 0.45s ease-out infinite;
+    .synth-wp-node.active .synth-wp-circle-bg {
+      fill: #1e3a8a;
+      stroke: #38bdf8;
+      stroke-width: 2.2;
+      filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6));
+    }
+    html.theme-light .synth-wp-node.active .synth-wp-circle-bg {
+      fill: #e0f2fe;
+      stroke: #0284c7;
     }
 
-    @keyframes smokePuff {
-      0% { transform: scale(1) translateY(0); opacity: 0.6; }
-      100% { transform: scale(2.8) translateY(-6px); opacity: 0; }
+    .synth-wp-node.done .synth-wp-circle-bg {
+      fill: #064e3b;
+      stroke: #10b981;
+      stroke-width: 2;
+    }
+    html.theme-light .synth-wp-node.done .synth-wp-circle-bg {
+      fill: #ecfdf5;
+      stroke: #059669;
+    }
+
+    .synth-wp-pulse {
+      fill: none;
+      stroke: #38bdf8;
+      stroke-width: 1.5;
+      opacity: 0;
+    }
+
+    .synth-wp-node.active .synth-wp-pulse {
+      animation: wpPulse 1.6s ease-out infinite;
+    }
+
+    @keyframes wpPulse {
+      0% { r: 7px; opacity: 0.8; }
+      100% { r: 20px; opacity: 0; }
+    }
+
+    .synth-wp-tag {
+      font-family: var(--font-mono);
+      font-size: 8.5px;
+      font-weight: 800;
+      fill: #94a3b8;
+      text-anchor: middle;
+      transition: all 0.25s ease;
+    }
+
+    .synth-wp-node.active .synth-wp-tag {
+      fill: #38bdf8;
+      font-weight: 800;
+    }
+    html.theme-light .synth-wp-node.active .synth-wp-tag {
+      fill: #0284c7;
+    }
+
+    .synth-wp-node.done .synth-wp-tag {
+      fill: #10b981;
+    }
+    html.theme-light .synth-wp-node.done .synth-wp-tag {
+      fill: #059669;
     }
 
     /* Milestone Phase Cards */
@@ -2248,13 +2234,44 @@ _UI_HTML = r"""<!DOCTYPE html>
 <body>
 <div class="ct-app-layout">
 
+  <!-- Ambient Logistics Blueprint & Route Geometry Overlay (Subtle presentation-style animated corridors) -->
+  <div class="ct-ambient-fleet-bg" aria-hidden="true">
+    <svg width="100%" height="100%" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" fill="none">
+      <!-- Subtle curved arterial transit corridors with animated flowing dashes -->
+      <path class="ct-ambient-route" d="M -60,240 C 280,120 540,360 880,190 C 1180,60 1380,310 1680,170" stroke="var(--ambient-route-stroke)" stroke-width="2.5" stroke-dasharray="16 12"/>
+      <path class="ct-ambient-route" d="M 120,780 C 460,580 720,840 1120,640 C 1370,500 1520,700 1760,560" stroke="var(--ambient-route-stroke)" stroke-width="2" stroke-dasharray="14 10" style="animation-delay:-8s"/>
+      <path class="ct-ambient-route" d="M 600,-40 C 720,260 840,480 1020,940" stroke="var(--ambient-route-stroke)" stroke-width="1.8" stroke-dasharray="12 12" style="animation-delay:-14s"/>
+
+      <!-- Ambient Commercial Freight Truck Wireframe Blueprint (Lower Right Margin) -->
+      <g transform="translate(1240, 680) scale(0.9)" opacity="0.04" stroke="var(--ambient-blueprint-stroke)">
+        <rect x="0" y="20" width="220" height="92" rx="6" stroke-width="1.5" fill="none"/>
+        <line x1="36" y1="20" x2="36" y2="112" stroke-width="1"/>
+        <line x1="72" y1="20" x2="72" y2="112" stroke-width="1"/>
+        <line x1="108" y1="20" x2="108" y2="112" stroke-width="1"/>
+        <line x1="144" y1="20" x2="144" y2="112" stroke-width="1"/>
+        <line x1="180" y1="20" x2="180" y2="112" stroke-width="1"/>
+        <path d="M 220,112 L 220,38 L 265,38 L 288,68 L 306,72 L 306,112 Z" stroke-width="1.5" fill="none"/>
+        <rect x="250" y="44" width="28" height="22" rx="3" stroke-width="1" fill="none"/>
+        <circle cx="36" cy="116" r="16" stroke-width="1.5" fill="none"/>
+        <circle cx="36" cy="116" r="6" stroke-width="1" fill="none"/>
+        <circle cx="76" cy="116" r="16" stroke-width="1.5" fill="none"/>
+        <circle cx="76" cy="116" r="6" stroke-width="1" fill="none"/>
+        <circle cx="168" cy="116" r="16" stroke-width="1.5" fill="none"/>
+        <circle cx="168" cy="116" r="6" stroke-width="1" fill="none"/>
+        <circle cx="272" cy="116" r="16" stroke-width="1.5" fill="none"/>
+        <circle cx="272" cy="116" r="6" stroke-width="1" fill="none"/>
+        <text x="20" y="14" font-family="monospace" font-size="10" fill="var(--ambient-blueprint-stroke)" letter-spacing="1">FLEET SPEC: T-20 CONTAINER MCV (16.2T GVW)</text>
+      </g>
+    </svg>
+  </div>
+
   <!-- ═══════════════ LEFT SIDEBAR NAVIGATION PANE ═══════════════ -->
   <aside class="ct-left-rail">
     <div>
       <div class="ct-brand">
         <div class="truck-brand-emblem-wrap">
           <svg class="truck-brand-svg" width="38" height="38" viewBox="0 0 40 40" fill="none">
-            <rect width="40" height="40" rx="10" fill="url(#brandG)" stroke="rgba(56,189,248,0.4)" stroke-width="1.5"/>
+            <rect width="40" height="40" rx="10" fill="url(#brandG)" stroke="rgba(56,189,248,0.45)" stroke-width="1.5"/>
             <!-- Vector Heavy Commercial Cab Silhouette -->
             <path d="M7 26 L7 16 L22 16 L29 23 L33 24 L33 28 L30 30 L9 30 Z" fill="#ffffff" opacity="0.95"/>
             <path d="M21 18 L27 23 L21 23 Z" fill="#0284c7"/>
@@ -2287,31 +2304,86 @@ _UI_HTML = r"""<!DOCTYPE html>
       <div class="ct-nav-section-lbl">Workspaces</div>
       <nav class="ct-nav-list" id="mainNavTabs">
         <button class="ct-nav-btn active" data-view="launchpad" onclick="switchWorkspace('launchpad')">
-          <span class="nav-ico">🚀</span>
+          <span class="nav-ico">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13" rx="2"/>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+              <circle cx="5.5" cy="18.5" r="2.5"/>
+              <circle cx="18.5" cy="18.5" r="2.5"/>
+            </svg>
+          </span>
           <span>Dispatch Launchpad</span>
         </button>
         <button class="ct-nav-btn" data-view="tower" onclick="switchWorkspace('tower')">
-          <span class="nav-ico">🗺️</span>
+          <span class="nav-ico">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+              <line x1="8" y1="2" x2="8" y2="18"/>
+              <line x1="16" y1="6" x2="16" y2="22"/>
+            </svg>
+          </span>
           <span>Dispatch &amp; Map</span>
         </button>
         <button class="ct-nav-btn" data-view="studio3d" onclick="switchWorkspace('studio3d')">
-          <span class="nav-ico">📦</span>
+          <span class="nav-ico">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+              <line x1="12" y1="22.08" x2="12" y2="12"/>
+            </svg>
+          </span>
           <span>3D Load Studio</span>
         </button>
         <button class="ct-nav-btn" data-view="simulator" onclick="switchWorkspace('simulator')">
-          <span class="nav-ico">🚛</span>
+          <span class="nav-ico">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="13" height="9" rx="1.5"/>
+              <path d="M15 10 L19 10 L22 13 L22 16 L15 16 Z"/>
+              <circle cx="6" cy="18" r="2"/>
+              <circle cx="11" cy="18" r="2"/>
+              <circle cx="19" cy="18" r="2"/>
+              <line x1="2" y1="4" x2="22" y2="4" stroke-dasharray="2 2"/>
+            </svg>
+          </span>
           <span>Fleet &amp; Cost Simulator</span>
         </button>
         <button class="ct-nav-btn" data-view="intake" onclick="switchWorkspace('intake')">
-          <span class="nav-ico">📸</span>
+          <span class="nav-ico">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 7V5a2 2 0 0 1 2-2h2"/>
+              <path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+              <path d="M21 17v2a2 2 0 0 1-2 2h-2"/>
+              <path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
+              <line x1="7" y1="8" x2="7" y2="16"/>
+              <line x1="11" y1="8" x2="11" y2="16"/>
+              <line x1="14" y1="8" x2="14" y2="16"/>
+              <line x1="17" y1="8" x2="17" y2="16"/>
+            </svg>
+          </span>
           <span>Dock QR &amp; Intake</span>
         </button>
         <button class="ct-nav-btn" data-view="gcp" onclick="switchWorkspace('gcp')">
-          <span class="nav-ico">📱</span>
+          <span class="nav-ico">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <circle cx="12" cy="12" r="3"/>
+              <line x1="12" y1="2" x2="12" y2="9"/>
+              <line x1="4.93" y1="19.07" x2="9.88" y2="14.12"/>
+              <line x1="19.07" y1="19.07" x2="14.12" y2="14.12"/>
+            </svg>
+          </span>
           <span>Driver Hub</span>
         </button>
         <button class="ct-nav-btn" data-view="history" onclick="switchWorkspace('history')">
-          <span class="nav-ico">📜</span>
+          <span class="nav-ico">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+          </span>
           <span>History &amp; Audit</span>
         </button>
       </nav>
@@ -2320,7 +2392,12 @@ _UI_HTML = r"""<!DOCTYPE html>
       <div style="margin-top:auto;padding-top:14px;border-top:1px solid var(--border-subtle)">
         <div class="ct-nav-section-lbl" style="padding-top:0">System Reference</div>
         <button class="ct-nav-btn" data-view="howto" onclick="switchWorkspace('howto')">
-          <span class="nav-ico">📘</span>
+          <span class="nav-ico">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+          </span>
           <span>Architecture &amp; How-To</span>
         </button>
       </div>
@@ -2350,7 +2427,11 @@ _UI_HTML = r"""<!DOCTYPE html>
             <div class="ct-kpi-sub" id="kpiTrucksSub">Mumbai Metropolitan · BHW-DC</div>
           </div>
           <div class="ct-kpi-right">
-            <div class="orbital-ring-wrap" style="width:32px;height:32px"><span class="orbital-ring-core" style="font-size:14px">📍</span></div>
+            <div class="orbital-ring-wrap" style="width:34px;height:34px">
+              <span class="orbital-ring-core" style="display:flex;align-items:center;justify-content:center">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/></svg>
+              </span>
+            </div>
             <div class="ct-kpi-badge" id="kpiTrucksBadge">STAGED</div>
           </div>
         </div>
@@ -2362,7 +2443,11 @@ _UI_HTML = r"""<!DOCTYPE html>
             <div class="ct-kpi-sub" id="kpiCostCompare">1,260 cartons · 43.6 m³ (8/8)</div>
           </div>
           <div class="ct-kpi-right">
-            <div class="orbital-ring-wrap" style="width:32px;height:32px"><span class="orbital-ring-core" style="font-size:14px">📦</span></div>
+            <div class="orbital-ring-wrap" style="width:34px;height:34px">
+              <span class="orbital-ring-core" style="display:flex;align-items:center;justify-content:center">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+              </span>
+            </div>
             <div class="ct-kpi-badge" id="kpiSavingsPct">BigQuery Book</div>
           </div>
         </div>
@@ -2374,7 +2459,11 @@ _UI_HTML = r"""<!DOCTYPE html>
             <div class="ct-kpi-sub" id="kpiStopsSub">Roster: Ravi, Sanjay, Imran...</div>
           </div>
           <div class="ct-kpi-right">
-            <div class="orbital-ring-wrap" style="width:32px;height:32px"><span class="orbital-ring-core" style="font-size:14px">🚛</span></div>
+            <div class="orbital-ring-wrap" style="width:34px;height:34px">
+              <span class="orbital-ring-core" style="display:flex;align-items:center;justify-content:center">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              </span>
+            </div>
             <div class="ct-kpi-badge" id="kpiCargoBadge">5 Vehicle Classes</div>
           </div>
         </div>
@@ -2386,7 +2475,11 @@ _UI_HTML = r"""<!DOCTYPE html>
             <div class="ct-kpi-sub" id="kpiDistanceSub">Click 'Synthesize &amp; Run Agent'</div>
           </div>
           <div class="ct-kpi-right">
-            <div class="orbital-ring-wrap" style="width:32px;height:32px"><span class="orbital-ring-core" style="font-size:14px">⚡</span></div>
+            <div class="orbital-ring-wrap" style="width:34px;height:34px">
+              <span class="orbital-ring-core" style="display:flex;align-items:center;justify-content:center">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </span>
+            </div>
             <div class="ct-kpi-badge" id="kpiDistanceBadge">Awaiting Run</div>
           </div>
         </div>
@@ -2401,11 +2494,19 @@ _UI_HTML = r"""<!DOCTYPE html>
             <div class="lp-hero-bar">
               <div style="display:flex;align-items:center;gap:16px;min-width:0">
                 <div class="orbital-ring-wrap" style="width:52px;height:52px">
-                  <span class="orbital-ring-core" style="font-size:24px">🚛</span>
+                  <span class="orbital-ring-core" style="display:flex;align-items:center;justify-content:center">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="1" y="3" width="15" height="13" rx="2"/>
+                      <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                      <circle cx="5.5" cy="18.5" r="2.5"/>
+                      <circle cx="18.5" cy="18.5" r="2.5"/>
+                    </svg>
+                  </span>
                 </div>
                 <div style="min-width:0">
                   <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
                     <span class="ct-kpi-badge" style="background:var(--accent-primary-soft);color:var(--accent-primary);border-color:rgba(66,133,244,0.4)">COMMERCIAL FLEET COMMAND</span>
+                    <span class="ct-kpi-badge" style="background:var(--accent-emerald-soft);color:var(--accent-emerald);border-color:rgba(52,168,83,0.4)">CMVR RULE 93 COMPLIANT</span>
                     <span id="lpActiveHubBadge" style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted);font-weight:800">HUB: BHW-DC (MUMBAI)</span>
                   </div>
                   <h1 class="ct-big-heading" style="font-size:25px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
@@ -3312,15 +3413,20 @@ _UI_HTML = r"""<!DOCTYPE html>
         <div class="truck-hud-header">
           <div style="display:flex;align-items:center;gap:14px">
             <div class="truck-emblem-badge">
-              <span style="font-size:24px">🚛</span>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="1" y="3" width="15" height="13" rx="2"/>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 8"/>
+                <circle cx="5.5" cy="18.5" r="2.5"/>
+                <circle cx="18.5" cy="18.5" r="2.5"/>
+              </svg>
             </div>
             <div>
               <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
-                <span class="truck-status-pill">● FLEET DISPATCH ENGINE</span>
+                <span class="truck-status-pill">● GEOSPATIAL ROUTE SOLVER</span>
                 <span class="truck-hud-telemetry-mono" id="lpTruckCorridorTag">NH-48 · 8 CORRIDORS ACTIVE</span>
               </div>
               <h3 id="lpModalTitle" class="ct-big-heading" style="font-size:18px;margin:0;letter-spacing:-0.02em">
-                Commercial Fleet Dispatch Optimizer Active
+                Geospatial Fleet Dispatch Optimizer Active
               </h3>
             </div>
           </div>
@@ -3344,172 +3450,189 @@ _UI_HTML = r"""<!DOCTYPE html>
           Staging retail store manifest, solving corridor ray-clusters &amp; running OR-Tools VRP engine...
         </div>
 
-        <!-- ═══ ANIMATED TRUCK HIGHWAY VIEWPORT ═══ -->
-        <div class="truck-highway-viewport">
-          <!-- Top Yellow Hazard Safety Curb -->
-          <div class="highway-curb top-curb"></div>
+        <!-- ═══ MINIMALIST GEOSPATIAL MAP ROUTE SIMULATION VIEWPORT ═══ -->
+        <div class="synth-map-viewport">
+          <svg class="synth-map-svg" viewBox="0 0 700 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="synthRadarCone" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.40"/>
+                <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+              </linearGradient>
+              <linearGradient id="branchAmberGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#f59e0b"/>
+                <stop offset="100%" stop-color="#d97706"/>
+              </linearGradient>
+              <linearGradient id="branchEmeraldGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#10b981"/>
+                <stop offset="100%" stop-color="#059669"/>
+              </linearGradient>
+              <linearGradient id="branchPurpleGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#a855f7"/>
+                <stop offset="100%" stop-color="#7c3aed"/>
+              </linearGradient>
+            </defs>
 
-          <!-- Road Surface & Dynamic Rushing Highway Markings -->
-          <div class="highway-surface">
-            <div class="highway-lane-line-top"></div>
-            <div class="highway-center-divider"></div>
-            <div class="highway-lane-line-bottom"></div>
+            <!-- 1. Background Coastline & Bay Contour -->
+            <path class="synth-water" d="M 0,165 Q 110,185 210,210 L 0,210 Z M 640,0 Q 660,60 700,90 L 700,0 Z"/>
 
-            <!-- Road Waypoint Milestone Nodes Embedded on Highway -->
-            <div class="highway-milestone-track">
-              <div class="highway-wp active" id="hwp1" style="left: 10%">
-                <div class="wp-sign">🏭 DC Dock</div>
-                <div class="wp-beacon"></div>
-              </div>
-              <div class="highway-wp" id="hwp2" style="left: 32%">
-                <div class="wp-sign">🧭 Corridors</div>
-                <div class="wp-beacon"></div>
-              </div>
-              <div class="highway-wp" id="hwp3" style="left: 55%">
-                <div class="wp-sign">⚡ OR-Tools VRP</div>
-                <div class="wp-beacon"></div>
-              </div>
-              <div class="highway-wp" id="hwp4" style="left: 78%">
-                <div class="wp-sign">📦 3D LIFO Axle</div>
-                <div class="wp-beacon"></div>
-              </div>
-              <div class="highway-wp" id="hwp5" style="left: 94%">
-                <div class="wp-sign">🏁 Store Drops</div>
-                <div class="wp-beacon"></div>
-              </div>
-            </div>
+            <!-- 2. Urban Topological Road Grid Network -->
+            <path class="synth-road-grid" d="
+              M 30,35 L 670,35 M 30,115 L 670,115 M 30,175 L 670,175
+              M 110,15 L 110,195 M 270,15 L 270,195 M 430,15 L 430,195 M 590,15 L 590,195
+              M 50,190 L 210,25 M 210,190 L 370,25 M 370,190 L 530,25 M 530,190 L 670,50
+            "/>
 
-            <!-- THE ANIMATED VECTOR COMMERCIAL FREIGHT TRUCK (Driving Left to Right) -->
-            <div id="animTruckWrapper" class="anim-truck-wrapper" style="left: 10%">
-              <!-- Forward Projecting Volumetric LED Headlight Beam (Shooting Forward to the Right) -->
-              <div class="truck-headlight-cone"></div>
+            <!-- 3. Geographic Locality Labels -->
+            <text x="75" y="172" class="synth-locality-label">BHIWANDI REGIONAL DC</text>
+            <text x="210" y="48" class="synth-locality-label">THANE GATEWAY</text>
+            <text x="360" y="188" class="synth-locality-label">NAVI MUMBAI INDUSTRIAL</text>
+            <text x="495" y="42" class="synth-locality-label">BKC COMMERCIAL CORRIDOR</text>
+            <text x="635" y="125" class="synth-locality-label">SOUTH RETAIL HUBS</text>
 
-              <!-- Detailed Commercial Freight Truck SVG -->
-              <svg class="commercial-truck-svg" viewBox="0 0 175 65" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Asphalt Drop Shadow -->
-                <ellipse cx="88" cy="58" rx="80" ry="3.5" fill="rgba(0,0,0,0.6)" filter="blur(1.5px)"/>
+            <!-- 4. Feeder Branch Routes with Moving Courier Pulse Dots (Presentation Style) -->
+            <!-- Branch A: South Corridor (Amber) -->
+            <path id="synthBranchA" d="M 220,122 C 280,165 370,165 470,140" fill="none" stroke="rgba(245, 158, 11, 0.25)" stroke-width="2" stroke-dasharray="4 4"/>
+            <path d="M 220,122 C 280,165 370,165 470,140" fill="none" stroke="url(#branchAmberGrad)" stroke-width="2" class="synth-branch-flow"/>
+            <circle r="3.5" fill="#f59e0b">
+              <animateMotion dur="3.8s" repeatCount="indefinite" path="M 220,122 C 280,165 370,165 470,140"/>
+            </circle>
 
-                <!-- Truck Body Group with Road Suspension Vibration Physics -->
-                <g class="truck-body-suspension">
-                  <!-- Exhaust Stack behind Tractor Cab with Smoke Puff -->
-                  <rect x="121" y="8" width="4" height="24" rx="1.5" fill="#94a3b8"/>
-                  <rect x="122" y="5" width="2" height="4" rx="1" fill="#cbd5e1"/>
-                  <circle cx="123" cy="3" r="2.5" fill="rgba(203,213,225,0.4)" class="exhaust-smoke-puff"/>
+            <!-- Branch B: East Corridor (Emerald) -->
+            <path id="synthBranchB" d="M 360,85 C 420,135 500,105 580,130" fill="none" stroke="rgba(16, 185, 129, 0.25)" stroke-width="2" stroke-dasharray="4 4"/>
+            <path d="M 360,85 C 420,135 500,105 580,130" fill="none" stroke="url(#branchEmeraldGrad)" stroke-width="2" class="synth-branch-flow" style="animation-delay:-1.2s"/>
+            <circle r="3.5" fill="#10b981">
+              <animateMotion dur="4.2s" repeatCount="indefinite" path="M 360,85 C 420,135 500,105 580,130"/>
+            </circle>
 
-                  <!-- Trailer Body (Corrugated Heavy Commercial Freight Container) -->
-                  <rect x="8" y="10" width="108" height="42" rx="3" fill="#1e293b" stroke="#334155" stroke-width="1.4"/>
-                  <!-- Corrugated steel vertical ribs -->
-                  <line x1="18" y1="12" x2="18" y2="50" stroke="#334155" stroke-width="1"/>
-                  <line x1="28" y1="12" x2="28" y2="50" stroke="#334155" stroke-width="1"/>
-                  <line x1="38" y1="12" x2="38" y2="50" stroke="#334155" stroke-width="1"/>
-                  <line x1="48" y1="12" x2="48" y2="50" stroke="#334155" stroke-width="1"/>
-                  <line x1="58" y1="12" x2="58" y2="50" stroke="#334155" stroke-width="1"/>
-                  <line x1="68" y1="12" x2="68" y2="50" stroke="#334155" stroke-width="1"/>
-                  <line x1="78" y1="12" x2="78" y2="50" stroke="#334155" stroke-width="1"/>
-                  <line x1="88" y1="12" x2="88" y2="50" stroke="#334155" stroke-width="1"/>
-                  <line x1="98" y1="12" x2="98" y2="50" stroke="#334155" stroke-width="1"/>
-                  <line x1="108" y1="12" x2="108" y2="50" stroke="#334155" stroke-width="1"/>
-                  <!-- Fleet Livery Decals (Google 4-Color Stripe) -->
-                  <rect x="8" y="27" width="108" height="5" fill="#4285F4"/>
-                  <rect x="8" y="32" width="108" height="2" fill="#FBBC05"/>
-                  <text x="32" y="23" fill="#f8fafc" font-family="system-ui, -apple-system, sans-serif" font-size="7.5" font-weight="900" letter-spacing="0.5">FLEETFLOW</text>
-                  <text x="32" y="42" fill="#94a3b8" font-family="monospace" font-size="4.8" font-weight="700">3D LIFO SMART FREIGHT</text>
-                  <!-- Rear Roll-up Door & Safety Warning Tape -->
-                  <rect x="8" y="10" width="3" height="42" fill="#ea4335"/>
-                  <line x1="9.5" y1="12" x2="9.5" y2="50" stroke="#ffffff" stroke-width="0.8" stroke-dasharray="2 2"/>
-                  <circle cx="10" cy="48" r="1.5" fill="#ef4444"/>
-                  <!-- Mud flaps -->
-                  <rect x="20" y="49" width="3" height="8" rx="0.5" fill="#0f172a"/>
+            <!-- Branch C: Central Corridor (Purple) -->
+            <path id="synthBranchC" d="M 480,52 C 530,25 580,45 640,30" fill="none" stroke="rgba(168, 85, 247, 0.25)" stroke-width="2" stroke-dasharray="4 4"/>
+            <path d="M 480,52 C 530,25 580,45 640,30" fill="none" stroke="url(#branchPurpleGrad)" stroke-width="2" class="synth-branch-flow" style="animation-delay:-2.4s"/>
+            <circle r="3.5" fill="#a855f7">
+              <animateMotion dur="3.5s" repeatCount="indefinite" path="M 480,52 C 530,25 580,45 640,30"/>
+            </circle>
 
-                  <!-- Fifth Wheel Hitch Connector -->
-                  <rect x="114" y="38" width="8" height="12" fill="#0f172a"/>
+            <!-- 5. Main Curved Delivery Expressway (Trunk Arterial Corridor) -->
+            <!-- Casing -->
+            <path class="synth-route-casing" d="M 60,145 C 150,45 230,170 360,85 C 440,25 530,135 630,65"/>
+            <!-- Base dashed track -->
+            <path class="synth-route-base" d="M 60,145 C 150,45 230,170 360,85 C 440,25 530,135 630,65"/>
+            <!-- Continuous glowing laser flow tracer -->
+            <path id="synthTrunkPath" class="synth-route-tracer" d="M 60,145 C 150,45 230,170 360,85 C 440,25 530,135 630,65"/>
+            <!-- Dynamic solid progress overlay -->
+            <path id="synthProgressPath" class="synth-route-progress" d="M 60,145 C 150,45 230,170 360,85 C 440,25 530,135 630,65"/>
 
-                  <!-- Heavy Tractor Cab (Facing Right) -->
-                  <path d="M118 52 L118 12 L142 12 L154 26 L164 28 L164 49 L158 52 Z" fill="#2563eb" stroke="#1d4ed8" stroke-width="1.2"/>
-                  <!-- Aerodynamic Roof Air Deflector Fairing -->
-                  <path d="M120 12 L140 12 L144 7 L120 7 Z" fill="#1d4ed8"/>
-                  <rect x="128" y="5" width="8" height="2.5" rx="1" fill="#f59e0b" class="roof-strobe-beacon"/>
-                  <!-- Tinted Windshield Glass -->
-                  <path d="M136 15 L144 15 L152 26 L136 26 Z" fill="#38bdf8" opacity="0.85"/>
-                  <!-- Windshield Sun Glint -->
-                  <path d="M138 16 L143 16 L147 23 L142 23 Z" fill="#ffffff" opacity="0.6"/>
-                  <!-- Driver Silhouette Inside Cab -->
-                  <circle cx="140" cy="21" r="2.8" fill="#0f172a" opacity="0.8"/>
-                  <!-- Side Door Window -->
-                  <rect x="124" y="16" width="9" height="10" rx="1" fill="#38bdf8" opacity="0.85"/>
-                  <!-- Chrome Front Radiator Grille -->
-                  <rect x="160" y="29" width="4.5" height="18" rx="1" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.8"/>
-                  <line x1="161" y1="32" x2="164" y2="32" stroke="#475569" stroke-width="0.8"/>
-                  <line x1="161" y1="36" x2="164" y2="36" stroke="#475569" stroke-width="0.8"/>
-                  <line x1="161" y1="40" x2="164" y2="40" stroke="#475569" stroke-width="0.8"/>
-                  <line x1="161" y1="44" x2="164" y2="44" stroke="#475569" stroke-width="0.8"/>
-                  <!-- Heavy Front Steel Bumper -->
-                  <rect x="158" y="47" width="9" height="6" rx="2" fill="#64748b"/>
-                  <!-- Dual Front LED Headlights (Glowing) -->
-                  <rect x="162" y="39" width="3" height="6" rx="1.5" fill="#fef08a"/>
-                  <!-- Amber Turn Indicator -->
-                  <circle cx="157" cy="46" r="1.5" fill="#f59e0b"/>
-                  <!-- Diesel Tank with Aluminum Steps -->
-                  <rect x="74" y="44" width="36" height="8" rx="3" fill="#64748b" stroke="#475569" stroke-width="0.8"/>
-                  <line x1="78" y1="46" x2="106" y2="46" stroke="#94a3b8" stroke-width="0.7"/>
-                  <line x1="78" y1="49" x2="106" y2="49" stroke="#94a3b8" stroke-width="0.7"/>
-                </g>
+            <!-- 6. Geospatial Waypoint Nodes (Checkpoints) -->
+            <!-- Node 1: DC Dock (Start) -->
+            <g id="synthWp1" class="synth-wp-node active" transform="translate(60, 145)">
+              <circle r="16" class="synth-wp-pulse"/>
+              <circle r="9" class="synth-wp-circle-bg"/>
+              <circle r="3.5" fill="#38bdf8"/>
+              <text y="-14" class="synth-wp-tag">HUB 01 · DC DOCK</text>
+            </g>
 
-                <!-- WHEELS (Dynamic Rotating Spokes with wheelRoll keyframes) -->
-                <!-- Tandem Axle 1 (Rear Trailer) -->
-                <g class="truck-wheel" transform="translate(32, 53)">
-                  <circle cx="0" cy="0" r="7.5" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
-                  <circle cx="0" cy="0" r="4.2" fill="#cbd5e1"/>
-                  <circle cx="0" cy="0" r="1.8" fill="#475569"/>
-                  <line x1="-3.5" y1="0" x2="3.5" y2="0" stroke="#64748b" stroke-width="1"/>
-                  <line x1="0" y1="-3.5" x2="0" y2="3.5" stroke="#64748b" stroke-width="1"/>
-                </g>
+            <!-- Node 2: Polar Corridors -->
+            <g id="synthWp2" class="synth-wp-node" transform="translate(220, 122)">
+              <circle r="16" class="synth-wp-pulse"/>
+              <circle r="9" class="synth-wp-circle-bg"/>
+              <circle r="3.5" fill="#94a3b8"/>
+              <text y="-14" class="synth-wp-tag">WP 02 · CORRIDORS</text>
+            </g>
 
-                <!-- Tandem Axle 2 (Rear Trailer) -->
-                <g class="truck-wheel" transform="translate(50, 53)">
-                  <circle cx="0" cy="0" r="7.5" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
-                  <circle cx="0" cy="0" r="4.2" fill="#cbd5e1"/>
-                  <circle cx="0" cy="0" r="1.8" fill="#475569"/>
-                  <line x1="-3.5" y1="0" x2="3.5" y2="0" stroke="#64748b" stroke-width="1"/>
-                  <line x1="0" y1="-3.5" x2="0" y2="3.5" stroke="#64748b" stroke-width="1"/>
-                </g>
+            <!-- Node 3: OR-Tools MIP Solver -->
+            <g id="synthWp3" class="synth-wp-node" transform="translate(360, 85)">
+              <circle r="16" class="synth-wp-pulse"/>
+              <circle r="9" class="synth-wp-circle-bg"/>
+              <circle r="3.5" fill="#94a3b8"/>
+              <text y="-14" class="synth-wp-tag">WP 03 · OR-TOOLS VRP</text>
+            </g>
 
-                <!-- Steer Axle (Front Tractor) -->
-                <g class="truck-wheel" transform="translate(146, 53)">
-                  <circle cx="0" cy="0" r="7.5" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
-                  <circle cx="0" cy="0" r="4.2" fill="#cbd5e1"/>
-                  <circle cx="0" cy="0" r="1.8" fill="#475569"/>
-                  <line x1="-3.5" y1="0" x2="3.5" y2="0" stroke="#64748b" stroke-width="1"/>
-                  <line x1="0" y1="-3.5" x2="0" y2="3.5" stroke="#64748b" stroke-width="1"/>
-                </g>
-              </svg>
-            </div>
-          </div>
+            <!-- Node 4: 3D LIFO Axle -->
+            <g id="synthWp4" class="synth-wp-node" transform="translate(480, 52)">
+              <circle r="16" class="synth-wp-pulse"/>
+              <circle r="9" class="synth-wp-circle-bg"/>
+              <circle r="3.5" fill="#94a3b8"/>
+              <text y="-14" class="synth-wp-tag">WP 04 · 3D LIFO AXLE</text>
+            </g>
 
-          <!-- Bottom Yellow Hazard Safety Curb -->
-          <div class="highway-curb bottom-curb"></div>
+            <!-- Node 5: Store Drops (Destination) -->
+            <g id="synthWp5" class="synth-wp-node" transform="translate(630, 65)">
+              <circle r="16" class="synth-wp-pulse"/>
+              <circle r="9" class="synth-wp-circle-bg"/>
+              <circle r="3.5" fill="#94a3b8"/>
+              <text y="-14" class="synth-wp-tag">DEST · STORE DROPS</text>
+            </g>
+
+            <!-- 7. Minimalist Top-Down Commercial Truck Telematics Beacon -->
+            <g id="synthTruckBeacon" class="synth-truck-beacon-group" transform="translate(60, 145)">
+              <!-- Expanding circular radar ping wave -->
+              <circle r="14" class="beacon-pulse-ring"/>
+
+              <!-- Forward Volumetric Directional Radar Cone -->
+              <polygon points="12,-4 40,-16 40,16 12,4" fill="url(#synthRadarCone)"/>
+
+              <!-- Vector Top-Down Heavy Commercial Freight Truck -->
+              <!-- Cargo Trailer Body -->
+              <rect x="-18" y="-7" width="22" height="14" rx="2" fill="#1e293b" stroke="#475569" stroke-width="1.2"/>
+              <!-- Cargo trailer roof grooves -->
+              <line x1="-14" y1="-4" x2="0" y2="-4" stroke="#334155" stroke-width="0.8"/>
+              <line x1="-14" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="0.8"/>
+              <line x1="-14" y1="4" x2="0" y2="4" stroke="#334155" stroke-width="0.8"/>
+              <!-- Axle wheel markers -->
+              <rect x="-16" y="-8.5" width="4" height="1.5" rx="0.5" fill="#0f172a"/>
+              <rect x="-16" y="7" width="4" height="1.5" rx="0.5" fill="#0f172a"/>
+              <rect x="-8" y="-8.5" width="4" height="1.5" rx="0.5" fill="#0f172a"/>
+              <rect x="-8" y="7" width="4" height="1.5" rx="0.5" fill="#0f172a"/>
+
+              <!-- Tractor Cab -->
+              <path d="M 4,-6 L 12,-6 Q 16,-5 16,0 Q 16,5 12,6 L 4,6 Z" fill="#2563eb" stroke="#38bdf8" stroke-width="1.2"/>
+              <!-- Windshield -->
+              <path d="M 8,-4 L 12,-4 Q 13,-3 13,0 Q 13,3 12,4 L 8,4 Z" fill="#0284c7" opacity="0.9"/>
+              <!-- Front steering wheel markers -->
+              <rect x="7" y="-8" width="4" height="1.5" rx="0.5" fill="#0f172a"/>
+              <rect x="7" y="6.5" width="4" height="1.5" rx="0.5" fill="#0f172a"/>
+              <!-- High-power LED headlights -->
+              <circle cx="15" cy="-3.5" r="1.2" fill="#fef08a"/>
+              <circle cx="15" cy="3.5" r="1.2" fill="#fef08a"/>
+            </g>
+          </svg>
         </div>
 
-        <!-- 5 Optimization Route Milestones Strip -->
+        <!-- 5 Optimization Route Milestones Strip with Uniform SVG Icons -->
         <div class="truck-milestone-grid">
           <div class="truck-mcard active" id="lpMStep1">
-            <div class="tm-icon">🏭</div>
+            <div class="tm-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="8" y1="13" x2="16" y2="13"/>
+                <line x1="8" y1="17" x2="14" y2="17"/>
+              </svg>
+            </div>
             <div class="tm-info">
-              <div class="tm-name">1. Manifest Inflow</div>
+              <div class="tm-name">1. Manifest Intake</div>
               <div class="tm-sub">Store Orders &amp; SKUs</div>
             </div>
             <span class="tm-badge" id="lpMStep1Badge">Active</span>
           </div>
           <div class="truck-mcard" id="lpMStep2">
-            <div class="tm-icon">🧭</div>
+            <div class="tm-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+              </svg>
+            </div>
             <div class="tm-info">
-              <div class="tm-name">2. Ray-Clusters</div>
-              <div class="tm-sub">Corridor Geo-Split</div>
+              <div class="tm-name">2. Polar Corridors</div>
+              <div class="tm-sub">Trunk &amp; Branch Rays</div>
             </div>
             <span class="tm-badge" id="lpMStep2Badge">Queued</span>
           </div>
           <div class="truck-mcard" id="lpMStep3">
-            <div class="tm-icon">⚡</div>
+            <div class="tm-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+            </div>
             <div class="tm-info">
               <div class="tm-name">3. OR-Tools MIP</div>
               <div class="tm-sub">Multi-Truck Fleet VRP</div>
@@ -3517,7 +3640,13 @@ _UI_HTML = r"""<!DOCTYPE html>
             <span class="tm-badge" id="lpMStep3Badge">Queued</span>
           </div>
           <div class="truck-mcard" id="lpMStep4">
-            <div class="tm-icon">📦</div>
+            <div class="tm-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                <line x1="12" y1="22.08" x2="12" y2="12"/>
+              </svg>
+            </div>
             <div class="tm-info">
               <div class="tm-name">4. 3D LIFO Spatial</div>
               <div class="tm-sub">CMVR Axle &amp; Packing</div>
@@ -3525,7 +3654,12 @@ _UI_HTML = r"""<!DOCTYPE html>
             <span class="tm-badge" id="lpMStep4Badge">Queued</span>
           </div>
           <div class="truck-mcard" id="lpMStep5">
-            <div class="tm-icon">🏁</div>
+            <div class="tm-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+            </div>
             <div class="tm-info">
               <div class="tm-name">5. Store Drops</div>
               <div class="tm-sub">Maps Navigation &amp; Turn</div>
@@ -4048,20 +4182,76 @@ function applyLaunchpadPreset(presetName) {
   if (!CT.bundle) updateStagedKpiStrip();
 }
 
-function getTruckAxleInfo(code) {
+function getTruckSvgIcon(code) {
   switch (code) {
     case 'ACE':
-      return { icon: '🚐', axle: '[O==O]', class: 'Mini 7ft (Tata Ace)', gvw: '1.5T GVW', wheels: '4 Wheeler' };
+      return `<svg width="24" height="15" viewBox="0 0 32 18" fill="none" style="vertical-align:middle">
+        <path d="M2 13 L2 5 Q2 3 5 3 L18 3 L24 7 L29 8 Q30 8 30 10 L30 13 Z" fill="currentColor" opacity="0.22" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M17 5 L22 8 L17 8 Z" fill="currentColor" opacity="0.6"/>
+        <circle cx="7" cy="13" r="3" fill="var(--bg-card)" stroke="currentColor" stroke-width="1.4"/>
+        <circle cx="24" cy="13" r="3" fill="var(--bg-card)" stroke="currentColor" stroke-width="1.4"/>
+      </svg>`;
     case 'PKP':
-      return { icon: '🛻', axle: '[O===O]', class: 'Pickup 8.5ft (Bolero)', gvw: '2.8T GVW', wheels: '4 Wheeler' };
+      return `<svg width="24" height="15" viewBox="0 0 32 18" fill="none" style="vertical-align:middle">
+        <path d="M2 13 L2 8 L14 8 L14 4 L22 4 L26 8 L30 9 L30 13 Z" fill="currentColor" opacity="0.22" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M16 6 L20 8 L16 8 Z" fill="currentColor" opacity="0.6"/>
+        <circle cx="7" cy="13" r="3" fill="var(--bg-card)" stroke="currentColor" stroke-width="1.4"/>
+        <circle cx="24" cy="13" r="3" fill="var(--bg-card)" stroke="currentColor" stroke-width="1.4"/>
+      </svg>`;
     case 'T14':
-      return { icon: '🚚', axle: '[O====O]', class: 'LCV 14ft (Eicher Pro)', gvw: '6.2T GVW', wheels: '4 Wheeler' };
+      return `<svg width="24" height="15" viewBox="0 0 32 18" fill="none" style="vertical-align:middle">
+        <rect x="2" y="2" width="18" height="11" rx="1.5" fill="currentColor" opacity="0.22" stroke="currentColor" stroke-width="1.4"/>
+        <path d="M20 13 L20 5 L26 5 L29 9 L30 10 L30 13 Z" fill="currentColor" opacity="0.35" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M22 6 L25 9 L22 9 Z" fill="currentColor" opacity="0.6"/>
+        <circle cx="6" cy="13" r="3" fill="var(--bg-card)" stroke="currentColor" stroke-width="1.4"/>
+        <circle cx="25" cy="13" r="3" fill="var(--bg-card)" stroke="currentColor" stroke-width="1.4"/>
+      </svg>`;
     case 'T17':
-      return { icon: '🚚', axle: '[O====OO]', class: 'ICV 17ft (Tata 1109)', gvw: '11.9T GVW', wheels: '6 Wheeler' };
+      return `<svg width="27" height="15" viewBox="0 0 36 18" fill="none" style="vertical-align:middle">
+        <rect x="2" y="2" width="22" height="11" rx="1.5" fill="currentColor" opacity="0.22" stroke="currentColor" stroke-width="1.4"/>
+        <path d="M24 13 L24 4 L30 4 L34 8 L35 9 L35 13 Z" fill="currentColor" opacity="0.35" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M26 6 L30 8 L26 8 Z" fill="currentColor" opacity="0.6"/>
+        <circle cx="6" cy="13" r="3" fill="var(--bg-card)" stroke="currentColor" stroke-width="1.4"/>
+        <circle cx="17" cy="13" r="3" fill="var(--bg-card)" stroke="currentColor" stroke-width="1.4"/>
+        <circle cx="29" cy="13" r="3" fill="var(--bg-card)" stroke="currentColor" stroke-width="1.4"/>
+      </svg>`;
     case 'T20':
-      return { icon: '🚛', axle: '[O--O====OO]', class: '20ft Container (1512)', gvw: '16.2T GVW', wheels: '10 Wheeler' };
+      return `<svg width="29" height="15" viewBox="0 0 40 18" fill="none" style="vertical-align:middle">
+        <rect x="2" y="2" width="25" height="11" rx="1.5" fill="currentColor" opacity="0.22" stroke="currentColor" stroke-width="1.4"/>
+        <line x1="8" y1="2" x2="8" y2="13" stroke="currentColor" stroke-width="0.8" opacity="0.5"/>
+        <line x1="14" y1="2" x2="14" y2="13" stroke="currentColor" stroke-width="0.8" opacity="0.5"/>
+        <line x1="20" y1="2" x2="20" y2="13" stroke="currentColor" stroke-width="0.8" opacity="0.5"/>
+        <path d="M28 13 L28 4 L34 4 L38 8 L39 9 L39 13 Z" fill="currentColor" opacity="0.35" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+        <circle cx="7" cy="13" r="3" fill="var(--bg-card)" stroke="currentColor" stroke-width="1.4"/>
+        <circle cx="14" cy="13" r="3" fill="var(--bg-card)" stroke="currentColor" stroke-width="1.4"/>
+        <circle cx="21" cy="13" r="3" fill="var(--bg-card)" stroke="currentColor" stroke-width="1.4"/>
+        <circle cx="34" cy="13" r="3" fill="var(--bg-card)" stroke="currentColor" stroke-width="1.4"/>
+      </svg>`;
     default:
-      return { icon: '🚛', axle: '[O====O]', class: code, gvw: 'Commercial', wheels: 'Multi-Axle' };
+      return `<svg width="24" height="15" viewBox="0 0 32 18" fill="none" style="vertical-align:middle">
+        <rect x="2" y="3" width="18" height="10" rx="1.5" stroke="currentColor" stroke-width="1.4"/>
+        <path d="M20 13 L20 6 L26 6 L29 10 L30 13 Z" stroke="currentColor" stroke-width="1.4"/>
+        <circle cx="7" cy="13" r="3" stroke="currentColor" stroke-width="1.4"/>
+        <circle cx="25" cy="13" r="3" stroke="currentColor" stroke-width="1.4"/>
+      </svg>`;
+  }
+}
+
+function getTruckAxleInfo(code) {
+  const svg = getTruckSvgIcon(code);
+  switch (code) {
+    case 'ACE':
+      return { icon: svg, axle: '[O==O]', class: 'Mini 7ft (Tata Ace)', gvw: '1.5T GVW', wheels: 'Single Axle' };
+    case 'PKP':
+      return { icon: svg, axle: '[O===O]', class: 'Pickup 8.5ft (Bolero Maxi)', gvw: '2.8T GVW', wheels: 'Single Axle' };
+    case 'T14':
+      return { icon: svg, axle: '[O====O]', class: 'LCV 14ft (Eicher Pro)', gvw: '6.2T GVW', wheels: '4 Wheeler' };
+    case 'T17':
+      return { icon: svg, axle: '[O====OO]', class: 'ICV 17ft (Tata 1109)', gvw: '11.9T GVW', wheels: '6 Wheeler Tandem' };
+    case 'T20':
+      return { icon: svg, axle: '[O--O====OO]', class: '20ft Container (1512)', gvw: '16.2T GVW', wheels: '10 Wheeler Multi' };
+    default:
+      return { icon: svg, axle: '[O====O]', class: code, gvw: 'Commercial', wheels: 'Multi-Axle' };
   }
 }
 
@@ -4170,13 +4360,61 @@ function setLaunchpadPrompt(txt) {
   if (el) el.value = txt;
 }
 
+function setSynthTruckProgress(pct) {
+  const path = document.getElementById('synthTrunkPath');
+  const progressPath = document.getElementById('synthProgressPath');
+  const beacon = document.getElementById('synthTruckBeacon');
+  if (!path || !beacon) return;
+  const totalLen = (path.getTotalLength && path.getTotalLength() > 0) ? path.getTotalLength() : 680;
+  const curLen = Math.max(0, Math.min(totalLen, (pct / 100) * totalLen));
+
+  if (progressPath) {
+    progressPath.style.strokeDashoffset = `${totalLen - curLen}px`;
+  }
+
+  if (path.getPointAtLength) {
+    const pt = path.getPointAtLength(curLen);
+    const ptAhead = path.getPointAtLength(Math.min(totalLen, curLen + 4));
+    const angle = Math.atan2(ptAhead.y - pt.y, ptAhead.x - pt.x) * (180 / Math.PI);
+    beacon.setAttribute('transform', `translate(${pt.x.toFixed(1)}, ${pt.y.toFixed(1)}) rotate(${angle.toFixed(1)})`);
+  }
+}
+
+function updateSynthWaypoint(stepNum, status) {
+  const wp = document.getElementById(`synthWp${stepNum}`);
+  const mcard = document.getElementById(`lpMStep${stepNum}`);
+  const mbadge = document.getElementById(`lpMStep${stepNum}Badge`);
+
+  if (mcard) {
+    mcard.className = `truck-mcard ${status}`;
+  }
+  if (mbadge) {
+    mbadge.textContent = status === 'done' ? '✓ Done' : (status === 'active' ? '⚡ Solving' : 'Queued');
+  }
+
+  if (wp) {
+    wp.setAttribute('class', `synth-wp-node ${status}`);
+    const circle = wp.querySelector('.synth-wp-circle-bg');
+    const dot = wp.querySelectorAll('circle')[2];
+    if (status === 'done') {
+      if (circle) circle.setAttribute('stroke', '#10b981');
+      if (dot) dot.setAttribute('fill', '#10b981');
+    } else if (status === 'active') {
+      if (circle) circle.setAttribute('stroke', '#38bdf8');
+      if (dot) dot.setAttribute('fill', '#38bdf8');
+    } else {
+      if (circle) circle.setAttribute('stroke', '#64748b');
+      if (dot) dot.setAttribute('fill', '#64748b');
+    }
+  }
+}
+
 async function synthesizeFromLaunchpad(switchAfter = true) {
   const modal = document.getElementById('lpSynthesisModal');
   const modalTitle = document.getElementById('lpModalTitle');
   const modalSub = document.getElementById('lpModalSubtitle');
   const timerLbl = document.getElementById('lpModalTimer');
 
-  const truckWrapper = document.getElementById('animTruckWrapper');
   const speedVal = document.getElementById('lpTruckSpeed');
   const distVal = document.getElementById('lpTruckDist');
   const axleVal = document.getElementById('lpTruckAxle');
@@ -4194,7 +4432,7 @@ async function synthesizeFromLaunchpad(switchAfter = true) {
     modal.style.display = 'flex';
     modal.style.opacity = '1';
     if (modalTitle) {
-      modalTitle.innerHTML = 'Commercial Fleet Dispatch Optimizer Active';
+      modalTitle.innerHTML = 'Geospatial Fleet Dispatch Optimizer Active';
       modalTitle.style.color = 'var(--text-main)';
     }
     const hc = CT.hubContext;
@@ -4206,26 +4444,16 @@ async function synthesizeFromLaunchpad(switchAfter = true) {
     }
 
     // Reset truck position to DC Dock
-    if (truckWrapper) truckWrapper.style.left = '10%';
+    setSynthTruckProgress(2);
     if (speedVal) speedVal.innerHTML = '38 <small style="font-size:9px">KM/H</small>';
     if (distVal) distVal.innerHTML = '10 <small style="font-size:9px">%</small>';
     if (axleVal) { axleVal.textContent = 'PASS ✓'; axleVal.style.color = 'var(--accent-emerald)'; }
 
     // Reset waypoints and milestone cards
-    for (let i = 1; i <= 5; i++) {
-      const el = document.getElementById(`lpMStep${i}`);
-      const b = document.getElementById(`lpMStep${i}Badge`);
-      const wp = document.getElementById(`hwp${i}`);
-      if (el) el.className = 'truck-mcard';
-      if (b) b.textContent = 'Queued';
-      if (wp) wp.className = 'highway-wp';
+    updateSynthWaypoint(1, 'active');
+    for (let i = 2; i <= 5; i++) {
+      updateSynthWaypoint(i, 'queued');
     }
-    const s1 = document.getElementById('lpMStep1');
-    const b1 = document.getElementById('lpMStep1Badge');
-    const wp1 = document.getElementById('hwp1');
-    if (s1) s1.className = 'truck-mcard active';
-    if (b1) b1.textContent = 'Active';
-    if (wp1) wp1.className = 'highway-wp active';
 
     timerInterval = setInterval(() => {
       const sec = ((Date.now() - tStart) / 1000).toFixed(1);
@@ -4235,37 +4463,17 @@ async function synthesizeFromLaunchpad(switchAfter = true) {
 
   // Smooth intermediate stage transitions while solver request runs in background
   setTimeout(() => {
-    const s1 = document.getElementById('lpMStep1');
-    const b1 = document.getElementById('lpMStep1Badge');
-    const s2 = document.getElementById('lpMStep2');
-    const b2 = document.getElementById('lpMStep2Badge');
-    const wp1 = document.getElementById('hwp1');
-    const wp2 = document.getElementById('hwp2');
-
-    if (wp1) wp1.className = 'highway-wp done';
-    if (wp2) wp2.className = 'highway-wp active';
-    if (s1) { s1.className = 'truck-mcard done'; if (b1) b1.textContent = '✓ Done'; }
-    if (s2) { s2.className = 'truck-mcard active'; if (b2) b2.textContent = 'Active'; }
-
-    if (truckWrapper) truckWrapper.style.left = '32%';
+    updateSynthWaypoint(1, 'done');
+    updateSynthWaypoint(2, 'active');
+    setSynthTruckProgress(28);
     if (speedVal) speedVal.innerHTML = '58 <small style="font-size:9px">KM/H</small>';
-    if (distVal) distVal.innerHTML = '32 <small style="font-size:9px">%</small>';
+    if (distVal) distVal.innerHTML = '28 <small style="font-size:9px">%</small>';
   }, 260);
 
   setTimeout(() => {
-    const s2 = document.getElementById('lpMStep2');
-    const b2 = document.getElementById('lpMStep2Badge');
-    const s3 = document.getElementById('lpMStep3');
-    const b3 = document.getElementById('lpMStep3Badge');
-    const wp2 = document.getElementById('hwp2');
-    const wp3 = document.getElementById('hwp3');
-
-    if (wp2) wp2.className = 'highway-wp done';
-    if (wp3) wp3.className = 'highway-wp active';
-    if (s2) { s2.className = 'truck-mcard done'; if (b2) b2.textContent = '✓ Done'; }
-    if (s3) { s3.className = 'truck-mcard active'; if (b3) b3.textContent = '⚡ Solving'; }
-
-    if (truckWrapper) truckWrapper.style.left = '55%';
+    updateSynthWaypoint(2, 'done');
+    updateSynthWaypoint(3, 'active');
+    setSynthTruckProgress(55);
     if (speedVal) speedVal.innerHTML = '74 <small style="font-size:9px">KM/H</small>';
     if (distVal) distVal.innerHTML = '55 <small style="font-size:9px">%</small>';
   }, 520);
@@ -4307,36 +4515,19 @@ async function synthesizeFromLaunchpad(switchAfter = true) {
     const bundle = await res.json();
 
     // Stage 4: 3D LIFO Spatial Loading & Axle Balance
-    const s3 = document.getElementById('lpMStep3');
-    const b3 = document.getElementById('lpMStep3Badge');
-    const s4 = document.getElementById('lpMStep4');
-    const b4 = document.getElementById('lpMStep4Badge');
-    const wp3 = document.getElementById('hwp3');
-    const wp4 = document.getElementById('hwp4');
-
-    if (wp3) wp3.className = 'highway-wp done';
-    if (wp4) wp4.className = 'highway-wp active';
-    if (s3) { s3.className = 'truck-mcard done'; if (b3) b3.textContent = '✓ Done'; }
-    if (s4) { s4.className = 'truck-mcard active'; if (b4) b4.textContent = '⚡ Packing'; }
-
-    if (truckWrapper) truckWrapper.style.left = '78%';
-    if (speedVal) speedVal.innerHTML = '62 <small style="font-size:9px">KM/H</small>';
+    updateSynthWaypoint(3, 'done');
+    updateSynthWaypoint(4, 'active');
+    setSynthTruckProgress(78);
+    if (speedVal) speedVal.innerHTML = '64 <small style="font-size:9px">KM/H</small>';
     if (distVal) distVal.innerHTML = '78 <small style="font-size:9px">%</small>';
     if (axleVal) { axleVal.textContent = '38%F/62%R ✓'; }
 
-    await new Promise(r => setTimeout(r, 380));
+    await new Promise(r => setTimeout(r, 400));
 
     // Stage 5: Store Drops & Final Route Optimization Complete
-    for (let i = 1; i <= 5; i++) {
-      const el = document.getElementById(`lpMStep${i}`);
-      const b = document.getElementById(`lpMStep${i}Badge`);
-      const wp = document.getElementById(`hwp${i}`);
-      if (el) el.className = 'truck-mcard done';
-      if (b) b.textContent = '✓ Done';
-      if (wp) wp.className = 'highway-wp done';
-    }
-
-    if (truckWrapper) truckWrapper.style.left = '94%';
+    updateSynthWaypoint(4, 'done');
+    updateSynthWaypoint(5, 'done');
+    setSynthTruckProgress(100);
     if (speedVal) speedVal.innerHTML = '0 <small style="font-size:9px">ARRIVED</small>';
     if (distVal) distVal.innerHTML = '100 <small style="font-size:9px">%</small>';
 
