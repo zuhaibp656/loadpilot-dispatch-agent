@@ -4232,6 +4232,8 @@ async function sendAgentPrompt() {
     </div>
     <div>${formatted}</div>
   `, 7500);
+}
+
 let historySearchTimer = null;
 function debounceHistorySearch() {
   clearTimeout(historySearchTimer);
