@@ -599,12 +599,27 @@ _UI_HTML = r"""<!DOCTYPE html>
       background: var(--bg-card);
     }
 
-    /* ── App Layout Shell (Left Sidebar + Right Main Stage) ── */
+    /* ── App Layout Shell (Commercial Freight Logistics Backdrop) ── */
     .ct-app-layout {
       display: flex;
       width: 100vw;
       height: 100vh;
       overflow: hidden;
+      background-color: var(--bg-canvas);
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.03) 0%, transparent 80%),
+        linear-gradient(to right, rgba(148, 163, 184, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
+      background-size: 100% 100%, 48px 48px, 48px 48px;
+    }
+
+    html.theme-dark .ct-app-layout {
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(37, 99, 235, 0.06) 0%, transparent 60%),
+        radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.05) 0%, transparent 60%),
+        linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 44px 44px, 44px 44px;
     }
 
     /* ── Left Navigation Sidebar (Gemini / macOS Style with Neon Highlights) ── */
@@ -627,8 +642,30 @@ _UI_HTML = r"""<!DOCTYPE html>
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 4px 6px 16px;
-      border-bottom: 1px solid var(--border-subtle);
+      padding: 4px 6px 10px;
+    }
+
+    .truck-brand-emblem-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 2px 8px rgba(2, 132, 199, 0.35));
+    }
+
+    .ct-rail-telematics-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 8px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+      margin-bottom: 8px;
     }
 
     .ct-brand-title {
@@ -985,14 +1022,14 @@ _UI_HTML = r"""<!DOCTYPE html>
       }
     }
 
-    /* ── High-Tech Google 4-Color Synthesis HUD Overlay ── */
+    /* ── Commercial Truck Highway Route Simulation & Telematics Modal Overlay ── */
     .lp-synthesis-modal {
       position: fixed;
       inset: 0;
       z-index: 99999;
-      background: rgba(4, 9, 22, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(4, 9, 22, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -1005,16 +1042,18 @@ _UI_HTML = r"""<!DOCTYPE html>
       100% { opacity: 1; }
     }
 
-    .lp-modal-card {
+    .truck-modal-card {
       position: relative;
       width: 100%;
-      max-width: 620px;
-      border-radius: 24px;
+      max-width: 720px;
+      border-radius: 22px;
+      background: var(--bg-card);
+      border: 1.5px solid rgba(56, 189, 248, 0.35);
       box-shadow:
-        0 24px 70px rgba(0, 0, 0, 0.65),
-        0 0 45px rgba(66, 133, 244, 0.28);
+        0 24px 70px rgba(0, 0, 0, 0.75),
+        0 0 45px rgba(56, 189, 248, 0.22);
+      overflow: hidden;
       animation: modalCardPop 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
-      overflow: visible;
     }
 
     @keyframes modalCardPop {
@@ -1022,86 +1061,442 @@ _UI_HTML = r"""<!DOCTYPE html>
       100% { opacity: 1; transform: perspective(1000px) translateY(0) scale(1); }
     }
 
-    .lp-progress-bar-wrap {
-      width: 100%;
-      height: 8px;
-      background: var(--bg-elevated);
-      border-radius: 999px;
-      overflow: hidden;
-      margin: 18px 0 20px;
-      border: 1px solid var(--border-subtle);
-      position: relative;
-    }
-
-    .lp-progress-bar-fill {
-      height: 100%;
-      width: 25%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #4285F4, #34A853, #FBBC05, #EA4335, #4285F4);
-      background-size: 200% 100%;
-      animation: lpShimmer 1.8s linear infinite;
-      transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    @keyframes lpShimmer {
-      0% { background-position: 100% 0; }
-      100% { background-position: -100% 0; }
-    }
-
-    .lp-modal-step-list {
+    .truck-modal-inner {
+      padding: 24px 28px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-top: 14px;
+      gap: 16px;
     }
 
-    .lp-modal-step {
+    .truck-hud-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 14px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .truck-emblem-badge {
+      width: 46px;
+      height: 46px;
       border-radius: 12px;
-      background: var(--bg-elevated);
-      border: 1.5px solid var(--border-subtle);
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-secondary);
-      transition: all 0.25s ease;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.25) 0%, rgba(2, 132, 199, 0.25) 100%);
+      border: 1.5px solid rgba(56, 189, 248, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
     }
 
-    .lp-modal-step.active {
-      border-color: #4285F4;
-      background: var(--accent-primary-soft);
-      color: var(--accent-primary);
-      box-shadow: 0 0 16px rgba(66, 133, 244, 0.22);
+    .truck-status-pill {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      padding: 2px 8px;
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 999px;
     }
 
-    .lp-modal-step.done {
-      border-color: rgba(52, 168, 83, 0.5);
-      background: var(--accent-emerald-soft);
-      color: var(--accent-emerald);
-    }
-
-    .lp-mstep-badge {
+    .truck-hud-telemetry-mono {
       font-family: var(--font-mono);
       font-size: 11px;
-      font-weight: 800;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: var(--bg-card);
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
+    }
+
+    .truck-hud-readout {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--bg-elevated);
+      padding: 6px 14px;
+      border-radius: 10px;
       border: 1px solid var(--border-subtle);
     }
 
-    .lp-modal-step.active .lp-mstep-badge {
-      background: #4285F4;
+    .truck-hud-metric {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .truck-hud-k {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .truck-hud-v {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .truck-modal-subtitle {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      margin-top: -4px;
+    }
+
+    /* ═══ HIGHWAY VIEWPORT & ROUTE SIMULATION ═══ */
+    .truck-highway-viewport {
+      position: relative;
+      width: 100%;
+      height: 148px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #0d111a;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.6), 0 4px 16px rgba(0,0,0,0.3);
+      border: 1.5px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .highway-curb {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 10px;
+      z-index: 5;
+      background: repeating-linear-gradient(
+        -45deg,
+        #fbbc05 0px,
+        #fbbc05 12px,
+        #1e293b 12px,
+        #1e293b 24px
+      );
+      box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    }
+    .top-curb { top: 0; }
+    .bottom-curb { bottom: 0; }
+
+    .highway-surface {
+      position: absolute;
+      inset: 10px 0;
+      background: linear-gradient(180deg, #131722 0%, #1a202c 45%, #151a24 100%);
+      overflow: hidden;
+    }
+
+    /* Moving Center Dashed White Highway Lane Divider */
+    .highway-center-divider {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 3px;
+      transform: translateY(-50%);
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.85) 0px,
+        rgba(255, 255, 255, 0.85) 28px,
+        transparent 28px,
+        transparent 56px
+      );
+      background-size: 56px 3px;
+      animation: highwayRoadRush 0.42s linear infinite;
+      z-index: 2;
+    }
+
+    .highway-lane-line-top {
+      position: absolute;
+      top: 24%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.25) 0px,
+        rgba(255, 255, 255, 0.25) 14px,
+        transparent 14px,
+        transparent 36px
+      );
+      background-size: 36px 1px;
+      animation: highwayRoadRush 0.42s linear infinite;
+      z-index: 2;
+    }
+
+    .highway-lane-line-bottom {
+      position: absolute;
+      bottom: 24%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.25) 0px,
+        rgba(255, 255, 255, 0.25) 14px,
+        transparent 14px,
+        transparent 36px
+      );
+      background-size: 36px 1px;
+      animation: highwayRoadRush 0.42s linear infinite;
+      z-index: 2;
+    }
+
+    @keyframes highwayRoadRush {
+      0% { background-position-x: 0px; }
+      100% { background-position-x: -56px; }
+    }
+
+    /* Embedded Highway Waypoint Milestones */
+    .highway-milestone-track {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .highway-wp {
+      position: absolute;
+      top: 6px;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.3s ease;
+      opacity: 0.65;
+    }
+
+    .highway-wp.active {
+      opacity: 1;
+      transform: translateX(-50%) scale(1.08);
+    }
+
+    .highway-wp.done {
+      opacity: 1;
+    }
+
+    .wp-sign {
+      font-size: 9.5px;
+      font-weight: 800;
+      font-family: var(--font-sans);
+      padding: 2px 7px;
+      border-radius: 5px;
+      background: #0f172a;
+      color: #94a3b8;
+      border: 1px solid #334155;
+      white-space: nowrap;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      transition: all 0.25s ease;
+    }
+
+    .highway-wp.active .wp-sign {
+      background: #1e3a8a;
+      color: #38bdf8;
+      border-color: #38bdf8;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
+    }
+
+    .highway-wp.done .wp-sign {
+      background: #064e3b;
+      color: #34d399;
+      border-color: #10b981;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.35);
+    }
+
+    .wp-beacon {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #475569;
+      margin-top: 2px;
+      transition: all 0.25s ease;
+    }
+
+    .highway-wp.active .wp-beacon {
+      background: #38bdf8;
+      box-shadow: 0 0 8px #38bdf8;
+      animation: beaconPulse 0.8s infinite alternate;
+    }
+
+    .highway-wp.done .wp-beacon {
+      background: #10b981;
+      box-shadow: 0 0 6px #10b981;
+    }
+
+    @keyframes beaconPulse {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(1.6); opacity: 1; }
+    }
+
+    /* ═══ THE ANIMATED COMMERCIAL FREIGHT TRUCK ═══ */
+    .anim-truck-wrapper {
+      position: absolute;
+      bottom: 14px;
+      left: 10%;
+      transform: translateX(-50%);
+      width: 175px;
+      height: 70px;
+      z-index: 10;
+      transition: left 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Forward Projecting Volumetric LED Headlight Beam (Shooting Forward to the Right) */
+    .truck-headlight-cone {
+      position: absolute;
+      top: 36px;
+      right: -100px;
+      width: 110px;
+      height: 24px;
+      transform-origin: left center;
+      transform: perspective(100px) rotateY(18deg);
+      background: linear-gradient(90deg, rgba(254, 240, 138, 0.75) 0%, rgba(56, 189, 248, 0.35) 45%, transparent 100%);
+      clip-path: polygon(0% 40%, 100% 0%, 100% 100%, 0% 65%);
+      pointer-events: none;
+      animation: headlightFlicker 0.6s ease-in-out infinite alternate;
+      z-index: 1;
+    }
+
+    @keyframes headlightFlicker {
+      0% { opacity: 0.85; transform: perspective(100px) rotateY(18deg) scaleY(1); }
+      100% { opacity: 0.98; transform: perspective(100px) rotateY(18deg) scaleY(1.05); }
+    }
+
+    .commercial-truck-svg {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      z-index: 3;
+    }
+
+    /* Heavy Truck Suspension Rumble Vibration */
+    .truck-body-suspension {
+      animation: truckRumble 0.16s ease-in-out infinite alternate;
+      transform-origin: 85px 54px;
+    }
+
+    @keyframes truckRumble {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-1.2px) rotate(0.35deg); }
+      100% { transform: translateY(0.8px) rotate(-0.25deg); }
+    }
+
+    /* Dynamic Wheel Roll Rotation (Moving forward to the right, wheels rotate clockwise) */
+    .truck-wheel {
+      animation: wheelRoll 0.38s linear infinite;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    @keyframes wheelRoll {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .roof-strobe-beacon {
+      animation: amberStrobe 0.7s infinite;
+    }
+
+    @keyframes amberStrobe {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; filter: drop-shadow(0 0 6px #f59e0b); }
+    }
+
+    .exhaust-smoke-puff {
+      animation: smokePuff 0.45s ease-out infinite;
+    }
+
+    @keyframes smokePuff {
+      0% { transform: scale(1) translateY(0); opacity: 0.6; }
+      100% { transform: scale(2.8) translateY(-6px); opacity: 0; }
+    }
+
+    /* Milestone Phase Cards */
+    .truck-milestone-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .truck-mcard {
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      transition: all 0.25s ease;
+      min-width: 0;
+    }
+
+    .truck-mcard.active {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.22);
+      transform: translateY(-2px);
+    }
+
+    .truck-mcard.done {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(16, 185, 129, 0.10);
+    }
+
+    .tm-icon {
+      font-size: 16px;
+    }
+
+    .tm-name {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tm-sub {
+      font-size: 9.5px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tm-badge {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      width: fit-content;
+      margin-top: 4px;
+    }
+
+    .truck-mcard.active .tm-badge {
+      background: #38bdf8;
+      color: #070b14;
+      border-color: transparent;
+    }
+
+    .truck-mcard.done .tm-badge {
+      background: #10b981;
       color: #ffffff;
       border-color: transparent;
     }
 
-    .lp-modal-step.done .lp-mstep-badge {
-      background: #34A853;
-      color: #ffffff;
-      border-color: transparent;
+    .truck-footer-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .status-pulse-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      animation: beaconPulse 1.2s infinite alternate;
     }
 
     /* Left/Center Canvas Stage */
@@ -1857,16 +2252,36 @@ _UI_HTML = r"""<!DOCTYPE html>
   <aside class="ct-left-rail">
     <div>
       <div class="ct-brand">
-        <div class="orbital-ring-wrap" style="width:42px;height:42px">
-          <span class="orbital-ring-core">🚚</span>
+        <div class="truck-brand-emblem-wrap">
+          <svg class="truck-brand-svg" width="38" height="38" viewBox="0 0 40 40" fill="none">
+            <rect width="40" height="40" rx="10" fill="url(#brandG)" stroke="rgba(56,189,248,0.4)" stroke-width="1.5"/>
+            <!-- Vector Heavy Commercial Cab Silhouette -->
+            <path d="M7 26 L7 16 L22 16 L29 23 L33 24 L33 28 L30 30 L9 30 Z" fill="#ffffff" opacity="0.95"/>
+            <path d="M21 18 L27 23 L21 23 Z" fill="#0284c7"/>
+            <circle cx="12" cy="30" r="3.5" fill="#0f172a" stroke="#ffffff" stroke-width="1.2"/>
+            <circle cx="28" cy="30" r="3.5" fill="#0f172a" stroke="#ffffff" stroke-width="1.2"/>
+            <rect x="31" y="25" width="2" height="3" rx="0.5" fill="#fef08a"/>
+            <defs>
+              <linearGradient id="brandG" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#1e40af"/>
+                <stop offset="1" stop-color="#0284c7"/>
+              </linearGradient>
+            </defs>
+          </svg>
         </div>
         <div>
           <div class="ct-brand-title">
             FleetFlow
-            <span class="ct-brand-badge">GCP AI</span>
+            <span class="ct-brand-badge">FLEET ENGINE</span>
           </div>
-          <div class="ct-brand-sub">Route &amp; 3D Load Control Tower</div>
+          <div class="ct-brand-sub">Commercial Fleet &amp; 3D Load</div>
         </div>
+      </div>
+
+      <!-- Live Commercial Telematics Rail Strip -->
+      <div class="ct-rail-telematics-bar">
+        <span class="status-pulse-dot" style="width:6px;height:6px"></span>
+        <span>12 TRUCKS · NH-48 GPS SYNCED</span>
       </div>
 
       <div class="ct-nav-section-lbl">Workspaces</div>
@@ -1986,15 +2401,15 @@ _UI_HTML = r"""<!DOCTYPE html>
             <div class="lp-hero-bar">
               <div style="display:flex;align-items:center;gap:16px;min-width:0">
                 <div class="orbital-ring-wrap" style="width:52px;height:52px">
-                  <span class="orbital-ring-core" style="font-size:24px">🚀</span>
+                  <span class="orbital-ring-core" style="font-size:24px">🚛</span>
                 </div>
                 <div style="min-width:0">
                   <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-                    <span class="ct-kpi-badge" style="background:var(--accent-primary-soft);color:var(--accent-primary);border-color:rgba(66,133,244,0.4)">LOGISTICS MANAGER LAUNCHPAD</span>
+                    <span class="ct-kpi-badge" style="background:var(--accent-primary-soft);color:var(--accent-primary);border-color:rgba(66,133,244,0.4)">COMMERCIAL FLEET COMMAND</span>
                     <span id="lpActiveHubBadge" style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted);font-weight:800">HUB: BHW-DC (MUMBAI)</span>
                   </div>
                   <h1 class="ct-big-heading" style="font-size:25px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
-                    FleetFlow <span class="google-gradient-text">AI Dispatch &amp; 3D Load</span> Command Center
+                    FleetFlow <span class="google-gradient-text">Commercial Fleet &amp; 3D Load</span> Command Center
                   </h1>
                 </div>
               </div>
@@ -2888,63 +3303,249 @@ _UI_HTML = r"""<!DOCTYPE html>
     </footer>
   </div>
 
-  <!-- High-Tech Animated Google 4-Color Synthesis Modal Overlay -->
+  <!-- High-Tech Animated Commercial Truck Highway & Route Synthesis Modal Overlay -->
   <div id="lpSynthesisModal" class="lp-synthesis-modal">
-    <div class="lp-modal-card google-revolving-box">
-      <div class="google-revolving-inner" style="padding:28px 30px">
-        <div style="display:flex;align-items:center;gap:16px;margin-bottom:8px">
-          <div class="orbital-ring-wrap" style="width:58px;height:58px">
-            <span class="orbital-ring-core" style="font-size:26px">🚀</span>
-          </div>
-          <div style="min-width:0;flex:1">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
-              <span class="ct-kpi-badge" style="font-size:10px;padding:2px 8px;background:var(--accent-primary-soft);color:var(--accent-primary);border-color:rgba(66,133,244,0.4)">AI AGENT RUNNING</span>
-              <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">OR-Tools + 3D Enclave</span>
+    <div class="truck-modal-card">
+      <div class="truck-modal-inner">
+
+        <!-- Top Header & Live Telematics HUD -->
+        <div class="truck-hud-header">
+          <div style="display:flex;align-items:center;gap:14px">
+            <div class="truck-emblem-badge">
+              <span style="font-size:24px">🚛</span>
             </div>
-            <h3 id="lpModalTitle" class="ct-big-heading" style="font-size:20px;margin:0">
-              FleetFlow AI Agent Optimizing Dispatch...
-            </h3>
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
+                <span class="truck-status-pill">● FLEET DISPATCH ENGINE</span>
+                <span class="truck-hud-telemetry-mono" id="lpTruckCorridorTag">NH-48 · 8 CORRIDORS ACTIVE</span>
+              </div>
+              <h3 id="lpModalTitle" class="ct-big-heading" style="font-size:18px;margin:0;letter-spacing:-0.02em">
+                Commercial Fleet Dispatch Optimizer Active
+              </h3>
+            </div>
+          </div>
+          <div class="truck-hud-readout">
+            <div class="truck-hud-metric">
+              <span class="truck-hud-k">SPEED</span>
+              <span class="truck-hud-v" id="lpTruckSpeed">38 <small style="font-size:9px">KM/H</small></span>
+            </div>
+            <div class="truck-hud-metric">
+              <span class="truck-hud-k">ROUTE OD</span>
+              <span class="truck-hud-v" id="lpTruckDist">10 <small style="font-size:9px">%</small></span>
+            </div>
+            <div class="truck-hud-metric">
+              <span class="truck-hud-k">AXLE LOAD</span>
+              <span class="truck-hud-v" id="lpTruckAxle" style="color:var(--accent-emerald)">PASS ✓</span>
+            </div>
           </div>
         </div>
 
-        <div id="lpModalSubtitle" style="font-size:12.5px;color:var(--text-secondary);margin-top:6px">
-          Staging retail store manifest, loading 8-corridor bounds &amp; solving fleet route matrix...
+        <div id="lpModalSubtitle" class="truck-modal-subtitle">
+          Staging retail store manifest, solving corridor ray-clusters &amp; running OR-Tools VRP engine...
         </div>
 
-        <div class="lp-progress-bar-wrap">
-          <div id="lpModalProgressBar" class="lp-progress-bar-fill"></div>
+        <!-- ═══ ANIMATED TRUCK HIGHWAY VIEWPORT ═══ -->
+        <div class="truck-highway-viewport">
+          <!-- Top Yellow Hazard Safety Curb -->
+          <div class="highway-curb top-curb"></div>
+
+          <!-- Road Surface & Dynamic Rushing Highway Markings -->
+          <div class="highway-surface">
+            <div class="highway-lane-line-top"></div>
+            <div class="highway-center-divider"></div>
+            <div class="highway-lane-line-bottom"></div>
+
+            <!-- Road Waypoint Milestone Nodes Embedded on Highway -->
+            <div class="highway-milestone-track">
+              <div class="highway-wp active" id="hwp1" style="left: 10%">
+                <div class="wp-sign">🏭 DC Dock</div>
+                <div class="wp-beacon"></div>
+              </div>
+              <div class="highway-wp" id="hwp2" style="left: 32%">
+                <div class="wp-sign">🧭 Corridors</div>
+                <div class="wp-beacon"></div>
+              </div>
+              <div class="highway-wp" id="hwp3" style="left: 55%">
+                <div class="wp-sign">⚡ OR-Tools VRP</div>
+                <div class="wp-beacon"></div>
+              </div>
+              <div class="highway-wp" id="hwp4" style="left: 78%">
+                <div class="wp-sign">📦 3D LIFO Axle</div>
+                <div class="wp-beacon"></div>
+              </div>
+              <div class="highway-wp" id="hwp5" style="left: 94%">
+                <div class="wp-sign">🏁 Store Drops</div>
+                <div class="wp-beacon"></div>
+              </div>
+            </div>
+
+            <!-- THE ANIMATED VECTOR COMMERCIAL FREIGHT TRUCK (Driving Left to Right) -->
+            <div id="animTruckWrapper" class="anim-truck-wrapper" style="left: 10%">
+              <!-- Forward Projecting Volumetric LED Headlight Beam (Shooting Forward to the Right) -->
+              <div class="truck-headlight-cone"></div>
+
+              <!-- Detailed Commercial Freight Truck SVG -->
+              <svg class="commercial-truck-svg" viewBox="0 0 175 65" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Asphalt Drop Shadow -->
+                <ellipse cx="88" cy="58" rx="80" ry="3.5" fill="rgba(0,0,0,0.6)" filter="blur(1.5px)"/>
+
+                <!-- Truck Body Group with Road Suspension Vibration Physics -->
+                <g class="truck-body-suspension">
+                  <!-- Exhaust Stack behind Tractor Cab with Smoke Puff -->
+                  <rect x="121" y="8" width="4" height="24" rx="1.5" fill="#94a3b8"/>
+                  <rect x="122" y="5" width="2" height="4" rx="1" fill="#cbd5e1"/>
+                  <circle cx="123" cy="3" r="2.5" fill="rgba(203,213,225,0.4)" class="exhaust-smoke-puff"/>
+
+                  <!-- Trailer Body (Corrugated Heavy Commercial Freight Container) -->
+                  <rect x="8" y="10" width="108" height="42" rx="3" fill="#1e293b" stroke="#334155" stroke-width="1.4"/>
+                  <!-- Corrugated steel vertical ribs -->
+                  <line x1="18" y1="12" x2="18" y2="50" stroke="#334155" stroke-width="1"/>
+                  <line x1="28" y1="12" x2="28" y2="50" stroke="#334155" stroke-width="1"/>
+                  <line x1="38" y1="12" x2="38" y2="50" stroke="#334155" stroke-width="1"/>
+                  <line x1="48" y1="12" x2="48" y2="50" stroke="#334155" stroke-width="1"/>
+                  <line x1="58" y1="12" x2="58" y2="50" stroke="#334155" stroke-width="1"/>
+                  <line x1="68" y1="12" x2="68" y2="50" stroke="#334155" stroke-width="1"/>
+                  <line x1="78" y1="12" x2="78" y2="50" stroke="#334155" stroke-width="1"/>
+                  <line x1="88" y1="12" x2="88" y2="50" stroke="#334155" stroke-width="1"/>
+                  <line x1="98" y1="12" x2="98" y2="50" stroke="#334155" stroke-width="1"/>
+                  <line x1="108" y1="12" x2="108" y2="50" stroke="#334155" stroke-width="1"/>
+                  <!-- Fleet Livery Decals (Google 4-Color Stripe) -->
+                  <rect x="8" y="27" width="108" height="5" fill="#4285F4"/>
+                  <rect x="8" y="32" width="108" height="2" fill="#FBBC05"/>
+                  <text x="32" y="23" fill="#f8fafc" font-family="system-ui, -apple-system, sans-serif" font-size="7.5" font-weight="900" letter-spacing="0.5">FLEETFLOW</text>
+                  <text x="32" y="42" fill="#94a3b8" font-family="monospace" font-size="4.8" font-weight="700">3D LIFO SMART FREIGHT</text>
+                  <!-- Rear Roll-up Door & Safety Warning Tape -->
+                  <rect x="8" y="10" width="3" height="42" fill="#ea4335"/>
+                  <line x1="9.5" y1="12" x2="9.5" y2="50" stroke="#ffffff" stroke-width="0.8" stroke-dasharray="2 2"/>
+                  <circle cx="10" cy="48" r="1.5" fill="#ef4444"/>
+                  <!-- Mud flaps -->
+                  <rect x="20" y="49" width="3" height="8" rx="0.5" fill="#0f172a"/>
+
+                  <!-- Fifth Wheel Hitch Connector -->
+                  <rect x="114" y="38" width="8" height="12" fill="#0f172a"/>
+
+                  <!-- Heavy Tractor Cab (Facing Right) -->
+                  <path d="M118 52 L118 12 L142 12 L154 26 L164 28 L164 49 L158 52 Z" fill="#2563eb" stroke="#1d4ed8" stroke-width="1.2"/>
+                  <!-- Aerodynamic Roof Air Deflector Fairing -->
+                  <path d="M120 12 L140 12 L144 7 L120 7 Z" fill="#1d4ed8"/>
+                  <rect x="128" y="5" width="8" height="2.5" rx="1" fill="#f59e0b" class="roof-strobe-beacon"/>
+                  <!-- Tinted Windshield Glass -->
+                  <path d="M136 15 L144 15 L152 26 L136 26 Z" fill="#38bdf8" opacity="0.85"/>
+                  <!-- Windshield Sun Glint -->
+                  <path d="M138 16 L143 16 L147 23 L142 23 Z" fill="#ffffff" opacity="0.6"/>
+                  <!-- Driver Silhouette Inside Cab -->
+                  <circle cx="140" cy="21" r="2.8" fill="#0f172a" opacity="0.8"/>
+                  <!-- Side Door Window -->
+                  <rect x="124" y="16" width="9" height="10" rx="1" fill="#38bdf8" opacity="0.85"/>
+                  <!-- Chrome Front Radiator Grille -->
+                  <rect x="160" y="29" width="4.5" height="18" rx="1" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.8"/>
+                  <line x1="161" y1="32" x2="164" y2="32" stroke="#475569" stroke-width="0.8"/>
+                  <line x1="161" y1="36" x2="164" y2="36" stroke="#475569" stroke-width="0.8"/>
+                  <line x1="161" y1="40" x2="164" y2="40" stroke="#475569" stroke-width="0.8"/>
+                  <line x1="161" y1="44" x2="164" y2="44" stroke="#475569" stroke-width="0.8"/>
+                  <!-- Heavy Front Steel Bumper -->
+                  <rect x="158" y="47" width="9" height="6" rx="2" fill="#64748b"/>
+                  <!-- Dual Front LED Headlights (Glowing) -->
+                  <rect x="162" y="39" width="3" height="6" rx="1.5" fill="#fef08a"/>
+                  <!-- Amber Turn Indicator -->
+                  <circle cx="157" cy="46" r="1.5" fill="#f59e0b"/>
+                  <!-- Diesel Tank with Aluminum Steps -->
+                  <rect x="74" y="44" width="36" height="8" rx="3" fill="#64748b" stroke="#475569" stroke-width="0.8"/>
+                  <line x1="78" y1="46" x2="106" y2="46" stroke="#94a3b8" stroke-width="0.7"/>
+                  <line x1="78" y1="49" x2="106" y2="49" stroke="#94a3b8" stroke-width="0.7"/>
+                </g>
+
+                <!-- WHEELS (Dynamic Rotating Spokes with wheelRoll keyframes) -->
+                <!-- Tandem Axle 1 (Rear Trailer) -->
+                <g class="truck-wheel" transform="translate(32, 53)">
+                  <circle cx="0" cy="0" r="7.5" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+                  <circle cx="0" cy="0" r="4.2" fill="#cbd5e1"/>
+                  <circle cx="0" cy="0" r="1.8" fill="#475569"/>
+                  <line x1="-3.5" y1="0" x2="3.5" y2="0" stroke="#64748b" stroke-width="1"/>
+                  <line x1="0" y1="-3.5" x2="0" y2="3.5" stroke="#64748b" stroke-width="1"/>
+                </g>
+
+                <!-- Tandem Axle 2 (Rear Trailer) -->
+                <g class="truck-wheel" transform="translate(50, 53)">
+                  <circle cx="0" cy="0" r="7.5" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+                  <circle cx="0" cy="0" r="4.2" fill="#cbd5e1"/>
+                  <circle cx="0" cy="0" r="1.8" fill="#475569"/>
+                  <line x1="-3.5" y1="0" x2="3.5" y2="0" stroke="#64748b" stroke-width="1"/>
+                  <line x1="0" y1="-3.5" x2="0" y2="3.5" stroke="#64748b" stroke-width="1"/>
+                </g>
+
+                <!-- Steer Axle (Front Tractor) -->
+                <g class="truck-wheel" transform="translate(146, 53)">
+                  <circle cx="0" cy="0" r="7.5" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+                  <circle cx="0" cy="0" r="4.2" fill="#cbd5e1"/>
+                  <circle cx="0" cy="0" r="1.8" fill="#475569"/>
+                  <line x1="-3.5" y1="0" x2="3.5" y2="0" stroke="#64748b" stroke-width="1"/>
+                  <line x1="0" y1="-3.5" x2="0" y2="3.5" stroke="#64748b" stroke-width="1"/>
+                </g>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Bottom Yellow Hazard Safety Curb -->
+          <div class="highway-curb bottom-curb"></div>
         </div>
 
-        <div class="lp-modal-step-list">
-          <div class="lp-modal-step" id="lpMStep1">
-            <span id="lpMStep1Txt">1. Hub &amp; Retail Order Manifest Intake</span>
-            <span class="lp-mstep-badge" id="lpMStep1Badge">⏳ Active</span>
+        <!-- 5 Optimization Route Milestones Strip -->
+        <div class="truck-milestone-grid">
+          <div class="truck-mcard active" id="lpMStep1">
+            <div class="tm-icon">🏭</div>
+            <div class="tm-info">
+              <div class="tm-name">1. Manifest Inflow</div>
+              <div class="tm-sub">Store Orders &amp; SKUs</div>
+            </div>
+            <span class="tm-badge" id="lpMStep1Badge">Active</span>
           </div>
-          <div class="lp-modal-step" id="lpMStep2">
-            <span id="lpMStep2Txt">2. Compass Ray-Clustering &amp; Trunk-Branch Splitting</span>
-            <span class="lp-mstep-badge" id="lpMStep2Badge">Queued</span>
+          <div class="truck-mcard" id="lpMStep2">
+            <div class="tm-icon">🧭</div>
+            <div class="tm-info">
+              <div class="tm-name">2. Ray-Clusters</div>
+              <div class="tm-sub">Corridor Geo-Split</div>
+            </div>
+            <span class="tm-badge" id="lpMStep2Badge">Queued</span>
           </div>
-          <div class="lp-modal-step" id="lpMStep3">
-            <span id="lpMStep3Txt">3. Google OR-Tools Multi-Capacity MIP Solver</span>
-            <span class="lp-mstep-badge" id="lpMStep3Badge">Queued</span>
+          <div class="truck-mcard" id="lpMStep3">
+            <div class="tm-icon">⚡</div>
+            <div class="tm-info">
+              <div class="tm-name">3. OR-Tools MIP</div>
+              <div class="tm-sub">Multi-Truck Fleet VRP</div>
+            </div>
+            <span class="tm-badge" id="lpMStep3Badge">Queued</span>
           </div>
-          <div class="lp-modal-step" id="lpMStep4">
-            <span id="lpMStep4Txt">4. 3D LIFO Reverse-Drop Spatial Packing &amp; Axle Balance</span>
-            <span class="lp-mstep-badge" id="lpMStep4Badge">Queued</span>
+          <div class="truck-mcard" id="lpMStep4">
+            <div class="tm-icon">📦</div>
+            <div class="tm-info">
+              <div class="tm-name">4. 3D LIFO Spatial</div>
+              <div class="tm-sub">CMVR Axle &amp; Packing</div>
+            </div>
+            <span class="tm-badge" id="lpMStep4Badge">Queued</span>
           </div>
-          <div class="lp-modal-step" id="lpMStep5">
-            <span id="lpMStep5Txt">5. Google Maps Routes Highway Geometry &amp; Turn-by-Turn</span>
-            <span class="lp-mstep-badge" id="lpMStep5Badge">Queued</span>
+          <div class="truck-mcard" id="lpMStep5">
+            <div class="tm-icon">🏁</div>
+            <div class="tm-info">
+              <div class="tm-name">5. Store Drops</div>
+              <div class="tm-sub">Maps Navigation &amp; Turn</div>
+            </div>
+            <span class="tm-badge" id="lpMStep5Badge">Queued</span>
           </div>
         </div>
 
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:14px;border-top:1px solid var(--border-subtle);font-size:11px;color:var(--text-muted)">
-          <span style="display:flex;align-items:center;gap:6px">
-            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#34A853;box-shadow:0 0 8px #34A853"></span>
-            Zero-Hallucination Math Enclave Active
-          </span>
-          <span id="lpModalTimer">Elapsed: 0.0s</span>
+        <!-- Bottom Telemetry Status Bar -->
+        <div class="truck-footer-bar">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="status-pulse-dot"></span>
+            <span style="font-weight:700;color:var(--text-main)">Commercial Fleet Enclave:</span>
+            <span style="color:var(--text-secondary)">Deterministic Zero-Hallucination Route Math</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <span id="lpModalTimer" style="font-family:var(--font-mono);font-weight:700;color:var(--accent-primary)">Elapsed: 0.0s</span>
+          </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -3238,25 +3839,25 @@ function updateStagedKpiStrip() {
   const totalTrucks = Object.values(CT.fleetCounts).reduce((a, b) => a + b, 0);
   const activeCorrCount = CT.selectedCorridors.length;
 
-  document.getElementById('kpiLbl1').textContent = 'Selected Hub';
+  document.getElementById('kpiLbl1').textContent = 'Commercial Hub & DC';
   document.getElementById('kpiTrucks').textContent = hc.hub.name;
-  document.getElementById('kpiTrucksSub').textContent = `${hc.city_name} · ${hc.hub.hub_id}`;
+  document.getElementById('kpiTrucksSub').textContent = `Bay Doors 01-08 Active · ${hc.city_name}`;
   document.getElementById('kpiTrucksBadge').textContent = 'STAGED';
 
-  document.getElementById('kpiLbl2').textContent = 'Staged Order Manifest';
-  document.getElementById('kpiSavings').textContent = `${hc.total_stops} Retail Outlets`;
-  document.getElementById('kpiCostCompare').textContent = `${hc.total_cartons.toLocaleString('en-IN')} cartons · ${hc.total_volume_m3} m³ (${activeCorrCount}/8)`;
-  document.getElementById('kpiSavingsPct').textContent = CT.activeOrderSource === 'chat' ? 'Excel / CSV' : 'BigQuery Book';
+  document.getElementById('kpiLbl2').textContent = 'Commercial Order Manifest';
+  document.getElementById('kpiSavings').textContent = `${hc.total_stops} Retail Drops`;
+  document.getElementById('kpiCostCompare').textContent = `${hc.total_cartons.toLocaleString('en-IN')} cartons · ${hc.total_volume_m3} m³ (${activeCorrCount}/8 corridors)`;
+  document.getElementById('kpiSavingsPct').textContent = CT.activeOrderSource === 'chat' ? 'Excel / CSV' : 'BigQuery Live';
 
-  document.getElementById('kpiLbl3').textContent = 'Hub Fleet & Roster';
+  document.getElementById('kpiLbl3').textContent = 'Commercial Fleet & Roster';
   document.getElementById('kpiStopsVal').textContent = `${totalTrucks} Trucks · ${hc.drivers.length} Drivers`;
-  document.getElementById('kpiStopsSub').textContent = `Roster: ${hc.drivers.slice(0, 3).map(d => d.name).join(', ')}...`;
+  document.getElementById('kpiStopsSub').textContent = `100% CMVR Rule 93 Axle Compliance`;
 
-  document.getElementById('kpiLbl4').textContent = 'Manager Rules & Status';
+  document.getElementById('kpiLbl4').textContent = 'Fleet Dispatch Rules';
   document.getElementById('kpiDistanceVal').textContent = CT.driverRules.length
-    ? `${CT.driverRules.length} Driver Rule${CT.driverRules.length > 1 ? 's' : ''} Active`
-    : 'Auto Solver Mode';
-  document.getElementById('kpiDistanceSub').textContent = `Click 'Synthesize & Run Agent'`;
+    ? `${CT.driverRules.length} Driver Claim${CT.driverRules.length > 1 ? 's' : ''} Active`
+    : 'All 8 Corridors Auto-MIP';
+  document.getElementById('kpiDistanceSub').textContent = `4.2 km/L Diesel Target · ₹92/L`;
   document.getElementById('kpiDistanceBadge').textContent = 'Awaiting Run';
 }
 
@@ -3447,24 +4048,51 @@ function applyLaunchpadPreset(presetName) {
   if (!CT.bundle) updateStagedKpiStrip();
 }
 
+function getTruckAxleInfo(code) {
+  switch (code) {
+    case 'ACE':
+      return { icon: '🚐', axle: '[O==O]', class: 'Mini 7ft (Tata Ace)', gvw: '1.5T GVW', wheels: '4 Wheeler' };
+    case 'PKP':
+      return { icon: '🛻', axle: '[O===O]', class: 'Pickup 8.5ft (Bolero)', gvw: '2.8T GVW', wheels: '4 Wheeler' };
+    case 'T14':
+      return { icon: '🚚', axle: '[O====O]', class: 'LCV 14ft (Eicher Pro)', gvw: '6.2T GVW', wheels: '4 Wheeler' };
+    case 'T17':
+      return { icon: '🚚', axle: '[O====OO]', class: 'ICV 17ft (Tata 1109)', gvw: '11.9T GVW', wheels: '6 Wheeler' };
+    case 'T20':
+      return { icon: '🚛', axle: '[O--O====OO]', class: '20ft Container (1512)', gvw: '16.2T GVW', wheels: '10 Wheeler' };
+    default:
+      return { icon: '🚛', axle: '[O====O]', class: code, gvw: 'Commercial', wheels: 'Multi-Axle' };
+  }
+}
+
 function renderLaunchpadFleetPool() {
   const grid = document.getElementById('lpFleetPoolGrid');
   if (!grid || !CT.meta) return;
   const total = Object.values(CT.fleetCounts).reduce((a, b) => a + b, 0);
   const lbl = document.getElementById('lpTotalFleetPoolLbl');
-  if (lbl) lbl.textContent = `${total} Trucks Available`;
+  if (lbl) lbl.textContent = `${total} Commercial Trucks Available`;
 
-  grid.innerHTML = CT.meta.truck_types.map(t => `
-    <div style="padding:10px 8px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-top:3px solid ${t.color};border-radius:10px;text-align:center">
-      <div style="font-weight:800;font-size:12px">${t.code}</div>
-      <div style="font-size:10px;color:var(--text-muted)">${t.volume_m3}m³ · ${(t.payload_kg/1000).toFixed(1)}t</div>
-      <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:6px">
-        <button class="ct-btn-secondary" style="height:26px;width:26px;padding:0;font-size:12px" onclick="stepFleetCount('${t.code}', -1)">-</button>
-        <span id="lpFleetCnt-${t.code}" style="font-family:var(--font-mono);font-weight:800;font-size:12.5px;min-width:18px">${CT.fleetCounts[t.code] ?? 2}</span>
-        <button class="ct-btn-secondary" style="height:26px;width:26px;padding:0;font-size:12px" onclick="stepFleetCount('${t.code}', 1)">+</button>
+  grid.innerHTML = CT.meta.truck_types.map(t => {
+    const ax = getTruckAxleInfo(t.code);
+    return `
+      <div style="padding:10px 8px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-top:3px solid ${t.color};border-radius:12px;text-align:center;display:flex;flex-direction:column;justify-content:space-between">
+        <div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:4px">
+            <span style="font-size:15px">${ax.icon}</span>
+            <span style="font-weight:800;font-size:12px">${t.code}</span>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:9.5px;font-weight:800;color:var(--accent-primary);margin:2px 0 1px">${ax.axle}</div>
+          <div style="font-size:10px;font-weight:700;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${ax.class}</div>
+          <div style="font-size:9.5px;color:var(--text-muted);margin-top:1px">${t.volume_m3}m³ · ${(t.payload_kg/1000).toFixed(1)}t · ${ax.wheels}</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px">
+          <button class="ct-btn-secondary" style="height:26px;width:26px;padding:0;font-size:12px" onclick="stepFleetCount('${t.code}', -1)">-</button>
+          <span id="lpFleetCnt-${t.code}" style="font-family:var(--font-mono);font-weight:800;font-size:12.5px;min-width:18px">${CT.fleetCounts[t.code] ?? 2}</span>
+          <button class="ct-btn-secondary" style="height:26px;width:26px;padding:0;font-size:12px" onclick="stepFleetCount('${t.code}', 1)">+</button>
+        </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 function uploadLaunchpadSpreadsheet(inputEl) {
@@ -3546,13 +4174,18 @@ async function synthesizeFromLaunchpad(switchAfter = true) {
   const modal = document.getElementById('lpSynthesisModal');
   const modalTitle = document.getElementById('lpModalTitle');
   const modalSub = document.getElementById('lpModalSubtitle');
-  const barFill = document.getElementById('lpModalProgressBar');
   const timerLbl = document.getElementById('lpModalTimer');
+
+  const truckWrapper = document.getElementById('animTruckWrapper');
+  const speedVal = document.getElementById('lpTruckSpeed');
+  const distVal = document.getElementById('lpTruckDist');
+  const axleVal = document.getElementById('lpTruckAxle');
+  const corridorTag = document.getElementById('lpTruckCorridorTag');
 
   const heroBtn = document.getElementById('btnHeroSynthesize');
   const botBtn = document.getElementById('btnBottomSynthesize');
-  if (heroBtn) heroBtn.innerHTML = '<span>⏳</span> FleetFlow Agent Running...';
-  if (botBtn) botBtn.innerHTML = '<span>⏳</span> FleetFlow Agent Running...';
+  if (heroBtn) heroBtn.innerHTML = '<span>⏳</span> Commercial Fleet Agent Running...';
+  if (botBtn) botBtn.innerHTML = '<span>⏳</span> Commercial Fleet Agent Running...';
 
   const tStart = Date.now();
   let timerInterval = null;
@@ -3561,26 +4194,38 @@ async function synthesizeFromLaunchpad(switchAfter = true) {
     modal.style.display = 'flex';
     modal.style.opacity = '1';
     if (modalTitle) {
-      modalTitle.innerHTML = 'FleetFlow AI Agent Optimizing Dispatch...';
+      modalTitle.innerHTML = 'Commercial Fleet Dispatch Optimizer Active';
       modalTitle.style.color = 'var(--text-main)';
     }
     const hc = CT.hubContext;
     if (modalSub && hc) {
       modalSub.textContent = `Staging ${hc.total_stops} retail outlets for ${hc.hub.name} across ${CT.selectedCorridors.length} sectors...`;
     }
-    if (barFill) barFill.style.width = '18%';
+    if (corridorTag && hc) {
+      corridorTag.textContent = `${hc.hub.code || 'BHW-DC'} · ${CT.selectedCorridors.length || 8} CORRIDORS ACTIVE`;
+    }
 
-    // Reset steps
+    // Reset truck position to DC Dock
+    if (truckWrapper) truckWrapper.style.left = '10%';
+    if (speedVal) speedVal.innerHTML = '38 <small style="font-size:9px">KM/H</small>';
+    if (distVal) distVal.innerHTML = '10 <small style="font-size:9px">%</small>';
+    if (axleVal) { axleVal.textContent = 'PASS ✓'; axleVal.style.color = 'var(--accent-emerald)'; }
+
+    // Reset waypoints and milestone cards
     for (let i = 1; i <= 5; i++) {
       const el = document.getElementById(`lpMStep${i}`);
       const b = document.getElementById(`lpMStep${i}Badge`);
-      if (el) el.className = 'lp-modal-step';
+      const wp = document.getElementById(`hwp${i}`);
+      if (el) el.className = 'truck-mcard';
       if (b) b.textContent = 'Queued';
+      if (wp) wp.className = 'highway-wp';
     }
     const s1 = document.getElementById('lpMStep1');
     const b1 = document.getElementById('lpMStep1Badge');
-    if (s1) s1.className = 'lp-modal-step active';
-    if (b1) b1.textContent = '⏳ Active';
+    const wp1 = document.getElementById('hwp1');
+    if (s1) s1.className = 'truck-mcard active';
+    if (b1) b1.textContent = 'Active';
+    if (wp1) wp1.className = 'highway-wp active';
 
     timerInterval = setInterval(() => {
       const sec = ((Date.now() - tStart) / 1000).toFixed(1);
@@ -3588,26 +4233,42 @@ async function synthesizeFromLaunchpad(switchAfter = true) {
     }, 100);
   }
 
-  // Animate stages smoothly while request is in flight
+  // Smooth intermediate stage transitions while solver request runs in background
   setTimeout(() => {
     const s1 = document.getElementById('lpMStep1');
     const b1 = document.getElementById('lpMStep1Badge');
     const s2 = document.getElementById('lpMStep2');
     const b2 = document.getElementById('lpMStep2Badge');
-    if (s1) { s1.className = 'lp-modal-step done'; if (b1) b1.textContent = '✓ Done'; }
-    if (s2) { s2.className = 'lp-modal-step active'; if (b2) b2.textContent = '⏳ Active'; }
-    if (barFill) barFill.style.width = '38%';
-  }, 220);
+    const wp1 = document.getElementById('hwp1');
+    const wp2 = document.getElementById('hwp2');
+
+    if (wp1) wp1.className = 'highway-wp done';
+    if (wp2) wp2.className = 'highway-wp active';
+    if (s1) { s1.className = 'truck-mcard done'; if (b1) b1.textContent = '✓ Done'; }
+    if (s2) { s2.className = 'truck-mcard active'; if (b2) b2.textContent = 'Active'; }
+
+    if (truckWrapper) truckWrapper.style.left = '32%';
+    if (speedVal) speedVal.innerHTML = '58 <small style="font-size:9px">KM/H</small>';
+    if (distVal) distVal.innerHTML = '32 <small style="font-size:9px">%</small>';
+  }, 260);
 
   setTimeout(() => {
     const s2 = document.getElementById('lpMStep2');
     const b2 = document.getElementById('lpMStep2Badge');
     const s3 = document.getElementById('lpMStep3');
     const b3 = document.getElementById('lpMStep3Badge');
-    if (s2) { s2.className = 'lp-modal-step done'; if (b2) b2.textContent = '✓ Done'; }
-    if (s3) { s3.className = 'lp-modal-step active'; if (b3) b3.textContent = '⚡ Solving'; }
-    if (barFill) barFill.style.width = '64%';
-  }, 480);
+    const wp2 = document.getElementById('hwp2');
+    const wp3 = document.getElementById('hwp3');
+
+    if (wp2) wp2.className = 'highway-wp done';
+    if (wp3) wp3.className = 'highway-wp active';
+    if (s2) { s2.className = 'truck-mcard done'; if (b2) b2.textContent = '✓ Done'; }
+    if (s3) { s3.className = 'truck-mcard active'; if (b3) b3.textContent = '⚡ Solving'; }
+
+    if (truckWrapper) truckWrapper.style.left = '55%';
+    if (speedVal) speedVal.innerHTML = '74 <small style="font-size:9px">KM/H</small>';
+    if (distVal) distVal.innerHTML = '55 <small style="font-size:9px">%</small>';
+  }, 520);
 
   const hubId = CT.activeHubId || 'BHW-DC';
   const objective = document.getElementById('lpSelObjective')?.value || 'lowest_cost';
@@ -3645,21 +4306,46 @@ async function synthesizeFromLaunchpad(switchAfter = true) {
     });
     const bundle = await res.json();
 
-    // Mark stages 3, 4, 5 as Done
+    // Stage 4: 3D LIFO Spatial Loading & Axle Balance
+    const s3 = document.getElementById('lpMStep3');
+    const b3 = document.getElementById('lpMStep3Badge');
+    const s4 = document.getElementById('lpMStep4');
+    const b4 = document.getElementById('lpMStep4Badge');
+    const wp3 = document.getElementById('hwp3');
+    const wp4 = document.getElementById('hwp4');
+
+    if (wp3) wp3.className = 'highway-wp done';
+    if (wp4) wp4.className = 'highway-wp active';
+    if (s3) { s3.className = 'truck-mcard done'; if (b3) b3.textContent = '✓ Done'; }
+    if (s4) { s4.className = 'truck-mcard active'; if (b4) b4.textContent = '⚡ Packing'; }
+
+    if (truckWrapper) truckWrapper.style.left = '78%';
+    if (speedVal) speedVal.innerHTML = '62 <small style="font-size:9px">KM/H</small>';
+    if (distVal) distVal.innerHTML = '78 <small style="font-size:9px">%</small>';
+    if (axleVal) { axleVal.textContent = '38%F/62%R ✓'; }
+
+    await new Promise(r => setTimeout(r, 380));
+
+    // Stage 5: Store Drops & Final Route Optimization Complete
     for (let i = 1; i <= 5; i++) {
       const el = document.getElementById(`lpMStep${i}`);
       const b = document.getElementById(`lpMStep${i}Badge`);
-      if (el) el.className = 'lp-modal-step done';
+      const wp = document.getElementById(`hwp${i}`);
+      if (el) el.className = 'truck-mcard done';
       if (b) b.textContent = '✓ Done';
+      if (wp) wp.className = 'highway-wp done';
     }
-    if (barFill) barFill.style.width = '100%';
+
+    if (truckWrapper) truckWrapper.style.left = '94%';
+    if (speedVal) speedVal.innerHTML = '0 <small style="font-size:9px">ARRIVED</small>';
+    if (distVal) distVal.innerHTML = '100 <small style="font-size:9px">%</small>';
 
     if (modalTitle) {
-      modalTitle.innerHTML = '✓ Dispatch Plan Optimized!';
+      modalTitle.innerHTML = '✓ Commercial Dispatch Plan Certified &amp; Dispatched!';
       modalTitle.style.color = 'var(--accent-emerald)';
     }
     if (modalSub) {
-      modalSub.innerHTML = `Dispatched <b>${bundle.kpi.optimized_trucks} trucks</b> for <b>${bundle.hub.name}</b> — saving <b>₹${bundle.kpi.savings_inr.toLocaleString('en-IN')}/day (-${bundle.kpi.savings_pct}%)</b>. Transitioning to live route map...`;
+      modalSub.innerHTML = `Dispatched <b>${bundle.kpi.optimized_trucks} commercial trucks</b> for <b>${bundle.hub.name}</b> — saving <b>₹${bundle.kpi.savings_inr.toLocaleString('en-IN')}/day (-${bundle.kpi.savings_pct}%)</b>. Transitioning to live route map...`;
     }
 
     applyBundle(bundle);
@@ -3667,8 +4353,8 @@ async function synthesizeFromLaunchpad(switchAfter = true) {
       CT.hubContext = bundle.hub_context;
     }
 
-    // Brief beat to display success confirmation before scrolling into the map page
-    await new Promise(r => setTimeout(r, 480));
+    // Brief beat for user to appreciate the truck arriving at destination waypoint
+    await new Promise(r => setTimeout(r, 620));
 
     if (modal) {
       modal.style.transition = 'opacity 0.28s ease, transform 0.28s ease';
@@ -3684,7 +4370,7 @@ async function synthesizeFromLaunchpad(switchAfter = true) {
       const noteMsg = (bundle.notes && bundle.notes.length)
         ? `<br><span style="font-size:11.5px;color:var(--text-secondary)">📌 ${bundle.notes[0]}</span>`
         : '';
-      showToast(`🚀 <b>Agent Synthesis Complete (${bundle.plan_id}):</b> Dispatched <b>${bundle.kpi.optimized_trucks} trucks</b> for <b>${bundle.hub.name}</b> — saving <b>₹${bundle.kpi.savings_inr.toLocaleString('en-IN')}/day (-${bundle.kpi.savings_pct}%)</b>!${noteMsg}`, 6800);
+      showToast(`🚛 <b>FleetFlow Commercial Dispatch Complete (${bundle.plan_id}):</b> Dispatched <b>${bundle.kpi.optimized_trucks} commercial trucks</b> for <b>${bundle.hub.name}</b> — saving <b>₹${bundle.kpi.savings_inr.toLocaleString('en-IN')}/day (-${bundle.kpi.savings_pct}%)</b>!${noteMsg}`, 6800);
     }
   } catch (err) {
     if (modal) modal.style.display = 'none';
@@ -3985,11 +4671,17 @@ async function runStudioRepack() {
 function renderFleetControls() {
   const c = document.getElementById('fleetControlsContainer');
   if (!CT.meta || !c) return;
-  c.innerHTML = CT.meta.truck_types.map(t => `
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--bg-card);border:1px solid var(--border-subtle);border-left:4px solid ${t.color};border-radius:10px">
+  c.innerHTML = CT.meta.truck_types.map(t => {
+    const ax = getTruckAxleInfo(t.code);
+    return `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--bg-card);border:1px solid var(--border-subtle);border-left:4px solid ${t.color};border-radius:10px">
       <div>
-        <div style="font-weight:800;font-size:12.5px">${t.code} · ${t.name}</div>
-        <div style="font-size:11px;color:var(--text-muted)">${t.volume_m3} m³ · ${t.payload_kg} kg · ₹${t.fixed_daily_cost_inr}/day + ₹${t.cost_per_km_inr}/km</div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span style="font-size:16px">${ax.icon}</span>
+          <span style="font-weight:800;font-size:12.5px">${t.code} · ${t.name}</span>
+          <span style="font-family:var(--font-mono);font-size:10px;font-weight:800;color:var(--accent-primary);background:var(--bg-elevated);padding:1px 6px;border-radius:4px;border:1px solid var(--border-subtle)">${ax.axle}</span>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:3px">${t.volume_m3} m³ · ${(t.payload_kg/1000).toFixed(1)}t payload · ${ax.gvw} · ₹${t.fixed_daily_cost_inr}/day + ₹${t.cost_per_km_inr}/km</div>
       </div>
       <div style="display:flex;align-items:center;gap:6px">
         <button class="ct-btn-secondary" style="padding:3px 9px" onclick="stepFleetCount('${t.code}', -1)">-</button>
@@ -3997,7 +4689,8 @@ function renderFleetControls() {
         <button class="ct-btn-secondary" style="padding:3px 9px" onclick="stepFleetCount('${t.code}', 1)">+</button>
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 
 function stepFleetCount(code, delta) {
