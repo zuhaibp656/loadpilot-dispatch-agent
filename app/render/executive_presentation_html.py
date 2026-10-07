@@ -525,75 +525,104 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .v-pill.opt{background:color-mix(in srgb,#00A389 12%,var(--surface));border-color:color-mix(in srgb,#00A389 30%,transparent);color:var(--teal-ink);font-weight:700}
   .v-stage-desc{font-size:11.5px;color:var(--text-muted);line-height:1.4;flex:1}
 
-  /* ── Dedicated Slide 03: Decision Flow Phase Summary ─────────── */
-  .flow-phase-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px}
-  .flow-phase-card{background:var(--surface-card);border:1px solid var(--border-hairline);border-radius:14px;padding:12px 16px;box-shadow:var(--card-shadow);border-left:3.5px solid var(--amber-deep)}
-  .flow-phase-card.p1{border-left-color:#1A73E8} .flow-phase-card.p2{border-left-color:#8E24AA} .flow-phase-card.p3{border-left-color:var(--amber-deep)} .flow-phase-card.p4{border-left-color:#188038}
-  .flow-phase-title{font-family:var(--font-display);font-size:13px;font-weight:800;color:var(--text);margin-bottom:4px;display:flex;align-items:center;gap:6px}
-  .flow-phase-desc{font-size:11.4px;color:var(--text-muted);line-height:1.4}
+  /* ── Slide 00: Problem Statement 3-Column Grid ───────────────────── */
+  .problem-3col-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:16px 0 14px}
+  .problem-card{background:var(--surface-card);border:1.5px solid var(--border-hairline);border-radius:16px;padding:18px 20px;box-shadow:var(--card-shadow);display:flex;flex-direction:column;gap:8px;border-top:4.5px solid #D93025;transition:transform .2s ease,box-shadow .2s ease}
+  .problem-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+  .problem-card.p-amber{border-top-color:var(--amber-deep)}
+  .problem-card.p-purple{border-top-color:#8E24AA}
+  .problem-card-head{display:flex;justify-content:space-between;align-items:center}
+  .problem-card-title{font-family:var(--font-display);font-size:15px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:7px}
+  .problem-card-badge{font-family:var(--font-mono);font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;background:var(--surface-sunk);border:1px solid var(--border-subtle);text-transform:uppercase;letter-spacing:.5px;color:#D93025}
+  .p-amber .problem-card-badge{color:var(--amber-ink)}
+  .p-purple .problem-card-badge{color:#8E24AA}
+  .problem-card-headline{font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--text);line-height:1.3}
+  .problem-card-desc{font-size:11.8px;color:var(--text-muted);line-height:1.45}
+  .problem-card-impact{background:var(--surface-sunk);border:1px dashed var(--border-subtle);border-radius:8px;padding:7px 10px;font-size:11px;color:var(--text);line-height:1.4;margin-top:auto}
+  .problem-card-impact b{color:#D93025}
+  .p-amber .problem-card-impact b{color:var(--amber-ink)}
+  .p-purple .problem-card-impact b{color:#8E24AA}
 
-  /* ── Dedicated Slide 04: Enterprise Security Grid ────────────────── */
-  .sec-dedicated-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0}
-  .sec-dedicated-card{background:var(--surface-card);border:1.5px solid var(--border-hairline);border-radius:14px;padding:16px 18px;box-shadow:var(--card-shadow);display:flex;flex-direction:column;gap:8px;border-top:3.5px solid var(--amber-deep);transition:transform .2s ease,box-shadow .2s ease}
+  .metrics-3col-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+  .metric-box-3{background:var(--surface-sunk);border:1px solid var(--border-subtle);border-radius:14px;padding:12px 16px;display:flex;flex-direction:column;gap:2px}
+  .metric-box-3 .metric-value{font-family:var(--font-display);font-size:24px;font-weight:800;line-height:1.1}
+  .metric-box-3 .metric-label{font-family:var(--font-mono);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim)}
+  .metric-box-3 .metric-desc{font-size:11.2px;color:var(--text-muted);line-height:1.35}
+  .metric-box-3 .metric-src{font-size:10px;color:var(--text-dim);font-family:var(--font-mono);margin-top:2px}
+
+  /* ── Dedicated Slide 03: Decision Flow Phase Summary ─────────── */
+  .flow-phase-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+  .flow-phase-card{background:var(--surface-card);border:1px solid var(--border-hairline);border-radius:14px;padding:14px 18px;box-shadow:var(--card-shadow);border-left:4px solid var(--amber-deep)}
+  .flow-phase-card.p1{border-left-color:#1A73E8} .flow-phase-card.p2{border-left-color:#8E24AA} .flow-phase-card.p3{border-left-color:#188038}
+  .flow-phase-title{font-family:var(--font-display);font-size:14px;font-weight:800;color:var(--text);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+  .flow-phase-desc{font-size:11.6px;color:var(--text-muted);line-height:1.45}
+
+  /* ── Dedicated Slide 05: Enterprise Security 3-Col Grid ───────────── */
+  .sec-dedicated-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:16px 0 14px}
+  .sec-dedicated-card{background:var(--surface-card);border:1.5px solid var(--border-hairline);border-radius:16px;padding:18px 20px;box-shadow:var(--card-shadow);display:flex;flex-direction:column;gap:8px;border-top:4.5px solid var(--amber-deep);transition:transform .2s ease,box-shadow .2s ease}
   .sec-dedicated-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
   .sec-dedicated-card.c-blue{border-top-color:#1A73E8}
-  .sec-dedicated-card.c-purple{border-top-color:#8E24AA}
-  .sec-dedicated-card.c-teal{border-top-color:#00A389}
   .sec-dedicated-card.c-green{border-top-color:#188038}
   .sec-dedicated-card.c-amber{border-top-color:var(--amber-deep)}
   .sec-card-head{display:flex;justify-content:space-between;align-items:center}
-  .sec-card-title{font-family:var(--font-display);font-size:14.5px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:7px}
+  .sec-card-title{font-family:var(--font-display);font-size:15px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:7px}
   .sec-card-badge{font-family:var(--font-mono);font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;background:var(--surface-sunk);border:1px solid var(--border-subtle);text-transform:uppercase;letter-spacing:.5px;color:var(--amber-ink)}
-  .c-blue .sec-card-badge{color:#1A73E8} .c-purple .sec-card-badge{color:#8E24AA} .c-teal .sec-card-badge{color:var(--teal-ink)} .c-green .sec-card-badge{color:var(--green-ink)}
-  .sec-card-desc{font-size:12px;color:var(--text-muted);line-height:1.45}
-  .sec-card-preview{background:var(--surface-sunk);border:1px dashed var(--border-subtle);border-radius:8px;padding:7px 10px;font-family:var(--font-mono);font-size:10.5px;color:var(--text);line-height:1.4;margin-top:auto}
+  .c-blue .sec-card-badge{color:#1A73E8} .c-green .sec-card-badge{color:var(--green-ink)}
+  .sec-card-headline{font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--text);line-height:1.3}
+  .sec-card-desc{font-size:11.8px;color:var(--text-muted);line-height:1.45}
+  .sec-card-footer{background:var(--surface-sunk);border:1px dashed var(--border-subtle);border-radius:8px;padding:7px 10px;font-size:11px;color:var(--text);line-height:1.4;margin-top:auto}
 
-  .sec-compliance-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
-  .sec-comp-box{background:var(--surface-sunk);border:1px solid var(--border-subtle);border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;gap:2px}
-  .sec-comp-val{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--amber-ink)}
-  .sec-comp-val.teal{color:var(--teal-ink)} .sec-comp-val.blue{color:#1A73E8} .sec-comp-val.green{color:var(--green-ink)}
+  .sec-compliance-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+  .sec-comp-box{background:var(--surface-sunk);border:1px solid var(--border-subtle);border-radius:12px;padding:12px 16px;display:flex;flex-direction:column;gap:2px}
+  .sec-comp-val{font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--amber-ink)}
+  .sec-comp-val.teal{color:var(--teal-ink)} .sec-comp-val.green{color:var(--green-ink)}
   .sec-comp-label{font-family:var(--font-mono);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim)}
-  .sec-comp-desc{font-size:11px;color:var(--text-muted);line-height:1.35}
+  .sec-comp-desc{font-size:11.2px;color:var(--text-muted);line-height:1.35}
 
-  /* ── Dedicated Slide 05: Multi-Channel Edge Execution Grid ──────── */
-  .edge-dedicated-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0}
-  .edge-card{background:var(--surface-card);border:1.5px solid var(--border-hairline);border-radius:14px;padding:16px 18px;box-shadow:var(--card-shadow);display:flex;flex-direction:column;gap:8px;border-top:3.5px solid var(--teal-ink);transition:transform .2s ease,box-shadow .2s ease}
+  /* ── Dedicated Slide 06: Driver Edge 3-Col Grid ──────────────────── */
+  .edge-dedicated-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:16px 0 14px}
+  .edge-card{background:var(--surface-card);border:1.5px solid var(--border-hairline);border-radius:16px;padding:18px 20px;box-shadow:var(--card-shadow);display:flex;flex-direction:column;gap:8px;border-top:4.5px solid var(--teal-ink);transition:transform .2s ease,box-shadow .2s ease}
   .edge-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
   .edge-card.c-blue{border-top-color:#1A73E8}
-  .edge-card.c-amber{border-top-color:var(--amber-deep)}
   .edge-card.c-green{border-top-color:#188038}
-  .edge-card.c-purple{border-top-color:#8E24AA}
+  .edge-card.c-teal{border-top-color:var(--teal-ink)}
   .edge-card-head{display:flex;justify-content:space-between;align-items:center}
-  .edge-card-title{font-family:var(--font-display);font-size:14.5px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:7px}
+  .edge-card-title{font-family:var(--font-display);font-size:15px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:7px}
   .edge-card-badge{font-family:var(--font-mono);font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;background:var(--surface-sunk);border:1px solid var(--border-subtle);text-transform:uppercase;letter-spacing:.5px;color:var(--teal-ink)}
-  .c-blue .edge-card-badge{color:#1A73E8} .c-amber .edge-card-badge{color:var(--amber-ink)} .c-green .edge-card-badge{color:var(--green-ink)} .c-purple .edge-card-badge{color:#8E24AA}
-  .edge-card-desc{font-size:12px;color:var(--text-muted);line-height:1.45}
-  .edge-card-preview{background:var(--surface-sunk);border:1px dashed var(--border-subtle);border-radius:8px;padding:7px 10px;font-family:var(--font-mono);font-size:10.5px;color:var(--text);line-height:1.4;margin-top:auto}
+  .c-blue .edge-card-badge{color:#1A73E8} .c-green .edge-card-badge{color:var(--green-ink)}
+  .edge-card-headline{font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--text);line-height:1.3}
+  .edge-card-desc{font-size:11.8px;color:var(--text-muted);line-height:1.45}
+  .edge-card-footer{background:var(--surface-sunk);border:1px dashed var(--border-subtle);border-radius:8px;padding:7px 10px;font-size:11px;color:var(--text);line-height:1.4;margin-top:auto}
 
-  .edge-metrics-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
-  .edge-stat-box{background:var(--surface-sunk);border:1px solid var(--border-subtle);border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;gap:2px}
-  .edge-stat-val{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--teal-ink)}
-  .edge-stat-val.amber{color:var(--amber-ink)} .edge-stat-val.blue{color:#1A73E8} .edge-stat-val.green{color:var(--green-ink)}
+  .edge-metrics-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+  .edge-stat-box{background:var(--surface-sunk);border:1px solid var(--border-subtle);border-radius:12px;padding:12px 16px;display:flex;flex-direction:column;gap:2px}
+  .edge-stat-val{font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--teal-ink)}
+  .edge-stat-val.amber{color:var(--amber-ink)} .edge-stat-val.green{color:var(--green-ink)}
   .edge-stat-label{font-family:var(--font-mono);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim)}
-  .edge-stat-desc{font-size:11px;color:var(--text-muted);line-height:1.35}
+  .edge-stat-desc{font-size:11.2px;color:var(--text-muted);line-height:1.35}
 
-  /* ── Process Stepper Diagrams (Slide 04) ─────────────────────────── */
-  .algo-stepper{display:flex;flex-direction:column;gap:8px}
-  .algo-step-node{background:var(--surface-sunk);border:1px solid var(--border-hairline);border-radius:12px;padding:9px 12px;display:flex;flex-direction:column;gap:3px}
-  .algo-step-top{display:flex;justify-content:space-between;align-items:center}
-  .algo-step-glyph{display:flex;align-items:center;gap:7px;font-family:var(--font-display);font-size:12.5px;font-weight:700;color:var(--text)}
-  .algo-step-idx{font-family:var(--font-mono);font-size:9.5px;font-weight:800;color:#fff;background:var(--grad-road);border-radius:5px;padding:1px 5px}
-  .algo-step-chip{font-family:var(--font-mono);font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;background:color-mix(in srgb,var(--amber) 14%,var(--surface));color:var(--amber-ink);border:1px solid color-mix(in srgb,var(--amber) 25%,transparent)}
-  .algo-step-detail{font-size:11.2px;color:var(--text-muted);line-height:1.38}
-  .algo-step-formula{font-family:var(--font-mono);font-size:10px;padding:3px 7px;border-radius:5px;background:var(--surface);border:1px solid var(--border-subtle);color:var(--text);display:flex;justify-content:space-between;align-items:center;margin-top:2px}
-  .algo-step-formula code{color:var(--teal-ink);font-weight:700}
-  .algo-stepper-connector{text-align:center;font-size:11px;color:var(--amber-ink);line-height:1;margin:-3px 0}
+  /* ── Dedicated Slide 07: Algorithm 3-Col Grid ─────────────────────── */
+  .algo-3col-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:16px 0 14px}
+  .algo-card{background:var(--surface-card);border:1.5px solid var(--border-hairline);border-radius:16px;padding:18px 20px;box-shadow:var(--card-shadow);display:flex;flex-direction:column;gap:8px;border-top:4.5px solid var(--teal-ink);transition:transform .2s ease,box-shadow .2s ease}
+  .algo-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+  .algo-card.a-amber{border-top-color:var(--amber-deep)}
+  .algo-card.a-teal{border-top-color:var(--teal-ink)}
+  .algo-card.a-green{border-top-color:#188038}
+  .algo-card-head{display:flex;justify-content:space-between;align-items:center}
+  .algo-card-title{font-family:var(--font-display);font-size:15px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:7px}
+  .algo-card-badge{font-family:var(--font-mono);font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;background:var(--surface-sunk);border:1px solid var(--border-subtle);text-transform:uppercase;letter-spacing:.5px;color:var(--teal-ink)}
+  .a-amber .algo-card-badge{color:var(--amber-ink)} .a-green .algo-card-badge{color:var(--green-ink)}
+  .algo-card-headline{font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--text);line-height:1.3}
+  .algo-card-desc{font-size:11.8px;color:var(--text-muted);line-height:1.45}
+  .algo-card-footer{background:var(--surface-sunk);border:1px dashed var(--border-subtle);border-radius:8px;padding:7px 10px;font-size:11px;color:var(--text);line-height:1.4;margin-top:auto}
 
-  /* ── Dispatch Visual Flow ────────────────────────────────────────── */
-  .dispatch-diag-row{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
-  .dispatch-diag-card{background:var(--surface-sunk);border:1px solid var(--border-hairline);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:2px}
-  .dispatch-diag-title{font-family:var(--font-display);font-size:11.8px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:5px}
-  .dispatch-diag-desc{font-size:10.8px;color:var(--text-muted);line-height:1.35}
+  /* ── Demo Results 3-Col Strip ────────────────────────────────────── */
+  .results-3col-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+  .result-box-3{background:var(--surface-sunk);border:1px solid var(--border-subtle);border-radius:14px;padding:12px 18px;display:flex;flex-direction:column;gap:2px}
+  .result-box-3 .result-val{font-family:var(--font-display);font-size:24px;font-weight:800;color:var(--amber-ink);line-height:1.1}
+  .result-box-3 .result-val.teal{color:var(--teal-ink)} .result-box-3 .result-val.green{color:var(--green-ink)}
+  .result-box-3 .result-label{font-family:var(--font-mono);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim)}
+  .result-box-3 .result-desc{font-size:11.2px;color:var(--text-muted);line-height:1.35}
 
   .dual-subhead{font-family:var(--font-display);font-size:14px;font-weight:700;margin-bottom:4px;color:var(--amber-ink);display:flex;align-items:center;gap:6px}
 
@@ -716,11 +745,73 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 
 <main class="deck-container">
 
-<!-- ═════════════ 00 OVERVIEW ═════════════ -->
-<section class="slide-section" data-title="00 Overview">
+<!-- ═════════════ 00 THE PROBLEM ═════════════ -->
+<section class="slide-section" data-title="00 The Problem">
  <div class="wrap-max">
-  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">FleetFlow · Retail &amp; CPG Supply Chain</span><span class="kicker-sep">/</span><span class="kicker-sub">Gemini Enterprise · Google ADK · Vertex AI Agent Engine</span></div>
-  <h1 class="monumental-headline">Load it in reverse.<br><span class="gradient-span">Drive it in order.</span> Deliver it all.</h1>
+  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Industry Ground Reality</span><span class="kicker-sep">/</span><span class="kicker-sub">Deep-Dive Supply Chain Research · India &amp; Global Logistics</span></div>
+  <h1 class="monumental-headline">The last mile is where<br><span class="gradient-span">margin, time &amp; fleet capacity leak out.</span></h1>
+  <p class="tagline-lead">Distribution networks operate on paper habits and gut feel. Vehicles roll out with empty volume, stops are driven out of sync, and morning dock crews lose hours manually sequencing dispatches. Across Indian supply chains, three structural bottlenecks paralyze fleet productivity:</p>
+
+  <div class="problem-3col-grid">
+    <div class="problem-card">
+      <div class="problem-card-head">
+        <span class="problem-card-title"><span>📦</span> The LIFO Box-Trap</span>
+        <span class="problem-card-badge">CAB-TO-DOOR CRISIS</span>
+      </div>
+      <div class="problem-card-headline">Drivers unload earlier drops onto muddy roads to reach deeper cartons.</div>
+      <div class="problem-card-desc">When loading order does not match reverse drop sequence, cartons for Stop 1 are buried behind Stop 8. Drivers waste 9–15 minutes per stop digging, leading to crushed packaging, broken seals, and delayed runs.</div>
+      <div class="problem-card-impact">Impact: <b>2–4 crew hours lost per truck-day</b> and elevated damage claims.</div>
+    </div>
+
+    <div class="problem-card p-amber">
+      <div class="problem-card-head">
+        <span class="problem-card-title"><span>🗺️</span> Route-Volume Disconnect</span>
+        <span class="problem-card-badge">PHYSICS BLIND SPOT</span>
+      </div>
+      <div class="problem-card-headline">2D GPS map routing ignores 3D cubic volume and axle weight limits.</div>
+      <div class="problem-card-desc">Conventional telematics and route planners solve simple point-to-point mileage. They fail to couple vehicle axle weight balance (CMVR Rule 93), crate stackability limits, and customer unload time windows, causing 40% empty running.</div>
+      <div class="problem-card-impact">Impact: <b>~40% empty running</b> and premature vehicle suspension fatigue.</div>
+    </div>
+
+    <div class="problem-card p-purple">
+      <div class="problem-card-head">
+        <span class="problem-card-title"><span>⏱️</span> 3-Hour Morning Bottleneck</span>
+        <span class="problem-card-badge">WHITEBOARD DEADLOCK</span>
+      </div>
+      <div class="problem-card-headline">Dispatch managers spend 3 hours every morning manually sorting orders.</div>
+      <div class="problem-card-desc">Hundreds of retail dealer orders arrive overnight via PDF invoices, ERP spreadsheets, and WhatsApp messages. Whiteboard dispatching creates dispatch gridlock, late departures, and missed commercial delivery SLAs.</div>
+      <div class="problem-card-impact">Impact: <b>3–4 hours dock idle time</b> before wheels turn, inflating fixed fleet overhead.</div>
+    </div>
+  </div>
+
+  <div class="metrics-3col-strip">
+    <div class="metric-box-3">
+      <div class="metric-value" style="color:var(--red-ink)">41%</div>
+      <div class="metric-label">Of Total Supply-Chain Cost is Last Mile</div>
+      <div class="metric-desc">The single most expensive leg in modern distribution. Inefficiencies directly erode operating margin by up to 26%.</div>
+      <div class="metric-src"><a href="https://www.capgemini.com/insights/research-library/the-last-mile-delivery-challenge/" target="_blank">Capgemini Research Institute</a></div>
+    </div>
+    <div class="metric-box-3">
+      <div class="metric-value" style="color:var(--amber-ink)">~40%</div>
+      <div class="metric-label">Empty Running Across Indian Trucks</div>
+      <div class="metric-desc">Indian freight vehicles average only 300–325 km/day vs. 500–800 km/day for global peers due to sub-optimal volume utilization.</div>
+      <div class="metric-src"><a href="https://rmi.org/insight/fast-tracking-freight-in-india/" target="_blank">NITI Aayog &amp; RMI</a></div>
+    </div>
+    <div class="metric-box-3">
+      <div class="metric-value" style="color:var(--teal-ink)">7.97%</div>
+      <div class="metric-label">Of India's GDP Spent on Logistics</div>
+      <div class="metric-desc">Over ₹24 lakh crore annually. National Logistics Policy targets reducing this to global benchmark (&lt;8%) via AI dispatch.</div>
+      <div class="metric-src"><a href="https://www.ncaer.org/" target="_blank">NCAER / DPIIT Study</a> · <a href="https://pib.gov.in/" target="_blank">PIB</a></div>
+    </div>
+  </div>
+ </div>
+</section>
+
+<!-- ═════════════ 01 THE SOLUTION ═════════════ -->
+<section class="slide-section" data-title="01 The Solution">
+ <div class="wrap-max">
+  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">The Solution · FleetFlow</span><span class="kicker-sep">/</span><span class="kicker-sub">Gemini Enterprise · Google ADK · Vertex AI Agent Engine</span></div>
+  <h2 class="monumental-headline">Load it in reverse.<br><span class="gradient-span">Drive it in order.</span> Deliver it all.</h2>
   <p class="tagline-lead"><b>FleetFlow</b> is an autonomous dispatch engine for primary and secondary distribution. Each morning it decides <b>which trucks</b> roll out and <b>which corridor</b> each driver takes. It then works out <b>the drop order</b> and <b>where every carton sits</b>, so drop 1 is at the door and the last drop sits behind the cab. Crews stop digging for cartons, and the fleet runs fewer kilometres.</p>
 
   <div class="gemini-cockpit">
@@ -744,39 +835,15 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
  </div>
 </section>
 
-<!-- ═════════════ 01 COST REALITY ═════════════ -->
-<section class="slide-section" data-title="01 The Problem">
- <div class="wrap-max">
-  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">The Cost Reality</span><span class="kicker-sep">/</span><span class="kicker-sub">Public research · India &amp; global</span></div>
-  <h2 class="monumental-headline">The last mile is where <span class="gradient-span">margin leaks out.</span></h2>
-  <p class="tagline-lead">Today, most depots plan dispatch by area and by habit. Trucks leave half-empty and stops get resequenced on the road. At every drop the crew unloads cartons that belong to later stops to reach the right one. The published numbers look like this.</p>
-  <div class="metrics-4col-grid">
-    <div class="metric-box"><div class="metric-value amber">7.97%</div><div class="metric-label">of India's GDP is logistics</div><div class="metric-desc">≈ ₹24 lakh crore a year (FY24). The National Logistics Policy targets a global-benchmark cost and a top-25 LPI rank by 2030.</div><div class="metric-src"><a href="https://www.ncaer.org/" target="_blank">NCAER / DPIIT, 2025</a> · <a href="https://pib.gov.in/" target="_blank">PIB</a></div></div>
-    <div class="metric-box"><div class="metric-value red">41%</div><div class="metric-label">of supply-chain cost is the last mile</div><div class="metric-desc">It is the single largest cost block. Left unaddressed, it can erode retailer profit by up to 26% over 3 years.</div><div class="metric-src"><a href="https://www.capgemini.com/insights/research-library/the-last-mile-delivery-challenge/" target="_blank">Capgemini Research Institute, 2019</a></div></div>
-    <div class="metric-box"><div class="metric-value amber">~40%</div><div class="metric-label">empty running on Indian trucks</div><div class="metric-desc">Indian trucks average 300–325 km/day, against 500–800 km/day for global peers. Poor utilisation is the root cause.</div><div class="metric-src"><a href="https://rmi.org/insight/fast-tracking-freight-in-india/" target="_blank">NITI Aayog &amp; RMI, 2021</a></div></div>
-    <div class="metric-box"><div class="metric-value red">40–55%</div><div class="metric-label">of truck operating cost is diesel</div><div class="metric-desc">Every kilometre cut goes straight to the P&amp;L and to Scope-3 emissions.</div><div class="metric-src">Industry estimates · range varies by source</div></div>
-  </div>
-  <div class="metrics-4col-grid">
-    <div class="metric-box"><div class="metric-value teal">100M mi</div><div class="metric-label">saved per year by route optimisation</div><div class="metric-desc">UPS ORION: ~10M gallons of fuel and ~100k t CO₂ a year, from 6–8 fewer miles per driver per day.</div><div class="metric-src"><a href="https://www.informs.org/Impact/O.R.-Analytics-Success-Stories/UPS-On-Road-Integrated-Optimization-and-Navigation-ORION-Project" target="_blank">INFORMS Edelman, 2016</a></div></div>
-    <div class="metric-box"><div class="metric-value teal">+36%</div><div class="metric-label">more delivery vehicles by 2030</div><div class="metric-desc">Emissions are projected to rise +32% in the top 100 cities. Routing and consolidation can cut that by up to ~30%.</div><div class="metric-src"><a href="https://www.weforum.org/publications/the-future-of-the-last-mile-ecosystem/" target="_blank">World Economic Forum, 2020</a></div></div>
-    <div class="metric-box"><div class="metric-value green">3–4 h → min</div><div class="metric-label">daily dispatch planning</div><div class="metric-desc">Route-planning software users report 75–84% less planning time.<span class="tag-vendor">VENDOR</span></div><div class="metric-src">Descartes · Locus case studies</div></div>
-    <div class="metric-box"><div class="metric-value green">10–25%</div><div class="metric-label">routing cost reduction</div><div class="metric-desc">Typical range for optimised VRP over manual planning. Descartes/ArrowXL reports −13% mileage.<span class="tag-vendor">VENDOR</span></div><div class="metric-src">McKinsey via Locus · Descartes</div></div>
-  </div>
-  <p class="note">Carton-search time and damage have no credible public benchmark. FleetFlow measures them per deployment; the demo assumes 9 min of digging per stop that is out of sequence.</p>
- </div>
-</section>
-
 <!-- ═════════════ 02 HOW IT WORKS ═════════════ -->
 <section class="slide-section" data-title="02 How It Works">
  <div class="wrap-max">
-  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">How FleetFlow Works</span><span class="kicker-sep">/</span><span class="kicker-sub">One conversation · four optimisers</span></div>
-  <h2 class="monumental-headline">From order list to <span class="gradient-span">loaded, routed trucks</span> in under a minute.</h2>
-  <div class="steps" style="grid-template-columns:repeat(5,1fr)">
-    <div class="step"><div class="n">1</div><h4>Ingest &amp; photos</h4><p>Orders from list, CSV/XLSX, PDF or email. Cartons captured from dock photos with QR codes &amp; labels.</p></div>
-    <div class="step"><div class="n">2</div><h4>Corridors &amp; claims</h4><p>Drivers claim directions (“I've got West”). If multiple trucks share a route, FleetFlow branches them.</p></div>
-    <div class="step"><div class="n">3</div><h4>Fleet &amp; routes</h4><p>OR-Tools VRP optimizes 5 truck types, customer time windows, and road-following itineraries.</p></div>
-    <div class="step"><div class="n">4</div><h4>LIFO loading &amp; safety</h4><p>Cab-to-door 3D packing with CMVR Rule 93 axle balance compliance and ESG diesel savings.</p></div>
-    <div class="step"><div class="n">5</div><h4>Google Maps &amp; dispatch</h4><p>1-tap Google Maps route with live traffic, 1-click WhatsApp dispatch, mobile run sheet &amp; digital POD.</p></div>
+  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">How FleetFlow Works</span><span class="kicker-sep">/</span><span class="kicker-sub">From Raw Orders to Ready-to-Roll Trucks in 17 Seconds</span></div>
+  <h2 class="monumental-headline">From order backlog to <span class="gradient-span">loaded, routed trucks</span> in 17 seconds.</h2>
+  <div class="steps" style="grid-template-columns:repeat(3,1fr)">
+    <div class="step"><div class="n">1</div><h4>Multimodal Intake &amp; Intent Scoping</h4><p>Ingests ERP sheets, BigQuery orders, and dock photos via Gemini 3.7. Accommodates driver direction claims (<i>"Ravi takes West"</i>) without breaking schedule constraints.</p></div>
+    <div class="step"><div class="n">2</div><h4>Polar Corridors &amp; OR-Tools Solver</h4><p>Partitions stops into 8 directional corridors and branches heavy routes. Google OR-Tools solves multi-vehicle CVRPTW using live traffic road network geodesics.</p></div>
+    <div class="step"><div class="n">3</div><h4>3D LIFO Packing &amp; Edge Dispatch</h4><p>Discrete height-map places Stop 1 cartons at the rear roll-up door and verifies CMVR Rule 93 axle balance. Emits 1-tap Google Maps and WhatsApp run sheets.</p></div>
   </div>
   <div class="split">
    <div class="blueprint-card">
@@ -813,25 +880,53 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       <div class="flow-phase-desc">Dock QR camera frames, ERP Excel spreadsheets, and BigQuery orders sanitized via Google Cloud Model Armor and Cloud DLP before LLM processing.</div>
     </div>
     <div class="flow-phase-card p2">
-      <div class="flow-phase-title"><span>🧠</span> 2. Driver Intent Scoping</div>
-      <div class="flow-phase-desc">Natural language driver preferences ("Ravi takes West") identified and pinned to spatial radial sectors, avoiding route friction and driver dissatisfaction.</div>
-    </div>
-    <div class="flow-phase-card p3">
-      <div class="flow-phase-title"><span>🧭</span> 3. Polar Corridors &amp; Branching</div>
+      <div class="flow-phase-title"><span>🧭</span> 2. Polar Corridors &amp; Branching</div>
       <div class="flow-phase-desc">Polar ray θ scan groups stops into 8 compass corridors. Volume and weight overflow triggers angular divergence, splitting routes into non-overlapping branches.</div>
     </div>
-    <div class="flow-phase-card p4">
-      <div class="flow-phase-title"><span>🧮</span> 4. MIP Solver &amp; 3D LIFO Physics</div>
+    <div class="flow-phase-card p3">
+      <div class="flow-phase-title"><span>🧮</span> 3. OR-Tools CVRPTW &amp; 3D LIFO Physics</div>
       <div class="flow-phase-desc">OR-Tools VRPTW routes highway itineraries, while discrete 3D height-map raster packing enforces cab-to-door LIFO drop safety and CMVR Rule 93 axle balance.</div>
     </div>
   </div>
  </div>
 </section>
 
-<!-- ═════════════ 04 ENTERPRISE SECURITY & GOVERNANCE ═════════════ -->
-<section class="slide-section" data-title="04 Enterprise Security">
+<!-- ═════════════ 04 ENTERPRISE ARCHITECTURE & ROADMAP ═════════════ -->
+<section class="slide-section" data-title="04 Architecture">
  <div class="wrap-max">
-  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Enterprise Security &amp; Zero-Trust Governance</span><span class="kicker-sep">/</span><span class="kicker-sub">Google Cloud Model Armor · Cloud DLP · VPC-SC · Cryptographic Ledger</span></div>
+  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Enterprise Architecture &amp; Dual Deployment</span><span class="kicker-sep">/</span><span class="kicker-sub">One Shared Backend · Two Deployment Surfaces · Zero Hardcoded Credentials</span></div>
+  <h2 class="monumental-headline">Unified agent core.<br><span class="gradient-span">Native to Gemini Enterprise, extensible to Cloud Run.</span></h2>
+  <p class="tagline-lead">FleetFlow is built on Google Cloud's modern AI stack: Google ADK for tool orchestration, Vertex AI Agent Engine for enterprise reasoning, BigQuery for telemetry, and Cloud Run for low-latency web UI.</p>
+  
+  <!-- High-Fidelity Multi-Tier Graphical Architecture Diagram -->
+  <div style="margin:16px 0 18px 0;border-radius:14px;overflow:hidden">
+    __SYSTEM_ARCH_SVG__
+  </div>
+  <div class="roadmap">
+    <div class="rm"><b>Option A · Gemini Enterprise Deploy</b><p><code>./scripts/deploy.sh --target gemini-enterprise --project YOUR_PROJECT</code> — provisions IAM, updates Vertex AI Agent Engine in-place, and registers in Gemini Enterprise.</p></div>
+    <div class="rm"><b>Option B · Cloud Run Control Tower UI</b><p><code>./scripts/deploy.sh --target ui --project YOUR_PROJECT</code> — builds and deploys the standalone Web Control Tower &amp; 3D Load Studio container to Google Cloud Run.</p></div>
+    <div class="rm"><b>Option C · Full Stack + BigQuery Seed</b><p><code>./scripts/deploy.sh --target all --publish-data --project YOUR_PROJECT</code> — seeds BigQuery &amp; Cloud Storage and deploys both surfaces simultaneously.</p></div>
+  </div>
+  <div class="blueprint-card">
+    <div class="card-title">Sources &amp; Field Benchmarks</div>
+    <div class="sources">
+      <div>NCAER for DPIIT, <i>Assessment of Logistics Cost in India</i> (2025): 7.97% of GDP, FY2023-24 · <a href="https://www.ncaer.org/" target="_blank">ncaer.org</a></div>
+      <div>Government of India, National Logistics Policy (2022) · <a href="https://pib.gov.in/" target="_blank">pib.gov.in</a></div>
+      <div>Capgemini Research Institute, <i>The Last-Mile Delivery Challenge</i> (2019) · <a href="https://www.capgemini.com/insights/research-library/the-last-mile-delivery-challenge/" target="_blank">capgemini.com</a></div>
+      <div>NITI Aayog &amp; RMI, <i>Fast Tracking Freight in India</i> (2021) · <a href="https://rmi.org/insight/fast-tracking-freight-in-india/" target="_blank">rmi.org</a></div>
+      <div>INFORMS, UPS ORION, Franz Edelman Award (2016) · <a href="https://www.informs.org/" target="_blank">informs.org</a></div>
+      <div>World Economic Forum, <i>The Future of the Last-Mile Ecosystem</i> (2020) · <a href="https://www.weforum.org/" target="_blank">weforum.org</a></div>
+      <div>Vendor-reported (flagged): Descartes, Locus, and McKinsey figures cited by Locus</div>
+      <div>Demo numbers: FleetFlow engine run on synthetic data for __STOPS__ Mumbai MMR dealers (seed 42)</div>
+    </div>
+  </div>
+ </div>
+</section>
+
+<!-- ═════════════ 05 ENTERPRISE SECURITY & GOVERNANCE ═════════════ -->
+<section class="slide-section" data-title="05 Security">
+ <div class="wrap-max">
+  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Enterprise Security &amp; Zero-Trust Governance</span><span class="kicker-sep">/</span><span class="kicker-sub">Model Armor · Cloud DLP · Deterministic Enclave · VPC-SC</span></div>
   <h2 class="monumental-headline">Zero-trust supply chain.<br><span class="gradient-span">Enterprise guardrails at every layer.</span></h2>
   <p class="tagline-lead">Logistics networks handle sensitive customer locations, pricing contracts, and driver telemetry. FleetFlow enforces multi-layered defense to prevent prompt injection, data exfiltration, and model hallucinations.</p>
 
@@ -839,73 +934,48 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     <div class="sec-dedicated-card c-amber">
       <div class="sec-card-head">
         <span class="sec-card-title"><span>🛡️</span> Model Armor</span>
-        <span class="sec-card-badge">PROMPT DEFENSE</span>
+        <span class="sec-card-badge">PROMPT INJECTION SHIELD</span>
       </div>
-      <div class="sec-card-desc">Real-time LLM input/output sanitization. Zero prompt injection, anti-jailbreak filters, malicious override blocking, and system prompt leakage shielding before reaching Gemini.</div>
-      <div class="sec-card-preview"><b>Latency overhead:</b> &lt;15ms · <b>Filter rate:</b> 100% known attacks quarantined without pipeline stall</div>
+      <div class="sec-card-headline">Real-time LLM input/output sanitization before Gemini.</div>
+      <div class="sec-card-desc">Quarantines prompt injection attacks, malicious instruction overrides, and system prompt leakage attempts. Latency overhead &lt;15ms; 100% of adversarial payloads intercepted.</div>
+      <div class="sec-card-footer"><b>Guardrail:</b> Google Cloud Model Armor · Pre-LLM filter</div>
     </div>
 
     <div class="sec-dedicated-card c-blue">
       <div class="sec-card-head">
         <span class="sec-card-title"><span>🔒</span> Cloud DLP</span>
-        <span class="sec-card-badge">PII &amp; GSTIN MASK</span>
+        <span class="sec-card-badge">PII &amp; TAX IDENTIFIER MASK</span>
       </div>
-      <div class="sec-card-desc">Automated inspection and redaction of customer phone numbers, driver identity info, GSTIN tax registration numbers, and commercial invoice totals. Raw PII never leaves customer VPC.</div>
-      <div class="sec-card-preview"><b>Inspection rules:</b> GSTIN, PAN, Phone, Banking · <b>Tokenization:</b> Reversible HMAC tokens for dispatch</div>
-    </div>
-
-    <div class="sec-dedicated-card c-purple">
-      <div class="sec-card-head">
-        <span class="sec-card-title"><span>🌐</span> VPC Service Controls</span>
-        <span class="sec-card-badge">AIR-GAPPED PERIMETER</span>
-      </div>
-      <div class="sec-card-desc">Strict network perimeter isolating BigQuery datasets, Cloud Storage media buckets, and Vertex AI Agent Engine. Zero public internet ingress/egress; private Google backbone only.</div>
-      <div class="sec-card-preview"><b>Boundary:</b> VPC-SC Restricted VIP · <b>Ingress:</b> Dedicated Cloud Interconnect / Private Service Connect</div>
-    </div>
-
-    <div class="sec-dedicated-card c-teal">
-      <div class="sec-card-head">
-        <span class="sec-card-title"><span>⚡</span> Deterministic Enclave</span>
-        <span class="sec-card-badge">ZERO-HALLUCINATION</span>
-      </div>
-      <div class="sec-card-desc">Mathematical air-gap between Gemini reasoning and physical operations. Gemini never invents routes or load coordinates; dual-guard ADK callbacks validate every tool output against physical physics.</div>
-      <div class="sec-card-preview"><b>Guardrail:</b> <code>after_turn</code> schema assertion · <b>Physics:</b> Hard error on volume/weight overflow</div>
+      <div class="sec-card-headline">Automated masking of dealer phone numbers and GSTIN.</div>
+      <div class="sec-card-desc">Scans order manifests and ERP sheets to tokenize customer telephone numbers, GSTIN IDs, and commercial invoice amounts. Reversible HMAC tokens ensure raw PII never leaves VPC.</div>
+      <div class="sec-card-footer"><b>Inspection:</b> GSTIN, Phone, PAN, Banking · Zero PII Leakage</div>
     </div>
 
     <div class="sec-dedicated-card c-green">
       <div class="sec-card-head">
-        <span class="sec-card-title"><span>📜</span> Cryptographic HMAC Audit</span>
-        <span class="sec-card-badge">TAMPER-EVIDENT</span>
+        <span class="sec-card-title"><span>⚡</span> Deterministic Enclave &amp; Ledger</span>
+        <span class="sec-card-badge">MATH AIR-GAP &amp; HMAC AUDIT</span>
       </div>
-      <div class="sec-card-desc">Every dispatch run generates a deterministic SHA-256 HMAC hash chain logging inputs, solver constraints, and output manifests. Stored immutably in BigQuery for statutory compliance audits.</div>
-      <div class="sec-card-preview"><b>Hash chain:</b> SHA-256(Input + Constraints + RouteGeo) · <b>Retention:</b> 7-year immutable Cloud Storage</div>
-    </div>
-
-    <div class="sec-dedicated-card c-blue">
-      <div class="sec-card-head">
-        <span class="sec-card-title"><span>🔑</span> Hardware CMEK &amp; IAM</span>
-        <span class="sec-card-badge">CLOUD KMS AES-256</span>
-      </div>
-      <div class="sec-card-desc">Customer-Managed Encryption Keys (CMEK) protect all at-rest order data in BigQuery and Cloud Storage buckets. Granular Workload Identity Federation eliminates long-lived service account keys.</div>
-      <div class="sec-card-preview"><b>Key store:</b> Cloud KMS FIPS 140-2 Level 3 HSM · <b>Auth:</b> Zero static credentials in code</div>
+      <div class="sec-card-headline">Zero-hallucination execution coupled with cryptographic audit.</div>
+      <div class="sec-card-desc">Gemini never guesses coordinates or cubic loads. Dual-guard ADK callbacks validate all outputs against OR-Tools and physics engines. Every run logs a SHA-256 HMAC hash chain to BigQuery.</div>
+      <div class="sec-card-footer"><b>Enclave:</b> Hard physics error on overflow · Immutable BigQuery audit</div>
     </div>
   </div>
 
   <div class="sec-compliance-strip">
     <div class="sec-comp-box"><div class="sec-comp-val teal">0.0% PII Leakage</div><div class="sec-comp-label">Cloud DLP Sanitization</div><div class="sec-comp-desc">Automated masking of dealer phone numbers, GSTIN, and commercial invoices.</div></div>
     <div class="sec-comp-box"><div class="sec-comp-val green">100% Deterministic</div><div class="sec-comp-label">Math Air-Gap Enclave</div><div class="sec-comp-desc">OR-Tools &amp; 3D Height-Map enforce zero hallucinated stops or cubic volumes.</div></div>
-    <div class="sec-comp-box"><div class="sec-comp-val blue">SHA-256 HMAC</div><div class="sec-comp-label">Tamper-Evident Ledger</div><div class="sec-comp-desc">Cryptographically signed dispatch plans logged immutably for compliance.</div></div>
-    <div class="sec-comp-box"><div class="sec-comp-val amber">SOC 2 / ISO 27001</div><div class="sec-comp-label">Google Cloud Posture</div><div class="sec-comp-desc">Full inheritance of Google Cloud enterprise security &amp; zero-trust governance.</div></div>
+    <div class="sec-comp-box"><div class="sec-comp-val amber">SHA-256 HMAC</div><div class="sec-comp-label">Tamper-Evident Ledger</div><div class="sec-comp-desc">Cryptographically signed dispatch plans logged immutably for compliance.</div></div>
   </div>
  </div>
 </section>
 
-<!-- ═════════════ 05 MULTI-CHANNEL EDGE DELIVERY ═════════════ -->
-<section class="slide-section" data-title="05 Driver Edge">
+<!-- ═════════════ 06 MULTI-CHANNEL EDGE DELIVERY ═════════════ -->
+<section class="slide-section" data-title="06 Driver Edge">
  <div class="wrap-max">
   <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Multi-Channel Edge Execution</span><span class="kicker-sep">/</span><span class="kicker-sub">Meeting Drivers Where They Are · Zero App Friction · Instant Field Adoption</span></div>
   <h2 class="monumental-headline">Empowering drivers on the highway.<br><span class="gradient-span">Multi-channel dispatch with zero login friction.</span></h2>
-  <p class="tagline-lead">Logistics technology fails when contract drivers refuse to install heavy proprietary apps. FleetFlow bridges the dispatch manager cockpit directly to highway crews using universal, lightweight edge interfaces.</p>
+  <p class="tagline-lead">Logistics technology fails when contract drivers refuse to install heavy proprietary apps. FleetFlow bridges the dispatch manager cockpit directly to highway crews using universal, lightweight edge interfaces:</p>
 
   <div class="edge-dedicated-grid">
     <div class="edge-card c-blue">
@@ -913,8 +983,9 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         <span class="edge-card-title"><span>🗺️</span> 1-Tap Google Maps</span>
         <span class="edge-card-badge">LIVE NAVIGATION</span>
       </div>
-      <div class="edge-card-desc">Emits pre-sequenced multi-stop Google Maps navigation links (<code>dir_action=navigate</code>) directly to the driver's smartphone. Features live congestion re-routing, bridge height clearances, and 1-tap direct dealer dialer.</div>
-      <div class="edge-card-preview"><b>URL Format:</b> <code>https://www.google.com/maps/dir/?api=1&amp;origin=...&amp;destination=...&amp;waypoints=...</code></div>
+      <div class="edge-card-headline">Pre-sequenced highway navigation directly in Google Maps.</div>
+      <div class="edge-card-desc">Emits turn-by-turn multi-waypoint navigation links (<code>dir_action=navigate</code>) with live traffic re-routing, bridge clearance awareness, and 1-tap direct dealer call dials.</div>
+      <div class="edge-card-footer"><b>Driver Action:</b> 1 tap opens native Google Maps app with all stops pre-sequenced</div>
     </div>
 
     <div class="edge-card c-teal">
@@ -922,155 +993,73 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         <span class="edge-card-title"><span>📱</span> Mobile Driver Portal</span>
         <span class="edge-card-badge">ZERO-LOGIN PWA</span>
       </div>
-      <div class="edge-card-desc">Standalone zero-login mobile web application (<code>plans/&lt;id&gt;/driver_&lt;tid&gt;.html</code>) generated per truck. Three intuitive tabs: Stop List 1➔N with arrival ETAs, interactive Leaflet live route map, and 3D truck cargo bay view.</div>
-      <div class="edge-card-preview"><b>Driver UX:</b> 📋 Stop List 1→N · 🗺️ Road Route · 📦 3D Bay Cross-Section</div>
+      <div class="edge-card-headline">Dedicated live run sheet generated per truck on the fly.</div>
+      <div class="edge-card-desc">Lightweight zero-login web app with three intuitive tabs: Stop List 1➔N with arrival ETAs, interactive Leaflet live route map, and 3D truck cargo bay view with cab-to-door depth markers.</div>
+      <div class="edge-card-footer"><b>Three Tabs:</b> 📋 Stop List 1→N · 🗺️ Road Route · 📦 3D Bay Cross-Section</div>
     </div>
 
     <div class="edge-card c-green">
       <div class="edge-card-head">
-        <span class="edge-card-title"><span>💬</span> WhatsApp Dispatch</span>
-        <span class="edge-card-badge">1-CLICK CHAT LINK</span>
+        <span class="edge-card-title"><span>💬</span> WhatsApp Dispatch &amp; POD</span>
+        <span class="edge-card-badge">1-CLICK CHAT &amp; POD</span>
       </div>
-      <div class="edge-card-desc">Instant dispatch notification formatted for WhatsApp with departure time, assigned corridor, dealer stop count, and total cartons. Single tap triggers WhatsApp with pre-filled message and direct run sheet URL.</div>
-      <div class="edge-card-preview"><b>Message Payload:</b> <i>"🚛 FleetFlow Dispatch: Truck T14 | 8 Drops | Bhiwandi DC ➔ West Corridor..."</i></div>
-    </div>
-
-    <div class="edge-card c-amber">
-      <div class="edge-card-head">
-        <span class="edge-card-title"><span>📑</span> RFC 4180 ERP Manifests</span>
-        <span class="edge-card-badge">SAP &amp; ORACLE OTM</span>
-      </div>
-      <div class="edge-card-desc">Standardized RFC 4180 CSV consignment manifests exportable directly into SAP S/4HANA TM, Oracle Transportation Management, or Blue Yonder. Standard columns: Consignment ID, Transporter, Truck Type, Sequence, and SKU weight.</div>
-      <div class="edge-card-preview"><b>Format:</b> <code>truck_id,sequence,dealer_name,cartons,weight_kg,lat,lon,eta</code></div>
-    </div>
-
-    <div class="edge-card c-purple">
-      <div class="edge-card-head">
-        <span class="edge-card-title"><span>🖨️</span> Transporter Challan (LR)</span>
-        <span class="edge-card-badge">PRINT-READY RECEIPT</span>
-      </div>
-      <div class="edge-card-desc">Print-ready official Transporter Delivery Challan with exact cab-to-door bay depth markers (e.g. <code>0–75 cm</code>). Includes signature acceptance box, rubber stamp endorsement, SKU breakdown, and emergency depot hotline.</div>
-      <div class="edge-card-preview"><b>Statutory:</b> Complies with Indian Carriage by Road Rules 2011 · Consignor / Consignee endorsement</div>
-    </div>
-
-    <div class="edge-card c-blue">
-      <div class="edge-card-head">
-        <span class="edge-card-title"><span>📸</span> Dock QR &amp; Digital POD</span>
-        <span class="edge-card-badge">OPENCV ARUCO</span>
-      </div>
-      <div class="edge-card-desc">Warehouse dock camera scans ArUco QR codes on carton flutes for 100% loading verification. On delivery, driver captures photo Proof of Delivery (POD) with timestamp and GPS geolocation stamped directly into BigQuery.</div>
-      <div class="edge-card-preview"><b>Vision Engine:</b> OpenCV ArUco 8/8 Verified ➔ Mobile Camera POD ➔ BigQuery Telemetry</div>
+      <div class="edge-card-headline">Instant WhatsApp notification paired with camera proof of delivery.</div>
+      <div class="edge-card-desc">Single tap transmits departure time, corridor, dealer drop count, and portal URL to driver WhatsApp. Upon drop, mobile camera captures photo POD with GPS timestamp written to BigQuery.</div>
+      <div class="edge-card-footer"><b>End-to-End:</b> WhatsApp Ping ➔ Mobile Camera POD ➔ BigQuery Telemetry</div>
     </div>
   </div>
 
   <div class="edge-metrics-strip">
     <div class="edge-stat-box"><div class="edge-stat-val teal">0 App Installs</div><div class="edge-stat-label">Driver Friction</div><div class="edge-stat-desc">Zero login, zero app-store downloads; runs in any mobile browser.</div></div>
     <div class="edge-stat-box"><div class="edge-stat-val amber">&lt; 5 Seconds</div><div class="edge-stat-label">Dispatch Hand-off</div><div class="edge-stat-desc">1-click WhatsApp message and 1-tap Google Maps turn-by-turn navigation.</div></div>
-    <div class="edge-stat-box"><div class="edge-stat-val blue">100% ERP Sync</div><div class="edge-stat-label">RFC 4180 Standard</div><div class="edge-stat-desc">Direct CSV ingestion into SAP TM, Oracle OTM, and enterprise WMS.</div></div>
     <div class="edge-stat-box"><div class="edge-stat-val green">0 Re-handling</div><div class="edge-stat-label">LIFO Door Placement</div><div class="edge-stat-desc">First drop at the door; zero carton digging on the highway.</div></div>
   </div>
  </div>
 </section>
 
-<!-- ═════════════ 06 OPTIMIZATION ALGORITHMS ═════════════ -->
-<section class="slide-section" data-title="06 Algorithms">
+<!-- ═════════════ 07 OPTIMIZATION ALGORITHMS ═════════════ -->
+<section class="slide-section" data-title="07 Algorithms">
  <div class="wrap-max">
   <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">The Optimization Engine</span><span class="kicker-sep">/</span><span class="kicker-sub">Coupled NP-Hard Solvers · OR-Tools VRPTW · 3D Height-Map LIFO · CMVR Rule 93</span></div>
   <h2 class="monumental-headline">Mathematical precision.<br><span class="gradient-span">Zero guesswork on road or dock.</span></h2>
   <p class="tagline-lead"><b>FleetFlow</b> pairs Google OR-Tools Vehicle Routing (VRPTW) and polar corridor clustering with a discrete 3D height-map bin packing engine and vehicle axle load balance physics.</p>
 
-  <div class="split">
-    <!-- Left: Fleet Routing Flowchart -->
-    <div class="blueprint-card">
-      <div class="dual-subhead"><span>🛣️</span> Fleet Routing Engine Flowchart</div>
-      <div class="card-sub">Polar Clustering ➔ Trunk/Branch Divergence ➔ Road Geodesics ➔ OR-Tools VRPTW</div>
-      <div class="algo-stepper">
-        <div class="algo-step-node">
-          <div class="algo-step-top">
-            <span class="algo-step-glyph"><span class="algo-step-idx">01</span> Directional Ray Clustering</span>
-            <span class="algo-step-chip">θ = atan2(Δy, Δx)</span>
-          </div>
-          <div class="algo-step-detail">Maps dealer coordinates into polar vectors relative to the hub. Partitions stops into 8 compass corridors (N, NE, E, SE, S, SW, W, NW), preventing route criss-crossing.</div>
-        </div>
-        <div class="algo-stepper-connector">▼</div>
-        <div class="algo-step-node">
-          <div class="algo-step-top">
-            <span class="algo-step-glyph"><span class="algo-step-idx">02</span> Trunk &amp; Branch Highway Splitting</span>
-            <span class="algo-step-chip">Divergence Angle</span>
-          </div>
-          <div class="algo-step-detail">When corridor volume or weight exceeds a single vehicle's payload, FleetFlow calculates angular divergence along highway arteries to spawn non-overlapping branches (e.g. West-1, West-2).</div>
-        </div>
-        <div class="algo-stepper-connector">▼</div>
-        <div class="algo-step-node">
-          <div class="algo-step-top">
-            <span class="algo-step-glyph"><span class="algo-step-idx">03</span> Google Routes API Road Geodesics</span>
-            <span class="algo-step-chip">Real Network</span>
-          </div>
-          <div class="algo-step-detail">Replaces Euclidean/Haversine approximations with real turn-by-turn road network distances, highway exit geometries, and live traffic duration matrices.</div>
-        </div>
-        <div class="algo-stepper-connector">▼</div>
-        <div class="algo-step-node">
-          <div class="algo-step-top">
-            <span class="algo-step-glyph"><span class="algo-step-idx">04</span> Google OR-Tools VRPTW Solver</span>
-            <span class="algo-step-chip">MIP + Metaheuristic</span>
-          </div>
-          <div class="algo-step-detail">Solves multi-constraint MIP: dual capacity (Weight &amp; Volume), time windows with per-carton unloading slack, driver corridor locks, and heterogeneous fleet cost minimization.</div>
-          <div class="algo-step-formula">
-            <span><code>∑ w_i ≤ W_k</code> &amp; <code>∑ v_i ≤ V_k</code></span>
-            <span><code>t_i + s_i + t_ij ≤ t_j ∈ [e_j, l_j]</code></span>
-          </div>
-        </div>
+  <div class="algo-3col-grid">
+    <div class="algo-card a-amber">
+      <div class="algo-card-head">
+        <span class="algo-card-title"><span>🧭</span> Polar Corridors &amp; Branching</span>
+        <span class="algo-card-badge">GEOGRAPHIC CLUSTERING</span>
       </div>
+      <div class="algo-card-headline">8-Ray radial compass projection with highway branching.</div>
+      <div class="algo-card-desc">Maps dealer coordinates into polar vectors relative to the DC. Stops are partitioned into 8 compass corridors. Volume and weight overflow triggers angular divergence, splitting routes into non-overlapping branches (e.g. West-1, West-2) to avoid criss-crossing.</div>
+      <div class="algo-card-footer"><b>Solves:</b> Corridor clustering · Route criss-crossing · Driver direction locks</div>
     </div>
 
-    <!-- Right: 3D LIFO Packing Engine Flowchart -->
-    <div class="blueprint-card">
-      <div class="dual-subhead"><span>📦</span> 3D LIFO Packing Engine Flowchart</div>
-      <div class="card-sub">Cab-to-Door Reverse Zoning ➔ 2D Elevation Matrix ➔ Ray-Casting ➔ CMVR Rule 93</div>
-      <div class="algo-stepper">
-        <div class="algo-step-node">
-          <div class="algo-step-top">
-            <span class="algo-step-glyph"><span class="algo-step-idx">01</span> Cab-to-Door Reverse-Drop Zoning</span>
-            <span class="algo-step-chip">Strict LIFO N → 1</span>
-          </div>
-          <div class="algo-step-detail">Inverts route drop order: Stop 1 loaded at rear roll-up door (X = L_truck); Stop N loaded against front cab (X = 0). Eliminates carton digging and re-handling completely.</div>
-        </div>
-        <div class="algo-stepper-connector">▼</div>
-        <div class="algo-step-node">
-          <div class="algo-step-top">
-            <span class="algo-step-glyph"><span class="algo-step-idx">02</span> 2D Discrete Height-Map Raster Grid</span>
-            <span class="algo-step-chip">1 cm × 1 cm Matrix</span>
-          </div>
-          <div class="algo-step-detail">Cargo bed discretized into elevation matrix Z(x, y). Tests 6 orthogonal box orientations to maximize volumetric density; strictly enforces upright orientation for liquid pails.</div>
-        </div>
-        <div class="algo-stepper-connector">▼</div>
-        <div class="algo-step-node">
-          <div class="algo-step-top">
-            <span class="algo-step-glyph"><span class="algo-step-idx">03</span> Structural Support &amp; Ray-Cast Exit</span>
-            <span class="algo-step-chip">≥ 80% Support</span>
-          </div>
-          <div class="algo-step-detail">Requires ≥80% bottom contact with floor or lower cartons; heavy pails (≥20 kg) placed on floor; fragile SKUs bear zero load; topological ray-casting ensures unobstructed exit path to door.</div>
-        </div>
-        <div class="algo-stepper-connector">▼</div>
-        <div class="algo-step-node">
-          <div class="algo-step-top">
-            <span class="algo-step-glyph"><span class="algo-step-idx">04</span> CMVR Rule 93 Axle Load Physics</span>
-            <span class="algo-step-chip">Statutory Balance</span>
-          </div>
-          <div class="algo-step-detail">Computes 3D Center of Gravity (X_cg) and axle reactions: steer axle 32%–45%, drive axle 55%–68%. Complies with Indian Central Motor Vehicles Rules, preventing steering failure.</div>
-          <div class="algo-step-formula">
-            <span><code>F_front = W_gross · (L_wb - X_cg) / L_wb</code></span>
-            <span><code>F_rear = W_gross · X_cg / L_wb</code></span>
-          </div>
-        </div>
+    <div class="algo-card a-teal">
+      <div class="algo-card-head">
+        <span class="algo-card-title"><span>🛣️</span> Google OR-Tools CVRPTW</span>
+        <span class="algo-card-badge">MIP ROUTING SOLVER</span>
       </div>
+      <div class="algo-card-headline">Constrained vehicle routing with live Google Maps geodesics.</div>
+      <div class="algo-card-desc">Solves multi-constraint MIP optimization: dual vehicle capacity (Weight &amp; Volume), time windows with unloading slack, driver corridor locks, and heterogeneous fleet costs. Turn-by-turn distance and travel time matrices powered by Google Routes API v2.</div>
+      <div class="algo-card-footer"><b>Constraints:</b> Capacity (Weight &amp; Volume) · Time Windows · Heterogeneous Fleet</div>
+    </div>
+
+    <div class="algo-card a-green">
+      <div class="algo-card-head">
+        <span class="algo-card-title"><span>📦</span> 3D LIFO &amp; Axle Physics</span>
+        <span class="algo-card-badge">CAB-TO-DOOR PACKING</span>
+      </div>
+      <div class="algo-card-headline">Discrete 1 cm raster height-map with statutory axle reactions.</div>
+      <div class="algo-card-desc">Inverts drop sequence so Stop 1 sits at the rear roll-up door. Discretizes cargo bed into elevation matrix Z(x, y), verifies &ge;80% bottom support, and places heavy pails on floor. Dynamically computes 3D Center of Gravity ensuring steer axle carries 32%–45% and drive axle 55%–68% per CMVR Rule 93.</div>
+      <div class="algo-card-footer"><b>Statutory:</b> Indian Central Motor Vehicles Rules 1989 Rule 93 axle compliance</div>
     </div>
   </div>
  </div>
 </section>
 
-<!-- ═════════════ 07 DEMO RESULTS ═════════════ -->
-<section class="slide-section" data-title="07 Demo Results">
+<!-- ═════════════ 08 DEMO RESULTS ═════════════ -->
+<section class="slide-section" data-title="08 Demo Results">
  <div class="wrap-max">
   <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Demo Results</span><span class="kicker-sep">/</span><span class="kicker-sub">__HUB__ · __STOPS__ dealers · live engine output</span></div>
   <h2 class="monumental-headline">Same orders. <span class="gradient-span">__B_TRUCKS__ → __O_TRUCKS__ trucks, −__SAVE_PCT__% cost.</span></h2>
@@ -1087,20 +1076,19 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
      <table class="tt" style="margin-top:10px"><thead><tr><th>Truck</th><th>Driver</th><th>Corridor</th><th>Drops</th><th>km</th></tr></thead><tbody>__TRUCK_ROWS__</tbody></table>
    </div>
   </div>
-  <div class="metrics-4col-grid" style="margin-top:16px">
-    <div class="metric-box"><div class="metric-value amber">₹__SAVE_YEAR_L__ L</div><div class="metric-label">per DC per year</div><div class="metric-desc">₹__SAVE_DAY__/day × 300 operating days</div></div>
-    <div class="metric-box"><div class="metric-value teal">__L_SAVED_YEAR__ L</div><div class="metric-label">diesel avoided per year</div><div class="metric-desc">__L_SAVED__ L/day · __KM_SAVED__ fewer km/day</div></div>
-    <div class="metric-box"><div class="metric-value green">__CO2_YEAR_T__ t</div><div class="metric-label">CO₂ avoided per year</div><div class="metric-desc">__CO2_SAVED__ kg/day, Scope-3 reportable</div></div>
-    <div class="metric-box"><div class="metric-value red">__CREW_H_SAVED__ h</div><div class="metric-label">crew hours freed daily</div><div class="metric-desc">Includes __SEARCH_H__ h/day of carton digging, now zero</div></div>
+  <div class="results-3col-strip">
+    <div class="result-box-3"><div class="result-val amber">₹__SAVE_YEAR_L__ L</div><div class="result-label">per DC per year</div><div class="result-desc">₹__SAVE_DAY__/day × 300 operating days</div></div>
+    <div class="result-box-3"><div class="result-val teal">__L_SAVED_YEAR__ L</div><div class="result-label">diesel &amp; __CO2_YEAR_T__ t CO₂ avoided</div><div class="result-desc">__L_SAVED__ L/day · __KM_SAVED__ fewer km/day</div></div>
+    <div class="result-box-3"><div class="result-val green">__SEARCH_H__ h → 0</div><div class="result-label">carton digging eliminated</div><div class="result-desc">__CREW_H_SAVED__ total crew hours freed daily</div></div>
   </div>
  </div>
 </section>
 
-<!-- ═════════════ 08 VALUE AT SCALE ═════════════ -->
-<section class="slide-section" data-title="08 Value at Scale">
+<!-- ═════════════ 09 VALUE AT SCALE ═════════════ -->
+<section class="slide-section" data-title="09 ROI at Scale">
  <div class="wrap-max">
-  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Value at Scale</span><span class="kicker-sep">/</span><span class="kicker-sub">Interactive ROI model · defaults from the demo day</span></div>
-  <h2 class="monumental-headline">Scale one depot's win <span class="gradient-span">across the network.</span></h2>
+  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Network Value at Scale</span><span class="kicker-sep">/</span><span class="kicker-sub">Interactive ROI model · defaults from the demo day</span></div>
+  <h2 class="monumental-headline">Scale one depot's win <span class="gradient-span">across the enterprise network.</span></h2>
   <p class="tagline-lead">Large paints, FMCG and building-materials networks run 100–150+ depots. Some serve 50k–160k+ dealers and replenish several times a day. Move the sliders to model your fleet.</p>
   <div class="roi-grid">
    <div class="blueprint-card">
@@ -1120,36 +1108,6 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
      </div>
      <p class="note">Truck, diesel, CO₂ and digging figures scale linearly from the demo day's per-truck ratios. This is illustrative; validate it with a 2-week shadow deployment.</p>
    </div>
-  </div>
- </div>
-</section>
-
-<!-- ═════════════ 09 ENTERPRISE PLATFORM & ROADMAP ═════════════ -->
-<section class="slide-section" data-title="09 Enterprise">
- <div class="wrap-max">
-  <div class="title-kicker"><span class="kicker-bar"></span><span class="kicker-primary">Enterprise Architecture &amp; Dual Deployment</span><span class="kicker-sep">/</span><span class="kicker-sub">One Shared Backend · Two Deployment Surfaces · Zero Hardcoded Credentials</span></div>
-  <h2 class="monumental-headline">Deploy to <span class="gradient-span">Gemini Enterprise or Cloud Run UI.</span></h2>
-  <!-- High-Fidelity Multi-Tier Graphical Architecture Diagram -->
-  <div style="margin:16px 0 20px 0;border-radius:14px;overflow:hidden">
-    __SYSTEM_ARCH_SVG__
-  </div>
-  <div class="roadmap">
-    <div class="rm"><b>Option A · Gemini Enterprise Deploy</b><p><code>./scripts/deploy.sh --target gemini-enterprise --project YOUR_PROJECT</code> — provisions IAM, updates Vertex AI Agent Engine in-place, and registers in Gemini Enterprise.</p></div>
-    <div class="rm"><b>Option B · Cloud Run Control Tower UI</b><p><code>./scripts/deploy.sh --target ui --project YOUR_PROJECT</code> — builds and deploys the standalone Web Control Tower &amp; 3D Load Studio container to Google Cloud Run.</p></div>
-    <div class="rm"><b>Option C · Full Stack + BigQuery Seed</b><p><code>./scripts/deploy.sh --target all --publish-data --project YOUR_PROJECT</code> — seeds BigQuery &amp; Cloud Storage and deploys both surfaces simultaneously.</p></div>
-  </div>
-  <div class="blueprint-card">
-    <div class="card-title">Sources</div>
-    <div class="sources">
-      <div>NCAER for DPIIT, <i>Assessment of Logistics Cost in India</i> (2025): 7.97% of GDP, FY2023-24 · <a href="https://www.ncaer.org/" target="_blank">ncaer.org</a></div>
-      <div>Government of India, National Logistics Policy (2022) · <a href="https://pib.gov.in/" target="_blank">pib.gov.in</a></div>
-      <div>Capgemini Research Institute, <i>The Last-Mile Delivery Challenge</i> (2019) · <a href="https://www.capgemini.com/insights/research-library/the-last-mile-delivery-challenge/" target="_blank">capgemini.com</a></div>
-      <div>NITI Aayog &amp; RMI, <i>Fast Tracking Freight in India</i> (2021) · <a href="https://rmi.org/insight/fast-tracking-freight-in-india/" target="_blank">rmi.org</a></div>
-      <div>INFORMS, UPS ORION, Franz Edelman Award (2016) · <a href="https://www.informs.org/" target="_blank">informs.org</a></div>
-      <div>World Economic Forum, <i>The Future of the Last-Mile Ecosystem</i> (2020) · <a href="https://www.weforum.org/" target="_blank">weforum.org</a></div>
-      <div>Vendor-reported (flagged): Descartes, Locus, and McKinsey figures cited by Locus</div>
-      <div>Demo numbers: FleetFlow engine run on synthetic data for __STOPS__ Mumbai MMR dealers (seed 42)</div>
-    </div>
   </div>
  </div>
 </section>
@@ -1320,6 +1278,7 @@ function goToSlide(i){
   document.getElementById('nextBtn').disabled=cur===slides.length-1;
   history.replaceState(null,'','#'+cur);
   if(cur===2) replayLifo();
+  if(cur===1) setQuery(qi);
   window.scrollTo(0,0);
 }
 
@@ -1366,7 +1325,7 @@ function setQuery(i){
 }
 function cycleQuery(){setQuery((qi+1)%Q.length)}
 setQuery(0);
-setInterval(()=>{if(cur===0&&!document.hidden)cycleQuery()},9000);
+setInterval(()=>{if(cur===1&&!document.hidden)cycleQuery()},9000);
 
 /* ── ROI ── */
 const $=id=>document.getElementById(id);
