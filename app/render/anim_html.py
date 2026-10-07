@@ -101,7 +101,7 @@ border:1px solid rgba(56,189,248,0.3);border-radius:16px;box-shadow:0 20px 45px 
 backdrop-filter:blur(8px);color:#e2e8f0;font:700 17px Inter,sans-serif;cursor:pointer;transition:all .15s}
 .lp-zoom button:hover{background:rgba(30,45,77,0.95);border-color:rgba(56,189,248,0.4);color:#fff}
 .lp-attr{position:absolute;right:12px;bottom:8px;font-size:10.5px;color:#94a3b8;background:rgba(9,13,26,0.85);backdrop-filter:blur(4px);padding:3px 8px;border-radius:6px}
-.lp-card{position:absolute;left:16px;top:16px;z-index:10;width:355px;max-height:calc(100% - 80px);overflow-y:auto;
+.lp-card{position:absolute;left:16px;top:16px;z-index:10;width:320px;max-height:calc(100% - 80px);overflow-y:auto;
 background:rgba(15,23,42,0.96);backdrop-filter:blur(16px);border:1px solid rgba(56,189,248,0.3);border-radius:16px;
 box-shadow:0 20px 45px rgba(0,0,0,0.65);font-size:13px}
 .lp-card .lp-pop-g{grid-template-columns:72px 1fr}

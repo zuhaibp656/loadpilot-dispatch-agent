@@ -96,6 +96,12 @@
     var tip = $('div', 'lp-tip', cwrap); tip.style.display = 'none';
     var hint = $('div', 'lp-hint', cwrap, '👆 Click a store on the right (or any carton) to see exactly where its boxes go');
 
+    function getIsDark() {
+      return document.documentElement.classList.contains('theme-dark') ||
+             document.body.classList.contains('theme-dark') ||
+             (D && D.theme === 'dark');
+    }
+
     trucks.forEach(function (tr, i) {
       var isAct = tr.active !== false;
       var tag = isAct && D.active_trucks && D.active_trucks.length < trucks.length ? ' • Active' : '';
@@ -119,7 +125,7 @@
       return fromDoor + ' cm from the door · ' + side + ' · ' + layer;
     }
     function showCard(seq) {
-      var s = T.stops.filter(function (x) { return x.seq === seq; })[0]; if (!s) { card.style.display = 'none'; return; }
+      var s = T.stops.filter(function (x) { return x.seq === seq; })[0]; if (!s) { card.style.display = 'none'; fitScale(); return; }
       var o = stopInfo(seq), nS = T.stops.length, before = T.stops.filter(function (x) { return x.seq < seq; });
       var inFront = before.reduce(function (a, x) { return a + x.n; }, 0);
       var skus = Object.keys(o.skus).sort(function (a, b) { return o.skus[b] - o.skus[a]; }).map(function (k) { return o.skus[k] + '× ' + esc(k); }).join('<br>');
@@ -131,8 +137,12 @@
         'First in · Placed on floor directly against CAB bulkhead' :
         ('Rests against / on top of Stop ' + (seq + 1) + ' foundation (' + priorCartons + ' earlier cartons in place)');
 
+      var isDark = getIsDark();
       card.innerHTML = '<div class="lp-pop-h" style="border-color:' + stopColor(seq) + '"><span class="lp-num" style="background:' + stopColor(seq) + '">' + seq + '</span>' +
-        '<div><b>' + esc(s.name) + '</b><br><span class="lp-muted">' + esc(s.addr || '') + '</span></div><button class="lp-x">&times;</button></div>' +
+        '<div><b>' + esc(s.name) + '</b><br><span class="lp-muted">' + esc(s.addr || '') + '</span></div>' +
+        '<div style="margin-left:auto;display:flex;align-items:center;gap:4px">' +
+          '<button class="lp-x" title="Close details card (keeps stop highlighted)" style="background:none;border:none;font-size:20px;cursor:pointer;line-height:1;padding:0 6px">&times;</button>' +
+        '</div></div>' +
         '<div class="lp-vmodes">' +
           '<button class="lp-vbtn' + (viewMode === 'step' ? ' on' : '') + '" data-vm="step">Foundation + Stop</button>' +
           '<button class="lp-vbtn' + (viewMode === 'isolated' ? ' on' : '') + '" data-vm="isolated">Isolated</button>' +
@@ -141,14 +151,22 @@
         '</div>' +
         '<div class="lp-pop-g">' +
         '<span>Loading</span><b>Step ' + stepNum + ' of ' + nS + ' · ' + (seq === nS ? 'Cab bulkhead (1st)' : seq === 1 ? 'Rear door (last in)' : 'After Stop ' + (seq + 1)) + '</b>' +
-        '<span>Foundation</span><b style="color:#8ab4f8">' + foundationText + '</b>' +
+        '<span>Foundation</span><b style="color:' + (isDark ? '#8ab4f8' : '#1a73e8') + '">' + foundationText + '</b>' +
         '<span>Delivery</span><b>' + seq + ' of ' + nS + ' · ETA ' + esc(s.eta) + (seq === 1 ? ' · first off' : seq === nS ? ' · last stop' : '') + '</b>' +
         '<span>Cartons</span><b>' + o.n + ' · ' + Math.round(o.kg) + ' kg' + (o.frag ? ' · <span class="bad">' + o.frag + ' fragile (on top)</span>' : '') + '</b>' +
         '<span>Position</span><b>' + fromDoor0 + '–' + fromDoor1 + ' cm from rear door' + (o.y1 - o.y0 > T.W * 0.8 ? ', full width' : '') + ', up to ' + Math.round(o.z1) + ' cm high</b>' +
         '<span>Unload</span><b>' + (inFront ? inFront + ' cartons of stops 1–' + (seq - 1) + ' are gone before you reach it' : 'nothing in front — straight out') + '</b>' +
         '<span>Goods</span><b>' + skus + '</b></div>';
       card.style.display = 'block';
-      card.querySelector('.lp-x').onclick = function () { setFocus(null); };
+      fitScale();
+      var xBtn = card.querySelector('.lp-x');
+      if (xBtn) {
+        xBtn.onclick = function (e) {
+          if (e) e.stopPropagation();
+          card.style.display = 'none';
+          fitScale();
+        };
+      }
       Array.prototype.forEach.call(card.querySelectorAll('.lp-vbtn[data-vm]'), function (btn) {
         btn.onclick = function () {
           viewMode = btn.dataset.vm;
@@ -161,6 +179,11 @@
       }
     }
     function setFocus(seq, animate) {
+      if (seq != null && focusSeq === seq && card.style.display === 'none') {
+        showCard(seq);
+        fitScale();
+        return;
+      }
       focusSeq = seq; pinIdx = -1; tip.style.display = 'none';
       if (seq != null) {
         if (mode !== 'load') { mode = 'load'; modeB.textContent = 'Unload replay'; }
@@ -174,6 +197,7 @@
       } else {
         animStop = null; card.style.display = 'none';
       }
+      fitScale();
       Array.prototype.forEach.call(legend.querySelectorAll('.lp-li'), function (r) {
         r.classList.toggle('sel', +r.dataset.seq === seq);
       });
@@ -272,7 +296,7 @@
       lastKStop = null; stepPauseTimer = 0;
     };
     scrub.oninput = function () { playing = false; play.innerHTML = '&#9654;'; mode = 'load'; t = +scrub.value; };
-    reset.onclick = function () { yaw = 0.62; pitch = 0.52; zoom = 1; };
+    reset.onclick = function () { yaw = 0.62; pitch = 0.52; zoom = 1; fitScale(); };
     function inPoly(px, py, pts) {
       var c = false;
       for (var i = 0, j = pts.length - 1; i < pts.length; j = i++) {
@@ -327,7 +351,11 @@
     function depth(x, y, z) { return (x - T.L / 2) * B.v[0] + (y - T.W / 2) * B.v[1] + (z - T.H / 2) * B.v[2]; }
     function fitScale() {
       var diag = Math.sqrt(T.L * T.L + T.W * T.W + T.H * T.H);
-      scale = Math.min(S.W, S.H * 1.6) / diag * 0.78 * zoom; ox = S.W / 2; oy = S.H / 2 + 10;
+      var cardVisible = card && card.style.display !== 'none';
+      var cardW = cardVisible ? 330 : 0;
+      scale = Math.min(S.W - cardW * 0.42, S.H * 1.55) / diag * 0.75 * zoom;
+      ox = cardVisible ? Math.min(S.W * 0.65, (S.W + cardW) / 2) : (S.W / 2);
+      oy = S.H / 2 + 10;
     }
     function quad(pts, fill, stroke, alpha) {
       ctx.globalAlpha = alpha == null ? 1 : alpha; ctx.beginPath();
@@ -402,8 +430,12 @@
               [[0, 0, 0], [L, 0, 0]], [[0, Wd, 0], [L, Wd, 0]], [[L, 0, 0], [L, Wd, 0]], [[0, 0, 0], [0, Wd, 0]]];
     };
     function drawEdges(near) {
+      var isDark = getIsDark();
       var c = depth(T.L / 2, T.W / 2, T.H / 2);
-      ctx.strokeStyle = near ? 'rgba(138,180,248,0.55)' : 'rgba(138,180,248,0.22)'; ctx.lineWidth = near ? 1.2 : 1;
+      ctx.strokeStyle = isDark ?
+        (near ? 'rgba(138,180,248,0.55)' : 'rgba(138,180,248,0.22)') :
+        (near ? 'rgba(26,115,232,0.85)' : 'rgba(26,115,232,0.35)');
+      ctx.lineWidth = near ? 1.4 : 1;
       EDGES().forEach(function (s) {
         var m = depth((s[0][0] + s[1][0]) / 2, (s[0][1] + s[1][1]) / 2, (s[0][2] + s[1][2]) / 2);
         if ((m > c + 1) !== near) return;
@@ -411,20 +443,27 @@
       });
     }
     function drawShell() {
+      var isDark = getIsDark();
       var L = T.L, Wd = T.W, Hh = T.H;
-      quad([P(0, 0, 0), P(L, 0, 0), P(L, Wd, 0), P(0, Wd, 0)], '#1b2336', null, 1);
+      quad([P(0, 0, 0), P(L, 0, 0), P(L, Wd, 0), P(0, Wd, 0)], isDark ? '#1b2336' : '#d8e2ec', null, 1);
       (T.zones || []).forEach(function (zn) {
-        quad([P(zn[1], 0, 0), P(zn[2], 0, 0), P(zn[2], Wd, 0), P(zn[1], Wd, 0)], stopColor(zn[0]), null, 0.12);
+        quad([P(zn[1], 0, 0), P(zn[2], 0, 0), P(zn[2], Wd, 0), P(zn[1], Wd, 0)], stopColor(zn[0]), null, isDark ? 0.12 : 0.18);
       });
-      ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 1;
+      ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)'; ctx.lineWidth = 1;
       for (var gx = 0; gx <= L; gx += 50) { var a = P(gx, 0, 0), b = P(gx, Wd, 0); ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); }
       // far walls only (translucent); near walls stay open so cartons remain visible
       var backY = B.v[1] > 0 ? 0 : Wd;
-      quad([P(0, backY, 0), P(L, backY, 0), P(L, backY, Hh), P(0, backY, Hh)], '#2a3550', 'rgba(140,170,255,0.25)', 0.3);
-      if (B.v[0] > 0) quad([P(0, 0, 0), P(0, Wd, 0), P(0, Wd, Hh), P(0, 0, Hh)], '#33415f', 'rgba(140,170,255,0.35)', 0.5);
+      quad([P(0, backY, 0), P(L, backY, 0), P(L, backY, Hh), P(0, backY, Hh)], isDark ? '#2a3550' : '#e2e8f0', isDark ? 'rgba(140,170,255,0.25)' : 'rgba(66,133,244,0.3)', isDark ? 0.3 : 0.45);
+      if (B.v[0] > 0) quad([P(0, 0, 0), P(0, Wd, 0), P(0, Wd, Hh), P(0, 0, Hh)], isDark ? '#33415f' : '#cbd5e1', isDark ? 'rgba(140,170,255,0.35)' : 'rgba(66,133,244,0.4)', isDark ? 0.5 : 0.55);
       drawEdges(false);
     }
-    function label(p, s, c) { ctx.font = '600 11px Inter,Roboto,Arial'; ctx.fillStyle = c; ctx.textAlign = 'center'; ctx.fillText(s, p[0], p[1]); }
+    function label(p, s, c) {
+      var isDark = getIsDark();
+      ctx.font = '600 11px Inter,Roboto,Arial';
+      ctx.fillStyle = isDark ? c : '#1e293b';
+      ctx.textAlign = 'center';
+      ctx.fillText(s, p[0], p[1]);
+    }
 
     function frame(now) {
       if (!T || !S.fit()) return;
@@ -435,16 +474,24 @@
         if (animStopT >= animStopDur) { animStop = null; }
       }
       var hudTxt = '', cur = null;
+      var isDark = getIsDark();
       B = basis(); fitScale();
       ctx.clearRect(0, 0, S.W, S.H);
       var g = ctx.createRadialGradient(S.W / 2, S.H / 2, 20, S.W / 2, S.H / 2, Math.max(S.W, S.H) * 0.7);
-      g.addColorStop(0, '#16203a'); g.addColorStop(1, '#070b16'); ctx.fillStyle = g; ctx.fillRect(0, 0, S.W, S.H);
+      if (isDark) {
+        g.addColorStop(0, '#16203a'); g.addColorStop(1, '#070b16');
+      } else {
+        g.addColorStop(0, '#ffffff'); g.addColorStop(1, '#edf2f7');
+      }
+      ctx.fillStyle = g; ctx.fillRect(0, 0, S.W, S.H);
       drawShell();
       var items = [];
       if (mode === 'load') {
         if (focusSeq != null) {
+          var detailsBtnHtml = (card.style.display === 'none') ?
+            ' <button class="lp-btn lp-btn-sm lp-reopen-card-btn" style="margin-left:8px;padding:2px 8px;font-size:11px;vertical-align:middle;cursor:pointer">📋 Details</button>' : '';
           hudTxt = 'Stop <b>' + focusSeq + '</b> of ' + T.stops.length + ' &middot; ' +
-                   (animStop ? 'Loading into position...' : (viewMode === 'step' ? 'Resting on foundation' : viewMode));
+                   (animStop ? 'Loading into position...' : (viewMode === 'step' ? 'Resting on foundation' : viewMode)) + detailsBtnHtml;
           for (var j = 0; j < N; j++) {
             var bx = T.boxes[j], sq = bx[6];
             if (sq === focusSeq) {
@@ -549,15 +596,23 @@
       if (focusSeq != null) {  // floor footprint of the focused store
         var fo = stopInfo(focusSeq);
         if (fo.n) {
-          ctx.setLineDash([5, 4]); quad([P(fo.x0, fo.y0, 0.5), P(fo.x1, fo.y0, 0.5), P(fo.x1, fo.y1, 0.5), P(fo.x0, fo.y1, 0.5)], null, '#ffffff', 0.9); ctx.setLineDash([]);
+          ctx.setLineDash([5, 4]); quad([P(fo.x0, fo.y0, 0.5), P(fo.x1, fo.y0, 0.5), P(fo.x1, fo.y1, 0.5), P(fo.x0, fo.y1, 0.5)], null, isDark ? '#ffffff' : '#1a73e8', 0.9); ctx.setLineDash([]);
           var lp = P((fo.x0 + fo.x1) / 2, (fo.y0 + fo.y1) / 2, fo.z1 + 18);
-          label(lp, 'Stop ' + focusSeq + ' · ' + Math.max(0, Math.round(T.L - fo.x1)) + '–' + Math.round(T.L - fo.x0) + ' cm from door', '#ffffff');
+          label(lp, 'Stop ' + focusSeq + ' · ' + Math.max(0, Math.round(T.L - fo.x1)) + '–' + Math.round(T.L - fo.x0) + ' cm from door', isDark ? '#ffffff' : '#0f172a');
         }
       }
       drawEdges(true);
-      label(P(0, T.W / 2, T.H + 14), 'CAB', '#8ab4f8');
-      label(P(T.L + 28, T.W / 2, 0), 'REAR DOOR', '#fdd663');
+      label(P(0, T.W / 2, T.H + 14), 'CAB', isDark ? '#8ab4f8' : '#1a73e8');
+      label(P(T.L + 28, T.W / 2, 0), 'REAR DOOR', isDark ? '#fdd663' : '#b45309');
       hud.innerHTML = hudTxt;
+      var reopenBtn = hud.querySelector('.lp-reopen-card-btn');
+      if (reopenBtn) {
+        reopenBtn.onclick = function (e) {
+          if (e) e.stopPropagation();
+          showCard(focusSeq);
+          fitScale();
+        };
+      }
       Array.prototype.forEach.call(legend.querySelectorAll('.lp-li'), function (r) {
         r.classList.toggle('on', !!cur && +r.dataset.seq === cur[6]);
       });
