@@ -149,10 +149,28 @@ _UI_HTML = r"""<!DOCTYPE html>
       color: #0f172a !important;
     }
     html.theme-light .lp-chip.on {
-      background: rgba(26, 115, 232, 0.12) !important;
-      border-color: #1a73e8 !important;
-      color: #1a73e8 !important;
-      box-shadow: 0 0 10px rgba(26, 115, 232, 0.2) !important;
+      background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%) !important;
+      border: 1.5px solid #0d47a1 !important;
+      color: #ffffff !important;
+      font-weight: 800 !important;
+      box-shadow: 0 4px 16px rgba(26, 115, 232, 0.45), 0 0 0 2px rgba(26, 115, 232, 0.25) !important;
+      transform: translateY(-1px);
+    }
+    html.theme-light .lp-chip.on small {
+      color: rgba(255, 255, 255, 0.90) !important;
+      font-weight: 700 !important;
+    }
+    html.theme-dark .lp-chip.on {
+      background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%) !important;
+      border: 1.5px solid #60a5fa !important;
+      color: #ffffff !important;
+      font-weight: 800 !important;
+      box-shadow: 0 4px 20px rgba(37, 99, 235, 0.65), 0 0 0 2px rgba(96, 165, 250, 0.40) !important;
+      transform: translateY(-1px);
+    }
+    html.theme-dark .lp-chip.on small {
+      color: rgba(255, 255, 255, 0.90) !important;
+      font-weight: 700 !important;
     }
     html.theme-light .lp-legend {
       background: #ffffff !important;
@@ -173,9 +191,23 @@ _UI_HTML = r"""<!DOCTYPE html>
     }
     html.theme-light .lp-li.on,
     html.theme-light .lp-li.sel {
-      background: rgba(26, 115, 232, 0.10) !important;
-      outline: 2px solid #1a73e8 !important;
-      color: #0f172a !important;
+      background: linear-gradient(135deg, #e8f0fe 0%, #d2e3fc 100%) !important;
+      outline: 2.5px solid #1a73e8 !important;
+      border-color: #1a73e8 !important;
+      color: #0d47a1 !important;
+      font-weight: 800 !important;
+      box-shadow: 0 4px 14px rgba(26, 115, 232, 0.28) !important;
+      transform: translateX(3px);
+    }
+    html.theme-dark .lp-li.on,
+    html.theme-dark .lp-li.sel {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.38) 0%, rgba(29, 78, 216, 0.52) 100%) !important;
+      outline: 2.5px solid #38bdf8 !important;
+      border-color: #38bdf8 !important;
+      color: #ffffff !important;
+      font-weight: 800 !important;
+      box-shadow: 0 4px 18px rgba(56, 189, 248, 0.40) !important;
+      transform: translateX(3px);
     }
     html.theme-light .lp-ctrl {
       background: #f1f5f9 !important;
@@ -1275,9 +1307,73 @@ _UI_HTML = r"""<!DOCTYPE html>
     }
 
     .ct-route-item.selected {
-      background: var(--accent-primary-soft);
-      border-color: #4285F4;
-      box-shadow: 0 4px 16px rgba(66, 133, 244, 0.20);
+      background: linear-gradient(135deg, #f0f7ff 0%, #e0effe 100%);
+      border: 2px solid #1a73e8;
+      border-left: 6px solid var(--route-c, #1a73e8);
+      box-shadow: 0 6px 20px rgba(26, 115, 232, 0.28), 0 0 0 2px rgba(26, 115, 232, 0.16);
+      transform: translateX(4px);
+    }
+
+    html.theme-dark .ct-route-item.selected {
+      background: linear-gradient(135deg, rgba(30, 58, 138, 0.45) 0%, rgba(17, 24, 39, 0.85) 100%);
+      border: 2px solid #60a5fa;
+      border-left: 6px solid var(--route-c, #60a5fa);
+      box-shadow: 0 6px 22px rgba(37, 99, 235, 0.50), 0 0 0 2px rgba(96, 165, 250, 0.30);
+      transform: translateX(4px);
+    }
+
+    /* Route card quick driver dispatch actions */
+    .ct-btn-chip-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 9px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .ct-btn-chip-action:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-main);
+      transform: translateY(-1px);
+    }
+    .ct-btn-chip-action.wa {
+      color: #16a34a;
+      border-color: rgba(22, 163, 74, 0.35);
+      background: rgba(22, 163, 74, 0.08);
+    }
+    .ct-btn-chip-action.wa:hover {
+      background: #16a34a;
+      color: #ffffff;
+      border-color: #16a34a;
+      box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
+    }
+    .ct-btn-chip-action.maps {
+      color: #1a73e8;
+      border-color: rgba(26, 115, 232, 0.35);
+      background: rgba(26, 115, 232, 0.08);
+    }
+    .ct-btn-chip-action.maps:hover {
+      background: #1a73e8;
+      color: #ffffff;
+      border-color: #1a73e8;
+      box-shadow: 0 2px 8px rgba(26, 115, 232, 0.3);
+    }
+    .ct-btn-chip-action.portal {
+      color: #9334e6;
+      border-color: rgba(147, 52, 230, 0.35);
+      background: rgba(147, 52, 230, 0.08);
+    }
+    .ct-btn-chip-action.portal:hover {
+      background: #9334e6;
+      color: #ffffff;
+      border-color: #9334e6;
+      box-shadow: 0 2px 8px rgba(147, 52, 230, 0.3);
     }
 
     /* Tables */
@@ -3539,6 +3635,17 @@ function applyBundle(bundle) {
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px;font-size:11.5px">
         <span>Fill: <b>${r.volume_fill_pct}% vol</b> / <b>${r.weight_fill_pct}% wt</b></span>
         <span style="font-family:var(--font-mono);font-weight:700;color:var(--text-main)">₹${r.cost_total.toLocaleString('en-IN')}</span>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:8px;padding-top:7px;border-top:1px dashed var(--border-subtle)" onclick="event.stopPropagation()">
+        <a href="${r.whatsapp_url}" target="_blank" class="ct-btn-chip-action wa" title="Share full delivery itinerary with driver via WhatsApp">
+          💬 WhatsApp
+        </a>
+        <a href="${r.gmaps_nav_url}" target="_blank" class="ct-btn-chip-action maps" title="Launch Google Maps Live Traffic Navigation">
+          🗺️ Maps Nav
+        </a>
+        <a href="${r.driver_portal_url}" target="_blank" class="ct-btn-chip-action portal" title="Open Mobile Driver Portal & Printable Challan">
+          📱 Portal
+        </a>
       </div>
     </div>
   `).join('');

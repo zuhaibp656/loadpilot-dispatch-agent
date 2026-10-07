@@ -588,7 +588,7 @@
         var isTarget = focusSeq != null && bb[6] === focusSeq;
         var isPrior = focusSeq != null && bb[6] > focusSeq;
         var hl = isTarget || (bi >= 0 && (bi === pinIdx || bi === hoverIdx));
-        var outlineCol = isTarget ? '#ffffff' : (isPrior ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.35)');
+        var outlineCol = isTarget ? (isDark ? '#ffffff' : '#1a73e8') : (isPrior ? (isDark ? 'rgba(255,255,255,0.45)' : 'rgba(26,115,232,0.45)') : 'rgba(0,0,0,0.35)');
         drawBox(bb[0] + it[2], bb[1], bb[2] + it[3], bb[3], bb[4], bb[5], stopColor(bb[6]), a,
                 it[4] || (isTarget && hl), a > 0.5 && !it[4] ? bi : -1, outlineCol);
         if (bb[7] && a > 0.7) { var c = P(bb[0] + it[2] + bb[3] / 2, bb[1] + bb[4] / 2, bb[2] + it[3] + bb[5]); label(c, '!', '#fff'); }

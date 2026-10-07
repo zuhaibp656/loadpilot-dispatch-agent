@@ -78,9 +78,8 @@ padding:6px 15px;cursor:pointer;font-weight:700;font-size:12.5px;transition:all 
 .lp-truck-bar-lbl{font-size:11px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-right:4px;flex:none}
 .lp-chip{background:rgba(22,32,58,0.7);color:#cbd5e1;border:1px solid rgba(255,255,255,0.1);
 border-left-width:4px;border-radius:18px;padding:5px 13px;cursor:pointer;font-weight:700;font-size:12.5px;transition:all .18s;white-space:nowrap}
-.lp-chip small{color:#94a3b8;font-weight:400;margin-left:4px}
-.lp-chip:hover{background:rgba(34,48,82,0.9);color:#fff}
-.lp-chip.on{background:rgba(30,50,90,0.95);color:#fff;border-color:rgba(56,189,248,0.6);box-shadow:0 0 12px rgba(56,189,248,0.25)}
+.lp-chip.on{background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);color:#fff;border-color:#60a5fa;box-shadow:0 4px 18px rgba(37,99,235,0.6),0 0 0 2px rgba(96,165,250,0.35);transform:translateY(-1px)}
+.lp-chip.on small{color:rgba(255,255,255,0.92);font-weight:600}
 .lp-chip.dim{opacity:0.55}
 .lp-seg{display:flex;border:1px solid rgba(255,255,255,0.12);border-radius:20px;overflow:hidden;background:rgba(18,26,48,0.6)}
 .lp-seg button{background:transparent;color:#94a3b8;border:none;padding:6px 14px;cursor:pointer;font-weight:700;font-size:12px;transition:all .15s}
@@ -107,7 +106,7 @@ box-shadow:0 20px 45px rgba(0,0,0,0.65);font-size:13px}
 .lp-card .lp-pop-g{grid-template-columns:72px 1fr}
 .lp-tip{position:absolute;z-index:12;pointer-events:none;max-width:340px;background:rgba(15,23,42,0.96);backdrop-filter:blur(12px);
 border:1px solid rgba(56,189,248,0.4);border-radius:12px;padding:8px 13px;font-size:12.5px;line-height:1.5;box-shadow:0 12px 28px rgba(0,0,0,0.6)}
-.lp-li.sel{background:rgba(34,54,92,0.9);outline:2px solid #38bdf8}
+.lp-li.sel{background:linear-gradient(135deg,rgba(37,99,235,0.4) 0%,rgba(29,78,216,0.6) 100%);outline:2.5px solid #38bdf8;box-shadow:0 4px 16px rgba(56,189,248,0.35);font-weight:700}
 .lp-go{display:block;width:calc(100% - 26px);margin:0 13px 14px;background:#38bdf8;color:#090d1a;border:none;border-radius:20px;
 padding:9px 14px;font-weight:800;font-size:12.5px;cursor:pointer;transition:all .18s;box-shadow:0 4px 14px rgba(56,189,248,0.3)}
 .lp-go:hover{background:#7dd3fc;box-shadow:0 6px 18px rgba(56,189,248,0.45)}
