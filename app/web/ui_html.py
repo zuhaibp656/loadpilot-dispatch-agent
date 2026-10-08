@@ -1597,6 +1597,53 @@ _UI_HTML = r"""<!DOCTYPE html>
       overflow: hidden;
     }
 
+    /* Clean High-Contrast Empty State Surfaces */
+    .ct-empty-state-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 100%;
+      min-height: 420px;
+      padding: 40px 24px;
+      background: radial-gradient(circle at center, rgba(66, 133, 244, 0.07) 0%, rgba(15, 23, 42, 0.45) 100%);
+      color: var(--text-main);
+    }
+    .ct-empty-icon {
+      font-size: 52px;
+      margin-bottom: 14px;
+      filter: drop-shadow(0 4px 12px rgba(66, 133, 244, 0.28));
+    }
+    .ct-empty-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+    .ct-empty-subtitle {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--accent-primary);
+      margin-bottom: 10px;
+    }
+    .ct-empty-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      max-width: 520px;
+      line-height: 1.55;
+      margin-bottom: 20px;
+    }
+    .ct-sidebar-empty {
+      padding: 28px 16px;
+      text-align: center;
+      background: var(--bg-card);
+      border: 1px dashed var(--border-subtle);
+      border-radius: 12px;
+      margin: 12px 0;
+    }
+
     /* Right Inspector Panel — Fixed Symmetric 380px Width Across Workspaces */
     .ct-sidebar {
       width: 380px;
@@ -2969,8 +3016,16 @@ _UI_HTML = r"""<!DOCTYPE html>
           </div>
 
           <div id="ct-map-mount" class="ct-engine-mount">
-            <div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);font-size:14px;gap:10px">
-              <span>⚡ Loading live route network &amp; 3D dispatch plan...</span>
+            <div class="ct-empty-state-card neon-blue">
+              <div class="ct-empty-icon">🗺️</div>
+              <div class="ct-empty-title">Dispatch Route Network Not Yet Synthesized</div>
+              <div class="ct-empty-subtitle">FleetFlow agent has not synthesized routes or loading configurations yet.</div>
+              <div class="ct-empty-desc">
+                Live dispatch corridors, multi-stop waypoints, and driver assignments will appear here once the agent executes. Return to the Launchpad to stage your fleet constraints and run synthesis.
+              </div>
+              <button class="ct-btn-primary" style="padding:10px 22px;font-size:13px;display:inline-flex;align-items:center;gap:8px" onclick="switchWorkspace('launchpad')">
+                <span>🚀</span> Go to Dispatch Launchpad
+              </button>
             </div>
           </div>
         </div>
@@ -2978,10 +3033,17 @@ _UI_HTML = r"""<!DOCTYPE html>
         <aside class="ct-sidebar neon-green">
           <div style="display:flex;align-items:center;justify-content:space-between;min-height:28px">
             <span class="ct-section-heading" style="font-size:16.5px">🚚 Dispatched Fleet</span>
-            <span id="routeCountLbl" class="ct-kpi-badge"></span>
+            <span id="routeCountLbl" class="ct-kpi-badge">0 Routes</span>
           </div>
 
-          <div id="towerRoutesList" style="flex:1;overflow-y:auto"></div>
+          <div id="towerRoutesList" style="flex:1;overflow-y:auto">
+            <div class="ct-sidebar-empty">
+              <div style="font-size:26px;margin-bottom:6px">🚚</div>
+              <div style="font-weight:700;color:var(--text-main);margin-bottom:4px">No Fleet Dispatched</div>
+              <div style="font-size:11.5px;color:var(--text-muted);line-height:1.5">Run FleetFlow Agent on the Launchpad to assign drivers and compute routes.</div>
+              <button class="ct-btn-secondary" style="margin-top:12px;width:100%;font-size:11.5px" onclick="switchWorkspace('launchpad')">Go to Launchpad →</button>
+            </div>
+          </div>
 
           <!-- Progressive Disclosure: Corridor Pinning tucked in a clean expandable drawer -->
           <details class="ct-accordion">
@@ -3021,10 +3083,22 @@ _UI_HTML = r"""<!DOCTYPE html>
               <span style="font-size:12.5px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Last stop loaded first at cab wall (X=0) · Stop 1 at rear door</span>
             </div>
             <div class="ct-scope-group">
-              <span id="studioBannerBadge" class="ct-kpi-badge">100% Unobstructed LIFO</span>
+              <span id="studioBannerBadge" class="ct-kpi-badge">Awaiting Dispatch Plan</span>
             </div>
           </div>
-          <div id="ct-load-mount" class="ct-engine-mount"></div>
+          <div id="ct-load-mount" class="ct-engine-mount">
+            <div class="ct-empty-state-card neon-amber">
+              <div class="ct-empty-icon">📦</div>
+              <div class="ct-empty-title">3D Cargo Bay Awaiting Consignment</div>
+              <div class="ct-empty-subtitle">No vehicle loading sequence or volumetric packing plan is currently active.</div>
+              <div class="ct-empty-desc">
+                Run the <b>FleetFlow Agent</b> from the Launchpad to compute physical axle-balanced packing, strict LIFO delivery sequences, and interactive 3D cargo inspection.
+              </div>
+              <button class="ct-btn-primary" style="padding:10px 22px;font-size:13px;display:inline-flex;align-items:center;gap:8px" onclick="switchWorkspace('launchpad')">
+                <span>🚀</span> Go to Dispatch Launchpad
+              </button>
+            </div>
+          </div>
         </div>
 
         <aside class="ct-sidebar neon-amber">
@@ -3036,7 +3110,9 @@ _UI_HTML = r"""<!DOCTYPE html>
             <div class="ct-panel-sub">Select any driver route and test-pack its cartons into any vehicle class.</div>
             <div class="ct-field" style="margin-bottom:10px">
               <label>1. Route / Driver Consignment</label>
-              <select id="selStudioRoute" class="ct-select" onchange="onStudioRouteSelect(this.value)"></select>
+              <select id="selStudioRoute" class="ct-select" onchange="onStudioRouteSelect(this.value)">
+                <option value="">(No active routes — run agent first)</option>
+              </select>
             </div>
             <div class="ct-field" style="margin-bottom:12px">
               <label>2. Test Vehicle Class (Dimensions)</label>
@@ -3167,7 +3243,20 @@ _UI_HTML = r"""<!DOCTYPE html>
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody id="simScheduleBody"></tbody>
+              <tbody id="simScheduleBody">
+                <tr>
+                  <td colspan="12" style="text-align:center;padding:52px 24px">
+                    <div style="font-size:28px;margin-bottom:8px">📊</div>
+                    <div style="font-size:15px;font-weight:800;color:var(--text-main);margin-bottom:6px">Dispatch Schedule Ledger Empty</div>
+                    <div style="font-size:12px;color:var(--text-muted);max-width:440px;margin:0 auto 16px auto;line-height:1.5">
+                      No active vehicle schedule or route ledger. Run the FleetFlow agent from the Dispatch Launchpad to simulate vehicle mix and cost metrics.
+                    </div>
+                    <button class="ct-btn-primary" style="padding:8px 18px;font-size:12px;display:inline-flex;align-items:center;gap:6px" onclick="switchWorkspace('launchpad')">
+                      <span>🚀</span> Go to Dispatch Launchpad
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
         </div>
@@ -3327,7 +3416,18 @@ _UI_HTML = r"""<!DOCTYPE html>
           <select id="selPortalTruck" class="ct-select" style="display:none" onchange="updateDriverHubPreview(this.value)"></select>
 
           <!-- Interactive Driver Cards Roster List -->
-          <div class="driver-roster-list" id="hubDriverRosterList"></div>
+          <div class="driver-roster-list" id="hubDriverRosterList">
+            <div class="ct-sidebar-empty" style="padding:28px 16px">
+              <div style="font-size:26px;margin-bottom:6px">👨‍✈️</div>
+              <div style="font-weight:700;color:var(--text-main);margin-bottom:4px">No Drivers Dispatched</div>
+              <div style="font-size:11.5px;color:var(--text-muted);line-height:1.5;margin-bottom:12px">
+                Driver assignments, shift schedules, and mobile turn-by-turn manifests will populate once the agent runs.
+              </div>
+              <button class="ct-btn-primary" style="width:100%;font-size:11.5px" onclick="switchWorkspace('launchpad')">
+                🚀 Go to Dispatch Launchpad
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- RIGHT COLUMN: Driver Operational Details & Progressive Disclosure Drawers -->
@@ -3337,12 +3437,12 @@ _UI_HTML = r"""<!DOCTYPE html>
             <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
               <div>
                 <div style="display:flex;align-items:center;gap:8px">
-                  <span style="font-size:18px;font-weight:800;color:var(--text-main)" id="hubDriverName">Select Driver</span>
-                  <span class="ct-kpi-badge" id="hubDriverClassBadge">T14 LCV</span>
-                  <span class="ct-kpi-badge" style="background:rgba(16,185,129,0.12);color:var(--accent-emerald)" id="hubDriverStatusBadge">Assigned · Shift Ready</span>
+                  <span style="font-size:18px;font-weight:800;color:var(--text-main)" id="hubDriverName">Awaiting Dispatch Plan</span>
+                  <span class="ct-kpi-badge" id="hubDriverClassBadge">Unassigned</span>
+                  <span class="ct-kpi-badge" style="background:rgba(16,185,129,0.12);color:var(--accent-emerald)" id="hubDriverStatusBadge">No Active Shift</span>
                 </div>
                 <div style="font-size:12px;color:var(--text-secondary);margin-top:3px" id="hubDriverSub">
-                  Select a driver from the left roster to view their route and cargo details.
+                  Return to Dispatch Launchpad to run agent synthesis and assign drivers.
                 </div>
               </div>
               <div style="display:flex;gap:12px;align-items:center">
@@ -3384,8 +3484,8 @@ _UI_HTML = r"""<!DOCTYPE html>
                 <div style="font-size:16px;font-weight:800;color:var(--text-main)" id="hubDriverWeight">0 kg</div>
               </div>
               <div style="padding:8px 10px;background:var(--bg-elevated);border-radius:10px;text-align:center">
-                <div style="font-size:10px;color:var(--text-muted);font-weight:800;text-transform:uppercase">Route Cost</div>
-                <div style="font-size:16px;font-weight:800;color:var(--text-main)" id="hubDriverCost">₹0</div>
+                <div style="font-size:10px;color:var(--text-muted);font-weight:800;text-transform:uppercase">Est. Distance</div>
+                <div style="font-size:16px;font-weight:800;color:var(--text-main)" id="hubDriverKm">0 km</div>
               </div>
             </div>
           </div>
@@ -3411,39 +3511,28 @@ _UI_HTML = r"""<!DOCTYPE html>
             </div>
           </details>
 
-          <!-- Accordion 3: Vehicle Axle Balance & Route Cost Breakdown -->
+          <!-- Accordion 3: Vehicle Axle Weight & Road Safety (CMVR Rule 93) -->
           <details class="ct-accordion">
             <summary class="ct-acc-trigger">
-              <span>📊 Vehicle Axle Weight Physics &amp; Cost Breakdown</span>
+              <span>⚖️ Vehicle Axle Weight &amp; CMVR Steering Safety</span>
               <span class="ct-kpi-badge" style="color:var(--accent-emerald)" id="hubAxleStatusPill">CMVR Rule 93 PASS ✓</span>
             </summary>
-            <div style="margin-top:10px;padding:12px;background:var(--bg-elevated);border-radius:10px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
-              <div>
-                <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:6px">Axle Weight Distribution</div>
-                <div style="font-size:12px;display:flex;justify-content:space-between;padding:4px 0">
-                  <span>Front Steer Axle:</span>
-                  <b id="hubDriverFrontAxle">38% (Pass)</b>
+            <div style="margin-top:10px;padding:12px;background:var(--bg-elevated);border-radius:10px">
+              <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:8px">Axle Weight Distribution &amp; Steering Stability</div>
+              <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+                <div style="padding:10px 14px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:8px">
+                  <div style="font-size:11px;color:var(--text-muted);font-weight:700">Front Steer Axle</div>
+                  <div style="font-size:18px;font-weight:800;color:var(--text-main);margin-top:2px" id="hubDriverFrontAxle">38% (Pass)</div>
+                  <div style="font-size:11px;color:var(--text-muted);margin-top:3px">Complies with CMVR Rule 93 steer axle safety requirements (&gt;20%).</div>
                 </div>
-                <div style="font-size:12px;display:flex;justify-content:space-between;padding:4px 0">
-                  <span>Rear Drive Axle:</span>
-                  <b id="hubDriverRearAxle">62% (Pass)</b>
+                <div style="padding:10px 14px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:8px">
+                  <div style="font-size:11px;color:var(--text-muted);font-weight:700">Rear Drive Axle</div>
+                  <div style="font-size:18px;font-weight:800;color:var(--text-main);margin-top:2px" id="hubDriverRearAxle">62% (Pass)</div>
+                  <div style="font-size:11px;color:var(--text-muted);margin-top:3px">Optimal drive axle road traction and payload stability.</div>
                 </div>
-                <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Complies with CMVR Rule 93 steer axle safety requirements.</div>
               </div>
-              <div>
-                <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:6px">Cost Components</div>
-                <div style="font-size:12px;display:flex;justify-content:space-between;padding:4px 0">
-                  <span>Distance &amp; Fuel:</span>
-                  <b id="hubDriverCostKm">₹0</b>
-                </div>
-                <div style="font-size:12px;display:flex;justify-content:space-between;padding:4px 0">
-                  <span>Driver Crew Day Pay:</span>
-                  <b id="hubDriverCostCrew">₹0</b>
-                </div>
-                <div style="font-size:12px;display:flex;justify-content:space-between;padding:4px 0">
-                  <span>Fixed Vehicle &amp; Tolls:</span>
-                  <b id="hubDriverCostFixed">₹0</b>
-                </div>
+              <div style="font-size:11.5px;color:var(--text-muted);margin-top:10px">
+                ✓ Centroid balance verified across all loaded cartons to prevent trailer sway and brake lockup.
               </div>
             </div>
           </details>
@@ -4104,24 +4193,134 @@ async function switchWorkspace(viewId) {
     dock.style.display = (viewId === 'launchpad') ? 'none' : 'flex';
   }
 
-  // If user jumps directly to a dispatch workspace before running synthesis, synthesize automatically
-  if (!CT.bundle && ['tower', 'studio3d', 'simulator', 'gcp'].includes(viewId)) {
-    await synthesizeFromLaunchpad(false);
+  // If user visits a dispatch workspace before running synthesis, show clean empty state cards prompting Launchpad run
+  if (!CT.bundle) {
+    if (viewId === 'tower') {
+      renderTowerEmptyState();
+    } else if (viewId === 'studio3d') {
+      renderStudioEmptyState();
+    } else if (viewId === 'simulator') {
+      renderSimulatorEmptyState();
+    } else if (viewId === 'gcp') {
+      renderGcpEmptyState();
+    }
+  } else {
+    if (viewId === 'tower') {
+      setTimeout(() => mountMapCanvas(CT.bundle.anim_data), 35);
+    } else if (viewId === 'studio3d') {
+      setTimeout(() => runStudioRepack(), 35);
+    } else if (viewId === 'gcp') {
+      renderDriverRoster(CT.bundle.routes);
+      const sel = document.getElementById('selPortalTruck');
+      if (sel && sel.value) updateDriverHubPreview(sel.value);
+    }
   }
 
-  if (viewId === 'tower' && CT.bundle) {
-    setTimeout(() => mountMapCanvas(CT.bundle.anim_data), 35);
-  } else if (viewId === 'studio3d' && CT.bundle) {
-    setTimeout(() => runStudioRepack(), 35);
-  } else if (viewId === 'gcp' && CT.bundle) {
-    renderDriverRoster(CT.bundle.routes);
-    const sel = document.getElementById('selPortalTruck');
-    if (sel && sel.value) updateDriverHubPreview(sel.value);
-  } else if (viewId === 'history') {
+  if (viewId === 'history') {
     setTimeout(() => loadHistoryView(), 35);
   }
 }
 window.switchView = switchWorkspace;
+
+function renderTowerEmptyState() {
+  const mount = document.getElementById('ct-map-mount');
+  if (mount) {
+    mount.innerHTML = `
+      <div class="ct-empty-state-card neon-blue">
+        <div class="ct-empty-icon">🗺️</div>
+        <div class="ct-empty-title">Dispatch Route Network Not Yet Synthesized</div>
+        <div class="ct-empty-subtitle">FleetFlow agent has not synthesized routes or loading configurations yet.</div>
+        <div class="ct-empty-desc">
+          Live dispatch corridors, multi-stop waypoints, and driver assignments will appear here once the agent executes. Return to the Launchpad to stage your fleet constraints and run synthesis.
+        </div>
+        <button class="ct-btn-primary" style="padding:10px 22px;font-size:13px;display:inline-flex;align-items:center;gap:8px" onclick="switchWorkspace('launchpad')">
+          <span>🚀</span> Go to Dispatch Launchpad
+        </button>
+      </div>`;
+  }
+  const rList = document.getElementById('towerRoutesList');
+  if (rList) {
+    rList.innerHTML = `
+      <div class="ct-sidebar-empty">
+        <div style="font-size:26px;margin-bottom:6px">🚚</div>
+        <div style="font-weight:700;color:var(--text-main);margin-bottom:4px">No Fleet Dispatched</div>
+        <div style="font-size:11.5px;color:var(--text-muted);line-height:1.5">Run FleetFlow Agent on the Launchpad to assign drivers and compute routes.</div>
+        <button class="ct-btn-secondary" style="margin-top:12px;width:100%;font-size:11.5px" onclick="switchWorkspace('launchpad')">Go to Launchpad →</button>
+      </div>`;
+  }
+  const rBadge = document.getElementById('routeCountLbl');
+  if (rBadge) rBadge.textContent = '0 Routes';
+}
+
+function renderStudioEmptyState() {
+  const mount = document.getElementById('ct-load-mount');
+  if (mount) {
+    mount.innerHTML = `
+      <div class="ct-empty-state-card neon-amber">
+        <div class="ct-empty-icon">📦</div>
+        <div class="ct-empty-title">3D Cargo Bay Awaiting Consignment</div>
+        <div class="ct-empty-subtitle">No vehicle loading sequence or volumetric packing plan is currently active.</div>
+        <div class="ct-empty-desc">
+          Run the <b>FleetFlow Agent</b> from the Launchpad to compute physical axle-balanced packing, strict LIFO delivery sequences, and interactive 3D cargo inspection.
+        </div>
+        <button class="ct-btn-primary" style="padding:10px 22px;font-size:13px;display:inline-flex;align-items:center;gap:8px" onclick="switchWorkspace('launchpad')">
+          <span>🚀</span> Go to Dispatch Launchpad
+        </button>
+      </div>`;
+  }
+  const selRoute = document.getElementById('selStudioRoute');
+  if (selRoute) {
+    selRoute.innerHTML = `<option value="">(No active routes — run agent first)</option>`;
+  }
+  const fitBadge = document.getElementById('studioBannerBadge');
+  if (fitBadge) fitBadge.textContent = 'Awaiting Dispatch Plan';
+}
+
+function renderSimulatorEmptyState() {
+  const body = document.getElementById('simScheduleBody');
+  if (body) {
+    body.innerHTML = `
+      <tr>
+        <td colspan="12" style="text-align:center;padding:52px 24px">
+          <div style="font-size:28px;margin-bottom:8px">📊</div>
+          <div style="font-size:15px;font-weight:800;color:var(--text-main);margin-bottom:6px">Dispatch Schedule Ledger Empty</div>
+          <div style="font-size:12px;color:var(--text-muted);max-width:440px;margin:0 auto 16px auto;line-height:1.5">
+            No active vehicle schedule or route ledger. Run the FleetFlow agent from the Dispatch Launchpad to simulate vehicle mix and cost metrics.
+          </div>
+          <button class="ct-btn-primary" style="padding:8px 18px;font-size:12px;display:inline-flex;align-items:center;gap:6px" onclick="switchWorkspace('launchpad')">
+            <span>🚀</span> Go to Dispatch Launchpad
+          </button>
+        </td>
+      </tr>`;
+  }
+}
+
+function renderGcpEmptyState() {
+  const list = document.getElementById('hubDriverRosterList');
+  if (list) {
+    list.innerHTML = `
+      <div class="ct-sidebar-empty" style="padding:28px 16px">
+        <div style="font-size:26px;margin-bottom:6px">👨‍✈️</div>
+        <div style="font-weight:700;color:var(--text-main);margin-bottom:4px">No Drivers Dispatched</div>
+        <div style="font-size:11.5px;color:var(--text-muted);line-height:1.5;margin-bottom:12px">
+          Driver assignments, shift schedules, and mobile turn-by-turn manifests will populate once the agent runs.
+        </div>
+        <button class="ct-btn-primary" style="width:100%;font-size:11.5px" onclick="switchWorkspace('launchpad')">
+          🚀 Go to Dispatch Launchpad
+        </button>
+      </div>`;
+  }
+  const badge = document.getElementById('hubDriverCountBadge');
+  if (badge) badge.textContent = '0 Drivers';
+  const name = document.getElementById('hubDriverName');
+  if (name) name.textContent = 'Awaiting Dispatch Plan';
+  const cls = document.getElementById('hubDriverClassBadge');
+  if (cls) cls.textContent = 'Unassigned';
+  const status = document.getElementById('hubDriverStatusBadge');
+  if (status) status.textContent = 'No Active Shift';
+  const sub = document.getElementById('hubDriverSub');
+  if (sub) sub.textContent = 'Return to Dispatch Launchpad to run agent synthesis and assign drivers.';
+}
 
 function mountMapCanvas(animData) {
   const mount = document.getElementById('ct-map-mount');
@@ -4214,6 +4413,14 @@ async function initControlTower() {
       applyHubContextToLaunchpad(meta.hub_context, true);
     } else {
       await onLaunchpadHubChange('BHW-DC');
+    }
+
+    // Initialize empty states for non-launchpad views so they don't assume data before agent run
+    if (!CT.bundle) {
+      renderTowerEmptyState();
+      renderStudioEmptyState();
+      renderSimulatorEmptyState();
+      renderGcpEmptyState();
     }
 
     // Support deep-link view routing via query param (?view=intake) or hash (#gcp)
@@ -5014,23 +5221,9 @@ function applyBundle(bundle) {
         <span style="font-weight:800;font-size:13px">${r.truck_id} · ${r.driver}</span>
         <span style="font-family:var(--font-mono);font-size:11px;color:${r.color};font-weight:700">${r.corridor} (${r.branch})</span>
       </div>
-      <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px">
-        ${r.truck_name} · ${r.stops_count} stops · ${r.cartons_count} boxes · ${r.km} km
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px;font-size:11.5px">
-        <span>Fill: <b>${r.volume_fill_pct}% vol</b> / <b>${r.weight_fill_pct}% wt</b></span>
-        <span style="font-family:var(--font-mono);font-weight:700;color:var(--text-main)">₹${r.cost_total.toLocaleString('en-IN')}</span>
-      </div>
-      <div style="display:flex;gap:6px;margin-top:8px;padding-top:7px;border-top:1px dashed var(--border-subtle)" onclick="event.stopPropagation()">
-        <a href="${r.whatsapp_url}" target="_blank" class="ct-btn-chip-action wa" title="Share full delivery itinerary with driver via WhatsApp">
-          💬 WhatsApp
-        </a>
-        <a href="${r.gmaps_nav_url}" target="_blank" class="ct-btn-chip-action maps" title="Launch Google Maps Live Traffic Navigation">
-          🗺️ Maps Nav
-        </a>
-        <a href="${r.driver_portal_url}" target="_blank" class="ct-btn-chip-action portal" title="Open Mobile Driver Portal & Printable Challan">
-          📱 Portal
-        </a>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--text-muted);margin-top:4px">
+        <span>${r.truck_name}</span>
+        <span>${r.stops_count} stops · ${Math.round(r.km)} km</span>
       </div>
     </div>
   `).join('');
@@ -5067,6 +5260,10 @@ function applyBundle(bundle) {
 }
 
 async function triggerPlanUpdate(extra = {}) {
+  if (!CT.bundle) {
+    showToast('⚠️ Please run the FleetFlow agent from the Dispatch Launchpad first.', 3500);
+    return;
+  }
   const payload = {
     hub_id: document.getElementById('selHub')?.value || CT.activeHubId || 'BHW-DC',
     objective: document.getElementById('selObjective')?.value || document.getElementById('lpSelObjective')?.value || 'lowest_cost',
@@ -5599,7 +5796,6 @@ function renderDriverRoster(routes) {
           <span class="driver-metric-pill"><b>${r.stops_count}</b> drops</span>
           <span class="driver-metric-pill"><b>${r.cartons_count}</b> ctn</span>
           <span class="driver-metric-pill"><b>${Math.round(r.km)}</b> km</span>
-          <span class="driver-metric-pill" style="margin-left:auto;color:var(--accent-primary)"><b>₹${r.cost_total.toLocaleString('en-IN')}</b></span>
         </div>
       </div>
     `;
@@ -5666,22 +5862,14 @@ function updateDriverHubPreview(truckId) {
   if (cartonsEl) cartonsEl.textContent = `${r.cartons_count} boxes`;
   const weightEl = document.getElementById('hubDriverWeight');
   if (weightEl) weightEl.textContent = `${(r.payload_kg || r.weight_kg || 1840).toLocaleString('en-IN')} kg`;
-  const costEl = document.getElementById('hubDriverCost');
-  if (costEl) costEl.textContent = `₹${r.cost_total.toLocaleString('en-IN')}`;
+  const kmEl = document.getElementById('hubDriverKm');
+  if (kmEl) kmEl.textContent = `${Math.round(r.km)} km`;
 
   // Axle weights & CMVR Rule 93
   const frontAxleEl = document.getElementById('hubDriverFrontAxle');
   if (frontAxleEl) frontAxleEl.textContent = `${r.axle_front_pct || 38}% (Pass)`;
   const rearAxleEl = document.getElementById('hubDriverRearAxle');
   if (rearAxleEl) rearAxleEl.textContent = `${r.axle_rear_pct || 62}% (Pass)`;
-
-  // Cost breakdown
-  const costKmEl = document.getElementById('hubDriverCostKm');
-  if (costKmEl) costKmEl.textContent = `₹${Math.round(r.cost_km || (r.cost_total * 0.48)).toLocaleString('en-IN')}`;
-  const costCrewEl = document.getElementById('hubDriverCostCrew');
-  if (costCrewEl) costCrewEl.textContent = `₹${Math.round(r.cost_driver || (r.cost_total * 0.32)).toLocaleString('en-IN')}`;
-  const costFixedEl = document.getElementById('hubDriverCostFixed');
-  if (costFixedEl) costFixedEl.textContent = `₹${Math.round(r.cost_fixed || (r.cost_total * 0.20)).toLocaleString('en-IN')}`;
 
   // Populate Stop-by-Stop Door-to-Cab Cargo Sequence List
   const listEl = document.getElementById('hubDriverStopsList');
