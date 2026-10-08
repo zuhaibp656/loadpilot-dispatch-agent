@@ -1,5 +1,245 @@
 [
   {
+    "plan_id": "LP-BDDD92",
+    "dispatch_date": "2026-10-08",
+    "created_at": "2026-10-08T09:34:57.543908",
+    "audit_hash": "0F480A5105B30DECF58537F8",
+    "hub_id": "BHW-DC",
+    "hub_name": "Bhiwandi Regional DC",
+    "city": "mumbai",
+    "objective": "lowest_cost",
+    "order_source": "demo",
+    "prompt": "Standard Dispatch Optimization",
+    "trucks_count": 7,
+    "corridors_count": 6,
+    "diesel_litres": 249,
+    "baseline_trucks": 10,
+    "optimized_trucks": 7,
+    "trucks_saved": 3,
+    "baseline_cost_inr": 64345.0,
+    "optimized_cost_inr": 45214.0,
+    "savings_inr": 19131.0,
+    "savings_pct": 29.7,
+    "baseline_km": 1186.0,
+    "optimized_km": 1046.0,
+    "km_saved": 140.0,
+    "total_stops": 70,
+    "total_cartons": 1260,
+    "total_weight_kg": 22260.0,
+    "avg_vol_fill_pct": 35.9,
+    "avg_wt_fill_pct": 86.4,
+    "diesel_saved_litres": 31.8,
+    "co2_saved_kg": 85.0,
+    "trees_offset": 1171,
+    "status": "DISPATCHED",
+    "actor": "Fleet Dispatcher",
+    "report_local_url": "/api/history/LP-BDDD92/report",
+    "manifest_local_url": "/api/history/LP-BDDD92/manifest.csv",
+    "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-BDDD92.html",
+    "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-BDDD92.csv",
+    "routes_summary": "7 trucks across 70 stops"
+  },
+  {
+    "plan_id": "LP-CE2988",
+    "dispatch_date": "2026-10-08",
+    "created_at": "2026-10-08T09:34:51.106983",
+    "audit_hash": "4C40F26B3560FCF253FE7D38",
+    "hub_id": "BHW-DC",
+    "hub_name": "Bhiwandi Regional DC",
+    "city": "mumbai",
+    "objective": "lowest_cost",
+    "order_source": "demo",
+    "prompt": "Standard Dispatch Optimization",
+    "trucks_count": 7,
+    "corridors_count": 5,
+    "diesel_litres": 240,
+    "baseline_trucks": 10,
+    "optimized_trucks": 7,
+    "trucks_saved": 3,
+    "baseline_cost_inr": 64345.0,
+    "optimized_cost_inr": 43151.0,
+    "savings_inr": 21194.0,
+    "savings_pct": 32.9,
+    "baseline_km": 1186.0,
+    "optimized_km": 1007.0,
+    "km_saved": 179.0,
+    "total_stops": 70,
+    "total_cartons": 1260,
+    "total_weight_kg": 22260.0,
+    "avg_vol_fill_pct": 37.8,
+    "avg_wt_fill_pct": 90.0,
+    "diesel_saved_litres": 39.7,
+    "co2_saved_kg": 106.4,
+    "trees_offset": 1466,
+    "status": "DISPATCHED",
+    "actor": "Fleet Dispatcher",
+    "report_local_url": "/api/history/LP-CE2988/report",
+    "manifest_local_url": "/api/history/LP-CE2988/manifest.csv",
+    "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-CE2988.html",
+    "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-CE2988.csv",
+    "routes_summary": "7 trucks across 70 stops"
+  },
+  {
+    "plan_id": "LP-352A1E",
+    "dispatch_date": "2026-10-08",
+    "created_at": "2026-10-08T09:30:12.313189",
+    "audit_hash": "DB49E9BC5A6654DC857136C6",
+    "hub_id": "BHW-DC",
+    "hub_name": "Bhiwandi Regional DC",
+    "city": "mumbai",
+    "objective": "lowest_cost",
+    "order_source": "chat",
+    "prompt": "plan only west",
+    "trucks_count": 1,
+    "corridors_count": 1,
+    "diesel_litres": 17,
+    "baseline_trucks": 3,
+    "optimized_trucks": 1,
+    "trucks_saved": 2,
+    "baseline_cost_inr": 12904.0,
+    "optimized_cost_inr": 4848.0,
+    "savings_inr": 8056.0,
+    "savings_pct": 62.4,
+    "baseline_km": 145.0,
+    "optimized_km": 72.0,
+    "km_saved": 73.0,
+    "total_stops": 8,
+    "total_cartons": 156,
+    "total_weight_kg": 2570.0,
+    "avg_vol_fill_pct": 27.7,
+    "avg_wt_fill_pct": 73.5,
+    "diesel_saved_litres": 6.9,
+    "co2_saved_kg": 18.6,
+    "trees_offset": 256,
+    "status": "DISPATCHED",
+    "actor": "Fleet Dispatcher",
+    "report_local_url": "/api/history/LP-352A1E/report",
+    "manifest_local_url": "/api/history/LP-352A1E/manifest.csv",
+    "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-352A1E.html",
+    "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-352A1E.csv",
+    "routes_summary": "1 trucks across 8 stops"
+  },
+  {
+    "plan_id": "LP-3367C2",
+    "dispatch_date": "2026-10-08",
+    "created_at": "2026-10-08T09:29:34.660100",
+    "audit_hash": "21A7DC0071BF47833D674CB7",
+    "hub_id": "BHW-DC",
+    "hub_name": "Bhiwandi Regional DC",
+    "city": "mumbai",
+    "objective": "lowest_cost",
+    "order_source": "demo",
+    "prompt": "Standard Dispatch Optimization",
+    "trucks_count": 7,
+    "corridors_count": 6,
+    "diesel_litres": 249,
+    "baseline_trucks": 10,
+    "optimized_trucks": 7,
+    "trucks_saved": 3,
+    "baseline_cost_inr": 64345.0,
+    "optimized_cost_inr": 45214.0,
+    "savings_inr": 19131.0,
+    "savings_pct": 29.7,
+    "baseline_km": 1186.0,
+    "optimized_km": 1046.0,
+    "km_saved": 140.0,
+    "total_stops": 70,
+    "total_cartons": 1260,
+    "total_weight_kg": 22260.0,
+    "avg_vol_fill_pct": 35.9,
+    "avg_wt_fill_pct": 86.4,
+    "diesel_saved_litres": 31.8,
+    "co2_saved_kg": 85.0,
+    "trees_offset": 1171,
+    "status": "DISPATCHED",
+    "actor": "Fleet Dispatcher",
+    "report_local_url": "/api/history/LP-3367C2/report",
+    "manifest_local_url": "/api/history/LP-3367C2/manifest.csv",
+    "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-3367C2.html",
+    "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-3367C2.csv",
+    "routes_summary": "7 trucks across 70 stops"
+  },
+  {
+    "plan_id": "LP-E8EB14",
+    "dispatch_date": "2026-10-08",
+    "created_at": "2026-10-08T09:29:28.248846",
+    "audit_hash": "2ABBE358559E4B320190B8EA",
+    "hub_id": "BHW-DC",
+    "hub_name": "Bhiwandi Regional DC",
+    "city": "mumbai",
+    "objective": "lowest_cost",
+    "order_source": "demo",
+    "prompt": "Standard Dispatch Optimization",
+    "trucks_count": 7,
+    "corridors_count": 5,
+    "diesel_litres": 240,
+    "baseline_trucks": 10,
+    "optimized_trucks": 7,
+    "trucks_saved": 3,
+    "baseline_cost_inr": 64345.0,
+    "optimized_cost_inr": 43151.0,
+    "savings_inr": 21194.0,
+    "savings_pct": 32.9,
+    "baseline_km": 1186.0,
+    "optimized_km": 1007.0,
+    "km_saved": 179.0,
+    "total_stops": 70,
+    "total_cartons": 1260,
+    "total_weight_kg": 22260.0,
+    "avg_vol_fill_pct": 37.8,
+    "avg_wt_fill_pct": 90.0,
+    "diesel_saved_litres": 39.7,
+    "co2_saved_kg": 106.4,
+    "trees_offset": 1466,
+    "status": "DISPATCHED",
+    "actor": "Fleet Dispatcher",
+    "report_local_url": "/api/history/LP-E8EB14/report",
+    "manifest_local_url": "/api/history/LP-E8EB14/manifest.csv",
+    "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-E8EB14.html",
+    "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-E8EB14.csv",
+    "routes_summary": "7 trucks across 70 stops"
+  },
+  {
+    "plan_id": "LP-00A80A",
+    "dispatch_date": "2026-10-08",
+    "created_at": "2026-10-08T09:12:48.594537",
+    "audit_hash": "8EC4E32F6BE4FE8739E76E46",
+    "hub_id": "BHW-DC",
+    "hub_name": "Bhiwandi Regional DC",
+    "city": "mumbai",
+    "objective": "lowest_cost",
+    "order_source": "demo",
+    "prompt": "plan only west",
+    "baseline_trucks": 10,
+    "optimized_trucks": 7,
+    "trucks_saved": 3,
+    "baseline_cost_inr": 64345.0,
+    "optimized_cost_inr": 43151.0,
+    "savings_inr": 21194.0,
+    "savings_pct": 32.9,
+    "baseline_km": 1186.0,
+    "optimized_km": 1007.0,
+    "km_saved": 179.0,
+    "total_stops": 70,
+    "total_cartons": 1260,
+    "total_weight_kg": 22260.0,
+    "avg_vol_fill_pct": 37.8,
+    "avg_wt_fill_pct": 90.0,
+    "diesel_saved_litres": 39.7,
+    "co2_saved_kg": 106.4,
+    "trees_offset": 1466,
+    "status": "DISPATCHED",
+    "actor": "Fleet Dispatcher",
+    "report_local_url": "/api/history/LP-00A80A/report",
+    "manifest_local_url": "/api/history/LP-00A80A/manifest.csv",
+    "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-00A80A.html",
+    "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-00A80A.csv",
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 240
+  },
+  {
     "plan_id": "LP-262B9F",
     "dispatch_date": "2026-10-07",
     "created_at": "2026-10-07T20:34:06.120849",
@@ -34,7 +274,10 @@
     "manifest_local_url": "/api/history/LP-262B9F/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-262B9F.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-262B9F.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 249
   },
   {
     "plan_id": "LP-6F2D67",
@@ -71,7 +314,10 @@
     "manifest_local_url": "/api/history/LP-6F2D67/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-6F2D67.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-6F2D67.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 240
   },
   {
     "plan_id": "LP-BF7875",
@@ -108,7 +354,10 @@
     "manifest_local_url": "/api/history/LP-BF7875/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-BF7875.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-BF7875.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 249
   },
   {
     "plan_id": "LP-087598",
@@ -145,7 +394,10 @@
     "manifest_local_url": "/api/history/LP-087598/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-087598.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-087598.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 240
   },
   {
     "plan_id": "LP-D67F97",
@@ -182,7 +434,10 @@
     "manifest_local_url": "/api/history/LP-D67F97/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-D67F97.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-D67F97.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 249
   },
   {
     "plan_id": "LP-EBA4BE",
@@ -219,7 +474,10 @@
     "manifest_local_url": "/api/history/LP-EBA4BE/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-EBA4BE.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-EBA4BE.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 240
   },
   {
     "plan_id": "LP-38CCD8",
@@ -256,7 +514,10 @@
     "manifest_local_url": "/api/history/LP-38CCD8/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-38CCD8.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-38CCD8.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 249
   },
   {
     "plan_id": "LP-6156BD",
@@ -293,7 +554,10 @@
     "manifest_local_url": "/api/history/LP-6156BD/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-6156BD.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-6156BD.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 256
   },
   {
     "plan_id": "LP-DB637A",
@@ -330,7 +594,10 @@
     "manifest_local_url": "/api/history/LP-DB637A/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-DB637A.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-DB637A.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 256
   },
   {
     "plan_id": "LP-97FA15",
@@ -367,7 +634,10 @@
     "manifest_local_url": "/api/history/LP-97FA15/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-97FA15.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-97FA15.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 249
   },
   {
     "plan_id": "LP-25D11D",
@@ -404,7 +674,10 @@
     "manifest_local_url": "/api/history/LP-25D11D/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-25D11D.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-25D11D.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 256
   },
   {
     "plan_id": "LP-799A9C",
@@ -441,7 +714,10 @@
     "manifest_local_url": "/api/history/LP-799A9C/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-799A9C.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-799A9C.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 249
   },
   {
     "plan_id": "LP-346FB0",
@@ -478,7 +754,10 @@
     "manifest_local_url": "/api/history/LP-346FB0/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-346FB0.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-346FB0.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 256
   },
   {
     "plan_id": "LP-192757",
@@ -515,7 +794,10 @@
     "manifest_local_url": "/api/history/LP-192757/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-192757.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-192757.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 240
   },
   {
     "plan_id": "LP-7F4185",
@@ -552,7 +834,10 @@
     "manifest_local_url": "/api/history/LP-7F4185/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-7F4185.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-7F4185.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 249
   },
   {
     "plan_id": "LP-0195F4",
@@ -589,7 +874,10 @@
     "manifest_local_url": "/api/history/LP-0195F4/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-0195F4.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-0195F4.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 243
   },
   {
     "plan_id": "LP-12C583",
@@ -626,7 +914,10 @@
     "manifest_local_url": "/api/history/LP-12C583/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-12C583.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-12C583.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 249
   },
   {
     "plan_id": "LP-A2CBA3",
@@ -663,7 +954,10 @@
     "manifest_local_url": "/api/history/LP-A2CBA3/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-A2CBA3.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-A2CBA3.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 256
   },
   {
     "plan_id": "LP-573542",
@@ -700,7 +994,10 @@
     "manifest_local_url": "/api/history/LP-573542/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-573542.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-573542.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 256
   },
   {
     "plan_id": "LP-973A05",
@@ -737,7 +1034,10 @@
     "manifest_local_url": "/api/history/LP-973A05/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-973A05.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-973A05.csv",
-    "routes_summary": "8 trucks across 70 stops"
+    "routes_summary": "8 trucks across 70 stops",
+    "trucks_count": 8,
+    "corridors_count": 4,
+    "diesel_litres": 260
   },
   {
     "plan_id": "LP-0E842B",
@@ -774,7 +1074,10 @@
     "manifest_local_url": "/api/history/LP-0E842B/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-0E842B.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-0E842B.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 249
   },
   {
     "plan_id": "LP-475E68",
@@ -811,7 +1114,10 @@
     "manifest_local_url": "/api/history/LP-475E68/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-475E68.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-475E68.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 240
   },
   {
     "plan_id": "LP-3100DA",
@@ -847,7 +1153,11 @@
     "manifest_local_url": "/api/history/LP-3100DA/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-3100DA.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-3100DA.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "audit_hash": "1F985C3102B4014AA6E296E0",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 249
   },
   {
     "plan_id": "LP-BF3D20",
@@ -883,7 +1193,11 @@
     "manifest_local_url": "/api/history/LP-BF3D20/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-BF3D20.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-BF3D20.csv",
-    "routes_summary": "7 trucks across 70 stops"
+    "routes_summary": "7 trucks across 70 stops",
+    "audit_hash": "E38CCCB0ED014E18452B5E08",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 240
   },
   {
     "plan_id": "LP-B8EC9B",
@@ -919,7 +1233,11 @@
     "manifest_local_url": "/api/history/LP-B8EC9B/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_LP-B8EC9B.html",
     "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_LP-B8EC9B.csv",
-    "routes_summary": "8 trucks across 70 stops"
+    "routes_summary": "8 trucks across 70 stops",
+    "audit_hash": "FBFF80DBCA54E6F25CA63779",
+    "trucks_count": 8,
+    "corridors_count": 4,
+    "diesel_litres": 260
   },
   {
     "plan_id": "BHW-20261006-01",
@@ -955,7 +1273,11 @@
     "report_local_url": "/api/history/BHW-20261006-01/report",
     "manifest_local_url": "/api/history/BHW-20261006-01/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_BHW-20261006-01.html",
-    "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_BHW-20261006-01.csv"
+    "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_BHW-20261006-01.csv",
+    "audit_hash": "03CAD8456E8AF2EDBB7FBF5B",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 201
   },
   {
     "plan_id": "BLR-20261005-01",
@@ -991,7 +1313,11 @@
     "report_local_url": "/api/history/BLR-20261005-01/report",
     "manifest_local_url": "/api/history/BLR-20261005-01/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_BLR-20261005-01.html",
-    "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_BLR-20261005-01.csv"
+    "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_BLR-20261005-01.csv",
+    "audit_hash": "52A916DE44A7C0FA81F6FB6D",
+    "trucks_count": 6,
+    "corridors_count": 4,
+    "diesel_litres": 162
   },
   {
     "plan_id": "BHW-20261004-01",
@@ -1027,7 +1353,11 @@
     "report_local_url": "/api/history/BHW-20261004-01/report",
     "manifest_local_url": "/api/history/BHW-20261004-01/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_BHW-20261004-01.html",
-    "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_BHW-20261004-01.csv"
+    "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_BHW-20261004-01.csv",
+    "audit_hash": "B74F2B3571E59B5E9B111C9A",
+    "trucks_count": 8,
+    "corridors_count": 4,
+    "diesel_litres": 218
   },
   {
     "plan_id": "BHW-20261002-01",
@@ -1063,7 +1393,11 @@
     "report_local_url": "/api/history/BHW-20261002-01/report",
     "manifest_local_url": "/api/history/BHW-20261002-01/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_BHW-20261002-01.html",
-    "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_BHW-20261002-01.csv"
+    "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_BHW-20261002-01.csv",
+    "audit_hash": "9675922BB49F914E4D15E2B9",
+    "trucks_count": 7,
+    "corridors_count": 4,
+    "diesel_litres": 198
   },
   {
     "plan_id": "BLR-20260930-01",
@@ -1099,6 +1433,10 @@
     "report_local_url": "/api/history/BLR-20260930-01/report",
     "manifest_local_url": "/api/history/BLR-20260930-01/manifest.csv",
     "gcs_report_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/reports/dispatch_report_BLR-20260930-01.html",
-    "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_BLR-20260930-01.csv"
+    "gcs_manifest_url": "https://storage.cloud.google.com/zuhaibp-ai-loadpilot-media/manifests/manifest_BLR-20260930-01.csv",
+    "audit_hash": "11C99122F25C1138C3AE5C70",
+    "trucks_count": 6,
+    "corridors_count": 4,
+    "diesel_litres": 165
   }
 ]

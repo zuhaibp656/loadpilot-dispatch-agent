@@ -51,7 +51,7 @@ from app.geo.gmaps import (
 )
 from app.geo.roads import provider_name
 from app.integration import tools as T
-from app.optim.corridors import normalize_corridor
+from app.optim.corridors import corridor_of, normalize_corridor
 from app.optim.lifo_packer import pack_truck_lifo
 from app.render.anim_html import ROUTE_COLORS, plan_to_anim_data
 from app.render.driver_portal_html import build_driver_portal_html
@@ -354,6 +354,11 @@ class ChatRequest(BaseModel):
     prompt: str
 
 
+class InterpretPromptRequest(BaseModel):
+    prompt: str = ""
+    hub_id: str | None = None
+
+
 class ScanPhotoRequest(BaseModel):
     sample_name: str = ""
     image_base64: str = ""
@@ -491,9 +496,163 @@ def _build_hub_context_payload(hub_id: str = "BHW-DC", order_source: str = "demo
     }
 
 
+def interpret_dispatch_prompt(prompt: str, current_hub: str = "BHW-DC") -> dict[str, Any]:
+    """Parse dispatch prompt using specialized intent extraction for corridors, drivers, objectives, and fleet scope."""
+    p_str = (prompt or "").strip()
+    if not p_str:
+        return {
+            "prompt": "",
+            "corridors": None,
+            "corridor_labels": [],
+            "driver_assignments": [],
+            "hub_id": None,
+            "city": None,
+            "objective": None,
+            "scope": None,
+            "fuel_price": None,
+            "driver_day_cost": None,
+            "summary": "Full fleet dispatch across all regional sectors",
+            "chips": [
+                {"icon": "⚡", "label": "Full Fleet Optimization"},
+                {"icon": "🛡️", "label": "Zero-Hallucination OR-Tools"}
+            ],
+        }
+
+    ql = p_str.lower()
+    res: dict[str, Any] = {
+        "prompt": p_str,
+        "corridors": None,
+        "corridor_labels": [],
+        "driver_assignments": [],
+        "hub_id": None,
+        "city": None,
+        "objective": None,
+        "scope": None,
+        "fuel_price": None,
+        "driver_day_cost": None,
+        "chips": [],
+        "summary": ""
+    }
+
+    # 1. Hub / City detection
+    if any(w in ql for w in ("bangalore", "bengaluru", "nelamangala", "electronic city", "blr")):
+        res["city"] = "bangalore"
+        res["hub_id"] = "BLR-EC" if "electronic" in ql else "BLR-NLG"
+        res["chips"].append({"icon": "🏢", "label": f"Hub: {res['hub_id']}"})
+    elif "taloja" in ql:
+        res["city"] = "mumbai"
+        res["hub_id"] = "TLJ-DC"
+        res["chips"].append({"icon": "🏢", "label": "Hub: TLJ-DC (Taloja)"})
+    elif "bhiwandi" in ql or "mumbai" in ql:
+        res["city"] = "mumbai"
+        res["hub_id"] = "BHW-DC"
+        res["chips"].append({"icon": "🏢", "label": "Hub: BHW-DC (Bhiwandi)"})
+
+    # 2. Objective detection
+    if "fewest" in ql or "fewer" in ql or "min truck" in ql or "minimum truck" in ql:
+        res["objective"] = "fewest_trucks"
+        res["chips"].append({"icon": "🎯", "label": "Fewest Trucks Goal"})
+    elif "fast" in ql or "speed" in ql or "quick" in ql:
+        res["objective"] = "fastest_completion"
+        res["chips"].append({"icon": "⚡", "label": "Fastest Completion"})
+    elif "balanc" in ql or "equal" in ql or "even" in ql:
+        res["objective"] = "balanced"
+        res["chips"].append({"icon": "⚖️", "label": "Balanced Workload"})
+    elif "cost" in ql or "cheap" in ql or "lowest" in ql or "saving" in ql:
+        res["objective"] = "lowest_cost"
+        res["chips"].append({"icon": "💰", "label": "Lowest Cost Goal"})
+
+    # 3. Scope detection (e.g. "1 truck", "top 3 trucks", "single truck")
+    if re.search(r"\b(1\s*truck|single\s*truck|one\s*truck|solo\s*truck)\b", ql):
+        res["scope"] = "1"
+        res["chips"].append({"icon": "🚚", "label": "1 Truck Scoped"})
+    elif re.search(r"\b(3\s*trucks?|three\s*trucks?|top\s*3)\b", ql):
+        res["scope"] = "3"
+        res["chips"].append({"icon": "🚛", "label": "Top 3 Trucks"})
+
+    # 4. Operating costs (fuel, driver)
+    if m_fuel := re.search(r"\b(?:diesel|fuel|petrol)\s*(?:at|@|price|rate|cost)?\s*([0-9]{2,3}(?:\.[0-9]+)?)\b", ql):
+        res["fuel_price"] = float(m_fuel.group(1))
+        res["chips"].append({"icon": "⛽", "label": f"₹{res['fuel_price']}/L Fuel"})
+    if m_drv := re.search(r"\b(?:driver\s*(?:pay|wage|cost|day|rate)?|day\s*cost)\s*(?:at|@|is)?\s*([0-9]{3,5})\b", ql):
+        res["driver_day_cost"] = float(m_drv.group(1))
+        res["chips"].append({"icon": "👨‍✈️", "label": f"₹{res['driver_day_cost']}/day Driver"})
+
+    # 5. Driver assignments + truck types e.g. "Ravi to West in T14"
+    all_drv_names = sorted({d for cfg in CITIES.values() for d in cfg.default_drivers}, key=len, reverse=True)
+    drv_pattern = "|".join(re.escape(d.lower()) for d in all_drv_names)
+    corr_words_pattern = r"(?:north[\s-]*east|north[\s-]*west|south[\s-]*east|south[\s-]*west|north|south|east|west|ne|nw|se|sw)"
+
+    assigned_drivers = set()
+    for m_c in re.finditer(rf"\b({drv_pattern})\b[^.;,\n]*?\b({corr_words_pattern})\b", ql):
+        d_name = m_c.group(1).title()
+        c_norm = normalize_corridor(m_c.group(2))
+        clause = ql[max(0, m_c.start() - 15):min(len(ql), m_c.end() + 45)]
+        tc_match = re.search(r"\b(ace|pkp|t14|t17|t20|14\s*ft|17\s*ft|20\s*ft|22\s*ft|small\s*truck)\b", clause)
+        tc_code = ""
+        if tc_match:
+            tok = tc_match.group(1).upper().replace(" ", "")
+            tc_map = {"14FT": "T14", "17FT": "T17", "20FT": "T20", "22FT": "T20", "SMALLTRUCK": "T14"}
+            tc_code = tc_map.get(tok, tok)
+        if c_norm and d_name not in assigned_drivers:
+            assigned_drivers.add(d_name)
+            res["driver_assignments"].append({
+                "driver": d_name,
+                "corridor": c_norm,
+                "truck_type": tc_code if tc_code in TRUCK_CATALOGUE else ""
+            })
+            truck_lbl = f" ({tc_code})" if tc_code in TRUCK_CATALOGUE else ""
+            res["chips"].append({"icon": "📌", "label": f"{d_name} → {CORRIDOR_NAMES.get(c_norm, c_norm)}{truck_lbl}"})
+
+    # 6. Corridor / Sector constraint filtering (e.g. "plan only west", "west only", "deliveries for west", "only north and south")
+    is_corridor_scoped = False
+    if any(k in ql for k in ("only", "just", "filter", "scope to", "deliveries for", "stops for", "dispatch west", "dispatch south", "dispatch north", "dispatch east")):
+        is_corridor_scoped = True
+    elif re.search(rf"\b{corr_words_pattern}\s+(?:only|sector|corridor|stops|deliveries)\b", ql):
+        is_corridor_scoped = True
+    elif re.search(rf"^(?:plan|dispatch|run|optimize)\s+{corr_words_pattern}\b", ql):
+        is_corridor_scoped = True
+
+    if is_corridor_scoped:
+        found_corrs = []
+        for m_corr in re.finditer(rf"\b({corr_words_pattern})\b", ql):
+            c_code = normalize_corridor(m_corr.group(1))
+            if c_code and c_code not in found_corrs:
+                found_corrs.append(c_code)
+        if found_corrs:
+            res["corridors"] = found_corrs
+            res["corridor_labels"] = [CORRIDOR_NAMES.get(c, c) for c in found_corrs]
+            corr_str = ", ".join(res["corridor_labels"])
+            res["chips"].insert(0, {"icon": "🧭", "label": f"Sector: {corr_str} Only"})
+
+    # Compose summary
+    summary_parts = []
+    if res["corridors"]:
+        summary_parts.append(f"Sector Filter: {', '.join(res['corridor_labels'])} Only")
+    if res["driver_assignments"]:
+        drv_strs = [f"{a['driver']} to {CORRIDOR_NAMES.get(a['corridor'], a['corridor'])}" for a in res["driver_assignments"]]
+        summary_parts.append("Pinned " + ", ".join(drv_strs))
+    if res["objective"]:
+        summary_parts.append(res["objective"].replace("_", " ").title() + " Goal")
+    if res["hub_id"]:
+        summary_parts.append(f"Hub {res['hub_id']}")
+    if not summary_parts:
+        summary_parts.append("Full Fleet Dispatch Optimization")
+    res["summary"] = " · ".join(summary_parts)
+
+    return res
+
+
 # ==============================================================================
 # Endpoints
 # ==============================================================================
+@router.post("/api/interpret-prompt")
+def api_interpret_prompt(req: InterpretPromptRequest) -> dict[str, Any]:
+    """Analyze dispatch prompt with NLP pattern extractor & AI intent analyzer."""
+    hub = req.hub_id or "BHW-DC"
+    return interpret_dispatch_prompt(req.prompt, current_hub=hub)
+
+
 @router.get("/api/hub-context")
 def api_get_hub_context(hub_id: str = "BHW-DC", order_source: str = "demo") -> dict[str, Any]:
     """Return dynamic Hub-aware drivers, fleet counts, corridor breakdown, and store manifest for the Launchpad."""
@@ -778,48 +937,38 @@ def api_run_plan(req: PlanRequest) -> dict[str, Any]:
 
     # Also parse natural-language prompt overrides if entered on the Launchpad
     prompt_str = (req.prompt or "").strip()
-    if prompt_str:
-        ql = prompt_str.lower()
-        if any(w in ql for w in ("bangalore", "bengaluru", "nelamangala", "electronic city", "blr")):
-            p.hub_id = "BLR-EC" if "electronic" in ql else "BLR-NLG"
-            replan_needed = True
-        elif "taloja" in ql:
-            p.hub_id = "TLJ-DC"
-            replan_needed = True
-        elif "bhiwandi" in ql or "mumbai" in ql:
-            p.hub_id = "BHW-DC"
-            replan_needed = True
-        if "fewest" in ql:
-            p.objective = Objective.FEWEST_TRUCKS
-            replan_needed = True
-        elif "fast" in ql:
-            p.objective = Objective.FASTEST_COMPLETION
-            replan_needed = True
-        elif "balanc" in ql:
-            p.objective = Objective.BALANCED
-            replan_needed = True
+    intent = interpret_dispatch_prompt(prompt_str, current_hub=p.hub_id) if prompt_str else {}
 
-        # Parse natural-language driver + corridor + optional truck size e.g. "Ravi to West in T14"
-        all_drv_names = "|".join(
-            sorted({d.lower() for cfg in CITIES.values() for d in cfg.default_drivers}, key=len, reverse=True)
-        )
-        for m_c in re.finditer(
-            rf"\b({all_drv_names})\b[^.;,\n]*?\b(north[\s-]*east|north[\s-]*west|south[\s-]*east|south[\s-]*west|north|south|east|west|ne|nw|se|sw)\b",
-            ql,
-        ):
-            d_name = m_c.group(1).title()
-            c_norm = normalize_corridor(m_c.group(2))
-            # Check if a truck code or size is mentioned in the same clause
-            clause = ql[max(0, m_c.start() - 15):min(len(ql), m_c.end() + 45)]
-            tc_match = re.search(r"\b(ace|pkp|t14|t17|t20|14\s*ft|17\s*ft|20\s*ft|22\s*ft|small\s*truck)\b", clause)
-            tc_code = ""
-            if tc_match:
-                tok = tc_match.group(1).upper().replace(" ", "")
-                tc_map = {"14FT": "T14", "17FT": "T17", "20FT": "T20", "22FT": "T20", "SMALLTRUCK": "T14"}
-                tc_code = tc_map.get(tok, tok)
-            if c_norm:
-                merged_claims[d_name] = f"{c_norm}|{tc_code}" if tc_code in TRUCK_CATALOGUE else c_norm
+    if intent.get("city") and not req.city:
+        _, default_hub = resolve_city_and_hub(query_city=intent["city"])
+        if p.hub_id != default_hub.hub_id:
+            p.hub_id = default_hub.hub_id
+            replan_needed = True
+    if intent.get("hub_id") and not req.hub_id:
+        if p.hub_id != intent["hub_id"]:
+            p.hub_id = intent["hub_id"]
+            replan_needed = True
+    if intent.get("objective") and not req.objective:
+        try:
+            obj = Objective(intent["objective"])
+            if p.objective != obj:
+                p.objective = obj
                 replan_needed = True
+        except ValueError:
+            pass
+    if intent.get("fuel_price") and req.fuel_price <= 0:
+        p.fuel_price_per_litre = intent["fuel_price"]
+        replan_needed = True
+    if intent.get("driver_day_cost") and req.driver_day_cost <= 0:
+        p.driver_day_cost = intent["driver_day_cost"]
+        replan_needed = True
+    for item in intent.get("driver_assignments", []):
+        drv = item["driver"]
+        nc = item["corridor"]
+        tc_up = item.get("truck_type", "").upper()
+        if drv and nc:
+            merged_claims[drv] = f"{nc}|{tc_up}" if tc_up in TRUCK_CATALOGUE else nc
+            replan_needed = True
 
     if req.corridor_claims is not None or req.driver_assignments is not None or merged_claims:
         if merged_claims != p.corridor_claims:
@@ -833,19 +982,23 @@ def api_run_plan(req: PlanRequest) -> dict[str, Any]:
         p.driver_day_cost = float(req.driver_day_cost)
         replan_needed = True
 
-    # Optional corridor filtering from Launchpad (e.g., dispatch only selected compass sectors)
+    # Determine targeted corridors: either from prompt intent (e.g. "plan only west") OR UI selected_corridors
+    target_corrs = None
+    if intent.get("corridors"):
+        target_corrs = set(intent["corridors"])
+    elif req.selected_corridors and len(req.selected_corridors) < 8:
+        target_corrs = {normalize_corridor(c) for c in req.selected_corridors if normalize_corridor(c)}
+
     saved_stops_backup = None
-    if req.selected_corridors and len(req.selected_corridors) < 8:
-        valid_corrs = {normalize_corridor(c) for c in req.selected_corridors if normalize_corridor(c)}
-        if valid_corrs:
-            _, hub_obj = resolve_city_and_hub(query_hub=p.hub_id)
-            base_stops = T.current_stops(sess, p.order_source, hub_id=p.hub_id)
-            filtered_stops = [s for s in base_stops if corridor_of(hub_obj, s) in valid_corrs]
-            if filtered_stops:
-                saved_stops_backup = (sess.get("stops"), p.order_source)
-                sess["stops"] = filtered_stops
-                p.order_source = "chat"
-                replan_needed = True
+    if target_corrs and len(target_corrs) < 8:
+        _, hub_obj = resolve_city_and_hub(query_hub=p.hub_id)
+        base_stops = T.current_stops(sess, p.order_source, hub_id=p.hub_id)
+        filtered_stops = [s for s in base_stops if corridor_of(hub_obj, s) in target_corrs]
+        if filtered_stops:
+            saved_stops_backup = (sess.get("stops"), p.order_source)
+            sess["stops"] = filtered_stops
+            p.order_source = "chat"
+            replan_needed = True
 
     T.save_params(st, p)
     try:
@@ -860,7 +1013,7 @@ def api_run_plan(req: PlanRequest) -> dict[str, Any]:
 
     # Determine active_trucks from req.scope or prompt
     active_trucks: list[str] | None = None
-    scope_str = (req.scope or "all").strip()
+    scope_str = (req.scope or intent.get("scope") or "all").strip()
     if scope_str.lower() not in ("all", "", "fleet", "all trucks"):
         if scope_str == "1":
             focus_id = req.focus_truck_id or (plan.routes[0].truck_id if plan.routes else "")
@@ -1188,7 +1341,33 @@ def api_agent_chat(req: ChatRequest) -> dict[str, Any]:
             f"(down from {plan.baseline.trucks}, saving **₹{plan.savings_inr:,.0f}/day**)."
         )
 
-    # 4. Check for scoping / filtering (1 truck, 3 trucks, specific driver/truck, or all)
+    # 4. Check for sector/corridor constraint e.g. "plan only west", "deliveries for west"
+    elif (chat_intent := interpret_dispatch_prompt(q)).get("corridors"):
+        tool_used = "plan_corridor_dispatch"
+        corrs = set(chat_intent["corridors"])
+        corr_names = chat_intent["corridor_labels"]
+        p = T.params_from_state(st)
+        _, hub_obj = resolve_city_and_hub(query_hub=p.hub_id)
+        base_stops = T.current_stops(sess, p.order_source, hub_id=p.hub_id)
+        filtered_stops = [s for s in base_stops if corridor_of(hub_obj, s) in corrs]
+        if filtered_stops:
+            sess["stops"] = filtered_stops
+            p.order_source = "chat"
+            T.save_params(st, p)
+            T.run_plan(st)
+            plan = sess["plan"]
+            active_trucks = [r.truck_id for r in plan.routes]
+            corr_label = ", ".join(corr_names)
+            reply = (
+                f"Constrained dispatch to **{corr_label} Sector** ({len(filtered_stops)} retail drops). "
+                f"Dispatched **{len(plan.routes)} truck{'s' if len(plan.routes) != 1 else ''}** "
+                f"({', '.join(f'{r.truck_id} · {r.driver} ({r.truck_type.code})' for r in plan.routes)}) "
+                f"totaling **{plan.optimized.km:.0f} km** and saving **₹{plan.savings_inr:,.0f}/day** vs baseline."
+            )
+        else:
+            reply = f"No delivery stops found in {', '.join(corr_names)} sector for {p.hub_id}."
+
+    # 5. Check for scoping / filtering (1 truck, 3 trucks, specific driver/truck, or all)
     else:
         plan = _ensure_plan(ctx)
         targets = T.parse_target_trucks(q, plan)

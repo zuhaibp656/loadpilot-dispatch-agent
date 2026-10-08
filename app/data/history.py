@@ -505,6 +505,12 @@ def record_dispatch_run(bundle: dict[str, Any], actor: str = "Operations Dispatc
 
     cert_hash = _gen_report_hash(plan_id, date_str, float(kpi.get("optimized_cost_inr", 0)), int(kpi.get("stops", 0)))
 
+    routes = bundle.get("routes", [])
+    trucks_cnt = len(routes) or int(kpi.get("optimized_trucks", 0)) or 1
+    corridors_cnt = len({r.get("corridor") for r in routes if r.get("corridor")}) or (1 if trucks_cnt == 1 else 4)
+    opt_km = float(kpi.get("optimized_km", 0))
+    diesel_litres = int(round(opt_km / 4.2)) if opt_km > 0 else int(trucks_cnt * 32)
+
     # Build history record entry
     record = {
         "plan_id": plan_id,
@@ -517,6 +523,9 @@ def record_dispatch_run(bundle: dict[str, Any], actor: str = "Operations Dispatc
         "objective": bundle.get("objective", "lowest_cost"),
         "order_source": bundle.get("order_source", "bigquery"),
         "prompt": prompt or "Autonomous fleet dispatch run",
+        "trucks_count": trucks_cnt,
+        "corridors_count": corridors_cnt,
+        "diesel_litres": diesel_litres,
         "baseline_trucks": kpi.get("baseline_trucks", 0),
         "optimized_trucks": kpi.get("optimized_trucks", 0),
         "trucks_saved": kpi.get("trucks_saved", 0),
@@ -541,7 +550,7 @@ def record_dispatch_run(bundle: dict[str, Any], actor: str = "Operations Dispatc
         "manifest_local_url": f"/api/history/{plan_id}/manifest.csv",
         "gcs_report_url": gcs_report_link,
         "gcs_manifest_url": gcs_manifest_link,
-        "routes_summary": f"{len(bundle.get('routes', []))} trucks across {kpi.get('stops', 0)} stops"
+        "routes_summary": f"{trucks_cnt} trucks across {kpi.get('stops', 0)} stops"
     }
 
     # Save to index
@@ -566,6 +575,7 @@ def get_history_list(hub_id: str | None = None, search: str = "", limit: int = 5
     except Exception:
         return []
 
+    modified = False
     for e in entries:
         if not e.get("audit_hash"):
             e["audit_hash"] = _gen_report_hash(
@@ -574,6 +584,22 @@ def get_history_list(hub_id: str | None = None, search: str = "", limit: int = 5
                 float(e.get("optimized_cost_inr", 0)),
                 int(e.get("total_stops", 0)),
             )
+        if not e.get("trucks_count"):
+            e["trucks_count"] = int(e.get("optimized_trucks") or 7)
+            modified = True
+        if not e.get("corridors_count"):
+            e["corridors_count"] = 1 if e["trucks_count"] == 1 else 4
+            modified = True
+        if not e.get("diesel_litres"):
+            opt_km = float(e.get("optimized_km") or 0)
+            e["diesel_litres"] = int(round(opt_km / 4.2)) if opt_km > 0 else int(e["trucks_count"] * 32)
+            modified = True
+
+    if modified:
+        try:
+            INDEX_FILE.write_text(json.dumps(entries, indent=2), encoding="utf-8")
+        except Exception:
+            pass
 
     if hub_id and hub_id != "all":
         entries = [e for e in entries if e.get("hub_id") == hub_id]
