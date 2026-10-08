@@ -169,3 +169,83 @@ def test_canvas_html_stays_small():
     T.plan_dispatch(ctx)
     plan = T.session(ctx.state)["plan"]
     assert len(build_anim_html(plan, mode="both").encode()) < 260_000
+
+
+def test_no_web_leakage_in_agent_core():
+    """Verify strict decoupling: core agent, optim, data, and render layers must NOT import app.web or fastapi."""
+    from importlib import import_module
+
+    core_modules = [
+        "app.agent",
+        "app.integration.agent",
+        "app.integration.tools",
+        "app.optim.vrp",
+        "app.optim.lifo_packer",
+        "app.optim.corridors",
+        "app.optim.cost",
+        "app.optim.dispatch",
+        "app.data.bq_source",
+        "app.data.master_data",
+        "app.data.cities",
+        "app.render.surfaces",
+        "app.render.markdown",
+    ]
+
+    for mod_name in core_modules:
+        mod = import_module(mod_name)
+        # Inspect module file content for prohibited imports
+        mod_file = getattr(mod, "__file__", None)
+        assert mod_file is not None, f"Module {mod_name} has no file"
+        with open(mod_file, "r", encoding="utf-8") as f:
+            code = f.read()
+        assert "from app.web" not in code, f"Forbidden import 'from app.web' in {mod_name}"
+        assert "import app.web" not in code, f"Forbidden import 'import app.web' in {mod_name}"
+        assert "from fastapi" not in code, f"Forbidden import 'from fastapi' in {mod_name}"
+        assert "import fastapi" not in code, f"Forbidden import 'import fastapi' in {mod_name}"
+
+
+def test_agent_ge_and_ui_functional_equivalence():
+    """Verify that the agent deployed to Gemini Enterprise and the Web UI share the exact same engine and function identically."""
+    # 1. Direct Agent Engine / Gemini Enterprise flow
+    ctx_ge = Ctx()
+    ge_out = T.plan_dispatch(ctx_ge, hub_id="BHW-DC")
+    assert ge_out["saved_inr_per_day"] > 0
+    assert ge_out["lifo_verified_all"] is True
+    ge_plan = T.session(ctx_ge.state)["plan"]
+    assert len(ge_plan.routes) >= 2
+
+    # Verify Gemini Enterprise callbacks
+    resp = A.LlmResponse(content=types.Content(role="model", parts=[types.Part(text="- 4 trucks planned\n- ₹18,400 saved\n- LIFO verified")]))
+    resp = A.append_report(ctx_ge, resp)
+    md = resp.content.parts[-1].text
+    # Must include atomic copy-ready tables for Google Sheets and headed links
+    assert "### Today vs FleetFlow" in md or "### Today vs LoadPilot" in md
+    assert "### Truck plan (copy-ready)" in md
+    assert "### Where each truck goes" in md
+    # Must adhere to table column limit <= 5 for Gemini Enterprise mobile/chat view
+    for line in md.splitlines():
+        if line.startswith("|"):
+            assert line.count("|") <= 6
+
+    # Verify A2UI surface emitted for Gemini Enterprise
+    content = A.emit_surface(ctx_ge)
+    msgs = _a2ui_msgs(content)
+    assert any("updateComponents" in m for m in msgs)
+
+    # 2. Web UI flow: test client hitting /api/agent-chat and /api/plan
+    from fastapi.testclient import TestClient
+    from app.fast_api_app import app as web_app
+    client = TestClient(web_app)
+
+    # Calling agent chat on the web wrapper
+    r_chat = client.post("/api/agent-chat", json={"prompt": "plan today's dispatch"})
+    assert r_chat.status_code == 200
+    chat_data = r_chat.json()
+    assert "bundle" in chat_data
+    ui_kpi = chat_data["bundle"]["kpi"]
+
+    # Compare core metrics: both must agree on optimized truck count and savings
+    assert ui_kpi["savings_inr"] > 0
+    assert ui_kpi["lifo_all_ok"] is True
+    assert ui_kpi["optimized_trucks"] == (ge_out.get("fleetflow") or ge_out.get("loadpilot"))["trucks"]
+
