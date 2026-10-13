@@ -1568,32 +1568,55 @@ _UI_HTML = r"""<!DOCTYPE html>
     /* Delivery Corridor Curved Trajectories */
     .synth-route-casing {
       fill: none;
-      stroke: #080d19;
-      stroke-width: 7;
+      stroke: #020617;
+      stroke-width: 14;
       stroke-linecap: round;
       stroke-linejoin: round;
-      opacity: 0.85;
+      opacity: 0.95;
     }
     html.theme-light .synth-route-casing {
-      stroke: #f1f5f9;
+      stroke: #cbd5e1;
+    }
+
+    .synth-route-asphalt {
+      fill: none;
+      stroke: #1e293b;
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    html.theme-light .synth-route-asphalt {
+      stroke: #e2e8f0;
+    }
+
+    .synth-route-lanes {
+      fill: none;
+      stroke: #475569;
+      stroke-width: 1.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 6 9;
+    }
+    html.theme-light .synth-route-lanes {
+      stroke: #94a3b8;
     }
 
     .synth-route-base {
       fill: none;
-      stroke: rgba(148, 163, 184, 0.35);
+      stroke: rgba(148, 163, 184, 0.20);
       stroke-width: 2.2;
       stroke-linecap: round;
       stroke-linejoin: round;
       stroke-dasharray: 4 6;
     }
     html.theme-light .synth-route-base {
-      stroke: rgba(100, 116, 139, 0.30);
+      stroke: rgba(100, 116, 139, 0.20);
     }
 
     /* Moving Neon Laser Flow Tracer Lines (Presentation Style) */
     .synth-route-tracer {
       fill: none;
-      stroke: #38bdf8;
+      stroke: rgba(56, 189, 248, 0.40);
       stroke-width: 2.6;
       stroke-linecap: round;
       stroke-linejoin: round;
@@ -1601,7 +1624,7 @@ _UI_HTML = r"""<!DOCTYPE html>
       animation: synthFlow 3.5s linear infinite;
     }
     html.theme-light .synth-route-tracer {
-      stroke: #1a73e8;
+      stroke: rgba(26, 115, 232, 0.40);
     }
 
     .synth-branch-flow {
@@ -1616,26 +1639,26 @@ _UI_HTML = r"""<!DOCTYPE html>
       to { stroke-dashoffset: -240px; }
     }
 
-    /* Dynamic Solid Progress Line that fills up as solver advances */
+    /* Dynamic Solid Progress Line: smooth 60fps direct update via rAF */
     .synth-route-progress {
       fill: none;
-      stroke: #2563eb;
-      stroke-width: 3.8;
+      stroke: #38bdf8;
+      stroke-width: 3.5;
       stroke-linecap: round;
       stroke-linejoin: round;
-      stroke-dasharray: 680;
-      stroke-dashoffset: 680;
-      transition: stroke-dashoffset 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+      stroke-dasharray: 720;
+      stroke-dashoffset: 720;
+      filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.75));
     }
     html.theme-light .synth-route-progress {
       stroke: #1a73e8;
+      filter: drop-shadow(0 0 4px rgba(26, 115, 232, 0.6));
     }
 
-    /* Minimalist Top-Down Telematics Commercial Truck Beacon */
+    /* Modern Aerodynamic Commercial Delivery Truck Beacon (zero CSS lag for pure 60fps rAF) */
     .synth-truck-beacon-group {
-      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
       transform-box: view-box;
-      filter: drop-shadow(0 2px 8px rgba(37, 99, 235, 0.5));
+      will-change: transform;
     }
 
     .beacon-pulse-ring {
@@ -3852,8 +3875,11 @@ _UI_HTML = r"""<!DOCTYPE html>
 
             <!-- 5 Prominent Quick Action Buttons -->
             <div class="driver-quick-btns">
-              <a id="btnOpenMapsNav" href="#" target="_blank" class="ct-btn-primary" style="text-decoration:none;background:linear-gradient(135deg,#16a34a,#059669);justify-content:center;box-shadow:0 3px 8px rgba(22,163,74,0.25)">
-                🗺️ Maps Turn-by-Turn
+              <a id="btnStartGmapsStop1" href="#" target="_blank" class="ct-btn-primary" style="text-decoration:none;background:linear-gradient(135deg,#16a34a,#059669);justify-content:center;box-shadow:0 3px 8px rgba(22,163,74,0.25)">
+                🚀 Start GPS Nav (Stop 1)
+              </a>
+              <a id="btnOpenMapsNav" href="#" target="_blank" class="ct-btn-secondary neon-blue" style="text-decoration:none;justify-content:center">
+                🗺️ Full Corridor Map
               </a>
               <a id="btnOpenStreetView" href="#" target="_blank" class="ct-btn-secondary neon-cyan" style="text-decoration:none;justify-content:center">
                 📸 Street View 360° Dock
@@ -3861,12 +3887,13 @@ _UI_HTML = r"""<!DOCTYPE html>
               <a id="btnOpenWhatsApp" href="#" target="_blank" class="ct-btn-secondary neon-green" style="text-decoration:none;justify-content:center">
                 💬 WhatsApp Dispatch
               </a>
-              <a id="btnOpenPortalTab" href="#" target="_blank" class="ct-btn-secondary" style="text-decoration:none;justify-content:center">
-                📄 Print LR Challan
-              </a>
               <a id="btnOpenStandalonePortal" href="#" target="_blank" class="ct-btn-secondary neon-blue" style="text-decoration:none;justify-content:center">
                 📱 Standalone App ↗
               </a>
+            </div>
+            <div style="margin-top:6px;font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px">
+              <span>💡</span>
+              <span><b>Turn-by-Turn Tip:</b> Tap <b>Start GPS Nav (Stop 1)</b> to launch active Google Maps GPS voice guidance. Tap <b>Full Corridor Map</b> for all-stop overview.</span>
             </div>
 
             <!-- Key Metric Counters Strip -->
@@ -4338,14 +4365,34 @@ _UI_HTML = r"""<!DOCTYPE html>
           Staging retail store manifest, solving corridor ray-clusters &amp; running OR-Tools VRP engine...
         </div>
 
-        <!-- ═══ MINIMALIST GEOSPATIAL MAP ROUTE SIMULATION VIEWPORT ═══ -->
+        <!-- ═══ SLEEK GEOSPATIAL EXPRESSWAY CORRIDOR VIEWPORT ═══ -->
         <div class="synth-map-viewport">
           <svg class="synth-map-svg" viewBox="0 0 700 210" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <linearGradient id="synthRadarCone" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.40"/>
+              <linearGradient id="synthHeadlightBeam" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85"/>
+                <stop offset="25%" stop-color="#38bdf8" stop-opacity="0.45"/>
                 <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
               </linearGradient>
+              <linearGradient id="synthCabGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#1d4ed8"/>
+                <stop offset="100%" stop-color="#2563eb"/>
+              </linearGradient>
+              <linearGradient id="synthTrailerGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#1e293b"/>
+                <stop offset="100%" stop-color="#0f172a"/>
+              </linearGradient>
+              <linearGradient id="synthWindshieldGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#0284c7"/>
+                <stop offset="100%" stop-color="#38bdf8"/>
+              </linearGradient>
+              <filter id="synthUnderglow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="3" result="blur"/>
+                <feMerge>
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
               <linearGradient id="branchAmberGrad" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0%" stop-color="#f59e0b"/>
                 <stop offset="100%" stop-color="#d97706"/>
@@ -4371,116 +4418,127 @@ _UI_HTML = r"""<!DOCTYPE html>
             "/>
 
             <!-- 3. Geographic Locality Labels -->
-            <text x="75" y="175" class="synth-locality-label">BHIWANDI REGIONAL DC</text>
+            <text x="65" y="172" class="synth-locality-label">BHIWANDI REGIONAL DC</text>
             <text x="210" y="32" class="synth-locality-label">THANE GATEWAY</text>
-            <text x="360" y="188" class="synth-locality-label">NAVI MUMBAI INDUSTRIAL</text>
-            <text x="495" y="105" class="synth-locality-label">BKC COMMERCIAL CORRIDOR</text>
-            <text x="635" y="145" class="synth-locality-label">SOUTH RETAIL HUBS</text>
+            <text x="310" y="55" class="synth-locality-label">OR-TOOLS VRP SOLVER</text>
+            <text x="445" y="145" class="synth-locality-label">3D LIFO STAGING</text>
+            <text x="635" y="115" class="synth-locality-label">RETAIL STORE DROPS</text>
 
-            <!-- 4. Feeder Branch Routes with Moving Courier Pulse Dots (Presentation Style) -->
+            <!-- 4. Feeder Branch Corridors -->
             <!-- Branch A: South Corridor (Amber) -->
-            <path id="synthBranchA" d="M 220,122 C 280,165 370,165 470,140" fill="none" stroke="rgba(245, 158, 11, 0.25)" stroke-width="2" stroke-dasharray="4 4"/>
-            <path d="M 220,122 C 280,165 370,165 470,140" fill="none" stroke="url(#branchAmberGrad)" stroke-width="2" class="synth-branch-flow"/>
+            <path id="synthBranchA" d="M 185,105 C 235,150 320,160 420,140" fill="none" stroke="rgba(245, 158, 11, 0.25)" stroke-width="2" stroke-dasharray="4 4"/>
+            <path d="M 185,105 C 235,150 320,160 420,140" fill="none" stroke="url(#branchAmberGrad)" stroke-width="2" class="synth-branch-flow"/>
             <circle r="3.5" fill="#f59e0b">
-              <animateMotion dur="3.8s" repeatCount="indefinite" path="M 220,122 C 280,165 370,165 470,140"/>
+              <animateMotion dur="3.8s" repeatCount="indefinite" path="M 185,105 C 235,150 320,160 420,140"/>
             </circle>
 
             <!-- Branch B: East Corridor (Emerald) -->
-            <path id="synthBranchB" d="M 360,85 C 420,135 500,105 580,130" fill="none" stroke="rgba(16, 185, 129, 0.25)" stroke-width="2" stroke-dasharray="4 4"/>
-            <path d="M 360,85 C 420,135 500,105 580,130" fill="none" stroke="url(#branchEmeraldGrad)" stroke-width="2" class="synth-branch-flow" style="animation-delay:-1.2s"/>
+            <path id="synthBranchB" d="M 380,86 C 440,120 510,95 580,120" fill="none" stroke="rgba(16, 185, 129, 0.25)" stroke-width="2" stroke-dasharray="4 4"/>
+            <path d="M 380,86 C 440,120 510,95 580,120" fill="none" stroke="url(#branchEmeraldGrad)" stroke-width="2" class="synth-branch-flow" style="animation-delay:-1.2s"/>
             <circle r="3.5" fill="#10b981">
-              <animateMotion dur="4.2s" repeatCount="indefinite" path="M 360,85 C 420,135 500,105 580,130"/>
+              <animateMotion dur="4.2s" repeatCount="indefinite" path="M 380,86 C 440,120 510,95 580,120"/>
             </circle>
 
             <!-- Branch C: Central Corridor (Purple) -->
-            <path id="synthBranchC" d="M 480,52 C 530,25 580,45 640,30" fill="none" stroke="rgba(168, 85, 247, 0.25)" stroke-width="2" stroke-dasharray="4 4"/>
-            <path d="M 480,52 C 530,25 580,45 640,30" fill="none" stroke="url(#branchPurpleGrad)" stroke-width="2" class="synth-branch-flow" style="animation-delay:-2.4s"/>
+            <path id="synthBranchC" d="M 540,126 C 580,85 620,105 670,80" fill="none" stroke="rgba(168, 85, 247, 0.25)" stroke-width="2" stroke-dasharray="4 4"/>
+            <path d="M 540,126 C 580,85 620,105 670,80" fill="none" stroke="url(#branchPurpleGrad)" stroke-width="2" class="synth-branch-flow" style="animation-delay:-2.4s"/>
             <circle r="3.5" fill="#a855f7">
-              <animateMotion dur="3.5s" repeatCount="indefinite" path="M 480,52 C 530,25 580,45 640,30"/>
+              <animateMotion dur="3.5s" repeatCount="indefinite" path="M 540,126 C 580,85 620,105 670,80"/>
             </circle>
 
-            <!-- 5. Main Curved Delivery Expressway (Trunk Arterial Corridor) -->
-            <!-- Casing -->
-            <path class="synth-route-casing" d="M 60,145 C 150,45 230,170 360,85 C 440,25 530,135 630,65"/>
-            <!-- Base dashed track -->
-            <path class="synth-route-base" d="M 60,145 C 150,45 230,170 360,85 C 440,25 530,135 630,65"/>
-            <!-- Continuous glowing laser flow tracer -->
-            <path id="synthTrunkPath" class="synth-route-tracer" d="M 60,145 C 150,45 230,170 360,85 C 440,25 530,135 630,65"/>
-            <!-- Dynamic solid progress overlay -->
-            <path id="synthProgressPath" class="synth-route-progress" d="M 60,145 C 150,45 230,170 360,85 C 440,25 530,135 630,65"/>
+            <!-- 5. Main Sweeping Commercial Freight Expressway Corridor -->
+            <!-- Outer road casing border -->
+            <path class="synth-route-casing" d="M 50,140 C 130,140 180,80 300,80 C 410,80 480,135 635,75"/>
+            <!-- Charcoal highway asphalt road bed -->
+            <path class="synth-route-asphalt" d="M 50,140 C 130,140 180,80 300,80 C 410,80 480,135 635,75"/>
+            <!-- Center dashed lane striping -->
+            <path class="synth-route-lanes" d="M 50,140 C 130,140 180,80 300,80 C 410,80 480,135 635,75"/>
+            <!-- Continuous glowing neon laser pulse flow -->
+            <path id="synthTrunkPath" class="synth-route-tracer" d="M 50,140 C 130,140 180,80 300,80 C 410,80 480,135 635,75"/>
+            <!-- Dynamic solid route progress line driven smoothly at 60fps -->
+            <path id="synthProgressPath" class="synth-route-progress" d="M 50,140 C 130,140 180,80 300,80 C 410,80 480,135 635,75"/>
 
             <!-- 6. Geospatial Waypoint Nodes (Checkpoints) -->
             <!-- Node 1: DC Dock (Start) -->
-            <g id="synthWp1" class="synth-wp-node active" transform="translate(60, 145)">
-              <circle r="16" class="synth-wp-pulse"/>
-              <circle r="9" class="synth-wp-circle-bg"/>
+            <g id="synthWp1" class="synth-wp-node active" transform="translate(50, 140)">
+              <circle r="15" class="synth-wp-pulse"/>
+              <circle r="8.5" class="synth-wp-circle-bg"/>
               <circle r="3.5" fill="#38bdf8"/>
               <text y="-14" class="synth-wp-tag">HUB 01 · DC DOCK</text>
             </g>
 
-            <!-- Node 2: Polar Corridors -->
-            <g id="synthWp2" class="synth-wp-node" transform="translate(220, 122)">
-              <circle r="16" class="synth-wp-pulse"/>
-              <circle r="9" class="synth-wp-circle-bg"/>
+            <!-- Node 2: Corridors -->
+            <g id="synthWp2" class="synth-wp-node" transform="translate(210, 94)">
+              <circle r="15" class="synth-wp-pulse"/>
+              <circle r="8.5" class="synth-wp-circle-bg"/>
               <circle r="3.5" fill="#94a3b8"/>
               <text y="-14" class="synth-wp-tag">WP 02 · CORRIDORS</text>
             </g>
 
             <!-- Node 3: OR-Tools MIP Solver -->
-            <g id="synthWp3" class="synth-wp-node" transform="translate(360, 85)">
-              <circle r="16" class="synth-wp-pulse"/>
-              <circle r="9" class="synth-wp-circle-bg"/>
+            <g id="synthWp3" class="synth-wp-node" transform="translate(300, 80)">
+              <circle r="15" class="synth-wp-pulse"/>
+              <circle r="8.5" class="synth-wp-circle-bg"/>
               <circle r="3.5" fill="#94a3b8"/>
               <text y="-14" class="synth-wp-tag">WP 03 · OR-TOOLS VRP</text>
             </g>
 
             <!-- Node 4: 3D LIFO Axle -->
-            <g id="synthWp4" class="synth-wp-node" transform="translate(480, 52)">
-              <circle r="16" class="synth-wp-pulse"/>
-              <circle r="9" class="synth-wp-circle-bg"/>
+            <g id="synthWp4" class="synth-wp-node" transform="translate(445, 106)">
+              <circle r="15" class="synth-wp-pulse"/>
+              <circle r="8.5" class="synth-wp-circle-bg"/>
               <circle r="3.5" fill="#94a3b8"/>
               <text y="-14" class="synth-wp-tag">WP 04 · 3D LIFO AXLE</text>
             </g>
 
             <!-- Node 5: Store Drops (Destination) -->
-            <g id="synthWp5" class="synth-wp-node" transform="translate(630, 65)">
-              <circle r="16" class="synth-wp-pulse"/>
-              <circle r="9" class="synth-wp-circle-bg"/>
+            <g id="synthWp5" class="synth-wp-node" transform="translate(635, 75)">
+              <circle r="15" class="synth-wp-pulse"/>
+              <circle r="8.5" class="synth-wp-circle-bg"/>
               <circle r="3.5" fill="#94a3b8"/>
               <text y="-14" class="synth-wp-tag">DEST · STORE DROPS</text>
             </g>
 
-            <!-- 7. Minimalist Top-Down Commercial Truck Telematics Beacon -->
-            <g id="synthTruckBeacon" class="synth-truck-beacon-group" transform="translate(60, 145)">
-              <!-- Expanding circular radar ping wave -->
-              <circle r="14" class="beacon-pulse-ring"/>
-
-              <!-- Forward Volumetric Directional Radar Cone -->
-              <polygon points="12,-4 40,-16 40,16 12,4" fill="url(#synthRadarCone)"/>
-
-              <!-- Vector Top-Down Heavy Commercial Freight Truck -->
-              <!-- Cargo Trailer Body -->
-              <rect x="-18" y="-7" width="22" height="14" rx="2" fill="#1e293b" stroke="#475569" stroke-width="1.2"/>
-              <!-- Cargo trailer roof grooves -->
-              <line x1="-14" y1="-4" x2="0" y2="-4" stroke="#334155" stroke-width="0.8"/>
-              <line x1="-14" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="0.8"/>
-              <line x1="-14" y1="4" x2="0" y2="4" stroke="#334155" stroke-width="0.8"/>
-              <!-- Axle wheel markers -->
-              <rect x="-16" y="-8.5" width="4" height="1.5" rx="0.5" fill="#0f172a"/>
-              <rect x="-16" y="7" width="4" height="1.5" rx="0.5" fill="#0f172a"/>
-              <rect x="-8" y="-8.5" width="4" height="1.5" rx="0.5" fill="#0f172a"/>
-              <rect x="-8" y="7" width="4" height="1.5" rx="0.5" fill="#0f172a"/>
-
+            <!-- 7. Modern Aerodynamic Commercial Delivery Truck -->
+            <g id="synthTruckBeacon" class="synth-truck-beacon-group" transform="translate(50, 140)">
+              <!-- Ground chassis drop shadow -->
+              <ellipse cx="-2" cy="0" rx="22" ry="10" fill="rgba(0,0,0,0.5)"/>
+              <!-- Underglow cyan neon aura -->
+              <ellipse cx="0" cy="0" rx="18" ry="7" fill="#38bdf8" opacity="0.32" filter="url(#synthUnderglow)"/>
+              <!-- Forward Xenon Headlight Beam Cones -->
+              <polygon points="15,-4.5 55,-16 55,-2 15,-2" fill="url(#synthHeadlightBeam)" opacity="0.9"/>
+              <polygon points="15,2 55,2 55,16 15,4.5" fill="url(#synthHeadlightBeam)" opacity="0.9"/>
+              <!-- Wheels: Rubber Tires with Alloy Rims -->
+              <rect x="-19" y="-9.5" width="5.5" height="2.2" rx="0.7" fill="#090d16" stroke="#475569" stroke-width="0.5"/>
+              <rect x="-19" y="7.3" width="5.5" height="2.2" rx="0.7" fill="#090d16" stroke="#475569" stroke-width="0.5"/>
+              <rect x="-12" y="-9.5" width="5.5" height="2.2" rx="0.7" fill="#090d16" stroke="#475569" stroke-width="0.5"/>
+              <rect x="-12" y="7.3" width="5.5" height="2.2" rx="0.7" fill="#090d16" stroke="#475569" stroke-width="0.5"/>
+              <rect x="7" y="-9" width="4.5" height="2" rx="0.6" fill="#090d16" stroke="#475569" stroke-width="0.5"/>
+              <rect x="7" y="7" width="4.5" height="2" rx="0.6" fill="#090d16" stroke="#475569" stroke-width="0.5"/>
+              <!-- Cargo Trailer Box -->
+              <rect x="-22" y="-7.5" width="25" height="15" rx="2" fill="url(#synthTrailerGrad)" stroke="#475569" stroke-width="1.1"/>
+              <!-- Trailer Top Ridges -->
+              <line x1="-18" y1="-3.5" x2="0" y2="-3.5" stroke="#334155" stroke-width="0.7"/>
+              <line x1="-18" y1="0" x2="0" y2="0" stroke="#334155" stroke-width="0.7"/>
+              <line x1="-18" y1="3.5" x2="0" y2="3.5" stroke="#334155" stroke-width="0.7"/>
+              <!-- FleetFlow Side Accent Stripe -->
+              <line x1="-21" y1="-7.5" x2="2" y2="-7.5" stroke="#38bdf8" stroke-width="1.2"/>
+              <line x1="-21" y1="7.5" x2="2" y2="7.5" stroke="#38bdf8" stroke-width="1.2"/>
+              <!-- Trailer Rear Safety Marker -->
+              <rect x="-22" y="-5" width="1.2" height="10" rx="0.4" fill="#f59e0b"/>
               <!-- Tractor Cab -->
-              <path d="M 4,-6 L 12,-6 Q 16,-5 16,0 Q 16,5 12,6 L 4,6 Z" fill="#2563eb" stroke="#38bdf8" stroke-width="1.2"/>
-              <!-- Windshield -->
-              <path d="M 8,-4 L 12,-4 Q 13,-3 13,0 Q 13,3 12,4 L 8,4 Z" fill="#0284c7" opacity="0.9"/>
-              <!-- Front steering wheel markers -->
-              <rect x="7" y="-8" width="4" height="1.5" rx="0.5" fill="#0f172a"/>
-              <rect x="7" y="6.5" width="4" height="1.5" rx="0.5" fill="#0f172a"/>
-              <!-- High-power LED headlights -->
-              <circle cx="15" cy="-3.5" r="1.2" fill="#fef08a"/>
-              <circle cx="15" cy="3.5" r="1.2" fill="#fef08a"/>
+              <path d="M 3,-6.5 L 13,-6 Q 16.5,-5 16.5,0 Q 16.5,5 13,6 L 3,6.5 Z" fill="url(#synthCabGrad)" stroke="#60a5fa" stroke-width="1"/>
+              <!-- Windshield with Reflection Glare -->
+              <path d="M 6,-4.5 L 12,-4 Q 13.5,-3 13.5,0 Q 13.5,3 12,4 L 6,4.5 Z" fill="url(#synthWindshieldGrad)"/>
+              <line x1="7" y1="-3" x2="11" y2="-1" stroke="#ffffff" stroke-width="0.8" opacity="0.75"/>
+              <!-- Side Mirrors -->
+              <rect x="7" y="-8.5" width="2.5" height="1.2" rx="0.4" fill="#1e293b"/>
+              <rect x="7" y="7.3" width="2.5" height="1.2" rx="0.4" fill="#1e293b"/>
+              <!-- High-Intensity Xenon Headlight Bulbs -->
+              <circle cx="15" cy="-3.5" r="1.4" fill="#fff" stroke="#fef08a" stroke-width="0.6"/>
+              <circle cx="15" cy="3.5" r="1.4" fill="#fff" stroke="#fef08a" stroke-width="0.6"/>
+              <!-- Radar Pulse Ping Ring -->
+              <circle r="16" class="beacon-pulse-ring"/>
             </g>
           </svg>
         </div>
@@ -4854,15 +4912,21 @@ function updateTowerGmapsEmbed() {
     targetRoute = routes[0];
   }
 
+  const layerType = CT.towerGmapsLayer === 'satellite' ? 'k' : 'm';
+  const zoom = CT.towerGmapsLayer === 'satellite' ? 16 : 13;
   let embedUrl = '';
   let fullUrl = '';
+
   if (targetRoute) {
-    embedUrl = CT.towerGmapsLayer === 'satellite' ? (targetRoute.gmaps_satellite_url || targetRoute.gmaps_embed_url) : (targetRoute.gmaps_embed_url || targetRoute.gmaps_satellite_url);
-    fullUrl = targetRoute.gmaps_nav_url || 'https://maps.google.com';
+    const firstStop = targetRoute.stops && targetRoute.stops[0];
+    const lat = firstStop ? firstStop.lat : ((CT.bundle && CT.bundle.hub && CT.bundle.hub.lat) || 19.2813);
+    const lon = firstStop ? firstStop.lon : ((CT.bundle && CT.bundle.hub && CT.bundle.hub.lon) || 73.0483);
+    embedUrl = `https://maps.google.com/maps?q=${lat},${lon}&t=${layerType}&z=${zoom}&output=embed`;
+    fullUrl = targetRoute.gmaps_nav_url || `https://maps.google.com/maps?q=${lat},${lon}`;
   } else {
-    const hubLat = (CT.bundle && CT.bundle.hub && CT.bundle.hub.lat) || 19.2969;
-    const hubLon = (CT.bundle && CT.bundle.hub && CT.bundle.hub.lon) || 73.0628;
-    embedUrl = `https://maps.google.com/maps?q=${hubLat},${hubLon}&t=${CT.towerGmapsLayer === 'satellite' ? 'k' : 'm'}&z=11&output=embed`;
+    const hubLat = (CT.bundle && CT.bundle.hub && CT.bundle.hub.lat) || 19.2813;
+    const hubLon = (CT.bundle && CT.bundle.hub && CT.bundle.hub.lon) || 73.0483;
+    embedUrl = `https://maps.google.com/maps?q=${hubLat},${hubLon}&t=${layerType}&z=12&output=embed`;
     fullUrl = `https://maps.google.com/maps?q=${hubLat},${hubLon}`;
   }
 
@@ -4876,8 +4940,8 @@ function updateTowerGmapsEmbed() {
 
 async function initControlTower() {
   try {
-    // Load metadata without pre-running a hardcoded dispatch plan so the Front Page Launchpad is first
-    const res = await fetch('/api/meta?include_plan=false');
+    // Load metadata and pre-cached initial dispatch plan so Control Tower map is instantly rendered
+    const res = await fetch('/api/meta?include_plan=true');
     const meta = await res.json();
     CT.meta = meta;
 
@@ -4951,8 +5015,10 @@ async function initControlTower() {
       await onLaunchpadHubChange('BHW-DC');
     }
 
-    // Initialize empty states for non-launchpad views so they don't assume data before agent run
-    if (!CT.bundle) {
+    // Immediately pre-apply initial plan if available, so visiting Control Tower or 3D Studio renders immediately
+    if (meta.initial_plan) {
+      applyBundle(meta.initial_plan);
+    } else if (!CT.bundle) {
       renderTowerEmptyState();
       renderStudioEmptyState();
       renderSimulatorEmptyState();
@@ -5733,12 +5799,17 @@ function renderAgentResponseCard(data, queryTxt) {
   surface.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
+let synthAnimFrame = null;
+let synthCurrentPct = 0;
+let synthTargetPct = 0;
+let synthAnimRunning = false;
+
 function setSynthTruckProgress(pct) {
   const path = document.getElementById('synthTrunkPath');
   const progressPath = document.getElementById('synthProgressPath');
   const beacon = document.getElementById('synthTruckBeacon');
   if (!path || !beacon) return;
-  const totalLen = (path.getTotalLength && path.getTotalLength() > 0) ? path.getTotalLength() : 680;
+  const totalLen = (path.getTotalLength && path.getTotalLength() > 0) ? path.getTotalLength() : 700;
   const curLen = Math.max(0, Math.min(totalLen, (pct / 100) * totalLen));
 
   if (progressPath) {
@@ -5747,9 +5818,80 @@ function setSynthTruckProgress(pct) {
 
   if (path.getPointAtLength) {
     const pt = path.getPointAtLength(curLen);
-    const ptAhead = path.getPointAtLength(Math.min(totalLen, curLen + 4));
+    const ptAhead = path.getPointAtLength(Math.min(totalLen, curLen + 3));
     const angle = Math.atan2(ptAhead.y - pt.y, ptAhead.x - pt.x) * (180 / Math.PI);
     beacon.setAttribute('transform', `translate(${pt.x.toFixed(1)}, ${pt.y.toFixed(1)}) rotate(${angle.toFixed(1)})`);
+  }
+}
+
+function startSynthAnimation() {
+  if (synthAnimFrame) cancelAnimationFrame(synthAnimFrame);
+  synthCurrentPct = 2;
+  synthTargetPct = 15;
+  synthAnimRunning = true;
+
+  const speedVal = document.getElementById('lpTruckSpeed');
+  const distVal = document.getElementById('lpTruckDist');
+  const axleVal = document.getElementById('lpTruckAxle');
+  if (axleVal) { axleVal.textContent = 'PASS ✓'; axleVal.style.color = 'var(--accent-emerald)'; }
+
+  // Initial stage
+  updateSynthWaypoint(1, 'active');
+  for (let i = 2; i <= 5; i++) {
+    updateSynthWaypoint(i, 'queued');
+  }
+
+  function loop() {
+    if (!synthAnimRunning) return;
+
+    // Smooth spring lerp toward target
+    const diff = synthTargetPct - synthCurrentPct;
+    if (Math.abs(diff) > 0.04) {
+      synthCurrentPct += diff * 0.085;
+    } else {
+      synthCurrentPct = synthTargetPct;
+    }
+
+    setSynthTruckProgress(synthCurrentPct);
+
+    if (distVal) {
+      distVal.innerHTML = `${Math.min(100, Math.round(synthCurrentPct))} <small style="font-size:9px">%</small>`;
+    }
+    if (speedVal) {
+      if (synthCurrentPct >= 99.2) {
+        speedVal.innerHTML = '0 <small style="font-size:9px">ARRIVED</small>';
+      } else {
+        const oscSpeed = Math.round(52 + Math.sin(Date.now() / 220) * 10 + (diff > 2 ? 14 : 0));
+        speedVal.innerHTML = `${oscSpeed} <small style="font-size:9px">KM/H</small>`;
+      }
+    }
+
+    // Waypoint state transitions based on smooth continuous distance
+    if (synthCurrentPct >= 20 && synthCurrentPct < 45) {
+      updateSynthWaypoint(1, 'done');
+      updateSynthWaypoint(2, 'active');
+    } else if (synthCurrentPct >= 45 && synthCurrentPct < 72) {
+      updateSynthWaypoint(2, 'done');
+      updateSynthWaypoint(3, 'active');
+    } else if (synthCurrentPct >= 72 && synthCurrentPct < 96) {
+      updateSynthWaypoint(3, 'done');
+      updateSynthWaypoint(4, 'active');
+    } else if (synthCurrentPct >= 96) {
+      updateSynthWaypoint(4, 'done');
+      updateSynthWaypoint(5, 'done');
+    }
+
+    synthAnimFrame = requestAnimationFrame(loop);
+  }
+
+  synthAnimFrame = requestAnimationFrame(loop);
+}
+
+function stopSynthAnimation() {
+  synthAnimRunning = false;
+  if (synthAnimFrame) {
+    cancelAnimationFrame(synthAnimFrame);
+    synthAnimFrame = null;
   }
 }
 
@@ -5816,17 +5958,7 @@ async function synthesizeFromLaunchpad(switchAfter = true) {
       corridorTag.textContent = `${hc.hub.code || 'BHW-DC'} · ${CT.selectedCorridors.length || 8} CORRIDORS ACTIVE`;
     }
 
-    // Reset truck position to DC Dock
-    setSynthTruckProgress(2);
-    if (speedVal) speedVal.innerHTML = '38 <small style="font-size:9px">KM/H</small>';
-    if (distVal) distVal.innerHTML = '10 <small style="font-size:9px">%</small>';
-    if (axleVal) { axleVal.textContent = 'PASS ✓'; axleVal.style.color = 'var(--accent-emerald)'; }
-
-    // Reset waypoints and milestone cards
-    updateSynthWaypoint(1, 'active');
-    for (let i = 2; i <= 5; i++) {
-      updateSynthWaypoint(i, 'queued');
-    }
+    startSynthAnimation();
 
     timerInterval = setInterval(() => {
       const sec = ((Date.now() - tStart) / 1000).toFixed(1);
@@ -5834,22 +5966,12 @@ async function synthesizeFromLaunchpad(switchAfter = true) {
     }, 100);
   }
 
-  // Smooth intermediate stage transitions while solver request runs in background
-  setTimeout(() => {
-    updateSynthWaypoint(1, 'done');
-    updateSynthWaypoint(2, 'active');
-    setSynthTruckProgress(28);
-    if (speedVal) speedVal.innerHTML = '58 <small style="font-size:9px">KM/H</small>';
-    if (distVal) distVal.innerHTML = '28 <small style="font-size:9px">%</small>';
-  }, 260);
-
-  setTimeout(() => {
-    updateSynthWaypoint(2, 'done');
-    updateSynthWaypoint(3, 'active');
-    setSynthTruckProgress(55);
-    if (speedVal) speedVal.innerHTML = '74 <small style="font-size:9px">KM/H</small>';
-    if (distVal) distVal.innerHTML = '55 <small style="font-size:9px">%</small>';
-  }, 520);
+  // Smooth progress increments while backend OR-Tools MIP solver executes
+  const progressTimeline = [
+    setTimeout(() => { if (synthAnimRunning) synthTargetPct = 36; }, 280),
+    setTimeout(() => { if (synthAnimRunning) synthTargetPct = 64; }, 680),
+    setTimeout(() => { if (synthAnimRunning) synthTargetPct = 78; }, 1200),
+  ];
 
   const hubId = CT.activeHubId || 'BHW-DC';
   const objective = document.getElementById('lpSelObjective')?.value || 'lowest_cost';
@@ -5887,22 +6009,16 @@ async function synthesizeFromLaunchpad(switchAfter = true) {
     });
     const bundle = await res.json();
 
-    // Stage 4: 3D LIFO Spatial Loading & Axle Balance
-    updateSynthWaypoint(3, 'done');
-    updateSynthWaypoint(4, 'active');
-    setSynthTruckProgress(78);
-    if (speedVal) speedVal.innerHTML = '64 <small style="font-size:9px">KM/H</small>';
-    if (distVal) distVal.innerHTML = '78 <small style="font-size:9px">%</small>';
+    progressTimeline.forEach(t => clearTimeout(t));
+
+    // Stage 4: 3D LIFO Spatial Loading & Axle Balance check
+    synthTargetPct = 85;
     if (axleVal) { axleVal.textContent = '38%F/62%R ✓'; }
+    await new Promise(r => setTimeout(r, 420));
 
-    await new Promise(r => setTimeout(r, 400));
-
-    // Stage 5: Store Drops & Final Route Optimization Complete
-    updateSynthWaypoint(4, 'done');
-    updateSynthWaypoint(5, 'done');
-    setSynthTruckProgress(100);
-    if (speedVal) speedVal.innerHTML = '0 <small style="font-size:9px">ARRIVED</small>';
-    if (distVal) distVal.innerHTML = '100 <small style="font-size:9px">%</small>';
+    // Stage 5: Store Drops Arrival
+    synthTargetPct = 100;
+    await new Promise(r => setTimeout(r, 550));
 
     if (modalTitle) {
       modalTitle.innerHTML = '✓ Commercial Dispatch Plan Certified &amp; Dispatched!';
@@ -5917,8 +6033,8 @@ async function synthesizeFromLaunchpad(switchAfter = true) {
       CT.hubContext = bundle.hub_context;
     }
 
-    // Brief beat for user to appreciate the truck arriving at destination waypoint
-    await new Promise(r => setTimeout(r, 620));
+    // Brief beat for user to appreciate the truck arriving smoothly at destination waypoint
+    await new Promise(r => setTimeout(r, 650));
 
     if (modal) {
       modal.style.transition = 'opacity 0.28s ease, transform 0.28s ease';
@@ -5937,9 +6053,12 @@ async function synthesizeFromLaunchpad(switchAfter = true) {
       showToast(`🚛 <b>FleetFlow Commercial Dispatch Complete (${bundle.plan_id}):</b> Dispatched <b>${bundle.kpi.optimized_trucks} commercial trucks</b> for <b>${bundle.hub.name}</b> — saving <b>₹${bundle.kpi.savings_inr.toLocaleString('en-IN')}/day (-${bundle.kpi.savings_pct}%)</b>!${noteMsg}`, 6800);
     }
   } catch (err) {
+    stopSynthAnimation();
     if (modal) modal.style.display = 'none';
     showToast(`❌ Synthesis error: ${err.message}`);
   } finally {
+    progressTimeline.forEach(t => clearTimeout(t));
+    stopSynthAnimation();
     if (timerInterval) clearInterval(timerInterval);
     if (heroBtn) heroBtn.innerHTML = '<span>🚀</span> Synthesize &amp; Run FleetFlow Agent →';
     if (botBtn) botBtn.innerHTML = '<span>🚀</span> Synthesize &amp; Run FleetFlow Agent →';
@@ -6655,8 +6774,15 @@ function updateDriverHubPreview(truckId) {
   if (pIframe && pIframe.src !== r.driver_portal_url) pIframe.src = r.driver_portal_url;
   const mLink = document.getElementById('btnOpenMapsNav');
   if (mLink) mLink.href = r.gmaps_nav_url;
-  const svLink = document.getElementById('btnOpenStreetView');
   const firstStop = (r.stops && r.stops[0]);
+  const sLink = document.getElementById('btnStartGmapsStop1');
+  if (sLink) {
+    const stop1NavUrl = r.first_stop_nav_url || (firstStop && firstStop.gmaps_url) || (firstStop && firstStop.lat ? `https://www.google.com/maps/dir/?api=1&destination=${firstStop.lat},${firstStop.lon}&travelmode=driving&dir_action=navigate` : r.gmaps_nav_url);
+    sLink.href = stop1NavUrl;
+    const stop1Name = (firstStop && firstStop.name) ? firstStop.name.substring(0, 16) : 'Stop 1';
+    sLink.innerHTML = `🚀 Start GPS Nav (${stop1Name})`;
+  }
+  const svLink = document.getElementById('btnOpenStreetView');
   const svUrl = (firstStop && firstStop.streetview_url) || (firstStop && firstStop.lat ? `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${firstStop.lat},${firstStop.lon}` : 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=19.2183,72.9781');
   if (svLink) svLink.href = svUrl;
   const waLink = document.getElementById('btnOpenWhatsApp');
@@ -6710,7 +6836,7 @@ function updateDriverHubPreview(truckId) {
             <div style="font-size:11px;color:var(--accent-primary);margin-top:3px;font-weight:600">🚪 Bay Depth: ${s.depth}</div>
             <div style="margin-top:6px;display:flex;gap:6px;align-items:center">
               <a href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${s.lat},${s.lon}" target="_blank" class="ct-badge neon-cyan" style="text-decoration:none;font-size:10px;padding:2px 8px;display:inline-flex;align-items:center;gap:3px">📸 Google Street View 360° Dock</a>
-              <a href="https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lon}" target="_blank" class="ct-badge neon-blue" style="text-decoration:none;font-size:10px;padding:2px 8px;display:inline-flex;align-items:center;gap:3px">🗺️ Navigate Drop</a>
+              <a href="https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lon}&travelmode=driving&dir_action=navigate" target="_blank" class="ct-badge neon-green" style="text-decoration:none;font-size:10.5px;padding:3px 9px;display:inline-flex;align-items:center;gap:4px;font-weight:700">🚀 Start GPS Nav (Drop #${idx + 1})</a>
             </div>
           </div>
           <div style="text-align:right">
@@ -6723,7 +6849,7 @@ function updateDriverHubPreview(truckId) {
       listEl.innerHTML = stopsList.map((s, idx) => {
         const depthText = idx === 0 ? '0–65 cm from rear door · Quick Unload' : idx === 1 ? '65–140 cm depth · Mid-Bay' : `${idx * 65}–${(idx + 1) * 65} cm depth · Front Cab`;
         const streetViewUrl = s.streetview_url || (s.lat ? `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${s.lat},${s.lon}` : '');
-        const navUrl = s.lat ? `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lon}` : '';
+        const navUrl = s.gmaps_url || (s.lat ? `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lon}&travelmode=driving&dir_action=navigate` : '');
         return `
           <div style="padding:10px 12px;background:var(--bg-elevated);border:1.5px solid var(--border-subtle);border-radius:10px;display:flex;justify-content:space-between;align-items:center">
             <div>
@@ -6732,7 +6858,7 @@ function updateDriverHubPreview(truckId) {
               <div style="font-size:11px;color:var(--accent-primary);margin-top:3px;font-weight:600">🚪 Bay Depth: ${depthText}</div>
               <div style="margin-top:6px;display:flex;gap:6px;align-items:center">
                 ${streetViewUrl ? `<a href="${streetViewUrl}" target="_blank" class="ct-badge neon-cyan" style="text-decoration:none;font-size:10px;padding:2px 8px;display:inline-flex;align-items:center;gap:3px">📸 Google Street View 360° Dock</a>` : ''}
-                ${navUrl ? `<a href="${navUrl}" target="_blank" class="ct-badge neon-blue" style="text-decoration:none;font-size:10px;padding:2px 8px;display:inline-flex;align-items:center;gap:3px">🗺️ Navigate Drop</a>` : ''}
+                ${navUrl ? `<a href="${navUrl}" target="_blank" class="ct-badge neon-green" style="text-decoration:none;font-size:10.5px;padding:3px 9px;display:inline-flex;align-items:center;gap:4px;font-weight:700">🚀 Start GPS Nav (Drop #${idx + 1})</a>` : ''}
               </div>
             </div>
             <div style="text-align:right">

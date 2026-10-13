@@ -184,6 +184,8 @@ def serialize_plan_bundle(
                 "n": len(s.boxes),
             })
 
+        first_stop_nav = gmaps_stop_nav_url(r.stops[0].stop.lat, r.stops[0].stop.lon) if r.stops else nav_url
+
         wa_url = whatsapp_dispatch_url(
             driver_name=r.driver,
             truck_id=r.truck_id,
@@ -194,6 +196,7 @@ def serialize_plan_bundle(
             stops_summary=wa_stops,
             gmaps_url=nav_url,
             driver_portal_url=portal_url,
+            first_stop_nav_url=first_stop_nav,
         )
 
         front_share = lp.front_axle_share_pct if lp else 38.0
@@ -234,6 +237,7 @@ def serialize_plan_bundle(
             "cost_toll": round(r.cost.tolls),
             "cost_overtime": round(r.cost.overtime),
             "gmaps_nav_url": nav_url,
+            "first_stop_nav_url": first_stop_nav,
             "gmaps_embed_url": embed_url,
             "gmaps_satellite_url": gmaps_satellite_embed_url(r.stops[0].stop.lat, r.stops[0].stop.lon) if r.stops else "",
             "whatsapp_url": wa_url,

@@ -34,7 +34,7 @@ def test_gmaps_universal_urls():
     embed_url = gmaps_embed_url(hub, stops, return_to_hub=True)
     assert "https://maps.google.com/maps?" in embed_url
     assert "output=embed" in embed_url
-    assert "+to:" in embed_url
+    assert "q=19.240300,73.130500" in embed_url
     assert "layer=t" in embed_url
 
     # Street View URL

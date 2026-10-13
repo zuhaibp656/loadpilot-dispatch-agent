@@ -802,6 +802,7 @@
     var zbox = $('div', 'lp-zoom', cwrap);
     var zin = $('button', '', zbox, '+'), zout = $('button', '', zbox, '&minus;'), zfit = $('button', '', zbox, '&#9974;');
     var attr = $('div', 'lp-attr', cwrap); attr.innerHTML = D.tileAttr || 'Map data © Google';
+    var legend = $('div', 'lp-legend', body);
     var ctr = $('div', 'lp-ctrl', el);
     var tog = $('div', 'lp-seg', ctr);
     var bOpt = $('button', 'on', tog, 'FleetFlow plan'), bBase = $('button', '', tog, 'Today (manual)');

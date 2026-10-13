@@ -132,6 +132,8 @@ def build_driver_portal_html(
     # Generate Google Maps universal directions URL (with live traffic)
     gmaps_nav = gmaps_route_url(hub_coords, stop_coords, return_to_hub=True)
     gmaps_embed = gmaps_embed_url(hub_coords, stop_coords, return_to_hub=True)
+    first_stop = r.stops[0].stop if r.stops else None
+    first_stop_nav_url = gmaps_stop_nav_url(first_stop.lat, first_stop.lon) if first_stop else gmaps_nav
 
     # Stops summary for WhatsApp
     stops_summary = [
@@ -154,6 +156,7 @@ def build_driver_portal_html(
         stops_summary=stops_summary,
         gmaps_url=gmaps_nav,
         driver_portal_url=share_url,
+        first_stop_nav_url=first_stop_nav_url,
     )
 
     zones = {z.stop_seq: z for z in lp.zones} if lp else {}
@@ -205,7 +208,7 @@ def build_driver_portal_html(
             <div class="detail-item"><span>Consignment</span><b>{html.escape(sku_str)}</b></div>
           </div>
           <div class="stop-actions">
-            <a href="{stop_gmaps_url}" target="_blank" class="btn-nav">📍 Navigate in Google Maps</a>
+            <a href="{stop_gmaps_url}" target="_blank" class="btn-nav" style="background:linear-gradient(135deg,#16a34a,#059669);color:#fff;font-weight:800;display:inline-flex;align-items:center;gap:6px">🚀 Start GPS Navigation (Stop {rs.seq})</a>
             <a href="tel:{phone.replace(' ', '')}" class="btn-call">📞 Call Store ({phone})</a>
             <label class="pod-toggle">
               <input type="checkbox" class="pod-checkbox" onchange="toggleDelivered({rs.seq}, this.checked)">
@@ -263,16 +266,24 @@ def build_driver_portal_html(
 
     <!-- Quick Action Bar -->
     <div class="actions">
-      <a href="{gmaps_nav}" target="_blank" class="btn btn-primary">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-        Start Google Maps (Live Traffic)
+      <a href="{first_stop_nav_url}" target="_blank" class="btn btn-primary" title="Launch turn-by-turn Google Maps voice navigation to Stop 1">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
+        🚀 Start Google Maps Nav (Stop 1{f': ' + html.escape(first_stop.name[:20]) if first_stop else ''})
+      </a>
+      <a href="{gmaps_nav}" target="_blank" class="btn btn-outline" title="View all stops and full day traffic corridor on Google Maps">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+        🗺️ Full Corridor ({len(r.stops)} Drops · {r.km:.0f} km)
       </a>
       <a href="{whatsapp_url}" target="_blank" class="btn btn-whatsapp">
         💬 WhatsApp
       </a>
       <button onclick="window.print()" class="btn btn-outline">
-        🖨️ Print Manifest
+        🖨️ Challan
       </button>
+    </div>
+    <div style="background:#0b1329;border:1px solid #1d4ed8;border-radius:10px;padding:9px 12px;margin-bottom:14px;font-size:12.5px;color:#93c5fd;display:flex;align-items:center;gap:8px">
+      <span style="font-size:16px">💡</span>
+      <div><b>Google Maps Navigation Tip:</b> Google Maps launches active turn-by-turn voice navigation per stop. Tap <b>"🚀 Start GPS Nav"</b> to drive to your active stop, or tap <b>"🚀 Start GPS Navigation"</b> inside any stop card below as you deliver.</div>
     </div>
 
     <!-- Navigation Tabs -->

@@ -82,19 +82,12 @@ def gmaps_embed_url(
     return_to_hub: bool = True,
     traffic: bool = True,
 ) -> str:
-    """Embeddable keyless Google Maps directions iframe URL showing route and live traffic."""
-    saddr = f"{hub_coords[0]:.6f},{hub_coords[1]:.6f}"
-    stops_to_show = stop_coords[:10]  # Limit to 10 points for clean embed query
+    """Embeddable keyless Google Maps iframe URL showing active corridor center and destination."""
     traffic_param = "&layer=t" if traffic else ""
-    if not stops_to_show:
-        return f"https://maps.google.com/maps?q={saddr}&z=13{traffic_param}&output=embed"
-
-    if return_to_hub:
-        daddr = "+to:".join([f"{lat:.6f},{lon:.6f}" for lat, lon in stops_to_show] + [saddr])
-    else:
-        daddr = "+to:".join(f"{lat:.6f},{lon:.6f}" for lat, lon in stops_to_show)
-
-    return f"https://maps.google.com/maps?saddr={saddr}&daddr={daddr}{traffic_param}&output=embed"
+    if stop_coords:
+        lat, lon = stop_coords[0]
+        return f"https://maps.google.com/maps?q={lat:.6f},{lon:.6f}&t=m&z=13{traffic_param}&output=embed"
+    return f"https://maps.google.com/maps?q={hub_coords[0]:.6f},{hub_coords[1]:.6f}&t=m&z=12{traffic_param}&output=embed"
 
 
 def whatsapp_dispatch_url(
@@ -107,17 +100,29 @@ def whatsapp_dispatch_url(
     stops_summary: list[dict[str, Any]],
     gmaps_url: str,
     driver_portal_url: str = "",
+    first_stop_nav_url: str = "",
 ) -> str:
     """Create a 1-click WhatsApp dispatch message URL for the driver/helper."""
     total_cartons = sum(s.get("n", 0) for s in stops_summary)
+    first_stop_name = stops_summary[0].get("name", "Stop 1") if stops_summary else "Stop 1"
     lines = [
         f"🚚 *FleetFlow Dispatch · {driver_name}*",
         f"🚛 *Truck:* {truck_id} ({truck_type})",
         f"📍 *Hub:* {hub_name}",
         f"⏰ *Shift:* Leave {leave_time} | Return {back_time}",
         f"📦 *Consignment:* {len(stops_summary)} Drops | {total_cartons} Cartons",
+    ]
+
+    if first_stop_nav_url:
+        lines += [
+            "",
+            f"🚀 *Start Turn-by-Turn GPS (Stop 1: {first_stop_name}):*",
+            first_stop_nav_url,
+        ]
+
+    lines += [
         "",
-        "🗺️ *Start Google Maps (Live Traffic Navigation):*",
+        "🗺️ *Full Day Corridor Map (All Drops & Traffic):*",
         gmaps_url,
     ]
 
@@ -146,6 +151,7 @@ def whatsapp_dispatch_url(
 
     lines += [
         "",
+        "💡 *Navigation Tip:* Tap 'Start Turn-by-Turn GPS' to launch Google Maps voice guidance to your active drop. Tap individual drops in your Mobile Run Sheet as you deliver.",
         "⚠️ *Reminder:* Load cab-to-door (Stop 1 at rear door). Check fragile cartons.",
         "Drive safe! 🚦",
     ]
