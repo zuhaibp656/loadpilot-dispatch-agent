@@ -90,11 +90,17 @@ border-left-width:4px;border-radius:18px;padding:5px 13px;cursor:pointer;font-we
 font:700 11.5px Inter,-apple-system,sans-serif;color:#090d1a;flex:none;padding:0 5px}
 .lp-pop{position:absolute;z-index:10;width:340px;background:rgba(15,23,42,0.96);backdrop-filter:blur(16px);
 border:1px solid rgba(56,189,248,0.3);border-radius:16px;box-shadow:0 20px 45px rgba(0,0,0,0.65);font-size:13px;overflow:hidden}
+.lp-pop.theme-light,html.theme-light .lp-pop{background:#ffffff;color:#0f172a;border:1.5px solid #cbd5e1;box-shadow:0 16px 36px rgba(0,0,0,0.12)}
 .lp-pop-h{display:flex;gap:10px;align-items:flex-start;padding:13px 15px;border-left:5px solid;background:rgba(20,30,55,0.85)}
-.lp-pop-h b{font-size:14.5px}.lp-x{margin-left:auto;background:none;border:none;color:#94a3b8;font-size:20px;cursor:pointer;line-height:1}
-.lp-x:hover{color:#fff}
+.lp-pop.theme-light .lp-pop-h,html.theme-light .lp-pop-h{background:#f8fafc;color:#0f172a;border-bottom:1px solid #e2e8f0}
+.lp-pop-h b{font-size:14.5px}.lp-pop.theme-light .lp-pop-h b,html.theme-light .lp-pop-h b{color:#0f172a}
+.lp-x{margin-left:auto;background:none;border:none;color:#94a3b8;font-size:20px;cursor:pointer;line-height:1}
+.lp-x:hover{color:#fff}.lp-pop.theme-light .lp-x{color:#64748b}.lp-pop.theme-light .lp-x:hover{color:#0f172a}
 .lp-pop-g{display:grid;grid-template-columns:76px 1fr;gap:7px 12px;padding:13px 15px}
+.lp-pop.theme-light .lp-pop-g,html.theme-light .lp-pop-g{background:#ffffff;color:#0f172a}
 .lp-pop-g span{color:#94a3b8;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;padding-top:1px;font-weight:600}
+.lp-pop.theme-light .lp-pop-g span,html.theme-light .lp-pop-g span{color:#64748b}
+.lp-pop-g b{color:#f8fafc}.lp-pop.theme-light .lp-pop-g b,html.theme-light .lp-pop-g b{color:#0f172a}
 .lp-zoom{position:absolute;right:16px;top:60px;display:flex;flex-direction:column;gap:6px;z-index:4}
 .lp-zoom button{width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(15,23,42,0.9);
 backdrop-filter:blur(8px);color:#e2e8f0;font:700 17px Inter,sans-serif;cursor:pointer;transition:all .15s}

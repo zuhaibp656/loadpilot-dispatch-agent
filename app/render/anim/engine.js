@@ -67,6 +67,45 @@
     var st = document.createElement('style');
     st.id = 'lp-drawer-engine-styles';
     st.textContent = [
+      '/* Unified Map Popup Styles */',
+      '.lp-pop {',
+      '  position: absolute; z-index: 10; width: 340px; max-width: calc(100% - 24px);',
+      '  border-radius: 14px; overflow: hidden; font-size: 13px;',
+      '  background: rgba(15, 23, 42, 0.98); color: #f8fafc;',
+      '  border: 1.5px solid rgba(56, 189, 248, 0.35);',
+      '  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.75);',
+      '  backdrop-filter: blur(16px);',
+      '}',
+      '.theme-light .lp-pop, html.theme-light .lp-pop, .lp-pop.theme-light {',
+      '  background: #ffffff !important; color: #0f172a !important;',
+      '  border: 1.5px solid #e2e8f0 !important;',
+      '  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.16), 0 2px 8px rgba(15, 23, 42, 0.06) !important;',
+      '}',
+      '.lp-pop-h {',
+      '  display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px;',
+      '  border-left: 5px solid #38bdf8; background: rgba(30, 41, 59, 0.95);',
+      '  border-bottom: 1px solid rgba(255, 255, 255, 0.08);',
+      '}',
+      '.theme-light .lp-pop-h, html.theme-light .lp-pop-h, .lp-pop.theme-light .lp-pop-h {',
+      '  background: #f8fafc !important; border-bottom: 1px solid #e2e8f0 !important;',
+      '}',
+      '.lp-pop-h b { font-size: 14px; font-weight: 800; color: #ffffff; }',
+      '.theme-light .lp-pop-h b, html.theme-light .lp-pop-h b, .lp-pop.theme-light .lp-pop-h b { color: #0f172a !important; }',
+      '.lp-pop-h .lp-muted { font-size: 11.5px; color: #94a3b8; }',
+      '.theme-light .lp-pop-h .lp-muted, html.theme-light .lp-pop-h .lp-muted, .lp-pop.theme-light .lp-pop-h .lp-muted { color: #64748b !important; }',
+      '.lp-pop-g { display: grid; grid-template-columns: 76px 1fr; gap: 8px 12px; padding: 12px 14px; background: rgba(15, 23, 42, 0.98); }',
+      '.theme-light .lp-pop-g, html.theme-light .lp-pop-g, .lp-pop.theme-light .lp-pop-g { background: #ffffff !important; }',
+      '.lp-pop-g span {',
+      '  color: #94a3b8; font-size: 11px; text-transform: uppercase;',
+      '  letter-spacing: 0.04em; padding-top: 1px; font-weight: 700;',
+      '}',
+      '.theme-light .lp-pop-g span, html.theme-light .lp-pop-g span, .lp-pop.theme-light .lp-pop-g span { color: #64748b !important; font-weight: 700 !important; }',
+      '.lp-pop-g b { color: #f8fafc; font-size: 12.5px; font-weight: 700; line-height: 1.4; }',
+      '.theme-light .lp-pop-g b, html.theme-light .lp-pop-g b, .lp-pop.theme-light .lp-pop-g b { color: #0f172a !important; font-weight: 700 !important; }',
+      '.lp-x { margin-left: auto; background: none; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; line-height: 1; padding: 0 4px; }',
+      '.theme-light .lp-x, html.theme-light .lp-x, .lp-pop.theme-light .lp-x { color: #64748b !important; }',
+      '.lp-x:hover { color: #ef4444 !important; }',
+      '/* 3D Drawer Styles */',
       '.lp-card.lp-drawer {',
       '  position: absolute; left: 14px; top: 14px; z-index: 20;',
       '  width: 340px; max-width: calc(100% - 28px);',
@@ -788,6 +827,7 @@
   function my(lat) { var s = Math.sin(lat * Math.PI / 180); return 0.5 - Math.log((1 + s) / (1 - s)) / (4 * Math.PI); }
 
   function MapView(host) {
+    ensureDrawerStyles();
     var el = $('div', 'lp-pane', host); this.el = el;
     var top = $('div', 'lp-top', el);
     $('div', 'lp-title', top, D.driver ? '<b>Your route today</b> &middot; ' + esc(D.driver.name) + ' · ' + esc(D.driver.id) +
@@ -1013,22 +1053,39 @@
       if (sel >= 0) { var b = boundsOf([R[set][sel]]); fitBox(b[0], b[1], b[2], b[3]); } else fitAll();
     }
     function openPop(r, s, pan) {
+      if (!s) return;
+      if (s.X === undefined && s.lon !== undefined) { s.X = mx(s.lon); s.Y = my(s.lat); }
       popStop = [r, s];
-      if (pan) { cx = s.X; cy = s.Y; if (z < 12) z = 12.5; }
+      if (pan && s.X !== undefined) { cx = s.X; cy = s.Y; if (z < 12) z = 12.5; }
+      var isDark = document.documentElement.classList.contains('theme-dark') ||
+                   document.body.classList.contains('theme-dark') ||
+                   (D && D.theme === 'dark');
+      pop.className = 'lp-pop ' + (isDark ? 'theme-dark' : 'theme-light');
+      pop.style.background = isDark ? '#0f172a' : '#ffffff';
+      pop.style.color = isDark ? '#f8fafc' : '#0f172a';
+      pop.style.borderColor = isDark ? 'rgba(56, 189, 248, 0.35)' : '#e2e8f0';
+
       var win = s.win ? fmtT(s.win[0]) + '–' + fmtT(s.win[1]) : '';
-      pop.innerHTML = '<div class="lp-pop-h" style="border-color:' + r.color + '"><span class="lp-num" style="background:' + r.color + '">' + s.seq + '</span>' +
-        '<div><b>' + esc(s.name) + '</b><br><span class="lp-muted">' + esc(s.addr || s.area || '') + '</span></div><button class="lp-x">&times;</button></div>' +
-        '<div class="lp-pop-g">' +
-        '<span>Truck</span><b>' + esc(r.id) + ' · ' + esc(r.driver) + '</b>' +
-        '<span>Drop</span><b>' + s.seq + ' of ' + r.stops.length + (s.seq === 1 ? ' · first off, at the door' : s.seq === r.stops.length ? ' · last, behind the cab' : '') + '</b>' +
-        '<span>ETA</span><b>' + fmtT(s.arr) + ' → leaves ' + fmtT(s.dep) + '</b>' +
-        (win ? '<span>Window</span><b>' + win + '</b>' : '') +
-        '<span>Cartons</span><b>' + s.n + (s.kg ? ' · ' + s.kg + ' kg' : '') + (s.frag ? ' · ' + s.frag + ' fragile' : '') + '</b>' +
-        (s.skus ? '<span>Goods</span><b>' + esc(s.skus) + '</b>' : '') +
+      var valCol = isDark ? '#f8fafc' : '#0f172a';
+      var lblCol = isDark ? '#94a3b8' : '#64748b';
+      var hdrBg = isDark ? 'rgba(30, 41, 59, 0.95)' : '#f8fafc';
+      var hdrBdr = isDark ? 'rgba(255, 255, 255, 0.08)' : '#e2e8f0';
+
+      pop.innerHTML = '<div class="lp-pop-h" style="border-left:5px solid ' + r.color + ';background:' + hdrBg + ';border-bottom:1px solid ' + hdrBdr + ';padding:12px 14px;display:flex;gap:10px;align-items:flex-start;">' +
+        '<span class="lp-num" style="background:' + r.color + ';color:#090d1a;font-weight:800;flex-shrink:0;">' + s.seq + '</span>' +
+        '<div style="flex:1;min-width:0;"><b style="font-size:14px;color:' + valCol + ';display:block;line-height:1.3;">' + esc(s.name) + '</b>' +
+        '<span class="lp-muted" style="font-size:11.5px;color:' + lblCol + ';display:block;margin-top:2px;">' + esc(s.addr || s.area || '') + '</span></div>' +
+        '<button class="lp-x" style="margin-left:auto;background:none;border:none;color:' + lblCol + ';font-size:20px;cursor:pointer;line-height:1;padding:0 4px;">&times;</button></div>' +
+        '<div class="lp-pop-g" style="padding:12px 14px;background:' + (isDark ? '#0f172a' : '#ffffff') + ';">' +
+        '<span style="color:' + lblCol + ';">Truck</span><b style="color:' + valCol + ';">' + esc(r.id) + ' · ' + esc(r.driver) + '</b>' +
+        '<span style="color:' + lblCol + ';">Drop</span><b style="color:' + valCol + ';">' + s.seq + ' of ' + r.stops.length + (s.seq === 1 ? ' · first off, at the door' : s.seq === r.stops.length ? ' · last, behind the cab' : '') + '</b>' +
+        '<span style="color:' + lblCol + ';">ETA</span><b style="color:' + valCol + ';">' + fmtT(s.arr) + ' → leaves ' + fmtT(s.dep) + '</b>' +
+        (win ? '<span style="color:' + lblCol + ';">Window</span><b style="color:' + valCol + ';">' + win + '</b>' : '') +
+        '<span style="color:' + lblCol + ';">Cartons</span><b style="color:' + valCol + ';">' + s.n + (s.kg ? ' · ' + s.kg + ' kg' : '') + (s.frag ? ' · ' + s.frag + ' fragile' : '') + '</b>' +
+        (s.skus ? '<span style="color:' + lblCol + ';">Goods</span><b style="color:' + valCol + ';">' + esc(s.skus) + '</b>' : '') +
         '</div>' +
-        '<div style="display:flex;gap:6px;padding:0 12px 10px;">' +
-        '<a href="https://www.google.com/maps/dir/?api=1&destination=' + s.lat + ',' + s.lon + '&travelmode=driving&dir_action=navigate" target="_blank" class="lp-btn" style="flex:1;text-align:center;background:#1a73e8;color:#fff;text-decoration:none;padding:7px 10px;border-radius:12px;font-size:12px;font-weight:700;">🗺️ Navigate in Google Maps</a>' +
-        '<a href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=' + s.lat + ',' + s.lon + '" target="_blank" class="lp-btn" style="flex:1;text-align:center;background:#0d9488;color:#fff;text-decoration:none;padding:7px 10px;border-radius:12px;font-size:12px;font-weight:700;">📸 Street View</a>' +
+        '<div style="padding:0 12px 12px;background:' + (isDark ? '#0f172a' : '#ffffff') + ';">' +
+        '<a href="https://www.google.com/maps/dir/?api=1&destination=' + s.lat + ',' + s.lon + '&travelmode=driving&dir_action=navigate" target="_blank" class="lp-btn" style="display:block;width:100%;box-sizing:border-box;text-align:center;background:linear-gradient(135deg,#1a73e8,#1557b0);color:#ffffff;text-decoration:none;padding:9px 12px;border-radius:10px;font-size:12.5px;font-weight:700;box-shadow:0 2px 8px rgba(26,115,232,0.28);">🗺️ Navigate in Google Maps</a>' +
         '</div>' +
         (window.LPgoLoad && set === 'opt' ? '<button class="lp-go">📦 Where are these cartons in the truck?</button>' : '');
       pop.style.display = 'block';
@@ -1185,6 +1242,10 @@
       hud.innerHTML = (set === 'opt' ? 'FleetFlow plan' : 'Today\'s manual plan') + ' &middot; delivered <b>' + delivered + '</b> / ' + total;
     }
     this.frame = frame;
+    this.openPop = openPop;
+    this.closePop = closePop;
+    this.focus = focus;
+    this.el = host;
   }
 
     if (MODE === 'both') window.LPgoLoad = function (id, seq) { show('load'); if (panes.load) panes.load.focusTruckStop(id, seq); };

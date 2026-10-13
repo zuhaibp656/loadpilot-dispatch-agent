@@ -254,12 +254,59 @@ _UI_HTML = r"""<!DOCTYPE html>
       color: #0f172a !important;
       width: 320px !important;
     }
+    html.theme-light .lp-pop {
+      background: #ffffff !important;
+      backdrop-filter: blur(16px) !important;
+      border: 1.5px solid var(--border-subtle, #e2e8f0) !important;
+      border-radius: 14px !important;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16), 0 2px 8px rgba(15, 23, 42, 0.06) !important;
+      color: #0f172a !important;
+    }
     html.theme-light .lp-pop-h {
-      background: #f1f5f9 !important;
+      background: #f8fafc !important;
+      border-bottom: 1px solid var(--border-subtle, #e2e8f0) !important;
       color: #0f172a !important;
     }
     html.theme-light .lp-pop-h b {
       color: #0f172a !important;
+    }
+    html.theme-light .lp-pop-h .lp-muted {
+      color: #64748b !important;
+    }
+    html.theme-light .lp-pop-g {
+      background: #ffffff !important;
+    }
+    html.theme-dark .lp-pop {
+      background: #0f172a !important;
+      backdrop-filter: blur(16px) !important;
+      border: 1.5px solid rgba(56, 189, 248, 0.35) !important;
+      border-radius: 14px !important;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.75) !important;
+      color: #f8fafc !important;
+    }
+    html.theme-dark .lp-pop-h {
+      background: rgba(30, 41, 59, 0.95) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+      color: #ffffff !important;
+    }
+    html.theme-dark .lp-pop-h b {
+      color: #ffffff !important;
+    }
+    html.theme-dark .lp-pop-h .lp-muted {
+      color: #94a3b8 !important;
+    }
+    html.theme-dark .lp-pop-g {
+      background: #0f172a !important;
+    }
+    html.theme-dark .lp-pop-g span {
+      color: #94a3b8 !important;
+      font-weight: 700 !important;
+    }
+    html.theme-dark .lp-pop-g b {
+      color: #f8fafc !important;
+    }
+    html.theme-dark .lp-x {
+      color: #94a3b8 !important;
     }
     html.theme-light .lp-vmodes {
       background: #f8fafc !important;
@@ -3873,16 +3920,13 @@ _UI_HTML = r"""<!DOCTYPE html>
               </div>
             </div>
 
-            <!-- 5 Prominent Quick Action Buttons -->
+            <!-- 4 Prominent Quick Action Buttons -->
             <div class="driver-quick-btns">
               <a id="btnStartGmapsStop1" href="#" target="_blank" class="ct-btn-primary" style="text-decoration:none;background:linear-gradient(135deg,#16a34a,#059669);justify-content:center;box-shadow:0 3px 8px rgba(22,163,74,0.25)">
                 🚀 Start GPS Nav (Stop 1)
               </a>
               <a id="btnOpenMapsNav" href="#" target="_blank" class="ct-btn-secondary neon-blue" style="text-decoration:none;justify-content:center">
                 🗺️ Full Corridor Map
-              </a>
-              <a id="btnOpenStreetView" href="#" target="_blank" class="ct-btn-secondary neon-cyan" style="text-decoration:none;justify-content:center">
-                📸 Street View 360° Dock
               </a>
               <a id="btnOpenWhatsApp" href="#" target="_blank" class="ct-btn-secondary neon-green" style="text-decoration:none;justify-content:center">
                 💬 WhatsApp Dispatch
@@ -6146,10 +6190,10 @@ function applyBundle(bundle) {
       </div>
       <div style="display:flex;gap:6px;margin-top:6px;padding-top:6px;border-top:1px dashed var(--border-subtle)">
         <a href="${r.gmaps_nav_url}" target="_blank" onclick="event.stopPropagation()" class="ct-badge neon-blue" style="text-decoration:none;font-size:10px;padding:2px 6px;display:inline-flex;align-items:center;gap:3px">
-          🗺️ Google Maps
+          🗺️ Full Route
         </a>
-        <a href="${(r.stops && r.stops[0]?.streetview_url) || ('https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=' + ((r.stops && r.stops[0]?.lat) || '19.2183') + ',' + ((r.stops && r.stops[0]?.lon) || '72.9781'))}" target="_blank" onclick="event.stopPropagation()" class="ct-badge neon-cyan" style="text-decoration:none;font-size:10px;padding:2px 6px;display:inline-flex;align-items:center;gap:3px">
-          📸 Street View Dock
+        <a href="${r.first_stop_nav_url || (r.stops && r.stops[0]?.gmaps_url) || r.gmaps_nav_url}" target="_blank" onclick="event.stopPropagation()" class="ct-badge neon-green" style="text-decoration:none;font-size:10px;padding:2px 6px;display:inline-flex;align-items:center;gap:3px;font-weight:700">
+          🚀 Stop 1 GPS
         </a>
       </div>
     </div>
@@ -6782,9 +6826,6 @@ function updateDriverHubPreview(truckId) {
     const stop1Name = (firstStop && firstStop.name) ? firstStop.name.substring(0, 16) : 'Stop 1';
     sLink.innerHTML = `🚀 Start GPS Nav (${stop1Name})`;
   }
-  const svLink = document.getElementById('btnOpenStreetView');
-  const svUrl = (firstStop && firstStop.streetview_url) || (firstStop && firstStop.lat ? `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${firstStop.lat},${firstStop.lon}` : 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=19.2183,72.9781');
-  if (svLink) svLink.href = svUrl;
   const waLink = document.getElementById('btnOpenWhatsApp');
   if (waLink) waLink.href = r.whatsapp_url;
   const lrLink = document.getElementById('btnOpenPortalTab');
@@ -6835,7 +6876,6 @@ function updateDriverHubPreview(truckId) {
             <div style="font-size:11.5px;color:var(--text-secondary);margin-top:2px">📍 ${s.area}</div>
             <div style="font-size:11px;color:var(--accent-primary);margin-top:3px;font-weight:600">🚪 Bay Depth: ${s.depth}</div>
             <div style="margin-top:6px;display:flex;gap:6px;align-items:center">
-              <a href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${s.lat},${s.lon}" target="_blank" class="ct-badge neon-cyan" style="text-decoration:none;font-size:10px;padding:2px 8px;display:inline-flex;align-items:center;gap:3px">📸 Google Street View 360° Dock</a>
               <a href="https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lon}&travelmode=driving&dir_action=navigate" target="_blank" class="ct-badge neon-green" style="text-decoration:none;font-size:10.5px;padding:3px 9px;display:inline-flex;align-items:center;gap:4px;font-weight:700">🚀 Start GPS Nav (Drop #${idx + 1})</a>
             </div>
           </div>
@@ -6848,7 +6888,6 @@ function updateDriverHubPreview(truckId) {
     } else {
       listEl.innerHTML = stopsList.map((s, idx) => {
         const depthText = idx === 0 ? '0–65 cm from rear door · Quick Unload' : idx === 1 ? '65–140 cm depth · Mid-Bay' : `${idx * 65}–${(idx + 1) * 65} cm depth · Front Cab`;
-        const streetViewUrl = s.streetview_url || (s.lat ? `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${s.lat},${s.lon}` : '');
         const navUrl = s.gmaps_url || (s.lat ? `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lon}&travelmode=driving&dir_action=navigate` : '');
         return `
           <div style="padding:10px 12px;background:var(--bg-elevated);border:1.5px solid var(--border-subtle);border-radius:10px;display:flex;justify-content:space-between;align-items:center">
@@ -6857,7 +6896,6 @@ function updateDriverHubPreview(truckId) {
               <div style="font-size:11.5px;color:var(--text-secondary);margin-top:2px">📍 ${s.area || s.address || ''}</div>
               <div style="font-size:11px;color:var(--accent-primary);margin-top:3px;font-weight:600">🚪 Bay Depth: ${depthText}</div>
               <div style="margin-top:6px;display:flex;gap:6px;align-items:center">
-                ${streetViewUrl ? `<a href="${streetViewUrl}" target="_blank" class="ct-badge neon-cyan" style="text-decoration:none;font-size:10px;padding:2px 8px;display:inline-flex;align-items:center;gap:3px">📸 Google Street View 360° Dock</a>` : ''}
                 ${navUrl ? `<a href="${navUrl}" target="_blank" class="ct-badge neon-green" style="text-decoration:none;font-size:10.5px;padding:3px 9px;display:inline-flex;align-items:center;gap:4px;font-weight:700">🚀 Start GPS Nav (Drop #${idx + 1})</a>` : ''}
               </div>
             </div>
