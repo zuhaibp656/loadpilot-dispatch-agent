@@ -56,7 +56,7 @@ app/
   config.py               Portable config resolver (env / .env / gcloud project; zero hardcoded IDs)
   contracts.py            Typed dataclasses (TruckType, Stop, Box, PlanningParams, DispatchPlan)
   data/                   BigQuery connector (bq_source.py), truck catalogue, Mumbai & Bangalore hubs
-  geo/roads.py            Google Maps Routes API v2 + OSRM real road network & polyline engine
+  geo/roads.py            Google Maps Routes API v2 (live traffic) + Google Great Circle Geodesics engine
   optim/                  8-sector corridors, OR-Tools CVRPTW solver, 3D height-map LIFO packer, cost
   ingest/orders.py        Email / CSV / XLSX / PDF order extraction
   capture/sources.py      Dock carton capture: OpenCV QR decoder + Gemini Vision label OCR

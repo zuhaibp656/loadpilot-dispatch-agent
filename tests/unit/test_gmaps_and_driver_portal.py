@@ -30,11 +30,32 @@ def test_gmaps_universal_urls():
     assert "destination=19.240300%2C73.130500" in stop_nav
     assert "dir_action=navigate" in stop_nav
 
-    # Embed URL
+    # Embed URL with traffic
     embed_url = gmaps_embed_url(hub, stops, return_to_hub=True)
     assert "https://maps.google.com/maps?" in embed_url
     assert "output=embed" in embed_url
     assert "+to:" in embed_url
+    assert "layer=t" in embed_url
+
+    # Street View URL
+    from app.geo.gmaps import gmaps_streetview_url, gmaps_satellite_embed_url
+    sv_url = gmaps_streetview_url(19.2403, 73.1305)
+    assert "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=19.240300,73.130500" in sv_url
+
+    # Satellite Embed URL
+    sat_url = gmaps_satellite_embed_url(19.2403, 73.1305)
+    assert "https://maps.google.com/maps?" in sat_url
+    assert "t=k" in sat_url
+    assert "output=embed" in sat_url
+
+
+def test_google_roads_provider():
+    from app.geo.roads import provider_name, _google_geodesic_legs
+    assert "Google" in provider_name()
+    legs = _google_geodesic_legs([(19.2965, 73.0620), (19.2403, 73.1305)], num_steps=5)
+    assert len(legs) == 1
+    assert len(legs[0]) >= 2
+    assert all(isinstance(p, tuple) and len(p) == 2 for p in legs[0])
 
 
 def test_whatsapp_dispatch_url():

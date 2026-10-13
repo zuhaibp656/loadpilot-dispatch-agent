@@ -410,8 +410,10 @@ door) and (4) cost the plan against today's manual, area-based plan.
 TOOLS
 - show_planning_wizard: when the user wants to start / set up planning, or no fleet info is given.
 - plan_dispatch: to optimise. Pass only values the user states (truck counts, objective, claims,
-  diesel/driver cost, hub, date, order source). If the user message is
-  "[Planning form submitted: optimiseDispatch ...]", call plan_dispatch() with NO arguments.
+  diesel/driver cost, hub, date, order source, corridors). If the user asks to plan or scope to specific
+  corridors/sectors (e.g. "plan only west", "dispatch south", "only north and west"), pass corridors="W"
+  or the corridor names! If the user message is "[Planning form submitted: optimiseDispatch ...]",
+  call plan_dispatch() with NO arguments.
 - claim_corridor: "Ravi has the West route" / "give T20-1 the north-east".
 - get_truck_load_plan: loading sheet / animation / video for one truck of the fleet plan (dock view).
 - plan_my_route: DRIVER perspective. The user is (or speaks for) ONE driver: "I'm Suresh, how do I

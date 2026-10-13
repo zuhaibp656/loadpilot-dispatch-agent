@@ -130,10 +130,11 @@ def _hhmm(m: int) -> str:
     return f"{m // 60:02d}:{m % 60:02d}"
 
 
-_ESRI = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/"
-TILE_URL = os.environ.get("LOADPILOT_TILE_URL", _ESRI + "World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}")
-LABEL_URL = os.environ.get("LOADPILOT_LABEL_URL", _ESRI + "World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}")
-TILE_ATTR = os.environ.get("LOADPILOT_TILE_ATTR", "Tiles © Esri — Esri, HERE, Garmin, © OpenStreetMap contributors")
+# Google Maps Platform Tile Layer (Roadmap & Hybrid tiles with live traffic overlays)
+GOOGLE_MAPS_TILES = "https://mt{s}.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}"
+TILE_URL = os.environ.get("LOADPILOT_TILE_URL", GOOGLE_MAPS_TILES)
+LABEL_URL = os.environ.get("LOADPILOT_LABEL_URL", "")
+TILE_ATTR = os.environ.get("LOADPILOT_TILE_ATTR", "Map data © Google")
 _BASEMAPS: dict[str, dict] = {}
 
 

@@ -68,6 +68,7 @@ def session(state: Any) -> dict[str, Any]:
 def params_to_state(p: PlanningParams) -> dict[str, Any]:
     d = dataclasses.asdict(p)
     d["objective"] = p.objective.value
+    d["corridors"] = list(p.corridors)
     return d
 
 
@@ -76,7 +77,12 @@ def params_from_state(state: Any) -> PlanningParams:
     p = PlanningParams()
     for k, v in raw.items():
         if hasattr(p, k) and v is not None:
-            setattr(p, k, Objective(v) if k == "objective" else v)
+            if k == "objective":
+                setattr(p, k, Objective(v))
+            elif k == "corridors":
+                setattr(p, k, tuple(v) if isinstance(v, (list, tuple)) else ((v,) if v else ()))
+            else:
+                setattr(p, k, v)
     if not p.dispatch_date:
         p.dispatch_date = dt.date.today().isoformat()
     if not p.hub_id:
@@ -209,6 +215,30 @@ def parse_target_trucks(query: str, plan: Any) -> list[str] | None:
     return None
 
 
+def parse_corridors_arg(text: str) -> tuple[str, ...]:
+    """Parse corridors string e.g. 'W', 'West', 'North, South', 'W;S', 'all' -> ('W',) or ()."""
+    if not text:
+        return ()
+    t = text.strip().lower()
+    if t in ("all", "all corridors", "entire fleet", "full fleet", "*", "fleet", "clear", "none", "full"):
+        return ()
+    corrs: list[str] = []
+    # Split on commas, semicolons, 'and', slashes, whitespace
+    parts = re.split(r"[,;&/\n]+|\s+and\s+", text)
+    for chunk in parts:
+        cleaned = chunk.strip().lower().replace("route", "").replace("corridor", "").replace("sector", "").strip()
+        if not cleaned:
+            continue
+        c = normalize_corridor(cleaned)
+        if c and c not in corrs:
+            corrs.append(c)
+    if not corrs:
+        c = normalize_corridor(text)
+        if c:
+            corrs.append(c)
+    return tuple(corrs)
+
+
 # ==============================================================================
 # Plan runner shared by tools
 # ==============================================================================
@@ -219,6 +249,11 @@ def run_plan(state: Any, focus_truck_id: str | None = None) -> dict[str, Any]:
     hub = ALL_HUBS.get(p.hub_id.upper()) if p.hub_id else None
     if hub is None:
         _, hub = resolve_city_and_hub(query_hub=p.hub_id, stops=stops)
+    if p.corridors:
+        target_set = set(p.corridors)
+        filtered = [s for s in stops if corridor_of(hub, s) in target_set]
+        if filtered:
+            stops = filtered
     plan = _plan_dispatch(hub, stops, p)
     focus = focus_truck_id or (plan.routes[0].truck_id if plan.routes else None)
     plan.focus_truck_id = focus
@@ -282,7 +317,7 @@ def show_planning_wizard(tool_context: ToolContext) -> dict[str, Any]:
 def plan_dispatch(tool_context: ToolContext, truck_counts: str = "", objective: str = "",
                   corridor_claims: str = "", fuel_price: float = 0.0, driver_day_cost: float = 0.0,
                   hub_id: str = "", city: str = "", dispatch_date: str = "", order_source: str = "",
-                  driver: str = "") -> dict[str, Any]:
+                  driver: str = "", corridors: str = "") -> dict[str, Any]:
     """Optimise today's dispatch: corridors, truck assignment, stop order, LIFO truck loading and
     cost vs today's manual plan. Arguments are optional overrides; anything not given keeps the
     current values (from the planning form or earlier chat).
@@ -300,9 +335,13 @@ def plan_dispatch(tool_context: ToolContext, truck_counts: str = "", objective: 
             still optimised, but the answer, map and 3D show just that driver's truck.
         order_source: demo | chat (orders pasted/uploaded) | photos (demo + scanned cartons) |
             bigquery (today's order book from BigQuery dataset loadpilot_demo).
+        corridors: Specific corridor(s) to constrain dispatch to, e.g. "W", "West", "North, South".
+            "all" or empty clears constraint and plans all regional sectors.
     """
     st = tool_context.state
     p = params_from_state(st)
+    if corridors:
+        p.corridors = parse_corridors_arg(corridors)
     if truck_counts:
         counts = parse_truck_counts(truck_counts)
         if counts:
@@ -331,7 +370,7 @@ def plan_dispatch(tool_context: ToolContext, truck_counts: str = "", objective: 
 
     # Fast-path for conversational follow-ups: if fleet was already planned and no parameters changed
     sess = session(st)
-    if who and sess.get("plan") and not (truck_counts or objective or corridor_claims or fuel_price or driver_day_cost or city or hub_id or dispatch_date or order_source):
+    if who and sess.get("plan") and not (truck_counts or objective or corridor_claims or fuel_price or driver_day_cost or city or hub_id or dispatch_date or order_source or corridors):
         plan = sess["plan"]
         targets = parse_target_trucks(who, plan)
         if targets:

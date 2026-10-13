@@ -801,9 +801,7 @@
     var pop = $('div', 'lp-pop', cwrap); pop.style.display = 'none';
     var zbox = $('div', 'lp-zoom', cwrap);
     var zin = $('button', '', zbox, '+'), zout = $('button', '', zbox, '&minus;'), zfit = $('button', '', zbox, '&#9974;');
-    zfit.title = 'Fit all';
-    var attr = $('div', 'lp-attr', cwrap);
-    var legend = $('div', 'lp-legend', body);
+    var attr = $('div', 'lp-attr', cwrap); attr.innerHTML = D.tileAttr || 'Map data © Google';
     var ctr = $('div', 'lp-ctrl', el);
     var tog = $('div', 'lp-seg', ctr);
     var bOpt = $('button', 'on', tog, 'FleetFlow plan'), bBase = $('button', '', tog, 'Today (manual)');
@@ -896,8 +894,8 @@
       if (!tilesOn) return null;
       im = new Image(); im.ok = false; tileCache[key] = im;
       im.onload = function () { im.ok = true; tileOk++; };
-      im.onerror = function () { tileFail++; if (!tileOk && tileFail > 4) tilesOn = false; };
-      im.src = url.replace('{s}', 'abcd'[(xx + y) % 4]).replace('{z}', zi).replace('{x}', xx).replace('{y}', y);
+      var sub = (url.indexOf('google.com') >= 0) ? '0123'[(xx + y) % 4] : 'abcd'[(xx + y) % 4];
+      im.src = url.replace('{s}', sub).replace('{z}', zi).replace('{x}', xx).replace('{y}', y);
       return null;
     }
     function drawTiles(url) {
@@ -1029,6 +1027,7 @@
         '</div>' +
         '<div style="display:flex;gap:6px;padding:0 12px 10px;">' +
         '<a href="https://www.google.com/maps/dir/?api=1&destination=' + s.lat + ',' + s.lon + '&travelmode=driving&dir_action=navigate" target="_blank" class="lp-btn" style="flex:1;text-align:center;background:#1a73e8;color:#fff;text-decoration:none;padding:7px 10px;border-radius:12px;font-size:12px;font-weight:700;">🗺️ Navigate in Google Maps</a>' +
+        '<a href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=' + s.lat + ',' + s.lon + '" target="_blank" class="lp-btn" style="flex:1;text-align:center;background:#0d9488;color:#fff;text-decoration:none;padding:7px 10px;border-radius:12px;font-size:12px;font-weight:700;">📸 Street View</a>' +
         '</div>' +
         (window.LPgoLoad && set === 'opt' ? '<button class="lp-go">📦 Where are these cartons in the truck?</button>' : '');
       pop.style.display = 'block';

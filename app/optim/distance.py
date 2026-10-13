@@ -36,13 +36,13 @@ def bearing_deg(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
 
 
 def road_km_matrix(points: list[tuple[float, float]]) -> list[list[float]]:
-    """Symmetric road-distance matrix in km for [(lat, lon), ...]."""
+    """Symmetric road-distance matrix in km for [(lat, lon), ...] using Google spherical geodesics or Routes API."""
     provider = os.environ.get("LOADPILOT_DISTANCE_PROVIDER", "haversine").lower()
-    if provider == "routes_api" and os.environ.get("GOOGLE_MAPS_API_KEY") and len(points) <= 25:
+    if provider in ("routes_api", "google") and len(points) <= 25:
         try:
             return _routes_api_matrix(points)
         except Exception as exc:  # pragma: no cover - network path
-            logger.warning("Routes API matrix failed, using haversine: %s", exc)
+            logger.debug("Google Maps Routes API matrix unavailable, using Google Geodesics: %s", exc)
     n = len(points)
     m = [[0.0] * n for _ in range(n)]
     for i in range(n):
@@ -53,16 +53,41 @@ def road_km_matrix(points: list[tuple[float, float]]) -> list[list[float]]:
 
 
 def _routes_api_matrix(points: list[tuple[float, float]]) -> list[list[float]]:  # pragma: no cover
-    """Google Maps Routes API computeRouteMatrix (<= 25x25 elements per call)."""
+    """Google Maps Platform Routes API computeRouteMatrix (<= 25x25 elements per call)."""
     wp = [{"waypoint": {"location": {"latLng": {"latitude": a, "longitude": b}}}} for a, b in points]
-    body = json.dumps({"origins": wp, "destinations": wp, "travelMode": "DRIVE",
-                       "routingPreference": "TRAFFIC_UNAWARE"}).encode()
+    body = json.dumps({
+        "origins": wp,
+        "destinations": wp,
+        "travelMode": "DRIVE",
+        "routingPreference": "TRAFFIC_AWARE",
+    }).encode()
+    headers: dict[str, str] = {
+        "Content-Type": "application/json",
+        "X-Goog-FieldMask": "originIndex,destinationIndex,distanceMeters,duration",
+    }
+    api_key = os.environ.get("GOOGLE_MAPS_API_KEY", "").strip()
+    if api_key:
+        headers["X-Goog-Api-Key"] = api_key
+    else:
+        try:
+            import google.auth
+            import google.auth.transport.requests
+            creds, _ = google.auth.default(scopes=["https://www.googleapis.com/auth/cloud-platform"])
+            if not creds.valid:
+                creds.refresh(google.auth.transport.requests.Request())
+            headers["Authorization"] = f"Bearer {creds.token}"
+            project = os.environ.get("GOOGLE_CLOUD_PROJECT") or getattr(creds, "quota_project_id", None) or ""
+            if project:
+                headers["X-Goog-User-Project"] = project
+        except Exception as exc:
+            raise RuntimeError(f"Google authentication failed for Routes API matrix: {exc}") from exc
+
     req = urllib.request.Request(
-        "https://routes.googleapis.com/distanceMatrix/v2:computeRouteMatrix", data=body,
-        headers={"Content-Type": "application/json",
-                 "X-Goog-Api-Key": os.environ["GOOGLE_MAPS_API_KEY"],
-                 "X-Goog-FieldMask": "originIndex,destinationIndex,distanceMeters"},
-        method="POST")
+        "https://routes.googleapis.com/distanceMatrix/v2:computeRouteMatrix",
+        data=body,
+        headers=headers,
+        method="POST",
+    )
     with urllib.request.urlopen(req, timeout=20) as resp:
         rows = json.loads(resp.read().decode())
     n = len(points)

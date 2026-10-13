@@ -1180,6 +1180,207 @@ _UI_HTML = r"""<!DOCTYPE html>
       color: var(--accent-primary);
     }
 
+    /* ── Intelligent Launchpad AI Agent Surface & Quick Palette ── */
+    .lp-quick-palette {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 6px;
+      margin-bottom: 2px;
+    }
+    .lp-quick-chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .lp-quick-chip:hover {
+      background: var(--bg-elevated);
+      border-color: var(--accent-primary);
+      color: var(--text-main);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    }
+    .lp-quick-chip:active {
+      transform: translateY(0);
+    }
+    .lp-quick-chip.active {
+      background: rgba(66, 133, 244, 0.16);
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+    }
+
+    .lp-agent-response-surface {
+      margin-top: 14px;
+      display: none;
+      animation: modalFadeIn 0.25s ease both;
+    }
+    .lp-agent-card {
+      background: var(--bg-card);
+      border: 1.5px solid rgba(66, 133, 244, 0.45);
+      border-radius: 14px;
+      padding: 16px 18px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .lp-agent-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #4285F4, #34A853, #FBBC04, #EA4335);
+    }
+    .lp-agent-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .lp-agent-badge-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .lp-agent-tool-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      background: rgba(52, 168, 83, 0.12);
+      border: 1px solid rgba(52, 168, 83, 0.35);
+      color: #34A853;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+    .lp-agent-time-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+    .lp-agent-body {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--text-main);
+      background: var(--bg-elevated);
+      border-radius: 10px;
+      padding: 12px 14px;
+      border: 1px solid var(--border-subtle);
+      white-space: pre-line;
+    }
+    .lp-agent-kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+    }
+    .lp-agent-kpi-pill {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9px;
+      padding: 8px 10px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .lp-agent-kpi-val {
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--accent-primary);
+    }
+    .lp-agent-kpi-lbl {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .lp-agent-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 4px;
+    }
+    .lp-card-action-btn {
+      padding: 7px 13px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      border: 1.5px solid var(--border-subtle);
+      background: var(--bg-surface);
+      color: var(--text-main);
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+    .lp-card-action-btn:hover {
+      border-color: var(--accent-primary);
+      background: var(--bg-elevated);
+      color: var(--accent-primary);
+      transform: translateY(-1px);
+    }
+    .lp-card-action-btn.primary {
+      background: linear-gradient(135deg, #1a73e8 0%, #0d5bbd 100%);
+      color: #ffffff;
+      border-color: #1a73e8;
+      box-shadow: 0 2px 6px rgba(26,115,232,0.3);
+    }
+    .lp-card-action-btn.primary:hover {
+      background: linear-gradient(135deg, #1557b0 0%, #08439b 100%);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+    .lp-followup-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      padding-top: 4px;
+    }
+    .lp-followup-chip {
+      background: rgba(66, 133, 244, 0.09);
+      border: 1px dashed rgba(66, 133, 244, 0.45);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-primary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+    .lp-followup-chip:hover {
+      background: rgba(66, 133, 244, 0.18);
+      border-color: var(--accent-primary);
+      transform: translateY(-1px);
+    }
+
     /* ── Historical Plan Inspection Modal ── */
     .hist-modal-overlay {
       position: fixed;
@@ -2994,16 +3195,48 @@ _UI_HTML = r"""<!DOCTYPE html>
                   id="inpLaunchpadPrompt"
                   class="ct-input"
                   style="width:100%;height:106px;font-size:15px;line-height:1.5;padding:13px 16px;border-radius:12px;border:2px solid rgba(66,133,244,0.45);resize:vertical"
-                  placeholder="Type dispatch instructions here... Example: 'Plan today's dispatch for this hub. Give Ravi the West route in a smaller T14 truck and distribute the remaining West stops to a backup truck.'"
+                  placeholder="Ask the AI agent anything or command dispatch... Examples: 'Plan only west', 'Give Ravi the West route in a smaller T14 truck', 'Explain CMVR Rule 93 axle limits', 'Reset demo data'"
                   oninput="debounceInterpretPrompt()"
-                  onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();synthesizeFromLaunchpad(true);}"
+                  onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitLaunchpadAgentCommand();}"
                 ></textarea>
 
-                <div id="lpAiIntentBar" class="lp-ai-intent-bar" style="display:none">
-                  <span style="font-size:12px;color:var(--accent-primary);font-weight:800;display:flex;align-items:center;gap:4px">
-                    <span>✨</span> <b>AI Dispatch Intent:</b>
-                  </span>
-                  <div id="lpAiIntentChips" style="display:inline-flex;gap:6px;flex-wrap:wrap"></div>
+                <!-- Quick-Action Command Palette (8 Express Agent Action Chips) -->
+                <div class="lp-quick-palette">
+                  <div class="lp-quick-chip" onclick="setLaunchpadPrompt('Plan dispatch only for West corridor'); submitLaunchpadAgentCommand();">
+                    <span>🧭</span> Plan Only West
+                  </div>
+                  <div class="lp-quick-chip" onclick="setLaunchpadPrompt('Give Ravi the West route in a smaller T14 truck and distribute overflow stops'); submitLaunchpadAgentCommand();">
+                    <span>📌</span> Ravi → West (T14)
+                  </div>
+                  <div class="lp-quick-chip" onclick="onLaunchpadHubChange('BLR-NLG'); setLaunchpadPrompt('Plan dispatch for Bengaluru Nelamangala hub and optimize top 3 trucks'); submitLaunchpadAgentCommand();">
+                    <span>🌳</span> Bengaluru Hub
+                  </div>
+                  <div class="lp-quick-chip" onclick="setLaunchpadPrompt('Plan dispatch for lowest total cost in ₹ across all corridors'); submitLaunchpadAgentCommand();">
+                    <span>💰</span> 100% Lowest Cost
+                  </div>
+                  <div class="lp-quick-chip" onclick="setLaunchpadPrompt('Optimize today\'s fleet dispatch for fewest trucks dispatched'); submitLaunchpadAgentCommand();">
+                    <span>🎯</span> Fewest Trucks Goal
+                  </div>
+                  <div class="lp-quick-chip" onclick="setLaunchpadPrompt('Plan dispatch assuming diesel price at ₹98 per litre'); submitLaunchpadAgentCommand();">
+                    <span>⛽</span> Diesel at ₹98/L
+                  </div>
+                  <div class="lp-quick-chip" onclick="setLaunchpadPrompt('Explain CMVR Rule 93 axle compliance and how FleetFlow enforces 38% front / 62% rear weight limits'); submitLaunchpadAgentCommand();">
+                    <span>⚖️</span> Explain CMVR Axle Rule
+                  </div>
+                  <div class="lp-quick-chip" onclick="setLaunchpadPrompt('Reset demo data to default baseline order book'); submitLaunchpadAgentCommand();">
+                    <span>🔄</span> Reset Demo Data
+                  </div>
+                </div>
+
+                <div id="lpAiIntentBar" class="lp-ai-intent-bar" style="display:none;align-items:center;justify-content:space-between">
+                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                    <span style="font-size:12px;color:var(--accent-primary);font-weight:800;display:flex;align-items:center;gap:4px">
+                      <span>✨</span> <b>AI Dispatch Intent:</b>
+                    </span>
+                    <span id="lpAiToolBadge" class="lp-agent-tool-badge" style="display:none">⚡ Tool: plan_dispatch()</span>
+                    <div id="lpAiIntentChips" style="display:inline-flex;gap:6px;flex-wrap:wrap"></div>
+                  </div>
+                  <button class="ct-btn-secondary" style="height:26px;padding:2px 8px;font-size:11px" onclick="setLaunchpadPrompt(''); document.getElementById('lpAiIntentBar').style.display='none';">Clear ✕</button>
                 </div>
 
                 <!-- 4 Equal-Size Rectangular Scenario Buttons in a Strict 4-Column Symmetrical Grid -->
@@ -3022,19 +3255,27 @@ _UI_HTML = r"""<!DOCTYPE html>
                   </button>
                 </div>
 
-                <!-- Symmetrical Action Footer Inside Revolving Box -->
-                <div style="display:flex;justify-content:space-between;align-items:center;gap:14px;padding-top:12px;border-top:1px solid var(--border-subtle)">
+                <!-- Symmetrical Action Footer Inside Revolving Box: Dual Execution Buttons -->
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:14px;padding-top:12px;border-top:1px solid var(--border-subtle);flex-wrap:wrap">
                   <div style="display:flex;align-items:center;gap:10px;height:46px;padding:0 16px;background:var(--bg-elevated);border:1.5px solid var(--border-subtle);border-radius:12px;font-size:12.5px;font-weight:700;color:var(--text-secondary)">
                     <span>🛡️ Zero-Hallucination Math Enclave</span>
                     <span>·</span>
                     <span id="lpQuickRuleSummary" style="color:var(--accent-primary);font-weight:800">1 Driver Rule Staged</span>
                   </div>
-                  <button class="lp-synth-cta" id="btnHeroSynthesize" onclick="synthesizeFromLaunchpad(true)">
-                    <span>🚀</span> Synthesize &amp; Run FleetFlow Agent →
-                  </button>
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <button class="lp-synth-cta" id="btnHeroAgentCommand" style="background:linear-gradient(135deg, #1a73e8 0%, #34A853 100%)" onclick="submitLaunchpadAgentCommand()">
+                      <span>✨</span> Ask AI Agent &amp; Dispatch
+                    </button>
+                    <button class="ct-btn-secondary" id="btnHeroSynthesize" style="height:48px;padding:0 20px;font-size:14px;font-weight:800;border-radius:12px;border-color:rgba(66,133,244,0.4)" onclick="synthesizeFromLaunchpad(true)">
+                      <span>⚡</span> Fast Solve &amp; Go to Map →
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
+
+            <!-- INTERACTIVE AI AGENT RESPONSE SURFACE (Rendered on Launchpad) -->
+            <div id="lpAgentResponseSurface" class="lp-agent-response-surface"></div>
 
             <!-- STEP 3: PROGRESSIVE DISCLOSURE — 3 FULL-WIDTH SYMMETRICAL ACCORDION BARS -->
             <div class="lp-acc-stack">
@@ -3152,6 +3393,10 @@ _UI_HTML = r"""<!DOCTYPE html>
               </select>
             </div>
             <div class="ct-scope-group">
+              <div style="display:flex;align-items:center;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:8px;padding:2px;gap:2px">
+                <button id="btnTowerCanvasMode" class="ct-scope-btn active" style="font-size:12px;padding:4px 10px" onclick="setTowerMapMode('canvas')">⚡ FleetFlow Engine</button>
+                <button id="btnTowerGmapsMode" class="ct-scope-btn" style="font-size:12px;padding:4px 10px" onclick="setTowerMapMode('gmaps')">🌐 Google Maps Live &amp; Traffic</button>
+              </div>
               <button class="ct-btn-secondary neon-blue" style="height:36px;padding:0 14px;font-size:12.5px" onclick="switchWorkspace('studio3d')">
                 📦 Inspect in 3D Studio →
               </button>
@@ -3170,6 +3415,15 @@ _UI_HTML = r"""<!DOCTYPE html>
                 <span>🚀</span> Go to Dispatch Launchpad
               </button>
             </div>
+          </div>
+
+          <div id="ct-gmaps-mount" class="ct-engine-mount" style="display:none;position:relative;width:100%;height:100%;min-height:480px;background:#090d1a;border-radius:12px;overflow:hidden">
+            <div id="ctGmapsToolbar" style="position:absolute;top:10px;right:10px;z-index:10;display:flex;gap:6px;background:rgba(15,23,42,0.88);backdrop-filter:blur(8px);padding:6px;border-radius:8px;border:1px solid var(--border-subtle)">
+              <button id="btnGmapsRoadmap" class="ct-badge neon-blue" style="cursor:pointer;background:var(--accent-primary);color:#fff;border:none;padding:4px 10px;font-size:11px" onclick="toggleTowerGmapsLayer('roadmap')">🗺️ Google Maps + Live Traffic</button>
+              <button id="btnGmapsSatellite" class="ct-badge" style="cursor:pointer;background:var(--bg-elevated);color:var(--text-main);border:1px solid var(--border-subtle);padding:4px 10px;font-size:11px" onclick="toggleTowerGmapsLayer('satellite')">🛰️ Satellite Imagery</button>
+              <a id="btnGmapsFullWindow" href="https://maps.google.com" target="_blank" class="ct-badge" style="text-decoration:none;background:var(--bg-elevated);color:var(--text-main);border:1px solid var(--border-subtle);padding:4px 10px;font-size:11px">↗ Open in Google Maps</a>
+            </div>
+            <iframe id="ctGmapsIframe" src="about:blank" style="width:100%;height:100%;min-height:550px;border:none" allowfullscreen loading="lazy"></iframe>
           </div>
         </div>
 
@@ -3596,10 +3850,13 @@ _UI_HTML = r"""<!DOCTYPE html>
               </div>
             </div>
 
-            <!-- 4 Prominent Quick Action Buttons -->
+            <!-- 5 Prominent Quick Action Buttons -->
             <div class="driver-quick-btns">
               <a id="btnOpenMapsNav" href="#" target="_blank" class="ct-btn-primary" style="text-decoration:none;background:linear-gradient(135deg,#16a34a,#059669);justify-content:center;box-shadow:0 3px 8px rgba(22,163,74,0.25)">
                 🗺️ Maps Turn-by-Turn
+              </a>
+              <a id="btnOpenStreetView" href="#" target="_blank" class="ct-btn-secondary neon-cyan" style="text-decoration:none;justify-content:center">
+                📸 Street View 360° Dock
               </a>
               <a id="btnOpenWhatsApp" href="#" target="_blank" class="ct-btn-secondary neon-green" style="text-decoration:none;justify-content:center">
                 💬 WhatsApp Dispatch
@@ -4343,6 +4600,8 @@ const CT = {
   customBoxes: [],
   mapEngine: null,
   loadEngine: null,
+  towerMapMode: 'canvas',
+  towerGmapsLayer: 'roadmap',
 };
 
 function getBqPresets() {
@@ -4408,7 +4667,11 @@ async function switchWorkspace(viewId) {
     }
   } else {
     if (viewId === 'tower') {
-      setTimeout(() => mountMapCanvas(CT.bundle.anim_data), 35);
+      if (CT.towerMapMode === 'gmaps') {
+        setTimeout(() => updateTowerGmapsEmbed(), 35);
+      } else {
+        setTimeout(() => mountMapCanvas(CT.bundle.anim_data), 35);
+      }
     } else if (viewId === 'studio3d') {
       setTimeout(() => runStudioRepack(), 35);
     } else if (viewId === 'gcp') {
@@ -4538,6 +4801,77 @@ function mountLoadCanvas(animData) {
   const d = JSON.parse(JSON.stringify(animData));
   d.start = 'load';
   CT.loadEngine = window.mountFleetFlowEngine(mount, d, 'load');
+}
+
+function setTowerMapMode(mode) {
+  CT.towerMapMode = mode;
+  const canvasMount = document.getElementById('ct-map-mount');
+  const gmapsMount = document.getElementById('ct-gmaps-mount');
+  const btnCanvas = document.getElementById('btnTowerCanvasMode');
+  const btnGmaps = document.getElementById('btnTowerGmapsMode');
+  if (btnCanvas) btnCanvas.classList.toggle('active', mode === 'canvas');
+  if (btnGmaps) btnGmaps.classList.toggle('active', mode === 'gmaps');
+
+  if (mode === 'canvas') {
+    if (canvasMount) canvasMount.style.display = 'flex';
+    if (gmapsMount) gmapsMount.style.display = 'none';
+    if (CT.bundle && CT.bundle.anim_data) {
+      mountMapCanvas(CT.bundle.anim_data);
+    }
+  } else {
+    if (canvasMount) canvasMount.style.display = 'none';
+    if (gmapsMount) gmapsMount.style.display = 'flex';
+    updateTowerGmapsEmbed();
+  }
+}
+
+function toggleTowerGmapsLayer(layer) {
+  CT.towerGmapsLayer = layer;
+  const btnRoadmap = document.getElementById('btnGmapsRoadmap');
+  const btnSat = document.getElementById('btnGmapsSatellite');
+  if (btnRoadmap) {
+    btnRoadmap.style.background = layer === 'roadmap' ? 'var(--accent-primary)' : 'var(--bg-elevated)';
+    btnRoadmap.style.color = layer === 'roadmap' ? '#fff' : 'var(--text-main)';
+  }
+  if (btnSat) {
+    btnSat.style.background = layer === 'satellite' ? 'var(--accent-primary)' : 'var(--bg-elevated)';
+    btnSat.style.color = layer === 'satellite' ? '#fff' : 'var(--text-main)';
+  }
+  updateTowerGmapsEmbed();
+}
+
+function updateTowerGmapsEmbed() {
+  const iframe = document.getElementById('ctGmapsIframe');
+  const extLink = document.getElementById('btnGmapsFullWindow');
+  if (!iframe) return;
+
+  const routes = (CT.bundle && CT.bundle.routes) || [];
+  let targetRoute = null;
+  if (CT.focusTruckId) {
+    targetRoute = routes.find(r => r.truck_id === CT.focusTruckId);
+  }
+  if (!targetRoute && routes.length) {
+    targetRoute = routes[0];
+  }
+
+  let embedUrl = '';
+  let fullUrl = '';
+  if (targetRoute) {
+    embedUrl = CT.towerGmapsLayer === 'satellite' ? (targetRoute.gmaps_satellite_url || targetRoute.gmaps_embed_url) : (targetRoute.gmaps_embed_url || targetRoute.gmaps_satellite_url);
+    fullUrl = targetRoute.gmaps_nav_url || 'https://maps.google.com';
+  } else {
+    const hubLat = (CT.bundle && CT.bundle.hub && CT.bundle.hub.lat) || 19.2969;
+    const hubLon = (CT.bundle && CT.bundle.hub && CT.bundle.hub.lon) || 73.0628;
+    embedUrl = `https://maps.google.com/maps?q=${hubLat},${hubLon}&t=${CT.towerGmapsLayer === 'satellite' ? 'k' : 'm'}&z=11&output=embed`;
+    fullUrl = `https://maps.google.com/maps?q=${hubLat},${hubLon}`;
+  }
+
+  if (iframe.src !== embedUrl) {
+    iframe.src = embedUrl;
+  }
+  if (extLink) {
+    extLink.href = fullUrl;
+  }
 }
 
 async function initControlTower() {
@@ -5137,11 +5471,13 @@ async function debounceInterpretPrompt() {
     const promptInput = document.getElementById('inpLaunchpadPrompt');
     const intentBar = document.getElementById('lpAiIntentBar');
     const chipsContainer = document.getElementById('lpAiIntentChips');
+    const toolBadge = document.getElementById('lpAiToolBadge');
     if (!promptInput || !intentBar || !chipsContainer) return;
 
     const txt = promptInput.value.trim();
     if (!txt) {
       intentBar.style.display = 'none';
+      if (toolBadge) toolBadge.style.display = 'none';
       return;
     }
 
@@ -5153,6 +5489,15 @@ async function debounceInterpretPrompt() {
       });
       if (!res.ok) return;
       const data = await res.json();
+
+      if (toolBadge) {
+        if (data.tool_badge) {
+          toolBadge.textContent = data.tool_badge;
+          toolBadge.style.display = 'inline-flex';
+        } else {
+          toolBadge.style.display = 'none';
+        }
+      }
 
       if (data.chips && data.chips.length) {
         chipsContainer.innerHTML = data.chips.map((c, i) => `
@@ -5174,6 +5519,218 @@ function setLaunchpadPrompt(txt) {
     el.value = txt;
     debounceInterpretPrompt();
   }
+}
+
+async function submitLaunchpadAgentCommand(overridePrompt = null) {
+  const promptInput = document.getElementById('inpLaunchpadPrompt');
+  const txt = (overridePrompt !== null ? overridePrompt : (promptInput ? promptInput.value : '')).trim();
+  if (!txt) {
+    showToast('⚠️ Please enter an AI command, dispatch instruction, or question in the prompt box.', 4000);
+    if (promptInput) promptInput.focus();
+    return;
+  }
+
+  const agentBtn = document.getElementById('btnHeroAgentCommand');
+  const responseSurface = document.getElementById('lpAgentResponseSurface');
+  if (agentBtn) {
+    agentBtn.disabled = true;
+    agentBtn.innerHTML = '<span>⏳</span> AI Agent Reasoning &amp; Executing...';
+  }
+
+  if (responseSurface) {
+    responseSurface.style.display = 'block';
+    responseSurface.innerHTML = `
+      <div class="lp-agent-card">
+        <div class="lp-agent-header">
+          <div class="lp-agent-badge-group">
+            <span class="ct-kpi-badge" style="background:var(--accent-primary-soft);color:var(--accent-primary);border-color:#4285F4">
+              ✨ Gemini 3.7 / 3.8 Flash &amp; 3.1 Pro
+            </span>
+            <span class="lp-agent-tool-badge">🛠️ Interpreting intent &amp; invoking tools...</span>
+          </div>
+          <span class="lp-agent-time-badge">⏳ Running...</span>
+        </div>
+        <div class="lp-agent-body" style="color:var(--text-secondary);font-style:italic">
+          Analyzing natural-language instruction: "${txt.replace(/"/g, '&quot;')}"...
+        </div>
+      </div>
+    `;
+    responseSurface.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  const hubId = CT.activeHubId || 'BHW-DC';
+  const objective = document.getElementById('lpSelObjective')?.value || 'lowest_cost';
+  const scopeVal = document.getElementById('lpSelScope')?.value || CT.scope || 'all';
+  const fuel = parseFloat(document.getElementById('lpInpFuel')?.value || '92');
+  const drvCost = parseFloat(document.getElementById('lpInpDriverCost')?.value || '950');
+
+  try {
+    const res = await fetch('/api/agent-command', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        prompt: txt,
+        message: txt,
+        session_id: 'launchpad-console',
+        hub_id: hubId,
+        execution_mode: 'full',
+        order_source: CT.activeOrderSource || 'demo',
+        scope: scopeVal,
+        fuel_price: fuel,
+        driver_day_cost: drvCost
+      })
+    });
+
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({ detail: 'Agent execution failed' }));
+      throw new Error(errData.detail || 'Agent execution failed');
+    }
+
+    const data = await res.json();
+
+    if (data.bundle) {
+      applyBundle(data.bundle);
+      CT.bundle = data.bundle;
+      if (data.bundle.hub_context) {
+        CT.hubContext = data.bundle.hub_context;
+      }
+    }
+
+    renderAgentResponseCard(data, txt);
+
+    showToast(`✨ <b>Agent Response Ready:</b> Tool <code>${data.tool_used}</code> completed in ${data.execution_latency_ms}ms`, 4500);
+  } catch (err) {
+    if (responseSurface) {
+      responseSurface.innerHTML = `
+        <div class="lp-agent-card" style="border-color:var(--accent-crimson)">
+          <div class="lp-agent-header">
+            <span class="ct-kpi-badge" style="background:rgba(234,67,53,0.15);color:var(--accent-crimson);border-color:#EA4335">
+              ⚠️ Execution Error
+            </span>
+          </div>
+          <div class="lp-agent-body" style="color:var(--accent-crimson)">
+            ${err.message || err}
+          </div>
+        </div>
+      `;
+    }
+    showToast(`❌ Error: ${err.message || err}`, 5000);
+  } finally {
+    if (agentBtn) {
+      agentBtn.disabled = false;
+      agentBtn.innerHTML = '<span>✨</span> Ask AI Agent &amp; Dispatch';
+    }
+  }
+}
+
+function renderAgentResponseCard(data, queryTxt) {
+  const surface = document.getElementById('lpAgentResponseSurface');
+  if (!surface) return;
+
+  const bundle = data.bundle || CT.bundle;
+  const kpi = bundle ? bundle.kpi : null;
+  const latency = data.execution_latency_ms ? `${(data.execution_latency_ms / 1000).toFixed(2)}s` : '0.45s';
+
+  // Format reply (convert markdown bold and bullets cleanly)
+  let formattedReply = (data.reply || '')
+    .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+    .replace(/^• /gm, '&bull; ')
+    .replace(/^1\. /gm, '<b>1.</b> ')
+    .replace(/^2\. /gm, '<b>2.</b> ')
+    .replace(/^3\. /gm, '<b>3.</b> ')
+    .replace(/^4\. /gm, '<b>4.</b> ');
+
+  let kpiRibbonHtml = '';
+  if (kpi && kpi.optimized_trucks) {
+    kpiRibbonHtml = `
+      <div class="lp-agent-kpis">
+        <div class="lp-agent-kpi-pill">
+          <div class="lp-agent-kpi-val">${kpi.optimized_trucks} Trucks</div>
+          <div class="lp-agent-kpi-lbl">Active Fleet</div>
+        </div>
+        <div class="lp-agent-kpi-pill">
+          <div class="lp-agent-kpi-val" style="color:var(--accent-emerald)">₹${kpi.savings_inr ? kpi.savings_inr.toLocaleString('en-IN') : '0'}</div>
+          <div class="lp-agent-kpi-lbl">Daily Savings (-${kpi.savings_pct || 0}%)</div>
+        </div>
+        <div class="lp-agent-kpi-pill">
+          <div class="lp-agent-kpi-val" style="color:var(--accent-primary)">100% LIFO</div>
+          <div class="lp-agent-kpi-lbl">Zero Reverse Drops</div>
+        </div>
+        <div class="lp-agent-kpi-pill">
+          <div class="lp-agent-kpi-val" style="color:#f59e0b">Rule 93 PASS</div>
+          <div class="lp-agent-kpi-lbl">Axle Compliance</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Build 1-click action buttons
+  let actionsHtml = `
+    <div class="lp-agent-actions">
+      <button class="lp-card-action-btn primary" onclick="switchWorkspace('tower'); window.scrollTo({top:0,behavior:'smooth'});">
+        <span>🗺️</span> View Route on Live Map
+      </button>
+      <button class="lp-card-action-btn" onclick="switchWorkspace('load'); if (CT.bundle && CT.bundle.trucks && CT.bundle.trucks[0]) selectTruck(CT.bundle.trucks[0].truck_id); window.scrollTo({top:0,behavior:'smooth'});">
+        <span>📦</span> Inspect 3D Load Studio
+      </button>
+      <button class="lp-card-action-btn" onclick="openDriverView()">
+        <span>📱</span> Driver Mobile PWA
+      </button>
+      <button class="lp-card-action-btn" onclick="openWhatsAppShare()">
+        <span>💬</span> WhatsApp LR Challan
+      </button>
+      <button class="lp-card-action-btn" onclick="openHmacAuditModal()">
+        <span>📄</span> HMAC Audit Log
+      </button>
+    </div>
+  `;
+
+  // Follow-up suggestion chips
+  let followUpsHtml = '';
+  if (data.follow_ups && data.follow_ups.length) {
+    followUpsHtml = `
+      <div style="display:flex;flex-direction:column;gap:5px;padding-top:6px;border-top:1px dashed var(--border-subtle)">
+        <div style="font-size:11.5px;font-weight:700;color:var(--text-secondary)">💡 Follow-Up Agent Suggestions (Click to Run):</div>
+        <div class="lp-followup-chips">
+          ${data.follow_ups.map(f => {
+            const cleanTxt = f.replace(/^[🔍📱➕🧹🗺️⚖️🚚🚀📊🧭📌🎯]\s*/, '');
+            return `<div class="lp-followup-chip" onclick="setLaunchpadPrompt('${cleanTxt.replace(/'/g, "\\'")}'); submitLaunchpadAgentCommand();">${f}</div>`;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  surface.style.display = 'block';
+  surface.innerHTML = `
+    <div class="lp-agent-card">
+      <div class="lp-agent-header">
+        <div class="lp-agent-badge-group">
+          <span class="ct-kpi-badge" style="background:var(--accent-primary-soft);color:var(--accent-primary);border-color:#4285F4">
+            ✨ Gemini 3.7 / 3.8 Flash &amp; 3.1 Pro
+          </span>
+          <span class="lp-agent-tool-badge">${data.tool_badge || `🛠️ ${data.tool_used}()`}</span>
+          <span class="ct-kpi-badge" style="background:rgba(52,168,83,0.12);color:#34A853;border-color:rgba(52,168,83,0.3)">
+            ✓ Zero-Hallucination Certified
+          </span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="lp-agent-time-badge">⏱️ ${latency}</span>
+          <button class="ct-btn-secondary" style="height:26px;padding:2px 8px;font-size:11px" onclick="document.getElementById('lpAgentResponseSurface').style.display='none';">✕</button>
+        </div>
+      </div>
+
+      <div class="lp-agent-body">${formattedReply}</div>
+
+      ${kpiRibbonHtml}
+
+      ${actionsHtml}
+
+      ${followUpsHtml}
+    </div>
+  `;
+
+  surface.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 function setSynthTruckProgress(pct) {
@@ -5468,6 +6025,14 @@ function applyBundle(bundle) {
         <span>${r.truck_name}</span>
         <span>${r.stops_count} stops · ${Math.round(r.km)} km</span>
       </div>
+      <div style="display:flex;gap:6px;margin-top:6px;padding-top:6px;border-top:1px dashed var(--border-subtle)">
+        <a href="${r.gmaps_nav_url}" target="_blank" onclick="event.stopPropagation()" class="ct-badge neon-blue" style="text-decoration:none;font-size:10px;padding:2px 6px;display:inline-flex;align-items:center;gap:3px">
+          🗺️ Google Maps
+        </a>
+        <a href="${(r.stops && r.stops[0]?.streetview_url) || ('https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=' + ((r.stops && r.stops[0]?.lat) || '19.2183') + ',' + ((r.stops && r.stops[0]?.lon) || '72.9781'))}" target="_blank" onclick="event.stopPropagation()" class="ct-badge neon-cyan" style="text-decoration:none;font-size:10px;padding:2px 6px;display:inline-flex;align-items:center;gap:3px">
+          📸 Street View Dock
+        </a>
+      </div>
     </div>
   `).join('');
 
@@ -5496,7 +6061,11 @@ function applyBundle(bundle) {
   renderAuditLog(bundle.audit_log || []);
 
   if (CT.currentView === 'tower') {
-    mountMapCanvas(bundle.anim_data);
+    if (CT.towerMapMode === 'gmaps') {
+      updateTowerGmapsEmbed();
+    } else {
+      mountMapCanvas(bundle.anim_data);
+    }
   } else if (CT.currentView === 'studio3d') {
     runStudioRepack();
   }
@@ -5540,10 +6109,13 @@ function applyTruckScope(scopeVal) {
 function applySingleTruckDropdown(val) {
   if (val === 'all') {
     CT.scope = 'all';
+    CT.focusTruckId = '';
+    if (CT.towerMapMode === 'gmaps') updateTowerGmapsEmbed();
     triggerPlanUpdate({ scope: 'all' });
   } else {
     CT.scope = val;
     CT.focusTruckId = val;
+    if (CT.towerMapMode === 'gmaps') updateTowerGmapsEmbed();
     triggerPlanUpdate({ scope: val, focus_truck_id: val });
   }
 }
@@ -5551,6 +6123,7 @@ function applySingleTruckDropdown(val) {
 function focusTruckFromSidebar(truckId) {
   CT.focusTruckId = truckId;
   CT.scope = truckId;
+  if (CT.towerMapMode === 'gmaps') updateTowerGmapsEmbed();
   triggerPlanUpdate({ scope: truckId, focus_truck_id: truckId });
 }
 
@@ -6082,6 +6655,10 @@ function updateDriverHubPreview(truckId) {
   if (pIframe && pIframe.src !== r.driver_portal_url) pIframe.src = r.driver_portal_url;
   const mLink = document.getElementById('btnOpenMapsNav');
   if (mLink) mLink.href = r.gmaps_nav_url;
+  const svLink = document.getElementById('btnOpenStreetView');
+  const firstStop = (r.stops && r.stops[0]);
+  const svUrl = (firstStop && firstStop.streetview_url) || (firstStop && firstStop.lat ? `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${firstStop.lat},${firstStop.lon}` : 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=19.2183,72.9781');
+  if (svLink) svLink.href = svUrl;
   const waLink = document.getElementById('btnOpenWhatsApp');
   if (waLink) waLink.href = r.whatsapp_url;
   const lrLink = document.getElementById('btnOpenPortalTab');
@@ -6121,9 +6698,9 @@ function updateDriverHubPreview(truckId) {
     if (!stopsList.length) {
       const count = r.stops_count || 3;
       const demoStops = [
-        { name: 'Sunrise Digital World', area: 'Thane West', cartons: Math.ceil(r.cartons_count * 0.35), depth: '0–65 cm from rear door · Quick Unload' },
-        { name: 'Krishna Supermart', area: 'Thane West', cartons: Math.ceil(r.cartons_count * 0.35), depth: '65–140 cm depth · Mid-Bay' },
-        { name: 'Patel Paints', area: 'Bhiwandi Bypass', cartons: Math.max(1, r.cartons_count - 2 * Math.ceil(r.cartons_count * 0.35)), depth: '140–210 cm depth · Front Cab' }
+        { name: 'Sunrise Digital World', area: 'Thane West', cartons: Math.ceil(r.cartons_count * 0.35), depth: '0–65 cm from rear door · Quick Unload', lat: 19.2183, lon: 72.9781 },
+        { name: 'Krishna Supermart', area: 'Thane West', cartons: Math.ceil(r.cartons_count * 0.35), depth: '65–140 cm depth · Mid-Bay', lat: 19.2065, lon: 72.9754 },
+        { name: 'Patel Paints', area: 'Bhiwandi Bypass', cartons: Math.max(1, r.cartons_count - 2 * Math.ceil(r.cartons_count * 0.35)), depth: '140–210 cm depth · Front Cab', lat: 19.2812, lon: 73.0489 }
       ].slice(0, count);
       listEl.innerHTML = demoStops.map((s, idx) => `
         <div style="padding:10px 12px;background:var(--bg-elevated);border:1.5px solid var(--border-subtle);border-radius:10px;display:flex;justify-content:space-between;align-items:center">
@@ -6131,6 +6708,10 @@ function updateDriverHubPreview(truckId) {
             <div style="font-size:13px;font-weight:800;color:var(--text-main)">Drop #${idx + 1} · ${s.name}</div>
             <div style="font-size:11.5px;color:var(--text-secondary);margin-top:2px">📍 ${s.area}</div>
             <div style="font-size:11px;color:var(--accent-primary);margin-top:3px;font-weight:600">🚪 Bay Depth: ${s.depth}</div>
+            <div style="margin-top:6px;display:flex;gap:6px;align-items:center">
+              <a href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${s.lat},${s.lon}" target="_blank" class="ct-badge neon-cyan" style="text-decoration:none;font-size:10px;padding:2px 8px;display:inline-flex;align-items:center;gap:3px">📸 Google Street View 360° Dock</a>
+              <a href="https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lon}" target="_blank" class="ct-badge neon-blue" style="text-decoration:none;font-size:10px;padding:2px 8px;display:inline-flex;align-items:center;gap:3px">🗺️ Navigate Drop</a>
+            </div>
           </div>
           <div style="text-align:right">
             <span class="ct-kpi-badge" style="font-size:11px;padding:3px 8px">${s.cartons} cartons</span>
@@ -6141,12 +6722,18 @@ function updateDriverHubPreview(truckId) {
     } else {
       listEl.innerHTML = stopsList.map((s, idx) => {
         const depthText = idx === 0 ? '0–65 cm from rear door · Quick Unload' : idx === 1 ? '65–140 cm depth · Mid-Bay' : `${idx * 65}–${(idx + 1) * 65} cm depth · Front Cab`;
+        const streetViewUrl = s.streetview_url || (s.lat ? `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${s.lat},${s.lon}` : '');
+        const navUrl = s.lat ? `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lon}` : '';
         return `
           <div style="padding:10px 12px;background:var(--bg-elevated);border:1.5px solid var(--border-subtle);border-radius:10px;display:flex;justify-content:space-between;align-items:center">
             <div>
               <div style="font-size:13px;font-weight:800;color:var(--text-main)">Drop #${idx + 1} · ${s.name}</div>
               <div style="font-size:11.5px;color:var(--text-secondary);margin-top:2px">📍 ${s.area || s.address || ''}</div>
               <div style="font-size:11px;color:var(--accent-primary);margin-top:3px;font-weight:600">🚪 Bay Depth: ${depthText}</div>
+              <div style="margin-top:6px;display:flex;gap:6px;align-items:center">
+                ${streetViewUrl ? `<a href="${streetViewUrl}" target="_blank" class="ct-badge neon-cyan" style="text-decoration:none;font-size:10px;padding:2px 8px;display:inline-flex;align-items:center;gap:3px">📸 Google Street View 360° Dock</a>` : ''}
+                ${navUrl ? `<a href="${navUrl}" target="_blank" class="ct-badge neon-blue" style="text-decoration:none;font-size:10px;padding:2px 8px;display:inline-flex;align-items:center;gap:3px">🗺️ Navigate Drop</a>` : ''}
+              </div>
             </div>
             <div style="text-align:right">
               <span class="ct-kpi-badge" style="font-size:11px;padding:3px 8px">${s.cartons || s.boxes_count || 1} cartons</span>

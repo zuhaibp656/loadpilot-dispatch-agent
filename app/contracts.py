@@ -154,6 +154,7 @@ class PlanningParams:
     fuel_price_per_litre: float | None = None
     driver_day_cost: float | None = None
     order_source: str = "demo"
+    corridors: tuple[str, ...] = ()
 
 
 # ==============================================================================

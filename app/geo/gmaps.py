@@ -66,23 +66,35 @@ def gmaps_stop_nav_url(lat: float, lon: float, query: str = "") -> str:
     return f"https://www.google.com/maps/dir/?{urllib.parse.urlencode(params)}"
 
 
+def gmaps_streetview_url(lat: float, lon: float) -> str:
+    """Official Google Street View 360° interactive panorama URL for store/dock inspection."""
+    return f"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint={lat:.6f},{lon:.6f}"
+
+
+def gmaps_satellite_embed_url(lat: float, lon: float, zoom: int = 17) -> str:
+    """Embeddable keyless Google Maps high-resolution satellite imagery URL."""
+    return f"https://maps.google.com/maps?q={lat:.6f},{lon:.6f}&t=k&z={zoom}&output=embed"
+
+
 def gmaps_embed_url(
     hub_coords: tuple[float, float],
     stop_coords: list[tuple[float, float]],
     return_to_hub: bool = True,
+    traffic: bool = True,
 ) -> str:
-    """Embeddable keyless Google Maps directions iframe URL showing route and traffic."""
+    """Embeddable keyless Google Maps directions iframe URL showing route and live traffic."""
     saddr = f"{hub_coords[0]:.6f},{hub_coords[1]:.6f}"
     stops_to_show = stop_coords[:10]  # Limit to 10 points for clean embed query
+    traffic_param = "&layer=t" if traffic else ""
     if not stops_to_show:
-        return f"https://maps.google.com/maps?q={saddr}&z=13&output=embed"
+        return f"https://maps.google.com/maps?q={saddr}&z=13{traffic_param}&output=embed"
 
     if return_to_hub:
         daddr = "+to:".join([f"{lat:.6f},{lon:.6f}" for lat, lon in stops_to_show] + [saddr])
     else:
         daddr = "+to:".join(f"{lat:.6f},{lon:.6f}" for lat, lon in stops_to_show)
 
-    return f"https://maps.google.com/maps?saddr={saddr}&daddr={daddr}&output=embed"
+    return f"https://maps.google.com/maps?saddr={saddr}&daddr={daddr}{traffic_param}&output=embed"
 
 
 def whatsapp_dispatch_url(
